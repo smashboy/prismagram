@@ -9,9 +9,8 @@ export const theme: MantineThemeOverride = {
       height: '100%'
     },
     body: {
-      // background:
-      //   "linear-gradient(220deg, rgb(115, 125, 254), rgb(255, 202, 201))",
-      // backdropFilter: "blur(40px)",
+      background: 'linear-gradient(220deg, rgb(115, 125, 254), rgb(255, 202, 201))',
+      backdropFilter: 'blur(40px)'
     }
   })
 }
