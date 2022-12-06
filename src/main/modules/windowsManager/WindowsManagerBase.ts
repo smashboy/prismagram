@@ -2,8 +2,9 @@ import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron'
 import { is } from '@electron-toolkit/utils'
 import { APP_ICON_PNG_PATH, PRELOAD_SCRIPT_PATH, RENDERER_HTML_PATH } from '../../constants'
 import { WindowManager } from './models'
+import ApiManager from '../apiManager/ApiManager'
 
-export default class WindowsManagerBase {
+export default class WindowsManagerBase extends ApiManager {
   protected createWindow(options: BrowserWindowConstructorOptions): WindowManager {
     const window = new BrowserWindow({
       ...options,
@@ -20,6 +21,7 @@ export default class WindowsManagerBase {
 
     window.on('ready-to-show', () => {
       window.show()
+      if (is.dev) window.webContents.openDevTools({ mode: 'detach' })
     })
 
     const show = () => {
@@ -30,6 +32,11 @@ export default class WindowsManagerBase {
       }
     }
 
-    return { show }
+    const createApiRoute = <T, R>(endpoint: string, callback: (args: T) => R) =>
+      this.createRoute<T, R>(endpoint, callback)
+
+    const getWindow = () => window
+
+    return { show, createApiRoute, getWindow }
   }
 }
