@@ -1,9 +1,13 @@
 import { useState } from 'react'
 import { useStore } from 'effector-react'
 import { Button, Group, Modal, Stack, TextInput } from '@mantine/core'
-import { $isOpenCreateProjectModal, toggleCreateProjectModal } from '@renderer/stores/ui'
 import { IconFile, IconFolder } from '@tabler/icons'
 import { useEndpoint } from '@renderer/core/hooks'
+import {
+  GET_FOLDER_DIRECTORY_ENDPOINT,
+  GET_PRISMA_SCHEMA_PATH_ENDPOINT
+} from '@shared/common/configs/api'
+import { $isOpenCreateProjectModal, toggleCreateProjectModal } from '@renderer/stores/ui/modals'
 
 export const CreateProjectModal = () => {
   const isOpen = useStore($isOpenCreateProjectModal)
@@ -13,13 +17,13 @@ export const CreateProjectModal = () => {
 
   const [projectName, setProjectName] = useState('')
   const [schemaPath, { invoke: invokeGetFilePath, reset: resetSchemaPath }] = useEndpoint(
-    'prisma.get-schema-path',
+    GET_PRISMA_SCHEMA_PATH_ENDPOINT,
     ''
   )
   const [
     projectDirectoryPath,
     { invoke: invokeGetProjectDirectory, reset: resetProjectDirectoryPath }
-  ] = useEndpoint('files.get-directory', '')
+  ] = useEndpoint(GET_FOLDER_DIRECTORY_ENDPOINT, '')
 
   const handleGetFilePath = () => invokeGetFilePath(null, (res) => res ?? '')
   const handleGetProjectDirectory = () => invokeGetProjectDirectory(null, (res) => res ?? '')

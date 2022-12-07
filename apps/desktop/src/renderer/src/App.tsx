@@ -1,9 +1,8 @@
 import { Group, Paper } from '@mantine/core'
 import 'reactflow/dist/style.css'
-import { DiagramEditor } from './modules/diagram-editor'
+import { Editor } from './modules/editor'
 import { CreateProjectModal, ProjectSelectorModal } from './modules/projects'
-
-// invoke('prisma.get-document').then((res) => console.log(res))
+import './transports'
 
 function App() {
   return (
@@ -11,7 +10,7 @@ function App() {
       <Group w="100%" h="100%" p="xs">
         <div style={{ width: 300 }} />
         <Paper w="100%" h="100%" shadow="md" sx={{ flex: 1 }}>
-          <DiagramEditor />
+          <Editor />
         </Paper>
         <CreateProjectModal />
         <ProjectSelectorModal />

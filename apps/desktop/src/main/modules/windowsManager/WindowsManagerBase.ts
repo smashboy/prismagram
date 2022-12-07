@@ -32,7 +32,7 @@ export default class WindowsManagerBase extends ApiManager {
       }
     }
 
-    const createApiRoute = <T, R>(endpoint: string, callback: (args: T) => R) =>
+    const createApiRoute = <T, R>(endpoint: string, callback: (args: T) => Promise<R>) =>
       this.createRoute<T, R>(endpoint, callback)
 
     const getWindow = () => window

@@ -3,6 +3,7 @@ import { BrowserWindow } from 'electron'
 import { PROJECTS_FOLDER_PATH } from '../../constants'
 import {
   CREATE_PROJECT_ENDPOINT,
+  GET_EDITOR_DATA,
   GET_FOLDER_DIRECTORY_ENDPOINT,
   GET_PRISMA_DOCUMENT_ENDPOINT,
   GET_PRISMA_SCHEMA_PATH_ENDPOINT,
@@ -17,6 +18,7 @@ import {
 } from '../../services/prisma'
 import { WindowManager } from './models'
 import WindowsManagerBase from './WindowsManagerBase'
+import { readEditorData, ReadEditorDataOptions } from '../../services/editor'
 
 export default class WindowsManager extends WindowsManagerBase {
   protected appWindow: WindowManager | undefined
@@ -64,6 +66,10 @@ export default class WindowsManager extends WindowsManagerBase {
 
       return createFile(PROJECTS_FOLDER_PATH, fileName, JSON.stringify(project))
     })
+
+    this.appWindow.createApiRoute(GET_EDITOR_DATA, (args: ReadEditorDataOptions) =>
+      readEditorData(args)
+    )
   }
 
   protected get allWindowsCount() {

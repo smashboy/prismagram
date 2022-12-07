@@ -59,8 +59,6 @@ export const readDirectoryFiles = async (directoryPath: string) => {
   for (const { name } of list) {
     const filePath = path.normalize(`${directoryPath}${path.sep}${name}`)
 
-    console.log(filePath)
-
     files2read.push(fs.readFile(filePath, { encoding: 'utf-8' }))
   }
 

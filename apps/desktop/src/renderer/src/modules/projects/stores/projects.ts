@@ -1,23 +1,18 @@
-import { createStore, sample } from 'effector'
-import { Project } from '@common/models'
+import { combine, createEvent, createStore } from 'effector'
+import { Project } from '@shared/common/models/Project'
 import { createMapStore } from '@renderer/core/effector'
-import { toggleSelectProjectModal } from '@renderer/stores/ui'
-import { getProjectsListEffect } from './effects'
+
+export const selectProjectEvent = createEvent<string>()
+export const closeProjectEvent = createEvent()
 
 export const [$projects, projectEvents] = createMapStore<Project>()
 
 export const $projectsArray = $projects.map((companies) => [...companies.keys()])
 
 export const $selectedProjectId = createStore<string | null>(null)
+  .on(selectProjectEvent, (_, projectId) => projectId)
+  .reset(closeProjectEvent)
 
-sample({
-  clock: toggleSelectProjectModal,
-  filter: (status) => !!status,
-  target: getProjectsListEffect
-})
-
-sample({
-  clock: getProjectsListEffect.doneData,
-  fn: (projects) => projects.map((project) => ({ key: project.id, item: project })),
-  target: projectEvents.addList
-})
+export const $selectedProject = combine([$selectedProjectId, $projects]).map(([id, projects]) =>
+  id ? projects.get(id)! : null
+)

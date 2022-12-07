@@ -1,9 +1,9 @@
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
-import { $isOpenSelectProjectModal, toggleSelectProjectModal } from '@renderer/stores/ui'
 import { Modal } from '@mantine/core'
 import { ProjectsList } from './ProjectsList'
-import { $projectsArray } from '../stores'
+import { $projectsArray } from '../stores/projects'
+import { $isOpenSelectProjectModal, toggleSelectProjectModal } from '@renderer/stores/ui/modals'
 
 const $store = combine({
   isOpen: $isOpenSelectProjectModal,
