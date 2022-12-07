@@ -1,0 +1,1 @@
+export { getProjectsListEffect } from './getProjectsListEffect'
