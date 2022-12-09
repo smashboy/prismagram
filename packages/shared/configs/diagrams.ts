@@ -19,3 +19,8 @@ export enum RelationIOType {
   SOURCE = 'source',
   TARGET = 'target'
 }
+
+export enum DiagramLayout {
+  HORIZONTAL,
+  VERTICAL
+}

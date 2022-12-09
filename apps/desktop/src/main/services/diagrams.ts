@@ -1,7 +1,14 @@
-import type { DMMF } from '@prisma/generator-helper'
-import { NodeType, RelationIOType, ScalarType } from '@shared/common/configs/diagrams'
-import { ModelField, ModelNodeData, Node, Diagram } from '@shared/common/models/Diagram'
 import { Edge } from 'reactflow'
+import dagre from 'dagre'
+import type { DMMF } from '@prisma/generator-helper'
+import {
+  DiagramLayout,
+  NodeType,
+  RelationIOType,
+  ScalarType
+} from '@shared/common/configs/diagrams'
+import { ModelField, ModelNodeData, Node, Diagram } from '@shared/common/models/Diagram'
+import { graphDirectionOption } from '../constants'
 
 export const prismaSchema2Diagram = (document: DMMF.Document): Diagram => {
   const {
@@ -86,4 +93,43 @@ export const simpleRelation2SimpleEdge = (relation: string): Edge => {
     sourceHandle: `${relation}-${from}`,
     targetHandle: `${relation}-${to}`
   }
+}
+
+export const layoutDiagramElements = (diagram: Diagram, layout: DiagramLayout): Diagram => {
+  const { nodes, edges } = diagram
+
+  const dagreGraph = new dagre.graphlib.Graph()
+  dagreGraph.setDefaultEdgeLabel(() => ({}))
+
+  dagreGraph.setGraph({ rankdir: graphDirectionOption[layout], nodesep: 50, ranksep: 100 })
+
+  const nodesArray = Object.entries(nodes)
+
+  nodesArray.forEach(([_, node]) => {
+    dagreGraph.setNode(node.id, {
+      width: node.width,
+      height: node.height
+    })
+  })
+
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target)
+  })
+
+  dagre.layout(dagreGraph)
+
+  const nodesWithLayout = nodesArray.reduce((acc, [id, node]) => {
+    const nodeWithPosition = dagreGraph.node(id)
+
+    // We are shifting the dagre node position (anchor=center center) to the top left
+    // so it matches the React Flow node anchor point (top left).
+    node.position = {
+      x: nodeWithPosition.x - node.width! / 2,
+      y: nodeWithPosition.y - node.height! / 2
+    }
+
+    return { ...acc, [id]: node }
+  }, {})
+
+  return { edges, nodes: nodesWithLayout }
 }

@@ -3,6 +3,7 @@ import { BrowserWindow } from 'electron'
 import { PROJECTS_FOLDER_PATH } from '../../constants'
 import {
   CREATE_PROJECT_ENDPOINT,
+  EDITOR_LAYOUT_NODES,
   GET_EDITOR_DATA,
   GET_FOLDER_DIRECTORY_ENDPOINT,
   GET_PRISMA_DOCUMENT_ENDPOINT,
@@ -19,6 +20,9 @@ import {
 import { WindowManager } from './models'
 import WindowsManagerBase from './WindowsManagerBase'
 import { readEditorData, ReadEditorDataOptions } from '../../services/editor'
+import { Diagram } from '@shared/common/models/Diagram'
+import { DiagramLayout } from '@shared/common/configs/diagrams'
+import { layoutDiagramElements } from '../../services/diagrams'
 
 export default class WindowsManager extends WindowsManagerBase {
   protected appWindow: WindowManager | undefined
@@ -69,6 +73,12 @@ export default class WindowsManager extends WindowsManagerBase {
 
     this.appWindow.createApiRoute(GET_EDITOR_DATA, (args: ReadEditorDataOptions) =>
       readEditorData(args)
+    )
+
+    this.appWindow.createApiRoute(
+      EDITOR_LAYOUT_NODES,
+      async ({ diagram, layout }: { diagram: Diagram; layout: DiagramLayout }) =>
+        layoutDiagramElements(diagram, layout)
     )
   }
 

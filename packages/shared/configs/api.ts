@@ -7,3 +7,4 @@ export const CREATE_PROJECT_ENDPOINT = 'projects.create'
 export const GET_PROJECTS_LIST_ENDPOINT = 'projects.get-list'
 
 export const GET_EDITOR_DATA = 'editor.get-data'
+export const EDITOR_LAYOUT_NODES = 'editor.layout-nodes'

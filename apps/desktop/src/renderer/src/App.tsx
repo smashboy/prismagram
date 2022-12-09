@@ -7,9 +7,9 @@ import './transports'
 function App() {
   return (
     <>
-      <Group w="100%" h="100%" p="xs">
-        <div style={{ width: 300 }} />
-        <Stack w="100%" h="100%" sx={{ flex: 1 }}>
+      <Group w="100%" h="100%" p="xs" noWrap>
+        <div style={{ width: 300, height: '100%', backgroundColor: 'red' }} />
+        <Stack w="calc(100% - 300px)" h="100%" sx={{ flex: 1 }}>
           <EditorToolbar />
           <Paper w="100%" h="100%" shadow="md">
             <Editor />

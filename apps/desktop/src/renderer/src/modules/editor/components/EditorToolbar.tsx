@@ -1,4 +1,14 @@
-import { ActionIcon, Center, Flex, Group, Paper, SegmentedControl, Transition } from '@mantine/core'
+import {
+  ActionIcon,
+  Center,
+  Flex,
+  Group,
+  Menu,
+  Paper,
+  SegmentedControl,
+  Transition
+} from '@mantine/core'
+import { DiagramLayout } from '@shared/common/configs/diagrams'
 import {
   IconArrowBackUp,
   IconArrowForwardUp,
@@ -9,21 +19,29 @@ import {
 } from '@tabler/icons'
 import { useStore } from 'effector-react'
 import { EditorView } from '../config'
-import { $selectedEditorView, changeEditorViewEvent } from '../stores'
+import {
+  $diagram,
+  $selectedEditorView,
+  changeEditorViewEvent,
+  layoutDiagramEffect
+} from '../stores'
 
 const ICON_SIZE = 20
 const ICON_BUTTON_SIZE = 'lg'
 
 const OptionsContainer: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <Paper align="center" px="xs" h="100%" component={Flex}>
+  <Paper align="center" px={3} py={3} h="100%" component={Flex}>
     <Group>{children}</Group>
   </Paper>
 )
 
 export const EditorToolbar = () => {
   const selectedView = useStore($selectedEditorView)
+  const diagram = useStore($diagram)
 
   const handleChangeEditorView = (view: EditorView) => changeEditorViewEvent(view)
+  const handleDiagramLayout = (layout: DiagramLayout) => () =>
+    layoutDiagramEffect({ diagram: diagram!, layout })
 
   return (
     <Group position="right">
@@ -49,7 +67,10 @@ export const EditorToolbar = () => {
               </ActionIcon>
             </OptionsContainer>
             <OptionsContainer>
-              <ActionIcon size={ICON_BUTTON_SIZE}>
+              <ActionIcon
+                onClick={handleDiagramLayout(DiagramLayout.VERTICAL)}
+                size={ICON_BUTTON_SIZE}
+              >
                 <IconBoxMargin size={ICON_SIZE} />
               </ActionIcon>
             </OptionsContainer>

@@ -1,6 +1,6 @@
 import { sample } from 'effector'
 import { loadDiagramEvent } from './diagram'
-import { loadEditorDataEffect } from './effects'
+import { layoutDiagramEffect, loadEditorDataEffect } from './effects'
 import { setPrismaSchema } from './schema'
 
 sample({
@@ -10,7 +10,12 @@ sample({
 })
 
 sample({
-  clock: loadEditorDataEffect.doneData,
+  source: layoutDiagramEffect.doneData,
+  target: loadDiagramEvent
+})
+
+sample({
+  source: loadEditorDataEffect.doneData,
   fn: (data) => data.schema,
   target: setPrismaSchema
 })
