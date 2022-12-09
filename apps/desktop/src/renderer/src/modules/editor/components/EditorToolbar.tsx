@@ -30,8 +30,8 @@ const ICON_SIZE = 20
 const ICON_BUTTON_SIZE = 'lg'
 
 const OptionsContainer: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <Paper align="center" px={3} py={3} h="100%" component={Flex}>
-    <Group>{children}</Group>
+  <Paper align="center" h="100%" component={Flex}>
+    <Group spacing={0}>{children}</Group>
   </Paper>
 )
 

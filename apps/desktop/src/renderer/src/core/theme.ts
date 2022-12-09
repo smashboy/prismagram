@@ -6,7 +6,8 @@ export const theme: MantineThemeOverride = {
   globalStyles: (theme) => ({
     'html, body, #root': {
       width: '100%',
-      height: '100%'
+      height: '100%',
+      overflow: 'hidden'
     },
     body: {
       background: `linear-gradient(6deg, ${theme.colors.blue[3]}, ${theme.colors.pink[3]})`,
