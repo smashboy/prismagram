@@ -14,3 +14,8 @@ export enum ScalarType {
   JSON = 'Json',
   BYTES = 'Bytes'
 }
+
+export enum RelationIOType {
+  SOURCE = 'source',
+  TARGET = 'target'
+}

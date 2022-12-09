@@ -4,3 +4,8 @@ import { ModelNode } from './components/ModelNode'
 export const nodeTypes = {
   [NodeType.MODEL]: ModelNode
 }
+
+export enum EditorView {
+  DIAGRAM = 'd',
+  SCHEMA = 's'
+}

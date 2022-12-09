@@ -12,3 +12,5 @@ export const $diagram = createStore<Diagram | null>(null)
   }))
 
 export const $nodesArray = $diagram.map((diagram) => (diagram ? Object.values(diagram.nodes) : []))
+
+export const $edgesArray = $diagram.map((diagram) => (diagram ? Object.values(diagram.edges) : []))

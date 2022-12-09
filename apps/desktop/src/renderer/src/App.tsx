@@ -1,6 +1,6 @@
-import { Group, Paper } from '@mantine/core'
+import { Group, Paper, Stack } from '@mantine/core'
 import 'reactflow/dist/style.css'
-import { Editor } from './modules/editor'
+import { Editor, EditorToolbar } from './modules/editor'
 import { CreateProjectModal, ProjectSelectorModal } from './modules/projects'
 import './transports'
 
@@ -9,9 +9,12 @@ function App() {
     <>
       <Group w="100%" h="100%" p="xs">
         <div style={{ width: 300 }} />
-        <Paper w="100%" h="100%" shadow="md" sx={{ flex: 1 }}>
-          <Editor />
-        </Paper>
+        <Stack w="100%" h="100%" sx={{ flex: 1 }}>
+          <EditorToolbar />
+          <Paper w="100%" h="100%" shadow="md">
+            <Editor />
+          </Paper>
+        </Stack>
         <CreateProjectModal />
         <ProjectSelectorModal />
       </Group>

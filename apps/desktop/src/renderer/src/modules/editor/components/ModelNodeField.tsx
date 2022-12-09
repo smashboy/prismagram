@@ -1,3 +1,5 @@
+import { Box } from '@mantine/core'
+import { string2Color } from '@renderer/core/utils'
 import { ModelField } from '@shared/common/models/Diagram'
 
 interface ModelNodeFieldProps {
@@ -11,9 +13,9 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({ fieldId, field }
   const displayType = type.concat(isList ? '[]' : '').concat(isRequired ? '' : '?')
 
   return (
-    <tr>
+    <Box component="tr">
       <td>{fieldId}</td>
-      <td>{displayType}</td>
-    </tr>
+      <td style={{ color: string2Color(type) }}>{displayType}</td>
+    </Box>
   )
 }
