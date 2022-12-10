@@ -1,10 +1,15 @@
 import { string2Color } from '@renderer/core/utils'
 import { NodeType, ScalarType } from '@shared/common/configs/diagrams'
+// import { RelationEdge } from './components'
 import { ModelNode } from './components/ModelNode'
 
 export const nodeTypes = {
   [NodeType.MODEL]: ModelNode
 }
+
+// export const edgeTypes = {
+//   relation: RelationEdge
+// }
 
 export enum EditorView {
   DIAGRAM = 'd',

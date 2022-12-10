@@ -3,8 +3,8 @@ import ReactFlow, { applyNodeChanges, Background, OnNodesChange } from 'reactflo
 import { useStore } from 'effector-react'
 import { nodeTypes } from '../config'
 import { $edgesArray, $nodesArray, nodesChangeEvent } from '../stores'
-import '../css/editor.css'
 import { DiagramEditorContextProvider } from '../stores/context'
+import '../css/editor.css'
 
 const $store = combine({
   nodes: $nodesArray,
@@ -23,6 +23,7 @@ export const DiagramEditor = () => {
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
+        // edgeTypes={edgeTypes}
         onNodesChange={handleNodeChanges}
         snapToGrid
         minZoom={0.05}

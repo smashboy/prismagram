@@ -1,13 +1,7 @@
-import { Edge } from 'reactflow'
 import dagre from 'dagre'
 import type { DMMF } from '@prisma/generator-helper'
-import {
-  DiagramLayout,
-  NodeType,
-  RelationIOType,
-  ScalarType
-} from '@shared/common/configs/diagrams'
-import { ModelField, ModelNodeData, Node, Diagram } from '@shared/common/models/Diagram'
+import { DiagramLayout, NodeType, ScalarType } from '@shared/common/configs/diagrams'
+import { ModelField, ModelNodeData, Node, Diagram, Edge } from '@shared/common/models/Diagram'
 import { graphDirectionOption } from '../constants'
 import { string2Color } from '../utils'
 
@@ -21,6 +15,7 @@ export const prismaSchema2Diagram = (document: DMMF.Document): Diagram => {
   const nodeModels = models.map((model) => model2NodeModel(model, relations))
 
   return {
+    document,
     nodes: nodeModels.reduce((acc, node) => ({ ...acc, [node.id]: node }), {}),
     edges: relations.map((relation) => simpleRelation2SimpleEdge(relation)),
     nodesColors: nodeModels.reduce(
@@ -91,7 +86,10 @@ export const simpleRelation2SimpleEdge = (relation: string): Edge => {
     target: to,
     type: 'smoothstep',
     sourceHandle: `${relation}-${from}`,
-    targetHandle: `${relation}-${to}`
+    targetHandle: `${relation}-${to}`,
+    data: {
+      color: string2Color(relation)
+    }
   }
 }
 

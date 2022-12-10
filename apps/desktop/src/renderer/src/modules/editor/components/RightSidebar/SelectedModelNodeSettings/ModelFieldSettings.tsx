@@ -1,21 +1,30 @@
 import { useStore } from 'effector-react'
-import { Accordion, Select, Stack, TextInput } from '@mantine/core'
-import { scalarOptionsArray } from '@renderer/modules/editor/config'
-import { $nodesIds } from '@renderer/modules/editor/stores'
+import { Accordion, Badge, Group, Select, Stack, Text, TextInput } from '@mantine/core'
+import { ScalarFieldColor, scalarOptionsArray } from '@renderer/modules/editor/config'
+import { $nodesColors, $nodesIds } from '@renderer/modules/editor/stores'
 import { ModelField } from '@shared/common/models/Diagram'
+import { combine } from 'effector'
 
 interface ModelFieldSettingsProps {
   name: string
   field: ModelField
 }
 
+const $store = combine({
+  modelsIds: $nodesIds,
+  nodesColors: $nodesColors
+})
+
 export const ModelFieldSettings: React.FC<ModelFieldSettingsProps> = ({
   name,
-  field: { type }
+  field: { type, isList, isRequired }
 }) => {
-  const modelsIds = useStore($nodesIds)
+  const { modelsIds, nodesColors } = useStore($store)
 
+  const displayType = type.concat(isList ? '[]' : '').concat(isRequired ? '' : '?')
   const typeOptions = [...scalarOptionsArray, ...modelsIds]
+
+  const typeColor = ScalarFieldColor[type] || nodesColors[type]
 
   return (
     <Accordion.Item
@@ -27,11 +36,16 @@ export const ModelFieldSettings: React.FC<ModelFieldSettingsProps> = ({
         }
       })}
     >
-      <Accordion.Control>{name}</Accordion.Control>
+      <Accordion.Control>
+        <Group>
+          <Text>{name}</Text>
+          <Badge sx={{ color: typeColor, textTransform: 'none' }}>{displayType}</Badge>
+        </Group>
+      </Accordion.Control>
       <Accordion.Panel>
         <Stack>
           <TextInput label="Name" value={name} readOnly />
-          <Select label="Type" value={type} data={typeOptions} />
+          <Select label="Type" value={type} data={typeOptions} readOnly />
         </Stack>
       </Accordion.Panel>
     </Accordion.Item>

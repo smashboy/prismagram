@@ -42,7 +42,9 @@ export const RightSidebar = () => {
             </ActionIcon>
           </Group>
           <Stack h="100%" sx={{ overflowY: 'auto' }}>
-            <ScrollArea>{selectedModelNode && <SelectedModelNodeSettings />}</ScrollArea>
+            <ScrollArea offsetScrollbars>
+              {selectedModelNode && <SelectedModelNodeSettings />}
+            </ScrollArea>
           </Stack>
         </Paper>
       )}

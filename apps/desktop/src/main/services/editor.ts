@@ -14,7 +14,7 @@ export const readEditorData = async (options: ReadEditorDataOptions): Promise<Ed
 
   const document = await getPrismaDocument(schema)
 
-  const diagram = await prismaSchema2Diagram(document)
+  const diagram = prismaSchema2Diagram(document)
 
   return {
     diagram,

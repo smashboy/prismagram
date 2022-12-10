@@ -6,9 +6,13 @@ import { GET_EDITOR_DATA } from '@shared/common/configs/api'
 import { $selectedProject } from '@renderer/modules/projects/stores/projects'
 
 export const loadEditorDataEffect = attach({
-  effect: createEffect<(project: Project | null) => Promise<EditorData>>((project) =>
-    invoke(GET_EDITOR_DATA, { schemaPath: project!.schema })
-  ),
+  effect: createEffect<(project: Project | null) => Promise<EditorData>>(async (project) => {
+    const d = await invoke(GET_EDITOR_DATA, { schemaPath: project!.schema })
+
+    console.log(d)
+
+    return d
+  }),
   source: $selectedProject
 })
 

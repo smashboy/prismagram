@@ -11,11 +11,12 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({ fieldId, field, 
   const { type, isList, isRequired } = field
 
   const displayType = type.concat(isList ? '[]' : '').concat(isRequired ? '' : '?')
+  const textColor = ScalarFieldColor[type] || nodesColors[type]
 
   return (
     <tr>
       <td>{fieldId}</td>
-      <td style={{ color: ScalarFieldColor[type] || nodesColors[type] }}>{displayType}</td>
+      <td style={{ color: textColor }}>{displayType}</td>
     </tr>
   )
 }

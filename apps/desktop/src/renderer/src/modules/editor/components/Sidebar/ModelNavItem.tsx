@@ -1,12 +1,18 @@
 import { NavLink } from '@mantine/core'
 import { toggleModelNodeSidebar } from '@renderer/stores/ui/modals'
 import { IconBorderAll } from '@tabler/icons'
+import { combine } from 'effector'
 import { useStore, useStoreMap } from 'effector-react'
-import { $diagram, $selectedModelNodeId, selectModelNodeEvent } from '../../stores'
+import { $diagram, $nodesColors, $selectedModelNodeId, selectModelNodeEvent } from '../../stores'
 
 interface ModelNavItemProps {
   nodeId: string
 }
+
+const $store = combine({
+  selectedNodeId: $selectedModelNodeId,
+  nodesColors: $nodesColors
+})
 
 export const ModelNavItem: React.FC<ModelNavItemProps> = ({ nodeId }) => {
   const {
@@ -17,7 +23,7 @@ export const ModelNavItem: React.FC<ModelNavItemProps> = ({ nodeId }) => {
     fn: (diagram, [id]) => diagram!.nodes[id]
   })
 
-  const selectedNodeId = useStore($selectedModelNodeId)
+  const { selectedNodeId, nodesColors } = useStore($store)
 
   const isSelected = selectedNodeId === nodeId
 
@@ -32,7 +38,7 @@ export const ModelNavItem: React.FC<ModelNavItemProps> = ({ nodeId }) => {
       variant="filled"
       active={isSelected}
       onClick={handleSelectMode}
-      icon={<IconBorderAll size={16} stroke={1.5} />}
+      icon={<IconBorderAll size={16} color={nodesColors[nodeId]} stroke={1.5} />}
       sx={(theme) => ({
         borderRadius: theme.radius.sm,
         boxShadow: isSelected ? theme.shadows.xs : void 0

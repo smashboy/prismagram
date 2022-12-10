@@ -14,7 +14,7 @@ export const SelectedModelNodeSettings = () => {
   } = model
 
   return (
-    <Stack p="xs">
+    <Stack pl="xs">
       <Paper p="xs" shadow="sm">
         <TextInput label="Model name" value={name} readOnly />
       </Paper>
