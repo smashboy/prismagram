@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { Button, Group, Modal, Stack, TextInput } from '@mantine/core'
 import { IconFile, IconFolder } from '@tabler/icons'
@@ -8,14 +9,18 @@ import {
   GET_PRISMA_SCHEMA_PATH_ENDPOINT
 } from '@shared/common/configs/api'
 import { $isOpenCreateProjectModal, toggleCreateProjectModal } from '@renderer/stores/ui/modals'
+import { $isCreatingProject, createProjectEffect } from '../stores'
+
+const $store = combine({
+  isOpen: $isOpenCreateProjectModal,
+  isCreatingProject: $isCreatingProject
+})
 
 export const CreateProjectModal = () => {
-  const isOpen = useStore($isOpenCreateProjectModal)
-
-  const [_, { invoke: invokeCreateProject, isLoading: isCreatingProject }] =
-    useEndpoint('projects.create')
+  const { isOpen, isCreatingProject } = useStore($store)
 
   const [projectName, setProjectName] = useState('')
+
   const [schemaPath, { invoke: invokeGetFilePath, reset: resetSchemaPath }] = useEndpoint(
     GET_PRISMA_SCHEMA_PATH_ENDPOINT,
     ''
@@ -37,12 +42,15 @@ export const CreateProjectModal = () => {
     setProjectName('')
   }
 
-  const handleCreateProject = () =>
-    invokeCreateProject({
+  const handleCreateProject = async () => {
+    await createProjectEffect({
       name: projectName,
       schema: schemaPath,
       projectDirectory: projectDirectoryPath
     })
+
+    handleCloseDialog()
+  }
 
   const disableCreateButton = !schemaPath || !projectName
 

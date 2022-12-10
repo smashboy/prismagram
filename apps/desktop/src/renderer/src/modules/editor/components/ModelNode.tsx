@@ -1,8 +1,9 @@
-import { Box, Card, Group, Stack, Table, Text } from '@mantine/core'
+import { Box, Card, Stack, Table, Text } from '@mantine/core'
 import { string2Color } from '@renderer/core/utils'
 import { RelationIOType } from '@shared/common/configs/diagrams'
 import { ModelNodeData } from '@shared/common/models/Diagram'
 import { Handle, Position } from 'reactflow'
+import { useTestStore } from '../stores/context'
 import { ModelNodeField } from './ModelNodeField'
 
 interface ModelNodeProps {
@@ -32,11 +33,20 @@ const HandlesContainer: React.FC<HandlesContainerProps> = ({ position, children 
 export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
   const { name, fields, relations } = data
 
+  const selectedModel = useTestStore()
+
   const source = relations.filter((relation) => relation.type === RelationIOType.SOURCE)
   const target = relations.filter((relation) => relation.type === RelationIOType.TARGET)
 
   return (
-    <Card sx={{ overflow: 'unset' }} withBorder>
+    <Card
+      sx={(theme) => ({
+        overflow: 'unset',
+        borderColor: selectedModel === name ? theme.primaryColor : void 0
+      })}
+      withBorder
+      shadow="lg"
+    >
       <HandlesContainer position={Position.Left}>
         {target.map((relation) => (
           <Box
@@ -69,7 +79,6 @@ export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
             key={relation.id}
             sx={{
               position: 'relative',
-
               width: 10
             }}
           >

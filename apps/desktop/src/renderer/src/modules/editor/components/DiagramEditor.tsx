@@ -4,21 +4,30 @@ import { useStore } from 'effector-react'
 import { nodeTypes } from '../config'
 import { $edgesArray, $nodesArray, nodesChangeEvent } from '../stores'
 import '../css/editor.css'
+import { TestProvider } from '../stores/context'
 
 const $store = combine({
   nodes: $nodesArray,
-  edges: $edgesArray,
+  edges: $edgesArray
 })
 
 export const DiagramEditor = () => {
-  const {nodes, edges} = useStore($store)
+  const { nodes, edges } = useStore($store)
 
   const handleNodeChanges: OnNodesChange = (changes) =>
     nodesChangeEvent(applyNodeChanges(changes, nodes))
 
   return (
-    <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} onNodesChange={handleNodeChanges} snapToGrid>
-      <Background />
-    </ReactFlow>
+    <TestProvider>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        onNodesChange={handleNodeChanges}
+        snapToGrid
+      >
+        <Background />
+      </ReactFlow>
+    </TestProvider>
   )
 }

@@ -1,2 +1,2 @@
-export { createProjectEffect } from './createProjectEffect'
+export { createProjectEffect, $isCreatingProject } from './createProjectEffect'
 export { getProjectsListEffect } from './getProjectsListEffect'

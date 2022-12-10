@@ -1,8 +1,8 @@
 import { sample } from 'effector'
 import { loadEditorDataEffect } from '@renderer/modules/editor'
-import { toggleSelectProjectModal } from '@renderer/stores/ui/modals'
-import { getProjectsListEffect } from './effects/getProjectsListEffect'
+import { $isOpenSelectProjectModal, toggleSelectProjectModal } from '@renderer/stores/ui/modals'
 import { projectEvents, selectProjectEvent } from './projects'
+import { createProjectEffect, getProjectsListEffect } from './effects'
 
 sample({
   clock: toggleSelectProjectModal,
@@ -19,5 +19,31 @@ sample({
 sample({
   clock: selectProjectEvent,
   fn: () => void 0,
-  target: [loadEditorDataEffect, toggleSelectProjectModal]
+  target: [loadEditorDataEffect]
+})
+
+sample({
+  clock: loadEditorDataEffect.doneData,
+  source: $isOpenSelectProjectModal,
+  filter: (isOpen) => isOpen,
+  fn: () => void 0,
+  target: toggleSelectProjectModal
+})
+
+sample({
+  clock: createProjectEffect.doneData,
+  fn: (project) => ({ key: project.id, item: project }),
+  target: projectEvents.add
+})
+
+sample({
+  clock: createProjectEffect.doneData,
+  fn: (project) => ({ key: project.id, item: project }),
+  target: projectEvents.add
+})
+
+sample({
+  clock: createProjectEffect.doneData,
+  fn: (project) => project.id,
+  target: selectProjectEvent
 })

@@ -62,13 +62,15 @@ export default class WindowsManager extends WindowsManagerBase {
       return projects.map((project) => JSON.parse(project))
     })
 
-    this.appWindow.createApiRoute(CREATE_PROJECT_ENDPOINT, (args: Omit<Project, 'id'>) => {
+    this.appWindow.createApiRoute(CREATE_PROJECT_ENDPOINT, async (args: Omit<Project, 'id'>) => {
       const id = randomUUID()
       const fileName = `${id}.json`
 
       const project: Project = { id, ...args }
 
-      return createFile(PROJECTS_FOLDER_PATH, fileName, JSON.stringify(project))
+      await createFile(PROJECTS_FOLDER_PATH, fileName, JSON.stringify(project))
+
+      return project
     })
 
     this.appWindow.createApiRoute(GET_EDITOR_DATA, (args: ReadEditorDataOptions) =>
