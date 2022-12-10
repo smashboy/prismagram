@@ -19,6 +19,8 @@ export const $selectedModelNode = createStore<string | null>(null)
 
 export const $nodesIds = $diagram.map((diagram) => (diagram ? Object.keys(diagram.nodes) : []))
 
+export const $nodesColors = $diagram.map((diagram) => diagram?.nodesColors || {})
+
 export const $nodesArray = $diagram.map((diagram) => (diagram ? Object.values(diagram.nodes) : []))
 
 export const $edgesArray = $diagram.map((diagram) => (diagram ? Object.values(diagram.edges) : []))

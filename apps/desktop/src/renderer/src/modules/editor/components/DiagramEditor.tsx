@@ -4,7 +4,7 @@ import { useStore } from 'effector-react'
 import { nodeTypes } from '../config'
 import { $edgesArray, $nodesArray, nodesChangeEvent } from '../stores'
 import '../css/editor.css'
-import { TestProvider } from '../stores/context'
+import { DiagramEditorContextProvider } from '../stores/context'
 
 const $store = combine({
   nodes: $nodesArray,
@@ -18,7 +18,7 @@ export const DiagramEditor = () => {
     nodesChangeEvent(applyNodeChanges(changes, nodes))
 
   return (
-    <TestProvider>
+    <DiagramEditorContextProvider>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -28,6 +28,6 @@ export const DiagramEditor = () => {
       >
         <Background />
       </ReactFlow>
-    </TestProvider>
+    </DiagramEditorContextProvider>
   )
 }

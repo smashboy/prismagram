@@ -9,6 +9,7 @@ import {
 } from '@shared/common/configs/diagrams'
 import { ModelField, ModelNodeData, Node, Diagram } from '@shared/common/models/Diagram'
 import { graphDirectionOption } from '../constants'
+import { string2Color } from '../utils'
 
 export const prismaSchema2Diagram = (document: DMMF.Document): Diagram => {
   const {
@@ -21,7 +22,11 @@ export const prismaSchema2Diagram = (document: DMMF.Document): Diagram => {
 
   return {
     nodes: nodeModels.reduce((acc, node) => ({ ...acc, [node.id]: node }), {}),
-    edges: relations.map((relation) => simpleRelation2SimpleEdge(relation))
+    edges: relations.map((relation) => simpleRelation2SimpleEdge(relation)),
+    nodesColors: nodeModels.reduce(
+      (acc, node) => ({ ...acc, [node.id]: generateNodeColor(node) }),
+      {}
+    )
   }
 }
 
@@ -34,7 +39,8 @@ export const model2NodeModel = (model: DMMF.Model, relations: string[]): Node =>
       (acc, field) => ({ ...acc, [field.name]: modelField2NodeModelField(field) }),
       {}
     ),
-    relations: []
+    sourceRelations: [],
+    targetRelations: []
   }
 
   for (const relation of relations) {
@@ -42,17 +48,11 @@ export const model2NodeModel = (model: DMMF.Model, relations: string[]): Node =>
 
     if (name === from || name === to) {
       if (from === name) {
-        data.relations.push({
-          type: RelationIOType.SOURCE,
-          id: `${relation}-${from}`
-        })
+        data.sourceRelations.push(`${relation}-${from}`)
         continue
       }
 
-      data.relations.push({
-        type: RelationIOType.TARGET,
-        id: `${relation}-${to}`
-      })
+      data.targetRelations.push(`${relation}-${to}`)
     }
   }
 
@@ -95,8 +95,10 @@ export const simpleRelation2SimpleEdge = (relation: string): Edge => {
   }
 }
 
+export const generateNodeColor = (node: Node) => string2Color(node.data.name)
+
 export const layoutDiagramElements = (diagram: Diagram, layout: DiagramLayout): Diagram => {
-  const { nodes, edges } = diagram
+  const { nodes, edges, ...other } = diagram
 
   const dagreGraph = new dagre.graphlib.Graph()
   dagreGraph.setDefaultEdgeLabel(() => ({}))
@@ -131,5 +133,5 @@ export const layoutDiagramElements = (diagram: Diagram, layout: DiagramLayout): 
     return { ...acc, [id]: node }
   }, {})
 
-  return { edges, nodes: nodesWithLayout }
+  return { edges, nodes: nodesWithLayout, ...other }
 }

@@ -1,9 +1,7 @@
 import { Box, Card, Stack, Table, Text } from '@mantine/core'
-import { string2Color } from '@renderer/core/utils'
-import { RelationIOType } from '@shared/common/configs/diagrams'
 import { ModelNodeData } from '@shared/common/models/Diagram'
 import { Handle, Position } from 'reactflow'
-import { useTestStore } from '../stores/context'
+import { useDiagramEditorStore } from '../stores/context'
 import { ModelNodeField } from './ModelNodeField'
 
 interface ModelNodeProps {
@@ -31,63 +29,50 @@ const HandlesContainer: React.FC<HandlesContainerProps> = ({ position, children 
 )
 
 export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
-  const { name, fields, relations } = data
+  const { name, fields, sourceRelations, targetRelations } = data
 
-  const selectedModel = useTestStore()
-
-  const source = relations.filter((relation) => relation.type === RelationIOType.SOURCE)
-  const target = relations.filter((relation) => relation.type === RelationIOType.TARGET)
+  const { selectedModelNode, nodesColors } = useDiagramEditorStore()
 
   return (
     <Card
       sx={(theme) => ({
         overflow: 'unset',
-        borderColor: selectedModel === name ? theme.primaryColor : void 0
+        borderColor: selectedModelNode === name ? theme.primaryColor : void 0
       })}
       withBorder
       shadow="lg"
     >
       <HandlesContainer position={Position.Left}>
-        {target.map((relation) => (
+        {targetRelations.map((relation) => (
           <Box
-            key={relation.id}
+            key={relation}
             sx={{
               position: 'relative',
               width: 10
             }}
           >
-            <Handle
-              id={relation.id}
-              type={relation.type}
-              position={Position.Left}
-              isConnectable={false}
-            />
+            <Handle id={relation} type="target" position={Position.Left} isConnectable={false} />
           </Box>
         ))}
       </HandlesContainer>
-      <Text color={string2Color(name)}>{name}</Text>
+      <Text color={nodesColors[name]}>{name}</Text>
       <Table>
         <tbody>
           {Object.entries(fields).map(([id, field]) => (
-            <ModelNodeField key={id} fieldId={id} field={field} />
+            <ModelNodeField key={id} fieldId={id} field={field} nodesColors={nodesColors} />
           ))}
         </tbody>
       </Table>
       <HandlesContainer position={Position.Right}>
-        {source.map((relation) => (
+        {sourceRelations.map((relation) => (
           <Box
-            key={relation.id}
+            key={relation}
             sx={{
               position: 'relative',
               width: 10
             }}
           >
-            <Handle
-              id={relation.id}
-              type={relation.type}
-              position={Position.Right}
-              isConnectable={false}
-            />
+            <Handle id={relation} type="source" position={Position.Right} isConnectable={false} />
           </Box>
         ))}
       </HandlesContainer>

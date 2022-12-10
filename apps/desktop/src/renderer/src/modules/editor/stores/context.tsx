@@ -1,15 +1,31 @@
+import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { createContext, useContext } from 'react'
-import { $selectedModelNode } from './diagram'
+import { $nodesColors, $selectedModelNode } from './diagram'
 
 //  Cant use effector store directly in nodes FOR FUCK SAKE???!!?!?!
 
-const Context = createContext<string | null>(null)
+const $store = combine({
+  selectedModelNode: $selectedModelNode,
+  nodesColors: $nodesColors
+})
 
-export const TestProvider = ({ children }) => {
-  const selectedModelNode = useStore($selectedModelNode)
+const DiagramEditorContext = createContext<{
+  selectedModelNode: string | null
+  nodesColors: Record<string, string>
+} | null>(null)
 
-  return <Context.Provider value={selectedModelNode}>{children}</Context.Provider>
+export const DiagramEditorContextProvider = ({ children }) => {
+  const store = useStore($store)
+
+  return <DiagramEditorContext.Provider value={store}>{children}</DiagramEditorContext.Provider>
 }
 
-export const useTestStore = () => useContext(Context)
+export const useDiagramEditorStore = () => {
+  const ctx = useContext(DiagramEditorContext)
+
+  if (!ctx)
+    throw new Error('useDiagramEditorStore must be used within DiagramEditorContextProvider')
+
+  return ctx
+}

@@ -6,7 +6,8 @@ export type Node = ReactNode<ModelNodeData>
 export interface ModelNodeData {
   name: string
   fields: Record<string, ModelField>
-  relations: FieldRelationIO[]
+  sourceRelations: string[]
+  targetRelations: string[]
 }
 
 export interface ModelField {
@@ -19,6 +20,7 @@ export interface ModelField {
 export interface Diagram {
   nodes: Record<string, Node>
   edges: Edge[]
+  nodesColors: Record<string, string>
 }
 
 export interface FieldRelationIO {
