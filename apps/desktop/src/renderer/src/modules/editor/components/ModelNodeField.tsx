@@ -1,4 +1,3 @@
-import { Box } from '@mantine/core'
 import { ModelField } from '@shared/common/models/Diagram'
 import { ScalarFieldColor } from '../config'
 
@@ -14,9 +13,9 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({ fieldId, field, 
   const displayType = type.concat(isList ? '[]' : '').concat(isRequired ? '' : '?')
 
   return (
-    <Box component="tr">
+    <tr>
       <td>{fieldId}</td>
       <td style={{ color: ScalarFieldColor[type] || nodesColors[type] }}>{displayType}</td>
-    </Box>
+    </tr>
   )
 }
