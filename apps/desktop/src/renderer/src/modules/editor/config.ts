@@ -22,3 +22,15 @@ export const ScalarFieldColor = {
   [ScalarType.JSON]: string2Color(ScalarType.JSON),
   [ScalarType.BYTES]: string2Color(ScalarType.BYTES)
 }
+
+export const scalarOptionsArray = [
+  ScalarType.BIG_INT,
+  ScalarType.BOOLEAN,
+  ScalarType.BYTES,
+  ScalarType.DATE_TIME,
+  ScalarType.DECIMAL,
+  ScalarType.FLOAT,
+  ScalarType.INT,
+  ScalarType.JSON,
+  ScalarType.STRING
+]

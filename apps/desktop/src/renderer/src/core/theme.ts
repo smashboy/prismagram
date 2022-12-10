@@ -30,7 +30,7 @@ export const theme: MantineThemeOverride = {
     },
     Input: {
       defaultProps: {
-        radius: 'lg',
+        radius: 'md',
         size: 'md'
       }
     },

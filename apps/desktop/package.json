@@ -41,6 +41,7 @@
     "lodash": "^4.17.21",
     "lowlight": "^2.8.0",
     "monaco-editor": "^0.34.1",
+    "patronum": "^1.12.3",
     "reactflow": "^11.3.2"
   },
   "devDependencies": {

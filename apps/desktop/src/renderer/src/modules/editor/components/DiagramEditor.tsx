@@ -25,6 +25,7 @@ export const DiagramEditor = () => {
         nodeTypes={nodeTypes}
         onNodesChange={handleNodeChanges}
         snapToGrid
+        minZoom={0.05}
       >
         <Background />
       </ReactFlow>

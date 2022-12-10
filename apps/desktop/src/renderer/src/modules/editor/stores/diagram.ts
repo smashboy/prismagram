@@ -1,4 +1,4 @@
-import { createEvent, createStore } from 'effector'
+import { combine, createEvent, createStore } from 'effector'
 import { Diagram, Node } from '@shared/common/models/Diagram'
 
 export const loadDiagramEvent = createEvent<Diagram>()
@@ -13,9 +13,13 @@ export const $diagram = createStore<Diagram | null>(null)
     nodes: nodes.reduce((acc, node) => ({ ...acc, [node.id]: node }), {})
   }))
 
-export const $selectedModelNode = createStore<string | null>(null)
+export const $selectedModelNodeId = createStore<string | null>(null)
   .on(selectModelNodeEvent, (_, id) => id)
   .reset(resetSelectedModelEvent)
+
+export const $selectedModelNode = combine([$diagram, $selectedModelNodeId]).map(
+  ([diagram, id]) => (id && diagram && diagram.nodes[id]) || null
+)
 
 export const $nodesIds = $diagram.map((diagram) => (diagram ? Object.keys(diagram.nodes) : []))
 

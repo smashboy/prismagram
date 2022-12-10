@@ -1,7 +1,8 @@
 import { NavLink } from '@mantine/core'
+import { toggleModelNodeSidebar } from '@renderer/stores/ui/modals'
 import { IconBorderAll } from '@tabler/icons'
 import { useStore, useStoreMap } from 'effector-react'
-import { $diagram, $selectedModelNode, selectModelNodeEvent } from '../../stores'
+import { $diagram, $selectedModelNodeId, selectModelNodeEvent } from '../../stores'
 
 interface ModelNavItemProps {
   nodeId: string
@@ -16,11 +17,14 @@ export const ModelNavItem: React.FC<ModelNavItemProps> = ({ nodeId }) => {
     fn: (diagram, [id]) => diagram!.nodes[id]
   })
 
-  const selectedNodeId = useStore($selectedModelNode)
+  const selectedNodeId = useStore($selectedModelNodeId)
 
   const isSelected = selectedNodeId === nodeId
 
-  const handleSelectMode = () => selectModelNodeEvent(nodeId)
+  const handleSelectMode = () => {
+    toggleModelNodeSidebar(true)
+    selectModelNodeEvent(nodeId)
+  }
 
   return (
     <NavLink

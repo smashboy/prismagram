@@ -1,4 +1,4 @@
-import { Box, Button, ScrollArea, Stack, TextInput } from '@mantine/core'
+import { Button, ScrollArea, Stack, TextInput } from '@mantine/core'
 import { $selectedProjectId } from '@renderer/modules/projects'
 import { IconPlus, IconSearch } from '@tabler/icons'
 import { useList, useStore } from 'effector-react'
