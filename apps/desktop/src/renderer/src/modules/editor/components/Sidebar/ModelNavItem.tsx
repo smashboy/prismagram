@@ -38,7 +38,9 @@ export const ModelNavItem: React.FC<ModelNavItemProps> = ({ nodeId }) => {
       variant="filled"
       active={isSelected}
       onClick={handleSelectMode}
-      icon={<IconBorderAll size={16} color={nodesColors[nodeId]} stroke={1.5} />}
+      icon={
+        <IconBorderAll size={16} color={isSelected ? void 0 : nodesColors[nodeId]} stroke={1.5} />
+      }
       sx={(theme) => ({
         borderRadius: theme.radius.sm,
         boxShadow: isSelected ? theme.shadows.xs : void 0
