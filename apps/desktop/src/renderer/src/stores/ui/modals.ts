@@ -5,17 +5,17 @@ import { combine } from 'effector'
 export const [$isOpenCreateProjectModal, toggleCreateProjectModal] = createBooleanStore(false)
 export const [$isOpenSelectProjectModal, toggleSelectProjectModal] = createBooleanStore(false)
 
-export const [$isOpenModeNodelSidebar, toggleModelNodeSidebar] = createBooleanStore(false)
+export const [$isOpenDetailsViewInitial, toggleModelNodeSidebar] = createBooleanStore(false)
 
-export const [$isOpenModeNodelSidebarDebounced] = createBooleanStore(false)
+export const [$isOpenDetailsViewDebounced] = createBooleanStore(false)
 
-export const $isOpenRightSidebarModeNodel = combine({
-  isOpen: $isOpenModeNodelSidebar,
-  isOpenDebounced: $isOpenModeNodelSidebarDebounced
+export const $isOpenDetailsView = combine({
+  isOpen: $isOpenDetailsViewInitial,
+  isOpenDebounced: $isOpenDetailsViewDebounced
 })
 
 debounce({
-  source: $isOpenModeNodelSidebar,
+  source: $isOpenDetailsViewInitial,
   timeout: 450,
-  target: $isOpenModeNodelSidebarDebounced
+  target: $isOpenDetailsViewDebounced
 })

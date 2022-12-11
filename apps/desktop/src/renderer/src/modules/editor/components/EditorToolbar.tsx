@@ -17,10 +17,12 @@ import {
   IconSchema,
   IconZoomInArea
 } from '@tabler/icons'
+import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { EditorView } from '../config'
 import {
   $diagram,
+  $isEditorEnabled,
   $selectedEditorView,
   changeEditorViewEvent,
   layoutDiagramEffect
@@ -29,6 +31,12 @@ import {
 const ICON_SIZE = 20
 const ICON_BUTTON_SIZE = 'lg'
 
+const $store = combine({
+  selectedView: $selectedEditorView,
+  diagram: $diagram,
+  isEditorEnabled: $isEditorEnabled
+})
+
 const OptionsContainer: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <Paper align="center" h="100%" component={Flex}>
     <Group spacing={0}>{children}</Group>
@@ -36,8 +44,7 @@ const OptionsContainer: React.FC<{ children: React.ReactNode }> = ({ children })
 )
 
 export const EditorToolbar = () => {
-  const selectedView = useStore($selectedEditorView)
-  const diagram = useStore($diagram)
+  const { selectedView, diagram, isEditorEnabled } = useStore($store)
 
   const handleChangeEditorView = (view: EditorView) => changeEditorViewEvent(view)
   const handleDiagramLayout = (layout: DiagramLayout) => () =>
@@ -54,15 +61,15 @@ export const EditorToolbar = () => {
         {(styles) => (
           <Group style={styles}>
             <OptionsContainer>
-              <ActionIcon size={ICON_BUTTON_SIZE}>
+              <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
                 <IconArrowBackUp size={ICON_SIZE} />
               </ActionIcon>
-              <ActionIcon size={ICON_BUTTON_SIZE}>
+              <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
                 <IconArrowForwardUp size={ICON_SIZE} />
               </ActionIcon>
             </OptionsContainer>
             <OptionsContainer>
-              <ActionIcon size={ICON_BUTTON_SIZE}>
+              <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
                 <IconZoomInArea size={ICON_SIZE} />
               </ActionIcon>
             </OptionsContainer>
@@ -70,6 +77,7 @@ export const EditorToolbar = () => {
               <ActionIcon
                 onClick={handleDiagramLayout(DiagramLayout.VERTICAL)}
                 size={ICON_BUTTON_SIZE}
+                disabled={!isEditorEnabled}
               >
                 <IconBoxMargin size={ICON_SIZE} />
               </ActionIcon>
@@ -81,6 +89,7 @@ export const EditorToolbar = () => {
         <SegmentedControl
           value={selectedView}
           onChange={handleChangeEditorView}
+          disabled={!isEditorEnabled}
           data={[
             {
               label: (

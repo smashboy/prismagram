@@ -31,8 +31,11 @@ export const ModelFieldSettings: React.FC<ModelFieldSettingsProps> = ({
       value={name}
       sx={(theme) => ({
         boxShadow: theme.shadows.sm,
-        ['&:not(:first-child) ']: {
+        ['&:not(:first-child)']: {
           marginTop: theme.spacing.xs
+        },
+        ['&:last-child']: {
+          marginBottom: theme.spacing.xl
         }
       })}
     >

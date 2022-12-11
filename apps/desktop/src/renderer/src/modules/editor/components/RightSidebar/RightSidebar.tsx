@@ -1,20 +1,18 @@
 import { useStore } from 'effector-react'
-import { $isOpenRightSidebarModeNodel, toggleModelNodeSidebar } from '@renderer/stores/ui/modals'
-import { ActionIcon, Group, Paper, ScrollArea, Stack, Transition } from '@mantine/core'
+import { $isOpenDetailsView, toggleModelNodeSidebar } from '@renderer/stores/ui/modals'
+import { ActionIcon, Group, Paper, Stack, Transition } from '@mantine/core'
 import { IconX } from '@tabler/icons'
 import { combine } from 'effector'
 import { $selectedModelNodeId } from '../../stores'
-import { SelectedModelNodeSettings } from './SelectedModelNodeSettings'
 
 const $store = combine({
-  isOpenRightSidebar: $isOpenRightSidebarModeNodel,
+  isOpenDetailsView: $isOpenDetailsView,
   selectedModelNode: $selectedModelNodeId
 })
 
 export const RightSidebar = () => {
   const {
-    isOpenRightSidebar: { isOpen, isOpenDebounced },
-    selectedModelNode
+    isOpenDetailsView: { isOpen, isOpenDebounced }
   } = useStore($store)
 
   const isMounted = isOpen ? isOpenDebounced : isOpen
@@ -42,9 +40,9 @@ export const RightSidebar = () => {
             </ActionIcon>
           </Group>
           <Stack h="100%" sx={{ overflowY: 'auto' }}>
-            <ScrollArea offsetScrollbars>
+            {/* <ScrollArea offsetScrollbars>
               {selectedModelNode && <SelectedModelNodeSettings />}
-            </ScrollArea>
+            </ScrollArea> */}
           </Stack>
         </Paper>
       )}
