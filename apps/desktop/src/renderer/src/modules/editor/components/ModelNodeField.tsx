@@ -8,9 +8,8 @@ interface ModelNodeFieldProps {
 }
 
 export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({ fieldId, field, nodesColors }) => {
-  const { type, isList, isRequired } = field
+  const { type, displayType } = field
 
-  const displayType = type.concat(isList ? '[]' : '').concat(isRequired ? '' : '?')
   const textColor = ScalarFieldColor[type] || nodesColors[type]
 
   return (

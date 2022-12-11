@@ -1,9 +1,11 @@
 import { contextBridge } from 'electron'
 import * as path from 'path'
+import { groupBy } from 'lodash'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
 const api = {
+  groupBy,
   path,
   __dirname
 }

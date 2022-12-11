@@ -1,5 +1,5 @@
 import { Edge as ReactEdge, Node as ReactNode } from 'reactflow'
-import { RelationIOType, ScalarType } from '../configs/diagrams'
+import { RelationType, ScalarType } from '../configs/diagrams'
 
 export type Node = ReactNode<ModelNodeData>
 export type Edge = ReactEdge<EdgeData>
@@ -7,8 +7,13 @@ export type Edge = ReactEdge<EdgeData>
 export interface ModelNodeData {
   name: string
   fields: Record<string, ModelField>
-  sourceRelations: string[]
-  targetRelations: string[]
+  sourceHandlers: Handler[]
+  targetHandlers: Handler[]
+}
+
+interface Handler {
+  relationType: RelationType
+  id: string
 }
 
 export interface EdgeData {
@@ -17,8 +22,9 @@ export interface EdgeData {
 
 export interface ModelField {
   type: ScalarType | string
-  isList: boolean
-  isRequired: boolean
+  displayType: string
+  // isList: boolean
+  // isRequired: boolean
   // relation?: FieldRelationIO
 }
 
@@ -28,7 +34,14 @@ export interface Diagram {
   nodesColors: Record<string, string>
 }
 
-export interface FieldRelationIO {
-  type: RelationIOType
+export interface Relation {
   id: string
+  type: RelationType
+  from: RelationTarget
+  to: RelationTarget
+}
+
+interface RelationTarget {
+  model: string
+  field: string
 }

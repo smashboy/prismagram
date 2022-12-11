@@ -17,11 +17,10 @@ const $store = combine({
 
 export const ModelFieldSettings: React.FC<ModelFieldSettingsProps> = ({
   name,
-  field: { type, isList, isRequired }
+  field: { type, displayType }
 }) => {
   const { modelsIds, nodesColors } = useStore($store)
 
-  const displayType = type.concat(isList ? '[]' : '').concat(isRequired ? '' : '?')
   const typeOptions = [...scalarOptionsArray, ...modelsIds]
 
   const typeColor = ScalarFieldColor[type] || nodesColors[type]

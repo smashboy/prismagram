@@ -29,7 +29,7 @@ const HandlesContainer: React.FC<HandlesContainerProps> = ({ position, children 
 )
 
 export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
-  const { name, fields, sourceRelations, targetRelations } = data
+  const { name, fields, sourceHandlers, targetHandlers } = data
 
   const { selectedModelNode, nodesColors } = useDiagramEditorStore()
 
@@ -43,15 +43,15 @@ export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
       shadow="lg"
     >
       <HandlesContainer position={Position.Left}>
-        {targetRelations.map((relation) => (
+        {targetHandlers.map((relation) => (
           <Box
-            key={relation}
+            key={relation.id}
             sx={{
               position: 'relative',
               width: 10
             }}
           >
-            <Handle id={relation} type="target" position={Position.Left} isConnectable={false} />
+            <Handle id={relation.id} type="target" position={Position.Left} isConnectable={false} />
           </Box>
         ))}
       </HandlesContainer>
@@ -64,15 +64,20 @@ export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
         </tbody>
       </Table>
       <HandlesContainer position={Position.Right}>
-        {sourceRelations.map((relation) => (
+        {sourceHandlers.map((relation) => (
           <Box
-            key={relation}
+            key={relation.id}
             sx={{
               position: 'relative',
               width: 10
             }}
           >
-            <Handle id={relation} type="source" position={Position.Right} isConnectable={false} />
+            <Handle
+              id={relation.id}
+              type="source"
+              position={Position.Right}
+              isConnectable={false}
+            />
           </Box>
         ))}
       </HandlesContainer>

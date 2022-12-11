@@ -1,7 +1,15 @@
 import dagre from 'dagre'
+import { groupBy } from 'lodash'
 import type { DMMF } from '@prisma/generator-helper'
-import { DiagramLayout, NodeType, ScalarType } from '@shared/common/configs/diagrams'
-import { ModelField, ModelNodeData, Node, Diagram, Edge } from '@shared/common/models/Diagram'
+import { DiagramLayout, NodeType, RelationType, ScalarType } from '@shared/common/configs/diagrams'
+import {
+  ModelField,
+  ModelNodeData,
+  Node,
+  Diagram,
+  Edge,
+  Relation
+} from '@shared/common/models/Diagram'
 import { graphDirectionOption } from '../constants'
 import { string2Color } from '../utils'
 
@@ -10,14 +18,15 @@ export const prismaSchema2Diagram = (document: DMMF.Document): Diagram => {
     datamodel: { models }
   } = document
 
-  const relations = defineModelsSimplifiedRelations(models)
+  const relations = defineModelsRelations(models)
 
   const nodeModels = models.map((model) => model2NodeModel(model, relations))
 
   return {
     document,
+    relations,
     nodes: nodeModels.reduce((acc, node) => ({ ...acc, [node.id]: node }), {}),
-    edges: relations.map((relation) => simpleRelation2SimpleEdge(relation)),
+    edges: [...relations.values()].map((relation) => relation2Edge(relation)),
     nodesColors: nodeModels.reduce(
       (acc, node) => ({ ...acc, [node.id]: generateNodeColor(node) }),
       {}
@@ -25,7 +34,7 @@ export const prismaSchema2Diagram = (document: DMMF.Document): Diagram => {
   }
 }
 
-export const model2NodeModel = (model: DMMF.Model, relations: string[]): Node => {
+export const model2NodeModel = (model: DMMF.Model, relations: Map<string, Relation>): Node => {
   const { name, fields } = model
 
   const data: ModelNodeData = {
@@ -34,20 +43,31 @@ export const model2NodeModel = (model: DMMF.Model, relations: string[]): Node =>
       (acc, field) => ({ ...acc, [field.name]: modelField2NodeModelField(field) }),
       {}
     ),
-    sourceRelations: [],
-    targetRelations: []
+    sourceHandlers: [],
+    targetHandlers: []
   }
 
-  for (const relation of relations) {
-    const [from, to] = relation.split('To')
+  const modelRelations = fields.map((field) => field.relationName).filter(Boolean) as string[]
 
-    if (name === from || name === to) {
-      if (from === name) {
-        data.sourceRelations.push(`${relation}-${from}`)
-        continue
+  for (const modelRelation of modelRelations) {
+    const relation = relations.get(modelRelation)
+
+    if (relation) {
+      const { id, type, from, to } = relation
+
+      if (from.model === name) {
+        data.sourceHandlers.push({
+          relationType: type,
+          id: `${id}.${from.model}.${from.field}`
+        })
       }
 
-      data.targetRelations.push(`${relation}-${to}`)
+      if (to.model === name) {
+        data.targetHandlers.push({
+          relationType: type,
+          id: `${id}.${to.model}.${to.field}`
+        })
+      }
     }
   }
 
@@ -64,31 +84,106 @@ export const modelField2NodeModelField = (field: DMMF.Field): ModelField => {
 
   const modelField: ModelField = {
     type: ScalarType[type] || type,
-    isList,
-    isRequired
+    displayType: `${type}${isList ? '[]' : !isRequired ? '?' : ''}`
   }
 
   return modelField
 }
 
-export const defineModelsSimplifiedRelations = (models: DMMF.Model[]) =>
-  Array.from(
-    new Set(models.flatMap((model) => model.fields.map((field) => field.relationName)))
-  ).filter(Boolean) as string[]
+interface ExtendedModelField extends DMMF.Field {
+  modelName: string
+}
 
-export const simpleRelation2SimpleEdge = (relation: string): Edge => {
-  const [from, to] = relation.split('To')
+export const defineModelsRelations = (models: DMMF.Model[]) => {
+  const modelsGroupedByRelations = groupBy<ExtendedModelField>(
+    models
+      .flatMap((model) => model.fields.map((field) => ({ ...field, modelName: model.name })))
+      .filter((field) => field.relationName),
+    (field) => field.relationName
+  )
+
+  const relations: Map<string, Relation> = new Map()
+
+  for (const [name, [first, second]] of Object.entries(modelsGroupedByRelations)) {
+    if (first.isList && second.isList) {
+      relations.set(name, {
+        id: name,
+        type: RelationType.MANY_TO_MANY,
+        from: {
+          model: first.modelName,
+          field: first.name
+        },
+        to: {
+          model: second.modelName,
+          field: second.name
+        }
+      })
+
+      continue
+    }
+
+    const { from, to } = determineSourceTarget(first, second)
+
+    if (first.isList || second.isList) {
+      relations.set(name, {
+        id: name,
+        type: RelationType.ONE_TO_MANY,
+        from: {
+          model: from.modelName,
+          field: from.name
+        },
+        to: {
+          model: to.modelName,
+          field: to.name
+        }
+      })
+
+      continue
+    }
+
+    relations.set(name, {
+      id: name,
+      type: RelationType.ONE_TO_ONE,
+      from: {
+        model: from.modelName,
+        field: from.name
+      },
+      to: {
+        model: to.modelName,
+        field: to.name
+      }
+    })
+  }
+
+  return relations
+}
+
+export const determineSourceTarget = (first: ExtendedModelField, second: ExtendedModelField) =>
+  first.relationFromFields!.length > 0 ? { from: first, to: second } : { from: second, to: first }
+
+// Array.from(
+//   new Set(
+//     models.flatMap((model) =>
+//       model.fields.map(
+//         (field) => `${field.relationName}.${model.name}->${field.relationName}.${field.type}`
+//       )
+//     )
+//   )
+// ).filter(Boolean) as string[]
+
+export const relation2Edge = (relation: Relation): Edge => {
+  const { id, type, from, to } = relation
 
   return {
-    id: relation,
-    label: relation,
-    source: from,
-    target: to,
+    id,
+    label: `${id} (${type})`,
+    source: from.model,
+    target: to.model,
     type: 'smoothstep',
-    sourceHandle: `${relation}-${from}`,
-    targetHandle: `${relation}-${to}`,
+    sourceHandle: `${id}.${from.model}.${from.field}`,
+    targetHandle: `${id}.${to.model}.${to.field}`,
     data: {
-      color: string2Color(relation)
+      color: string2Color(id)
     }
   }
 }
@@ -105,6 +200,7 @@ export const layoutDiagramElements = (diagram: Diagram, layout: DiagramLayout): 
 
   const nodesArray = Object.entries(nodes)
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   nodesArray.forEach(([_, node]) => {
     dagreGraph.setNode(node.id, {
       width: node.width,
@@ -121,8 +217,6 @@ export const layoutDiagramElements = (diagram: Diagram, layout: DiagramLayout): 
   const nodesWithLayout = nodesArray.reduce((acc, [id, node]) => {
     const nodeWithPosition = dagreGraph.node(id)
 
-    // We are shifting the dagre node position (anchor=center center) to the top left
-    // so it matches the React Flow node anchor point (top left).
     node.position = {
       x: nodeWithPosition.x - node.width! / 2,
       y: nodeWithPosition.y - node.height! / 2

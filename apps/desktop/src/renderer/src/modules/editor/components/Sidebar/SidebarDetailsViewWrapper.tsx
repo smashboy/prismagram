@@ -23,7 +23,7 @@ export const SidebarDetailsViewWrapper: React.FC<SidebarDetailsViewWrapperProps>
   }
 
   return (
-    <Transition mounted={isOpen} transition="fade" duration={300} timingFunction="ease">
+    <Transition mounted={isOpen} transition="fade" duration={250} timingFunction="ease">
       {(style) => (
         <Box w="100%" h="100%" style={style}>
           <Group pb="xs" position="left">
