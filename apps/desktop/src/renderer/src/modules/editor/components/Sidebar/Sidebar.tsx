@@ -34,7 +34,7 @@ export const Sidebar = () => {
           <Transition
             mounted={isMountedMainView ? false : true}
             transition="fade"
-            duration={400}
+            duration={300}
             timingFunction="ease"
           >
             {(style) => (
