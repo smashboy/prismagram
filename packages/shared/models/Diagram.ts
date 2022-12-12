@@ -7,11 +7,11 @@ export type Edge = ReactEdge<EdgeData>
 export interface ModelNodeData {
   name: string
   fields: Record<string, ModelField>
-  sourceHandlers: Handler[]
-  targetHandlers: Handler[]
+  sourceHandlers: Record<string, Handler>
+  targetHandlers: Record<string, Handler>
 }
 
-interface Handler {
+export interface Handler {
   relationType: RelationType
   id: string
 }

@@ -40,15 +40,13 @@ export const readFile = async (window: BrowserWindow, options: OpenReadOptions) 
 
   if (!filePath) return filePath
 
-  const res = await fs.readFile(filePath, { encoding: 'utf-8' })
-
-  return res
+  return fs.readFile(filePath, { encoding: 'utf-8' })
 }
 
-export const createFile = async (filePath: string, filename: string, content: string) => {
+export const createFile = (filePath: string, filename: string, content: string) => {
   if (!fsSync.existsSync(filePath)) fsSync.mkdirSync(filePath, { recursive: true })
 
-  fs.writeFile(path.join(filePath, filename), content)
+  return fs.writeFile(path.join(filePath, filename), content)
 }
 
 export const readDirectoryFiles = async (directoryPath: string) => {

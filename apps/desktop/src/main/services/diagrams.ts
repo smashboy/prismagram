@@ -43,30 +43,32 @@ export const model2NodeModel = (model: DMMF.Model, relations: Map<string, Relati
       (acc, field) => ({ ...acc, [field.name]: modelField2NodeModelField(field) }),
       {}
     ),
-    sourceHandlers: [],
-    targetHandlers: []
+    sourceHandlers: {},
+    targetHandlers: {}
   }
 
-  const modelRelations = fields.map((field) => field.relationName).filter(Boolean) as string[]
+  const fieldsWithRelations = fields.filter((field) => field.relationName)
 
-  for (const modelRelation of modelRelations) {
-    const relation = relations.get(modelRelation)
+  for (const field of fieldsWithRelations) {
+    const { name: fieldName, relationName } = field
+
+    const relation = relations.get(relationName!)
 
     if (relation) {
       const { id, type, from, to } = relation
 
       if (from.model === name) {
-        data.sourceHandlers.push({
+        data.sourceHandlers[fieldName] = {
           relationType: type,
           id: `${id}.${from.model}.${from.field}`
-        })
+        }
       }
 
       if (to.model === name) {
-        data.targetHandlers.push({
+        data.targetHandlers[fieldName] = {
           relationType: type,
           id: `${id}.${to.model}.${to.field}`
-        })
+        }
       }
     }
   }
@@ -95,7 +97,7 @@ interface ExtendedModelField extends DMMF.Field {
 }
 
 export const defineModelsRelations = (models: DMMF.Model[]) => {
-  const modelsGroupedByRelations = groupBy<ExtendedModelField>(
+  const fieldsGroupedByRelations = groupBy<ExtendedModelField>(
     models
       .flatMap((model) => model.fields.map((field) => ({ ...field, modelName: model.name })))
       .filter((field) => field.relationName),
@@ -104,7 +106,7 @@ export const defineModelsRelations = (models: DMMF.Model[]) => {
 
   const relations: Map<string, Relation> = new Map()
 
-  for (const [name, [first, second]] of Object.entries(modelsGroupedByRelations)) {
+  for (const [name, [first, second]] of Object.entries(fieldsGroupedByRelations)) {
     if (first.isList && second.isList) {
       relations.set(name, {
         id: name,

@@ -19,7 +19,7 @@ sample({
 sample({
   clock: selectProjectEvent,
   fn: () => void 0,
-  target: [loadEditorDataEffect]
+  target: loadEditorDataEffect
 })
 
 sample({
