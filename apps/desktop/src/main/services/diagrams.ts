@@ -220,8 +220,8 @@ export const layoutDiagramElements = (diagram: Diagram, layout: DiagramLayout): 
     const nodeWithPosition = dagreGraph.node(id)
 
     node.position = {
-      x: nodeWithPosition.x - node.width! / 2,
-      y: nodeWithPosition.y - node.height! / 2
+      x: nodeWithPosition.x,
+      y: nodeWithPosition.y
     }
 
     return { ...acc, [id]: node }

@@ -1,13 +1,4 @@
-import {
-  ActionIcon,
-  Center,
-  Flex,
-  Group,
-  Menu,
-  Paper,
-  SegmentedControl,
-  Transition
-} from '@mantine/core'
+import { ActionIcon, Center, Flex, Group, Paper, SegmentedControl, Transition } from '@mantine/core'
 import { DiagramLayout } from '@shared/common/configs/diagrams'
 import {
   IconArrowBackUp,
@@ -75,7 +66,7 @@ export const EditorToolbar = () => {
             </OptionsContainer>
             <OptionsContainer>
               <ActionIcon
-                onClick={handleDiagramLayout(DiagramLayout.VERTICAL)}
+                onClick={handleDiagramLayout(DiagramLayout.HORIZONTAL)}
                 size={ICON_BUTTON_SIZE}
                 disabled={!isEditorEnabled}
               >
