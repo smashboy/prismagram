@@ -32,10 +32,10 @@ export enum ProjectSettingsRoute {
 }
 
 export const settingsRoutes = new Map<SettingsRoute, SettingsRouteOptions>([
-  [SettingsRoute.GENERAL, { label: 'General', icon: IconHomeCog }],
-  [SettingsRoute.SHORTCUTS, { label: 'Shortcuts', icon: IconCommand }],
-  [SettingsRoute.PROJECT, { label: 'Project', icon: IconBriefcase }],
-  [SettingsRoute.ABOUT, { label: 'About', icon: IconInfoCircle }]
+  [SettingsRoute.GENERAL, { label: 'General', icon: IconHomeCog, color: 'indigo' }],
+  [SettingsRoute.SHORTCUTS, { label: 'Shortcuts', icon: IconCommand, color: 'cyan' }],
+  [SettingsRoute.PROJECT, { label: 'Project', icon: IconBriefcase, color: 'orange' }],
+  [SettingsRoute.ABOUT, { label: 'About', icon: IconInfoCircle, color: 'pink' }]
 ])
 
 export const generalSettingsRoutes = new Map<GeneralSettingsRoute, SettingsRouteOptions>([
@@ -47,7 +47,7 @@ export const generalSettingsRoutes = new Map<GeneralSettingsRoute, SettingsRoute
 export const projectSettingsRoutes = new Map<ProjectSettingsRoute, SettingsRouteOptions>([
   [ProjectSettingsRoute.GENERAL, { label: 'General', icon: IconAdjustments }],
   [ProjectSettingsRoute.COMMANDS, { label: 'Commands', icon: IconPrompt }],
-  [ProjectSettingsRoute.PRISMA, { label: 'Schema settings', icon: IconBrandPrisma }]
+  [ProjectSettingsRoute.PRISMA, { label: 'Schema', icon: IconBrandPrisma }]
 ])
 
 export const settingsRoutesArray = [...settingsRoutes.entries()]

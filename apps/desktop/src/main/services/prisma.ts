@@ -1,4 +1,5 @@
 import { getDMMF, formatSchema, getConfig } from '@prisma/internals'
+import { ProjectPrismaSettings } from '@shared/common/models/Project'
 import { BrowserWindow } from 'electron'
 import { readFile, readFilePath } from './filesManager'
 
@@ -30,3 +31,40 @@ export const readPrismaSchemaFile = (window: BrowserWindow) =>
       }
     ]
   })
+
+export const getPrismaSchemaSettings = async (src: string): Promise<ProjectPrismaSettings> => {
+  const { datasources, generators } = await getPrismaConfig(src)
+
+  const settings: ProjectPrismaSettings = {
+    datasources: {},
+    generators: {}
+  }
+
+  for (const { name, provider, url } of datasources) {
+    settings.datasources[name] = {
+      provider: provider,
+      url: {
+        isEnv: !!url.fromEnvVar,
+        value: url.fromEnvVar || url.value
+      }
+    }
+  }
+
+  for (const { name, provider, output, previewFeatures } of generators) {
+    settings.generators[name] = {
+      provider: {
+        isEnv: !!provider.fromEnvVar,
+        value: provider.fromEnvVar || provider.value
+      },
+      previewFeatures,
+      output: output
+        ? {
+            isEnv: !!output.fromEnvVar,
+            value: output.fromEnvVar || output.value
+          }
+        : void 0
+    }
+  }
+
+  return settings
+}

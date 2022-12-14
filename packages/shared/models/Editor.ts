@@ -1,6 +1,8 @@
-import { Diagram } from "./Diagram";
+import { Diagram } from './Diagram'
+import { ProjectSettings } from './Project'
 
 export interface EditorData {
-  diagram: Diagram,
+  diagram: Diagram
   schema: string
+  settings: ProjectSettings
 }

@@ -1,0 +1,1 @@
+export { PrismaProjectSettings } from './PrismaProjectSettings'

@@ -11,7 +11,7 @@ export const ProjectSettingsNavigation = () => {
 
   return (
     <SegmentedControl
-      w="25%"
+      w="fit-content"
       value={selectedSection}
       onChange={handleChangeSection}
       data={projectSettingsRoutesArray.map(([id, { label, icon: Icon }]) => ({

@@ -13,11 +13,11 @@ const $store = combine({
   selectedSection: $selectedSettingsSection
 })
 
-const settingsRoutesComponents = new Map<SettingsRoute, React.FC | null>([
+const settingsRoutesComponents = new Map<SettingsRoute, React.FC>([
   [SettingsRoute.GENERAL, GeneralSettings],
-  [SettingsRoute.SHORTCUTS, null],
-  [SettingsRoute.PROJECT, ProjectSettings],
-  [SettingsRoute.ABOUT, null]
+  // [SettingsRoute.SHORTCUTS, null],
+  [SettingsRoute.PROJECT, ProjectSettings]
+  // [SettingsRoute.ABOUT, null]
 ])
 
 export const SettingsModal = () => {

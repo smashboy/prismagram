@@ -16,6 +16,6 @@ export const $isOpenDetailsView = combine({
 
 debounce({
   source: $isOpenDetailsViewInitial,
-  timeout: 450,
+  timeout: 200,
   target: $isOpenDetailsViewDebounced
 })

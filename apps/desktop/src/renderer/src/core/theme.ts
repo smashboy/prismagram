@@ -39,6 +39,12 @@ export const theme: MantineThemeOverride = {
         spacing: 'xs'
       }
     },
+    Switch: {
+      defaultProps: {
+        labelPosition: 'left',
+        size: 'md'
+      }
+    },
     SimpleGrid: {
       defaultProps: {
         spacing: 'xs'

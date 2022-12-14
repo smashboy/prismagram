@@ -11,7 +11,7 @@ export const GeneralSettingsNavigation = () => {
 
   return (
     <SegmentedControl
-      w="25%"
+      w="fit-content"
       value={selectedSection}
       onChange={handleChangeSection}
       data={generalSettingsRoutesArray.map(([id, { label, icon: Icon }]) => ({

@@ -7,7 +7,7 @@ export const closeProjectEvent = createEvent()
 
 export const [$projects, projectEvents] = createMapStore<Project>()
 
-export const $projectsArray = $projects.map((companies) => [...companies.keys()])
+export const $projectsArray = $projects.map((projects) => [...projects.keys()])
 
 export const $selectedProjectId = createStore<string | null>(null)
   .on(selectProjectEvent, (_, projectId) => projectId)
