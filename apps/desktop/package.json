@@ -26,6 +26,7 @@
     "@mantine/hooks": "^5.9.2",
     "@mantine/tiptap": "^5.9.2",
     "@monaco-editor/react": "^4.4.6",
+    "@mrleebo/prisma-ast": "^0.4.2",
     "@prisma/internals": "^4.7.1",
     "@prisma/text-editors": "^0.0.22",
     "@shared/common": "*",

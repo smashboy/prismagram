@@ -3,11 +3,11 @@ import { $isOpenDetailsView, toggleModelNodeSidebar } from '@renderer/stores/ui/
 import { ActionIcon, Group, Paper, Stack, Transition } from '@mantine/core'
 import { IconX } from '@tabler/icons'
 import { combine } from 'effector'
-import { $selectedModelNodeId } from '../../stores'
+import { $selectedModelId } from '../../stores'
 
 const $store = combine({
   isOpenDetailsView: $isOpenDetailsView,
-  selectedModelNode: $selectedModelNodeId
+  selectedModelNode: $selectedModelId
 })
 
 export const RightSidebar = () => {

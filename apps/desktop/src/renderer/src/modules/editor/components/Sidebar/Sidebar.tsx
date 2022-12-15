@@ -2,7 +2,7 @@ import { Box, Paper, Stack, Transition } from '@mantine/core'
 import { $isOpenDetailsView } from '@renderer/stores/ui/modals'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
-import { $selectedModelNode } from '../../stores'
+import { $selectedSchemaModel } from '../../stores'
 import { SelectedModelNodeSettings } from './SelectedModelNodeSettings'
 import { ModelsList } from './ModelsList'
 import { SidebarFooter } from './SidebarFooter'
@@ -10,13 +10,13 @@ import { SidebarDetailsViewWrapper } from './SidebarDetailsViewWrapper'
 
 const $store = combine({
   isOpenDetailsView: $isOpenDetailsView,
-  selectedModelNode: $selectedModelNode
+  selectedModel: $selectedSchemaModel
 })
 
 export const Sidebar = () => {
   const {
     isOpenDetailsView: { isOpen, isOpenDebounced },
-    selectedModelNode
+    selectedModel
   } = useStore($store)
 
   const isMountedSecondView = isOpen ? isOpenDebounced : isOpen
@@ -43,11 +43,8 @@ export const Sidebar = () => {
               </Box>
             )}
           </Transition>
-          <SidebarDetailsViewWrapper
-            title={selectedModelNode?.data.name}
-            isOpen={isMountedSecondView}
-          >
-            {selectedModelNode && <SelectedModelNodeSettings />}
+          <SidebarDetailsViewWrapper title={selectedModel?.name} isOpen={isMountedSecondView}>
+            {selectedModel && <SelectedModelNodeSettings />}
           </SidebarDetailsViewWrapper>
         </Box>
         <SidebarFooter />

@@ -2,7 +2,7 @@ import { ActionIcon, Box, Group, Text, Transition } from '@mantine/core'
 import { toggleModelNodeSidebar } from '@renderer/stores/ui/modals'
 import { IconArrowLeft } from '@tabler/icons'
 import { useStore } from 'effector-react'
-import { $selectedModelNodeId, resetSelectedModelEvent } from '../../stores'
+import { $selectedModelId, resetSelectedModelEvent } from '../../stores'
 
 interface SidebarDetailsViewWrapperProps {
   isOpen: boolean
@@ -15,11 +15,11 @@ export const SidebarDetailsViewWrapper: React.FC<SidebarDetailsViewWrapperProps>
   children,
   title
 }) => {
-  const selectedModelNodeId = useStore($selectedModelNodeId)
+  const selectedModelId = useStore($selectedModelId)
 
   const handleCloseSidebar = () => {
     toggleModelNodeSidebar(false)
-    if (selectedModelNodeId) resetSelectedModelEvent()
+    if (selectedModelId) resetSelectedModelEvent()
   }
 
   return (

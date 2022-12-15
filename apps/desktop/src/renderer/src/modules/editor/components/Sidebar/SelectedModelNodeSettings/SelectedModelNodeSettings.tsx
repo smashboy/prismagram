@@ -1,17 +1,18 @@
 import { useStore } from 'effector-react'
-import { $selectedModelNode } from '@renderer/modules/editor/stores'
+import { $selectedSchemaModel } from '@renderer/modules/editor/stores'
 import { Accordion, Button, Paper, ScrollArea, Stack, TextInput } from '@mantine/core'
 import { ModelFieldSettings } from './ModelFieldSettings'
 import { IconPlus } from '@tabler/icons'
+import { Field } from '@mrleebo/prisma-ast'
 
 export const SelectedModelNodeSettings = () => {
-  const model = useStore($selectedModelNode)
+  const model = useStore($selectedSchemaModel)
 
   if (!model) return null
 
-  const {
-    data: { name, fields }
-  } = model
+  const { name, properties } = model
+
+  const fields = properties.filter((prop) => prop.type === 'field') as Field[]
 
   return (
     <ScrollArea h="100%" type="scroll" offsetScrollbars>
@@ -28,8 +29,8 @@ export const SelectedModelNodeSettings = () => {
           chevronPosition="left"
           defaultValue="customization"
         >
-          {Object.entries(fields).map(([name, field]) => (
-            <ModelFieldSettings key={name} name={name} field={field} />
+          {fields.map((field) => (
+            <ModelFieldSettings key={field.name} field={field} />
           ))}
         </Accordion>
       </Stack>

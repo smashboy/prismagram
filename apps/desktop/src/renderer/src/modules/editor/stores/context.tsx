@@ -1,12 +1,13 @@
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { createContext, useContext } from 'react'
-import { $nodesColors, $selectedModelNodeId } from './diagram'
+import { $nodesColors } from './diagram'
+import { $selectedModelId } from './ui'
 
 //  Cant use effector store directly in nodes FOR FUCK SAKE???!!?!?!
 
 const $store = combine({
-  selectedModelNode: $selectedModelNodeId,
+  selectedModelNode: $selectedModelId,
   nodesColors: $nodesColors
 })
 

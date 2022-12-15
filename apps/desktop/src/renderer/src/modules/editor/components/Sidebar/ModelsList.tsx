@@ -2,12 +2,12 @@ import { Button, ScrollArea, Stack, TextInput } from '@mantine/core'
 import {} from '@renderer/modules/projects'
 import { IconPlus, IconSearch } from '@tabler/icons'
 import { useList, useStore } from 'effector-react'
-import { $isEditorEnabled, $nodesIds } from '../../stores'
+import { $isEditorEnabled, $modelsIds } from '../../stores'
 import { ModelNavItem } from './ModelNavItem'
 
 export const ModelsList = () => {
   const isEditorEnabled = useStore($isEditorEnabled)
-  const models = useList($nodesIds, (id) => <ModelNavItem nodeId={id} />)
+  const models = useList($modelsIds, (id) => <ModelNavItem nodeId={id} />)
 
   return (
     <>

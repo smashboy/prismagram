@@ -3,24 +3,22 @@ import { toggleModelNodeSidebar } from '@renderer/stores/ui/modals'
 import { IconBorderAll } from '@tabler/icons'
 import { combine } from 'effector'
 import { useStore, useStoreMap } from 'effector-react'
-import { $diagram, $nodesColors, $selectedModelNodeId, selectModelNodeEvent } from '../../stores'
+import { $nodesColors, $schemaModels, $selectedModelId, selectModelNodeEvent } from '../../stores'
 
 interface ModelNavItemProps {
   nodeId: string
 }
 
 const $store = combine({
-  selectedNodeId: $selectedModelNodeId,
+  selectedNodeId: $selectedModelId,
   nodesColors: $nodesColors
 })
 
 export const ModelNavItem: React.FC<ModelNavItemProps> = ({ nodeId }) => {
-  const {
-    data: { name }
-  } = useStoreMap({
-    store: $diagram,
+  const { name } = useStoreMap({
+    store: $schemaModels,
     keys: [nodeId],
-    fn: (diagram, [id]) => diagram!.nodes[id]
+    fn: (models, [id]) => models.get(id)!
   })
 
   const { selectedNodeId, nodesColors } = useStore($store)
