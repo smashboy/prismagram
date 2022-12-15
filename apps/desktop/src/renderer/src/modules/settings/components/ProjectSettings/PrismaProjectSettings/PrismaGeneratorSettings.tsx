@@ -1,11 +1,11 @@
-import { useStoreMap } from 'effector-react'
-import { $projectPrismaGeneratorSettings } from '@renderer/modules/settings/stores'
-import { Stack } from '@mantine/core'
+import { useStore, useStoreMap } from 'effector-react'
+import { MultiSelect, Stack } from '@mantine/core'
 import { SettingsSectionPaper } from '../../SettingsSectionPaper'
 import { EnvInput } from '../../EnvInput'
-import { extractAssignmentValue } from '@renderer/modules/settings/utils'
+import { cleanupAssignmentValue, extractAssignmentValue } from '@renderer/modules/settings/utils'
 import { $schemaGenerators } from '@renderer/modules/editor'
-import { Assignment } from '@mrleebo/prisma-ast'
+import { Assignment, RelationArray } from '@mrleebo/prisma-ast'
+import { $prismaSettings } from '@renderer/modules/settings/stores'
 
 interface PrismaDatasourceSettingsProps {
   settingsId: string
@@ -14,6 +14,8 @@ interface PrismaDatasourceSettingsProps {
 export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = ({
   settingsId
 }) => {
+  const { previewFeaturesList } = useStore($prismaSettings)
+
   const { assignments: lines } = useStoreMap({
     store: $schemaGenerators,
     keys: [settingsId],
@@ -34,8 +36,25 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
     value: ''
   }
 
+  const previewFeatures = assignments.find((a) => a.key === 'previewFeatures') || {
+    type: 'assignment',
+    key: 'previewFeatures',
+    value: {
+      type: 'array',
+      args: []
+    }
+  }
+
+  const selectedPreviewFeatures = (previewFeatures.value as RelationArray).args.map(
+    cleanupAssignmentValue
+  )
+
   const providerInput = extractAssignmentValue(provider)
   const outputInput = extractAssignmentValue(output)
+
+  const previewFeaturesOptions = Array.from(
+    new Set([...selectedPreviewFeatures, ...previewFeaturesList])
+  )
 
   return (
     <SettingsSectionPaper>
@@ -53,6 +72,11 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
           description="Determines the location for the generated client. Default: node_modules/.prisma/client"
           value={outputInput.value}
           isEnv={outputInput.isEnv}
+        />
+        <MultiSelect
+          label="Preview features"
+          value={selectedPreviewFeatures}
+          data={previewFeaturesOptions}
         />
       </Stack>
     </SettingsSectionPaper>

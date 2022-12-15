@@ -15,3 +15,11 @@ export interface ProjectPrismaSettings {
   datasources: Record<string, PrismaDatasource>
   generators: Record<string, PrismaGenerator>
 }
+
+export interface GlobalSettings {
+  prisma: GlobalPrismaSettings
+}
+
+export interface GlobalPrismaSettings {
+  previewFeaturesList: string[]
+}

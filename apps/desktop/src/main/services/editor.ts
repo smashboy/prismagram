@@ -1,5 +1,5 @@
 import fs from 'fs/promises'
-import { getPrismaDocument, getPrismaSchemaSettings } from './prisma'
+import { getPrismaDocument } from './prisma'
 import { EditorData } from '@shared/common/models/Editor'
 import { prismaSchema2Diagram } from './diagrams'
 
@@ -12,18 +12,15 @@ export const readEditorData = async (options: ReadEditorDataOptions): Promise<Ed
 
   const schema = await fs.readFile(schemaPath, { encoding: 'utf-8' })
 
-  const [document, prismaSettings] = await Promise.all([
-    getPrismaDocument(schema),
-    getPrismaSchemaSettings(schema)
+  const [document] = await Promise.all([
+    getPrismaDocument(schema)
+    // getPrismaSchemaSettings(schema)
   ])
 
   const diagram = prismaSchema2Diagram(document)
 
   return {
     diagram,
-    schema,
-    settings: {
-      prisma: prismaSettings
-    }
+    schema
   }
 }

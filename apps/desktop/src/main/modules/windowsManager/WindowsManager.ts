@@ -3,17 +3,19 @@ import { BrowserWindow } from 'electron'
 import { PROJECTS_FOLDER_PATH } from '../../constants'
 import {
   CREATE_PROJECT_ENDPOINT,
-  EDITOR_LAYOUT_NODES,
-  GET_EDITOR_DATA,
+  EDITOR_LAYOUT_NODES_ENDPOINT,
+  GET_EDITOR_DATA_ENDPOINT,
   GET_FOLDER_DIRECTORY_ENDPOINT,
+  GET_GLOBAL_SETTINGS_ENDPOINT,
   GET_PRISMA_DOCUMENT_ENDPOINT,
   GET_PRISMA_SCHEMA_PATH_ENDPOINT,
   GET_PROJECTS_LIST_ENDPOINT
 } from '@shared/common/configs/api'
-import { Project } from '@shared/common/models/Project'
+import { GlobalSettings, Project } from '@shared/common/models/Project'
 import { createFile, readDirectoryFiles, readDirectoryPath } from '../../services/filesManager'
 import {
   getPrismaDocument,
+  getPrismaPreviewFeaturesList,
   readPrismaSchemaFile,
   readPrismaSchemaFilePath
 } from '../../services/prisma'
@@ -73,15 +75,25 @@ export default class WindowsManager extends WindowsManagerBase {
       return project
     })
 
-    this.appWindow.createApiRoute(GET_EDITOR_DATA, (args: ReadEditorDataOptions) =>
+    this.appWindow.createApiRoute(GET_EDITOR_DATA_ENDPOINT, (args: ReadEditorDataOptions) =>
       readEditorData(args)
     )
 
     this.appWindow.createApiRoute(
-      EDITOR_LAYOUT_NODES,
+      EDITOR_LAYOUT_NODES_ENDPOINT,
       async ({ diagram, layout }: { diagram: Diagram; layout: DiagramLayout }) =>
         layoutDiagramElements(diagram, layout)
     )
+
+    this.appWindow.createApiRoute(GET_GLOBAL_SETTINGS_ENDPOINT, async () => {
+      const settings: GlobalSettings = {
+        prisma: {
+          previewFeaturesList: getPrismaPreviewFeaturesList()
+        }
+      }
+
+      return settings
+    })
   }
 
   protected get allWindowsCount() {

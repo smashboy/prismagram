@@ -1,11 +1,16 @@
+import { useEffect } from 'react'
 import { Group, Paper, Stack } from '@mantine/core'
 import { Editor, EditorToolbar, Sidebar } from './modules/editor'
 import { CreateProjectModal, ProjectSelectorModal } from './modules/projects'
-import { SettingsModal } from './modules/settings'
+import { loadGlobalSettingsEffect, SettingsModal } from './modules/settings'
 import 'reactflow/dist/style.css'
 import './transports'
 
 function App() {
+  useEffect(() => {
+    loadGlobalSettingsEffect()
+  }, [])
+
   return (
     <>
       <Group w="100%" h="100%" p="xs" noWrap>

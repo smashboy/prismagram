@@ -6,5 +6,7 @@ export const GET_FOLDER_DIRECTORY_ENDPOINT = 'files.get-directory'
 export const CREATE_PROJECT_ENDPOINT = 'projects.create'
 export const GET_PROJECTS_LIST_ENDPOINT = 'projects.get-list'
 
-export const GET_EDITOR_DATA = 'editor.get-data'
-export const EDITOR_LAYOUT_NODES = 'editor.layout-nodes'
+export const GET_EDITOR_DATA_ENDPOINT = 'editor.get-data'
+export const EDITOR_LAYOUT_NODES_ENDPOINT = 'editor.layout-nodes'
+
+export const GET_GLOBAL_SETTINGS_ENDPOINT = 'settings.get'

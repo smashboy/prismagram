@@ -812,6 +812,11 @@
   resolved "https://registry.yarnpkg.com/@prisma/prisma-fmt-wasm/-/prisma-fmt-wasm-4.7.1-1.272861e07ab64f234d3ffc4094e32bd61775599c.tgz#d0a7c7c4e3cfb5a14b5efdfebc576f149d102967"
   integrity sha512-o9oSp2c5yDWHn9TT2Ntv3cb6LuJKPBy32gTtipYH1D166KfKBy+1RkPySobWZCKV/TrkUGlcBn5vcQgRBHPvVA==
 
+"@prisma/prisma-fmt-wasm@^4.8.0-44.574e45f3fd7c55b8ffcea000812329a79e7f2a22":
+  version "4.8.0-44.574e45f3fd7c55b8ffcea000812329a79e7f2a22"
+  resolved "https://registry.yarnpkg.com/@prisma/prisma-fmt-wasm/-/prisma-fmt-wasm-4.8.0-44.574e45f3fd7c55b8ffcea000812329a79e7f2a22.tgz#c1aa5eeea0d79c2a635ef310e0a5f296ea97dc7c"
+  integrity sha512-eLE4gC6liqQiMvHcgZjVn/8XsG0e3XcxExy/+jBAPhWGB2M5WjdryyChViibFnGQqlRae/UZTMZnS/wdioTOXQ==
+
 "@prisma/text-editors@^0.0.22":
   version "0.0.22"
   resolved "https://registry.yarnpkg.com/@prisma/text-editors/-/text-editors-0.0.22.tgz#5a57e5c2e7db384b598ab6dff68c1f2530713e6a"
