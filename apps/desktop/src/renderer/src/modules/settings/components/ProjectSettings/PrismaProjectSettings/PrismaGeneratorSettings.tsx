@@ -30,7 +30,7 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
         />
         <EnvInput
           label="Output"
-          description="Determines the location for the generated client, learn more. Default: node_modules/.prisma/client"
+          description="Determines the location for the generated client. Default: node_modules/.prisma/client"
           value={output?.value || ''}
           isEnv={output?.isEnv ?? false}
         />
