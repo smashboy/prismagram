@@ -48,7 +48,7 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
 
   const engineType = assignments.find((a) => a.key === 'engineType') || {
     type: 'assignment',
-    key: 'output',
+    key: 'engineType',
     value: ''
   }
 

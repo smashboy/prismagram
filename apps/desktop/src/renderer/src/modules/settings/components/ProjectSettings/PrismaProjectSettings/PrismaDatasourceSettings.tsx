@@ -39,7 +39,7 @@ export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> =
 
   const shadowDatabaseUrl = assignments.find((a) => a.key === 'shadowDatabaseUrl') || {
     type: 'assignment',
-    key: 'url',
+    key: 'shadowDatabaseUrl',
     value: ''
   }
 
