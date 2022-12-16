@@ -17,9 +17,7 @@ export const SelectedModelNodeSettings = () => {
   return (
     <ScrollArea h="100%" type="scroll" offsetScrollbars>
       <Stack>
-        <Paper p="xs" shadow="sm">
-          <TextInput label="Model name" value={name} readOnly />
-        </Paper>
+        <TextInput label="Model name" value={name} readOnly />
         <Button variant="subtle" rightIcon={<IconPlus size={16} />}>
           New field
         </Button>
