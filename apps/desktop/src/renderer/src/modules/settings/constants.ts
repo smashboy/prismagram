@@ -1,5 +1,6 @@
 import {
   IconAdjustments,
+  IconAlertTriangle,
   IconBrandPrisma,
   IconBriefcase,
   IconCommand,
@@ -28,7 +29,8 @@ export enum GeneralSettingsRoute {
 export enum ProjectSettingsRoute {
   GENERAL = 'general',
   COMMANDS = 'commands',
-  PRISMA = 'prisma'
+  PRISMA = 'prisma',
+  DANGER = 'danger'
 }
 
 export const settingsRoutes = new Map<SettingsRoute, SettingsRouteOptions>([
@@ -47,7 +49,8 @@ export const generalSettingsRoutes = new Map<GeneralSettingsRoute, SettingsRoute
 export const projectSettingsRoutes = new Map<ProjectSettingsRoute, SettingsRouteOptions>([
   [ProjectSettingsRoute.GENERAL, { label: 'General', icon: IconAdjustments }],
   [ProjectSettingsRoute.COMMANDS, { label: 'Commands', icon: IconPrompt }],
-  [ProjectSettingsRoute.PRISMA, { label: 'Schema', icon: IconBrandPrisma }]
+  [ProjectSettingsRoute.PRISMA, { label: 'Schema', icon: IconBrandPrisma }],
+  [ProjectSettingsRoute.DANGER, { label: 'Danger', icon: IconAlertTriangle }]
 ])
 
 export const settingsRoutesArray = [...settingsRoutes.entries()]

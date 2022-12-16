@@ -1,11 +1,12 @@
 import { useStore, useStoreMap } from 'effector-react'
-import { MultiSelect, Stack } from '@mantine/core'
+import { MultiSelect, Select, Stack } from '@mantine/core'
 import { SettingsSectionPaper } from '../../SettingsSectionPaper'
 import { EnvInput } from '../../EnvInput'
 import { cleanupAssignmentValue, extractAssignmentValue } from '@renderer/modules/settings/utils'
 import { $schemaGenerators } from '@renderer/modules/editor'
 import { Assignment, RelationArray } from '@mrleebo/prisma-ast'
 import { $prismaSettings } from '@renderer/modules/settings/stores'
+import { prismaBinaryTargetsList, prismaEngineTypesList } from '@shared/common/configs/prisma'
 
 interface PrismaDatasourceSettingsProps {
   settingsId: string
@@ -45,16 +46,27 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
     }
   }
 
+  const engineType = assignments.find((a) => a.key === 'engineType') || {
+    type: 'assignment',
+    key: 'output',
+    value: ''
+  }
+
   const selectedPreviewFeatures = (previewFeatures.value as RelationArray).args.map(
     cleanupAssignmentValue
   )
 
+  const engineTypeValue = cleanupAssignmentValue(engineType.value as string)
+
   const providerInput = extractAssignmentValue(provider)
   const outputInput = extractAssignmentValue(output)
 
-  const previewFeaturesOptions = Array.from(
+  const previewFeatureOptions = Array.from(
     new Set([...selectedPreviewFeatures, ...previewFeaturesList])
   )
+
+  const engineTypeOptions = prismaEngineTypesList
+  const binaryTargetsOptions = prismaBinaryTargetsList
 
   return (
     <SettingsSectionPaper>
@@ -76,7 +88,22 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
         <MultiSelect
           label="Preview features"
           value={selectedPreviewFeatures}
-          data={previewFeaturesOptions}
+          data={previewFeatureOptions}
+          searchable
+        />
+        <Select
+          label="Engine type"
+          description="Defines the query engine type to download and use. Default: library"
+          value={engineTypeValue}
+          data={engineTypeOptions}
+          searchable
+        />
+        <MultiSelect
+          label="Binary targets"
+          description="Specify the OS on which the Prisma Client will run to ensure compatibility of the query engine. Default: native"
+          value={[]}
+          data={binaryTargetsOptions}
+          searchable
         />
       </Stack>
     </SettingsSectionPaper>

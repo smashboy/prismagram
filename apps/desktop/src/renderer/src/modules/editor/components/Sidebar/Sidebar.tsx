@@ -27,7 +27,7 @@ export const Sidebar = () => {
       w={350}
       h="100%"
       shadow="md"
-      sx={{ backgroundColor: 'rgba(255, 255, 255, .5)', backdropFilter: 'blur(5px)' }}
+      sx={{ backgroundColor: 'rgba(255, 255, 255, .35)', backdropFilter: 'blur(5px)' }}
     >
       <Stack h="100%" py="xs" pl="xs">
         <Box h="calc(100% - 40px)" sx={{ overflow: 'hidden' }}>

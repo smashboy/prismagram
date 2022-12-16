@@ -181,12 +181,14 @@ export const relation2Edge = (relation: Relation): Edge => {
     label: `${id} (${type})`,
     source: from.model,
     target: to.model,
+    labelShowBg: false,
     type: 'smoothstep',
     sourceHandle: `${id}.${from.model}.${from.field}`,
     targetHandle: `${id}.${to.model}.${to.field}`,
-    data: {
-      color: string2Color(id)
-    }
+    style: { stroke: string2Color(id), strokeWidth: 3 }
+    // data: {
+    //   color: string2Color(id)
+    // }
   }
 }
 
