@@ -69,7 +69,7 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
   const binaryTargetsOptions = prismaBinaryTargetsList
 
   return (
-    <SettingsSectionPaper>
+    <SettingsSectionPaper title="Generator">
       <Stack>
         {/* <Text>{settingsId}</Text> */}
         <EnvInput

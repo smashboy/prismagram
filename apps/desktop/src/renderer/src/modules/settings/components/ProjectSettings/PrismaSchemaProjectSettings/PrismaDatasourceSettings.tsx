@@ -49,7 +49,7 @@ export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> =
   const shadowDatabaseUrlInput = extractAssignmentValue(shadowDatabaseUrl)
 
   return (
-    <SettingsSectionPaper>
+    <SettingsSectionPaper title="Datasource">
       <Stack>
         {/* <Text>{settingsId}</Text> */}
         <Select

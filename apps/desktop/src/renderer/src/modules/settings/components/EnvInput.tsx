@@ -11,15 +11,6 @@ export const EnvInput: React.FC<EnvInputProps> = ({ isEnv, ...props }) => {
         label="Is environment variable"
         description="If the field is marked as an environment variable, you must specify its name instead of the actual value."
         checked={isEnv}
-        sx={{
-          '& .mantine-Switch-body': {
-            width: '100%',
-            alignItems: 'center'
-          },
-          '& .mantine-Switch-labelWrapper': {
-            flex: 1
-          }
-        }}
       />
     </Stack>
   )

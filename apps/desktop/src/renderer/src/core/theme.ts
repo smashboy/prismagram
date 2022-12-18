@@ -45,6 +45,17 @@ export const theme: MantineThemeOverride = {
       defaultProps: {
         labelPosition: 'left',
         size: 'md'
+      },
+      styles: {
+        root: {
+          '& .mantine-Switch-body': {
+            width: '100%',
+            alignItems: 'center'
+          },
+          '& .mantine-Switch-labelWrapper': {
+            flex: 1
+          }
+        }
       }
     },
     SimpleGrid: {

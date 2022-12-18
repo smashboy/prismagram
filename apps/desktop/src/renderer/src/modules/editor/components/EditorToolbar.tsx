@@ -5,6 +5,7 @@ import {
   IconArrowForwardUp,
   IconBoxMargin,
   IconCode,
+  IconPlayerPlay,
   IconSchema,
   IconZoomInArea
 } from '@tabler/icons'
@@ -101,6 +102,11 @@ export const EditorToolbar = () => {
           ]}
         />
       </Paper>
+      <OptionsContainer>
+        <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
+          <IconPlayerPlay size={ICON_SIZE} />
+        </ActionIcon>
+      </OptionsContainer>
     </Group>
   )
 }

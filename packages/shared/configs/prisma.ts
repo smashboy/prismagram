@@ -60,3 +60,26 @@ export const prismaBinaryTargetsList = [
   'netbsd',
   'arm'
 ]
+
+export enum PrismaGeneralCommand {
+  // VERSION = 'version',
+  // INIT = 'init',
+  GENERATE = 'generate',
+  INTROSPECT = 'introspect',
+  VALIDATE = 'validate',
+  FORMAT = 'format'
+}
+
+export enum PrismaDbCommand {
+  PULL = 'db pull',
+  PUSH = 'db push',
+  SEED = 'db seed',
+  EXECUTE = 'db execute'
+}
+
+export enum PrismaDbExecuteCommandInput {
+  STDIN = '--stdin',
+  FILE = '--file'
+}
+
+export enum PrismaMigrateCommand {}

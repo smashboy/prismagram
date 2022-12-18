@@ -2,11 +2,15 @@ import { ScrollArea, Stack } from '@mantine/core'
 import { useStore } from 'effector-react'
 import { ProjectSettingsRoute } from '../../constants'
 import { $selectedProjectSettingsSection } from '../../stores'
-import { PrismaProjectSettings } from './PrismaProjectSettings'
+import { PrismaCommandsProjectSettings } from './PrismaCommandsProjectSettings'
+import { PrismaSchemaProjectSettings } from './PrismaSchemaProjectSettings'
+import { ProjectGeneralSettings } from './ProjectGeneralSettings'
 import { ProjectSettingsNavigation } from './ProjectSettingsNavigation'
 
 const settingsRoutesComponents = new Map<ProjectSettingsRoute, React.FC>([
-  [ProjectSettingsRoute.PRISMA, PrismaProjectSettings]
+  [ProjectSettingsRoute.PRISMA, PrismaSchemaProjectSettings],
+  [ProjectSettingsRoute.GENERAL, ProjectGeneralSettings],
+  [ProjectSettingsRoute.COMMANDS, PrismaCommandsProjectSettings]
 ])
 
 export const ProjectSettings = () => {

@@ -1,3 +1,4 @@
+import { createBooleanStore } from '@renderer/core/effector'
 import { toggleSettingsModal } from '@renderer/stores/ui/modals'
 import { createEvent, createStore } from 'effector'
 import { GeneralSettingsRoute, ProjectSettingsRoute, SettingsRoute } from '../constants'
@@ -5,6 +6,8 @@ import { GeneralSettingsRoute, ProjectSettingsRoute, SettingsRoute } from '../co
 export const changeSettingsSectionEvent = createEvent<SettingsRoute>()
 export const changeGeneralSettingsSectionEvent = createEvent<GeneralSettingsRoute>()
 export const changeProjectSettingsSectionEvent = createEvent<ProjectSettingsRoute>()
+
+export const [$isOpenCreateNewCommand, toggleOpenCreateNewCommandEvent] = createBooleanStore()
 
 export const $selectedSettingsSection = createStore(SettingsRoute.GENERAL)
   .on(changeSettingsSectionEvent, (_, section) => section)

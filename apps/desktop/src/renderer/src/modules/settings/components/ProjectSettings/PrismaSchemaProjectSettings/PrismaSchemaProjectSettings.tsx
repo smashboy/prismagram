@@ -1,10 +1,10 @@
-import { Stack, Text } from '@mantine/core'
 import { $schemaDatasourceIds, $schemaGeneratorIds } from '@renderer/modules/editor'
 import { useList } from 'effector-react'
+import { SettingsSection } from '../../SettingsSection'
 import { PrismaDatasourceSettings } from './PrismaDatasourceSettings'
 import { PrismaGeneratorSettings } from './PrismaGeneratorSettings'
 
-export const PrismaProjectSettings = () => {
+export const PrismaSchemaProjectSettings = () => {
   const datasources = useList($schemaDatasourceIds, (id) => (
     <PrismaDatasourceSettings settingsId={id} />
   ))
@@ -14,15 +14,9 @@ export const PrismaProjectSettings = () => {
   ))
 
   return (
-    <Stack w="45%" h="100%" sx={{ overflow: 'hidden' }}>
-      <Text fz="xl" fw="bold">
-        Datasource
-      </Text>
+    <SettingsSection>
       {datasources}
-      <Text fz="xl" fw="bold">
-        Generator
-      </Text>
       {generators}
-    </Stack>
+    </SettingsSection>
   )
 }
