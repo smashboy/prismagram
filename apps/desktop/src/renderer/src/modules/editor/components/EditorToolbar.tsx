@@ -5,6 +5,7 @@ import {
   IconArrowForwardUp,
   IconBoxMargin,
   IconCode,
+  IconDatabase,
   IconPlayerPlay,
   IconSchema,
   IconZoomInArea
@@ -22,6 +23,33 @@ import {
 
 const ICON_SIZE = 20
 const ICON_BUTTON_SIZE = 'lg'
+
+const editorViewOptions = [
+  {
+    label: (
+      <Center>
+        <IconSchema size={ICON_SIZE} />
+      </Center>
+    ),
+    value: EditorView.DIAGRAM
+  },
+  {
+    label: (
+      <Center>
+        <IconCode size={ICON_SIZE} />
+      </Center>
+    ),
+    value: EditorView.SCHEMA
+  },
+  {
+    label: (
+      <Center>
+        <IconDatabase size={ICON_SIZE} />
+      </Center>
+    ),
+    value: EditorView.PRISMA_STUDIO
+  }
+]
 
 const $store = combine({
   selectedView: $selectedEditorView,
@@ -82,24 +110,7 @@ export const EditorToolbar = () => {
           value={selectedView}
           onChange={handleChangeEditorView}
           disabled={!isEditorEnabled}
-          data={[
-            {
-              label: (
-                <Center>
-                  <IconSchema size={ICON_SIZE} />
-                </Center>
-              ),
-              value: EditorView.DIAGRAM
-            },
-            {
-              label: (
-                <Center>
-                  <IconCode size={ICON_SIZE} />
-                </Center>
-              ),
-              value: EditorView.SCHEMA
-            }
-          ]}
+          data={editorViewOptions}
         />
       </Paper>
       <OptionsContainer>

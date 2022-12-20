@@ -40,9 +40,9 @@ export interface PrismaGenerateCommand extends PrismaCommandBase {
   watch: boolean
 }
 
-export interface PrismaIntrospectCommand extends PrismaCommandBase {
-  command: PrismaGeneralCommand.INTROSPECT
-}
+// export interface PrismaIntrospectCommand extends PrismaCommandBase {
+//   command: PrismaGeneralCommand.INTROSPECT
+// }
 
 export interface PrismaValidateCommand extends PrismaCommandBase {
   command: PrismaGeneralCommand.VALIDATE

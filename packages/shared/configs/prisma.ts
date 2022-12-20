@@ -65,7 +65,7 @@ export enum PrismaGeneralCommand {
   // VERSION = 'version',
   // INIT = 'init',
   GENERATE = 'generate',
-  INTROSPECT = 'introspect',
+  // INTROSPECT = 'introspect',
   VALIDATE = 'validate',
   FORMAT = 'format'
 }

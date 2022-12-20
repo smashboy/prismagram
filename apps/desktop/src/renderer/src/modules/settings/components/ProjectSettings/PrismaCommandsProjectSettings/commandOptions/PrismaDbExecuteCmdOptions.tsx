@@ -19,7 +19,7 @@ export const PrismaDbExecuteCmdOptions = () => {
       <TextInput label="Url" description="URL of the data source to run the command on." required />
       <TextInput
         label="Schema"
-        description="	Path to a Prisma schema file, uses the URL in the datasource block."
+        description="Path to a Prisma schema file, uses the URL in the datasource block."
         required
       />
       <Select

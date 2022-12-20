@@ -1,6 +1,6 @@
 import { useStore } from 'effector-react'
 import { $selectedSchemaModel } from '@renderer/modules/editor/stores'
-import { Accordion, Button, Paper, ScrollArea, Stack, TextInput } from '@mantine/core'
+import { Accordion, Button, ScrollArea, Stack, TextInput } from '@mantine/core'
 import { ModelFieldSettings } from './ModelFieldSettings'
 import { IconPlus } from '@tabler/icons'
 import { Field } from '@mrleebo/prisma-ast'

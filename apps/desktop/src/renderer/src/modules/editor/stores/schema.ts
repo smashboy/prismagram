@@ -15,6 +15,8 @@ export const $schemaModels = $schemaDataModel.map(({ list }) => {
     if (block.type === 'model') models.set(block.name, block)
   }
 
+  console.log(models)
+
   return models
 })
 

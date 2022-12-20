@@ -3,7 +3,8 @@ import { ScalarType } from '@shared/common/configs/diagrams'
 
 export enum EditorView {
   DIAGRAM = 'd',
-  SCHEMA = 's'
+  SCHEMA = 's',
+  PRISMA_STUDIO = 'ps'
 }
 
 export const ScalarFieldColor = {
