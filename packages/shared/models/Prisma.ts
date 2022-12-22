@@ -4,7 +4,8 @@ import {
   PrismaDbCommand,
   PrismaDbExecuteCommandInput,
   PrismaGeneralCommand,
-  PrismaGeneratorProvider
+  PrismaGeneratorProvider,
+  PrismaMigrateCommand
 } from '../configs/prisma'
 
 export interface PrismaDatasource {
@@ -78,4 +79,28 @@ export interface PrismaDbExecuteCommand extends PrismaCommandBase {
   url: string
   schema: string
   input: PrismaDbExecuteCommandInput
+}
+
+export interface PrismaMigrateDevCommand extends PrismaCommandBase {
+  command: PrismaMigrateCommand.DEV
+  createOnly?: boolean
+  skipSeed?: boolean
+  skipGenerate?: boolean
+}
+
+export interface PrismaMigrateResetCommand extends PrismaCommandBase {
+  command: PrismaMigrateCommand.RESET
+  force?: boolean
+  skipSeed?: boolean
+  skipGenerate?: boolean
+}
+
+export interface PrismaMigrateDeployCommand extends PrismaCommandBase {
+  command: PrismaMigrateCommand.DEPLOY
+}
+
+export interface PrismaMigrateResolveCommand extends PrismaCommandBase {
+  command: PrismaMigrateCommand.RESOLVE
+  applied?: string
+  rolledBack?: string
 }

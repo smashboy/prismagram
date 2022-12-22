@@ -77,9 +77,15 @@ export enum PrismaDbCommand {
   EXECUTE = 'db execute'
 }
 
+export enum PrismaMigrateCommand {
+  DEV = 'migrate dev',
+  RESET = 'migrate reset',
+  DEPLOY = 'mirgrate deploy',
+  RESOLVE = 'migrate resolve'
+  // STATUS = 'migrate status'
+}
+
 export enum PrismaDbExecuteCommandInput {
   STDIN = '--stdin',
   FILE = '--file'
 }
-
-export enum PrismaMigrateCommand {}
