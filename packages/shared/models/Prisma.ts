@@ -35,6 +35,10 @@ export interface PrismaCommandBase {
   isDefault: boolean
 }
 
+export interface PrismaCommand extends PrismaCommandBase {
+  [key: string]: string | boolean
+}
+
 export interface PrismaGenerateCommand extends PrismaCommandBase {
   command: PrismaGeneralCommand.GENERATE
   dataProxy: boolean
@@ -58,7 +62,6 @@ export interface PrismaFormatCommand extends PrismaCommandBase {
 export interface PrismaDbPullCommand extends PrismaCommandBase {
   command: PrismaDbCommand.PULL
   force: boolean
-  print: boolean
   schema?: string
 }
 
@@ -77,7 +80,7 @@ export interface PrismaSeedCommand extends PrismaCommandBase {
 export interface PrismaDbExecuteCommand extends PrismaCommandBase {
   command: PrismaDbCommand.EXECUTE
   url: string
-  schema: string
+  // schema: string
   input: PrismaDbExecuteCommandInput
 }
 

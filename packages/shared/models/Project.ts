@@ -1,10 +1,11 @@
-import { PrismaDatasource, PrismaGenerator } from './Prisma'
+import { PrismaCommand, PrismaDatasource, PrismaGenerator } from './Prisma'
 
 export interface Project {
   id: string
   name: string
   schema: string
   projectDirectory?: string
+  commands?: Record<string, PrismaCommand>
 }
 
 export interface ProjectSettings {

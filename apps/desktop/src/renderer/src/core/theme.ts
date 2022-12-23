@@ -68,6 +68,13 @@ export const theme: MantineThemeOverride = {
         spacing: 'xs'
       }
     },
+    Accordion: {
+      defaultProps: {
+        variant: 'separated',
+        radius: 'md',
+        chevronPosition: 'left'
+      }
+    },
     MultiSelect: {
       defaultProps: {
         dropdownPosition: 'flip'

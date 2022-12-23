@@ -20,3 +20,11 @@ export const SelectItemWithDescription = forwardRef<HTMLDivElement, ItemProps>(
     </div>
   )
 )
+
+// export const customSelectFilter = (value: string, item: { value: string }) => {
+//   console.log({
+//     item,
+//     value
+//   })
+//   return item.value === value
+// }

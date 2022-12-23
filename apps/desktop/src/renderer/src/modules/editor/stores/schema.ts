@@ -1,6 +1,7 @@
 import { combine, createEvent, createStore } from 'effector'
 import { Datasource, Enum, getSchema, Model, Generator } from '@mrleebo/prisma-ast'
 import { $selectedModelId } from './ui'
+import { extractBlocksByType } from './utils'
 
 export const setPrismaSchema = createEvent<string>()
 
@@ -24,35 +25,17 @@ export const $selectedSchemaModel = combine([$schemaModels, $selectedModelId]).m
   id ? models.get(id)! : null
 )
 
-export const $schemaEnums = $schemaDataModel.map(({ list }) => {
-  const models = new Map<string, Enum>()
+export const $schemaEnums = $schemaDataModel.map(({ list }) =>
+  extractBlocksByType<Enum>('enum', list)
+)
 
-  for (const block of list) {
-    if (block.type === 'enum') models.set(block.name, block)
-  }
+export const $schemaDatasources = $schemaDataModel.map(({ list }) =>
+  extractBlocksByType<Datasource>('datasource', list)
+)
 
-  return models
-})
-
-export const $schemaDatasources = $schemaDataModel.map(({ list }) => {
-  const models = new Map<string, Datasource>()
-
-  for (const block of list) {
-    if (block.type === 'datasource') models.set(block.name, block)
-  }
-
-  return models
-})
-
-export const $schemaGenerators = $schemaDataModel.map(({ list }) => {
-  const models = new Map<string, Generator>()
-
-  for (const block of list) {
-    if (block.type === 'generator') models.set(block.name, block)
-  }
-
-  return models
-})
+export const $schemaGenerators = $schemaDataModel.map(({ list }) =>
+  extractBlocksByType<Generator>('generator', list)
+)
 
 // TODO: move to common
 export const $schemaEnumIds = $schemaEnums.map((models) => [...models.keys()])

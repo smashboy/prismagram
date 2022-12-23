@@ -2,7 +2,8 @@ import { sample } from 'effector'
 import { loadEditorDataEffect } from '@renderer/modules/editor'
 import { $isOpenSelectProjectModal, toggleSelectProjectModal } from '@renderer/stores/ui/modals'
 import { projectEvents, selectProjectEvent } from './projects'
-import { createProjectEffect, getProjectsListEffect } from './effects'
+import { createProjectEffect, getProjectsListEffect, updateProjectEffect } from './effects'
+import { createPrismaCommandEffect } from '@renderer/modules/settings'
 
 sample({
   clock: toggleSelectProjectModal,
@@ -31,13 +32,11 @@ sample({
 })
 
 sample({
-  clock: createProjectEffect.doneData,
-  fn: (project) => ({ key: project.id, item: project }),
-  target: projectEvents.add
-})
-
-sample({
-  clock: createProjectEffect.doneData,
+  clock: [
+    createProjectEffect.doneData,
+    updateProjectEffect.doneData,
+    createPrismaCommandEffect.doneData
+  ],
   fn: (project) => ({ key: project.id, item: project }),
   target: projectEvents.add
 })

@@ -1,16 +1,34 @@
-import { Button, Group, Stack, Transition } from '@mantine/core'
+import { Stack, Transition } from '@mantine/core'
+import { $selectedProject } from '@renderer/modules/projects'
 import {
+  $isCreatingPrismaCommand,
   $isOpenCreateNewCommand,
+  createPrismaCommandEffect,
   toggleOpenCreateNewCommandEvent
 } from '@renderer/modules/settings/stores'
+import { PrismaCommand } from '@shared/common/models/Prisma'
+import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { SettingsSectionPaper } from '../../SettingsSectionPaper'
 import { PrismaCommandForm } from './PrismaCommandForm'
 
+const $store = combine({
+  isOpen: $isOpenCreateNewCommand,
+  project: $selectedProject,
+  isLoading: $isCreatingPrismaCommand
+})
+
 export const NewPrismaCommandForm = () => {
-  const isOpen = useStore($isOpenCreateNewCommand)
+  const { isOpen, project, isLoading } = useStore($store)
 
   const handleClose = () => toggleOpenCreateNewCommandEvent()
+  const handleCreateCommand = async (command: PrismaCommand) => {
+    await createPrismaCommandEffect({
+      project,
+      command
+    })
+    handleClose()
+  }
 
   return (
     <Transition mounted={isOpen} transition="slide-down">
@@ -18,13 +36,11 @@ export const NewPrismaCommandForm = () => {
         <div style={style}>
           <SettingsSectionPaper title="New command">
             <Stack>
-              <PrismaCommandForm />
-              <Group position="right">
-                <Button onClick={handleClose} variant="subtle" color="gray">
-                  Close
-                </Button>
-                <Button variant="filled">Save</Button>
-              </Group>
+              <PrismaCommandForm
+                onClose={handleClose}
+                onSubmit={handleCreateCommand}
+                isLoading={isLoading}
+              />
             </Stack>
           </SettingsSectionPaper>
         </div>

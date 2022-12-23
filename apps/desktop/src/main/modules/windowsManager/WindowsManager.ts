@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto'
 import { BrowserWindow } from 'electron'
 import { PROJECTS_FOLDER_PATH } from '../../constants'
 import {
+  CREATE_COMMAND_ENDPOINT,
   CREATE_PROJECT_ENDPOINT,
   EDITOR_LAYOUT_NODES_ENDPOINT,
   GET_EDITOR_DATA_ENDPOINT,
@@ -9,7 +10,8 @@ import {
   GET_GLOBAL_SETTINGS_ENDPOINT,
   GET_PRISMA_DOCUMENT_ENDPOINT,
   GET_PRISMA_SCHEMA_PATH_ENDPOINT,
-  GET_PROJECTS_LIST_ENDPOINT
+  GET_PROJECTS_LIST_ENDPOINT,
+  UPDATE_PROJECT_ENDPOINT
 } from '@shared/common/configs/api'
 import { GlobalSettings, Project } from '@shared/common/models/Project'
 import { createFile, readDirectoryFiles, readDirectoryPath } from '../../services/filesManager'
@@ -25,6 +27,7 @@ import { readEditorData, ReadEditorDataOptions } from '../../services/editor'
 import { Diagram } from '@shared/common/models/Diagram'
 import { DiagramLayout } from '@shared/common/configs/diagrams'
 import { layoutDiagramElements } from '../../services/diagrams'
+import { PrismaCommand } from '@shared/common/models/Prisma'
 
 export default class WindowsManager extends WindowsManagerBase {
   protected appWindow: WindowManager | undefined
@@ -94,6 +97,32 @@ export default class WindowsManager extends WindowsManagerBase {
 
       return settings
     })
+
+    this.appWindow.createApiRoute(UPDATE_PROJECT_ENDPOINT, async (project: Project) => {
+      const fileName = `${project.id}.json`
+
+      await createFile(PROJECTS_FOLDER_PATH, fileName, JSON.stringify(project))
+
+      return project
+    })
+
+    this.appWindow.createApiRoute(
+      CREATE_COMMAND_ENDPOINT,
+      async (args: { project: Project; command: PrismaCommand }) => {
+        const { project, command } = args
+
+        const id = randomUUID()
+        const fileName = `${project.id}.json`
+
+        const fragment = { [id]: command }
+
+        project.commands = project.commands ? { ...project.commands, ...fragment } : fragment
+
+        await createFile(PROJECTS_FOLDER_PATH, fileName, JSON.stringify(project))
+
+        return project
+      }
+    )
   }
 
   protected get allWindowsCount() {

@@ -7,6 +7,7 @@ import { IconPlus } from '@tabler/icons'
 import { useStore } from 'effector-react'
 import { SettingsSection } from '../../SettingsSection'
 import { NewPrismaCommandForm } from './NewPrismaCommandForm'
+import { PrismaCommandsList } from './PrismaCommandsList'
 
 export const PrismaCommandsProjectSettings = () => {
   const isOpenNewCommandForm = useStore($isOpenCreateNewCommand)
@@ -25,6 +26,7 @@ export const PrismaCommandsProjectSettings = () => {
         )}
       </Transition>
       <NewPrismaCommandForm />
+      <PrismaCommandsList />
     </SettingsSection>
   )
 }

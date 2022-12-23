@@ -21,12 +21,7 @@ export const SelectedModelNodeSettings = () => {
         <Button variant="subtle" rightIcon={<IconPlus size={16} />}>
           New field
         </Button>
-        <Accordion
-          variant="separated"
-          radius="md"
-          chevronPosition="left"
-          defaultValue="customization"
-        >
+        <Accordion defaultValue="customization">
           {fields.map((field) => (
             <ModelFieldSettings key={field.name} field={field} />
           ))}
