@@ -29,6 +29,7 @@ interface PrismaCommandFormProps {
   onSubmit?: (command: PrismaCommand) => void
   isLoading?: boolean
   defaultValues?: PrismaCommand
+  customActions?: React.ReactNode
 }
 
 const commandOptions: SelectItem[] = [
@@ -108,7 +109,8 @@ export const PrismaCommandForm: React.FC<PrismaCommandFormProps> = ({
   onClose,
   onSubmit,
   isLoading = false,
-  defaultValues = {}
+  defaultValues = {},
+  customActions
 }) => {
   const {
     command: initialCommand = null,
@@ -159,6 +161,7 @@ export const PrismaCommandForm: React.FC<PrismaCommandFormProps> = ({
       />
       {SelectedCmdOptions && <SelectedCmdOptions value={options} onChange={setOptions} />}
       <Group position="right">
+        {customActions}
         {onClose && (
           <Button onClick={onClose} variant="subtle" color="gray">
             Close

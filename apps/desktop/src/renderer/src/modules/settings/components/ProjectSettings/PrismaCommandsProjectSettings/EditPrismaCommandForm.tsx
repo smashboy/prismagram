@@ -1,4 +1,4 @@
-import { Accordion, Text } from '@mantine/core'
+import { Accordion, Button, Text } from '@mantine/core'
 import {
   $isUpdatingProject,
   $selectedProject,
@@ -36,6 +36,17 @@ export const EditPrismaCommandForm: React.FC<EditPrismaCommandFormProps> = ({ co
       commands: { ...project?.commands, [commandId]: updatedCommand }
     })
 
+  const handleDeleteCommand = () =>
+    updateProjectEffect({
+      ...project,
+      commands: project?.commands
+        ? Object.entries(project.commands).reduce((acc, [id, cmd]) => {
+            if (id === commandId) return acc
+            return { ...acc, [id]: cmd }
+          }, {})
+        : void 0
+    })
+
   return (
     <Accordion.Item value={commandId}>
       <Accordion.Control>
@@ -46,6 +57,11 @@ export const EditPrismaCommandForm: React.FC<EditPrismaCommandFormProps> = ({ co
           defaultValues={command}
           onSubmit={handleSaveChanges}
           isLoading={isLoading}
+          customActions={
+            <Button color="red" onClick={handleDeleteCommand}>
+              Delete
+            </Button>
+          }
         />
       </Accordion.Panel>
     </Accordion.Item>

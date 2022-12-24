@@ -11,7 +11,5 @@ export const GET_EDITOR_DATA_ENDPOINT = 'editor.get-data'
 export const EDITOR_LAYOUT_NODES_ENDPOINT = 'editor.layout-nodes'
 
 export const CREATE_COMMAND_ENDPOINT = 'commands.create'
-export const UPDATE_COMMAND_ENDPOINT = 'commands.update'
-export const GET_COMMANDS_ENDPOINT = 'commands.get'
 
 export const GET_GLOBAL_SETTINGS_ENDPOINT = 'settings.get'
