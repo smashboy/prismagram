@@ -22,7 +22,7 @@ function App() {
             w="100%"
             h="100%"
             shadow="md"
-            sx={{ transition: 'width 400ms ease' }}
+            sx={{ transition: 'width 400ms ease', overflow: 'hidden' }}
           >
             <Editor />
           </Paper>

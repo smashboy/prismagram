@@ -1,5 +1,5 @@
 import { sample } from 'effector'
-import { loadEditorDataEffect } from '@renderer/modules/editor'
+import { closePrismaStudioEffect, loadEditorDataEffect } from '@renderer/modules/editor'
 import { $isOpenSelectProjectModal, toggleSelectProjectModal } from '@renderer/stores/ui/modals'
 import { projectEvents, selectProjectEvent } from './projects'
 import { createProjectEffect, getProjectsListEffect, updateProjectEffect } from './effects'
@@ -20,7 +20,7 @@ sample({
 sample({
   clock: selectProjectEvent,
   fn: () => void 0,
-  target: loadEditorDataEffect
+  target: [loadEditorDataEffect, closePrismaStudioEffect]
 })
 
 sample({

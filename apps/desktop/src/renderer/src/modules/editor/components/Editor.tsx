@@ -9,6 +9,7 @@ import { combine } from 'effector'
 import { $selectedEditorView } from '../stores'
 import { EditorView } from '../config'
 import { SchemaEditor } from './SchemaEditor'
+import { PrismaStudioView } from './PrismaStudioView'
 
 const $store = combine({
   projectId: $selectedProjectId,
@@ -38,6 +39,8 @@ export const Editor = () => {
     )
 
   if (selectedView === EditorView.DIAGRAM) return <DiagramEditor />
+
+  if (selectedView === EditorView.PRISMA_STUDIO) return <PrismaStudioView />
 
   return <SchemaEditor />
 }

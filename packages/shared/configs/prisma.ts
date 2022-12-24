@@ -34,6 +34,8 @@ export const prismaRelationModesList = ['foreignKeys', 'prisma']
 
 export const prismaEngineTypesList = ['binary', 'dataproxy', 'library']
 
+export const DEFAULT_PRISMA_STUDIO_PORT = 5555
+
 export const prismaBinaryTargetsList = [
   'native',
   'darwin',

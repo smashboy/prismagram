@@ -22,6 +22,7 @@ export default class AppManager extends WindowsManager {
       })
 
       app.on('window-all-closed', () => {
+        this.onAppClose()
         if (process.platform !== 'darwin') {
           app.quit()
         }

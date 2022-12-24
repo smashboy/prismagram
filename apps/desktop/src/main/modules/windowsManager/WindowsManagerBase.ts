@@ -15,7 +15,8 @@ export default class WindowsManagerBase extends ApiManager {
         : {}),
       webPreferences: {
         preload: PRELOAD_SCRIPT_PATH,
-        sandbox: false
+        sandbox: false,
+        webviewTag: true
         // webSecurity: false,
         // allowRunningInsecureContent: true
       }

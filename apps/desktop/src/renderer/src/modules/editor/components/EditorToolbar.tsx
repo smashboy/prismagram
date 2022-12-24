@@ -18,6 +18,7 @@ import {
   $isEditorEnabled,
   $selectedEditorView,
   changeEditorViewEvent,
+  launchPrismaStudioEffect,
   layoutDiagramEffect
 } from '../stores'
 
@@ -66,7 +67,10 @@ const OptionsContainer: React.FC<{ children: React.ReactNode }> = ({ children })
 export const EditorToolbar = () => {
   const { selectedView, diagram, isEditorEnabled } = useStore($store)
 
-  const handleChangeEditorView = (view: EditorView) => changeEditorViewEvent(view)
+  const handleChangeEditorView = (view: EditorView) => {
+    if (view === EditorView.PRISMA_STUDIO) launchPrismaStudioEffect()
+    changeEditorViewEvent(view)
+  }
   const handleDiagramLayout = (layout: DiagramLayout) => () =>
     layoutDiagramEffect({ diagram: diagram!, layout })
 

@@ -5,6 +5,7 @@ export interface Project {
   name: string
   schema: string
   projectDirectory?: string
+  prismaStudioPort?: number
   commands?: Record<string, PrismaCommand>
 }
 

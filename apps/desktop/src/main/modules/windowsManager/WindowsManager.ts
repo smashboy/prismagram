@@ -1,9 +1,12 @@
 import { randomUUID } from 'crypto'
 import { BrowserWindow } from 'electron'
+import { killPortProcess } from 'kill-port-process'
 import { PROJECTS_FOLDER_PATH } from '../../constants'
 import {
   CREATE_COMMAND_ENDPOINT,
   CREATE_PROJECT_ENDPOINT,
+  EDITOR_CLOSE_PRISMA_STUDIO_ENDPOINT,
+  EDITOR_LAUNCH_PRISMA_STUDIO_ENDPOINT,
   EDITOR_LAYOUT_NODES_ENDPOINT,
   GET_EDITOR_DATA_ENDPOINT,
   GET_FOLDER_DIRECTORY_ENDPOINT,
@@ -28,9 +31,15 @@ import { Diagram } from '@shared/common/models/Diagram'
 import { DiagramLayout } from '@shared/common/configs/diagrams'
 import { layoutDiagramElements } from '../../services/diagrams'
 import { PrismaCommand } from '@shared/common/models/Prisma'
+import { DEFAULT_PRISMA_STUDIO_PORT } from '@shared/common/configs/prisma'
+import CommandsManager from '../commandsManager/CommandsManager'
+
+const PRISMA_STUDIO_PROCESS_ID = 'prisma-studio-process'
 
 export default class WindowsManager extends WindowsManagerBase {
   protected appWindow: WindowManager | undefined
+
+  private readonly commandsManager = new CommandsManager()
 
   protected createAppWindow() {
     this.appWindow = this.createWindow({
@@ -123,9 +132,34 @@ export default class WindowsManager extends WindowsManagerBase {
         return project
       }
     )
+
+    this.appWindow.createApiRoute(
+      EDITOR_LAUNCH_PRISMA_STUDIO_ENDPOINT,
+      async (project: Project) => {
+        if (this.commandsManager.hasProcess(PRISMA_STUDIO_PROCESS_ID)) return
+
+        return this.commandsManager.runCommand(
+          'npx prisma studio',
+          { port: project.prismaStudioPort ?? DEFAULT_PRISMA_STUDIO_PORT, browser: 'none' },
+          {
+            execDirectory: project.projectDirectory,
+            id: PRISMA_STUDIO_PROCESS_ID
+          }
+        )
+      }
+    )
+
+    this.appWindow.createApiRoute(EDITOR_CLOSE_PRISMA_STUDIO_ENDPOINT, async () => {
+      this.commandsManager.killProcess(PRISMA_STUDIO_PROCESS_ID)
+      await killPortProcess(DEFAULT_PRISMA_STUDIO_PORT, { signal: 'SIGTERM' })
+    })
   }
 
   protected get allWindowsCount() {
     return BrowserWindow.getAllWindows().length
+  }
+
+  protected onAppClose() {
+    this.commandsManager.killAllProcesses()
   }
 }
