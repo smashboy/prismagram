@@ -136,22 +136,13 @@ export default class WindowsManager extends WindowsManagerBase {
     this.appWindow.createApiRoute(
       EDITOR_LAUNCH_PRISMA_STUDIO_ENDPOINT,
       async (project: Project) => {
-        if (this.commandsManager.hasProcess(PRISMA_STUDIO_PROCESS_ID)) return
-
-        return this.commandsManager.runCommand(
-          'npx prisma studio',
-          { port: project.prismaStudioPort ?? DEFAULT_PRISMA_STUDIO_PORT, browser: 'none' },
-          {
-            execDirectory: project.projectDirectory,
-            id: PRISMA_STUDIO_PROCESS_ID
-          }
-        )
+        const { prismaStudioPort, projectDirectory } = project
+        this.commandsManager.launchPrismaStudio(prismaStudioPort, projectDirectory)
       }
     )
 
     this.appWindow.createApiRoute(EDITOR_CLOSE_PRISMA_STUDIO_ENDPOINT, async () => {
-      this.commandsManager.killProcess(PRISMA_STUDIO_PROCESS_ID)
-      await killPortProcess(DEFAULT_PRISMA_STUDIO_PORT, { signal: 'SIGTERM' })
+      this.commandsManager.killPrismaStudio()
     })
   }
 
@@ -160,6 +151,6 @@ export default class WindowsManager extends WindowsManagerBase {
   }
 
   protected onAppClose() {
-    this.commandsManager.killAllProcesses()
+    return this.commandsManager.killAllProcesses()
   }
 }

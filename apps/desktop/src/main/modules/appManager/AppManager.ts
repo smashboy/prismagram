@@ -21,8 +21,8 @@ export default class AppManager extends WindowsManager {
         if (this.allWindowsCount === 0) this.appWindow!.show()
       })
 
-      app.on('window-all-closed', () => {
-        this.onAppClose()
+      app.on('window-all-closed', async () => {
+        await this.onAppClose()
         if (process.platform !== 'darwin') {
           app.quit()
         }

@@ -1,5 +1,9 @@
+import { DEFAULT_PRISMA_STUDIO_PORT } from '@shared/common/configs/prisma'
 import child_process, { ChildProcess } from 'child_process'
 import { randomUUID } from 'crypto'
+import { killPortProcess } from 'kill-port-process'
+
+const PRISMA_STUDIO_PROCESS_ID = 'prisma-studio-process'
 
 type CommandOptions = Record<string, boolean | string | number>
 
@@ -10,6 +14,7 @@ interface RunCommandOptions {
 
 export default class CommandsManager {
   private readonly processes = new Map<string, ChildProcess>()
+  private currentPrismaStudioPort: number | null = null
 
   private buildCommandOptionsString(options: CommandOptions) {
     return Object.entries(options).reduce((acc, [cmd, value]) => {
@@ -39,6 +44,31 @@ export default class CommandsManager {
     })
   }
 
+  async launchPrismaStudio(port?: number, directory?: string) {
+    if (this.currentPrismaStudioPort) return
+
+    port = port ?? DEFAULT_PRISMA_STUDIO_PORT
+
+    await this.runCommand(
+      'npx prisma studio',
+      { port: port ?? DEFAULT_PRISMA_STUDIO_PORT, browser: 'none' },
+      {
+        execDirectory: directory,
+        id: PRISMA_STUDIO_PROCESS_ID
+      }
+    )
+
+    this.currentPrismaStudioPort = port
+  }
+
+  async killPrismaStudio() {
+    if (this.currentPrismaStudioPort) {
+      await killPortProcess(this.currentPrismaStudioPort, { signal: 'SIGTERM' })
+      this.killProcess(PRISMA_STUDIO_PROCESS_ID)
+      this.currentPrismaStudioPort = null
+    }
+  }
+
   hasProcess(id: string) {
     return this.processes.has(id)
   }
@@ -46,23 +76,14 @@ export default class CommandsManager {
   killProcess(id: string) {
     const process = this.processes.get(id)
     if (process) {
-      this.processes.delete(id)
       process.kill('SIGINT')
-      // if (process.pid) {
-      //   psTree(process.pid, (_, children) =>
-      //     child_process.spawn('kill', ['-9'].concat(children.map((p) => p.PID)))
-      //   )
-      // }
+      this.processes.delete(id)
     }
   }
 
-  killAllProcesses() {
+  async killAllProcesses() {
+    await this.killPrismaStudio()
     for (const process of [...this.processes.values()]) {
-      // if (process.pid) {
-      //   psTree(process.pid, (_, children) =>
-      //     child_process.spawn('kill', ['-9'].concat(children.map((p) => p.PID)))
-      //   )
-      // }
       process.kill('SIGINT')
     }
 

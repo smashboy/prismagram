@@ -1,5 +1,6 @@
 import { $selectedProjectId } from '@renderer/modules/projects'
 import { createEvent, createStore } from 'effector'
+import { createGate } from 'effector-react'
 import { EditorView } from '../config'
 
 export const changeEditorViewEvent = createEvent<EditorView>()
@@ -16,3 +17,5 @@ export const $selectedModelId = createStore<string | null>(null)
   .reset(resetSelectedModelEvent)
 
 export const $isEditorEnabled = $selectedProjectId.map((id) => !!id)
+
+export const PrismaStudioGate = createGate<string | null>()

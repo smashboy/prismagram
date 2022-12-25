@@ -1,4 +1,5 @@
 import { ActionIcon, Center, Flex, Group, Paper, SegmentedControl, Transition } from '@mantine/core'
+import { $selectedProject } from '@renderer/modules/projects'
 import { DiagramLayout } from '@shared/common/configs/diagrams'
 import {
   IconArrowBackUp,
@@ -18,44 +19,17 @@ import {
   $isEditorEnabled,
   $selectedEditorView,
   changeEditorViewEvent,
-  launchPrismaStudioEffect,
   layoutDiagramEffect
 } from '../stores'
 
 const ICON_SIZE = 20
 const ICON_BUTTON_SIZE = 'lg'
 
-const editorViewOptions = [
-  {
-    label: (
-      <Center>
-        <IconSchema size={ICON_SIZE} />
-      </Center>
-    ),
-    value: EditorView.DIAGRAM
-  },
-  {
-    label: (
-      <Center>
-        <IconCode size={ICON_SIZE} />
-      </Center>
-    ),
-    value: EditorView.SCHEMA
-  },
-  {
-    label: (
-      <Center>
-        <IconDatabase size={ICON_SIZE} />
-      </Center>
-    ),
-    value: EditorView.PRISMA_STUDIO
-  }
-]
-
 const $store = combine({
   selectedView: $selectedEditorView,
   diagram: $diagram,
-  isEditorEnabled: $isEditorEnabled
+  isEditorEnabled: $isEditorEnabled,
+  project: $selectedProject
 })
 
 const OptionsContainer: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -65,12 +39,37 @@ const OptionsContainer: React.FC<{ children: React.ReactNode }> = ({ children })
 )
 
 export const EditorToolbar = () => {
-  const { selectedView, diagram, isEditorEnabled } = useStore($store)
+  const { selectedView, diagram, isEditorEnabled, project } = useStore($store)
 
-  const handleChangeEditorView = (view: EditorView) => {
-    if (view === EditorView.PRISMA_STUDIO) launchPrismaStudioEffect()
-    changeEditorViewEvent(view)
-  }
+  const editorViewOptions = [
+    {
+      label: (
+        <Center>
+          <IconSchema size={ICON_SIZE} />
+        </Center>
+      ),
+      value: EditorView.DIAGRAM
+    },
+    {
+      label: (
+        <Center>
+          <IconCode size={ICON_SIZE} />
+        </Center>
+      ),
+      value: EditorView.SCHEMA
+    },
+    {
+      label: (
+        <Center>
+          <IconDatabase size={ICON_SIZE} />
+        </Center>
+      ),
+      value: EditorView.PRISMA_STUDIO,
+      disabled: !project?.projectDirectory
+    }
+  ]
+
+  const handleChangeEditorView = (view: EditorView) => changeEditorViewEvent(view)
   const handleDiagramLayout = (layout: DiagramLayout) => () =>
     layoutDiagramEffect({ diagram: diagram!, layout })
 
