@@ -82,7 +82,6 @@ export const ProjectGeneralSettings = () => {
             onBlur={handlePortInputBlur}
             min={0}
             step={1}
-            // onClick={handleGetProjectDirectory}
           />
           <Group position="right">
             <Button variant="filled" onClick={handleSaveProject} disabled={disableSaveButton}>
