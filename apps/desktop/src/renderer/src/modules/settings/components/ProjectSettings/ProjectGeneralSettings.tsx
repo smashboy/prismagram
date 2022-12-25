@@ -60,7 +60,7 @@ export const ProjectGeneralSettings = () => {
       projectDirectory: projectDirectory ?? void 0,
       prismaStudioPort:
         !prismaStudioPort || prismaStudioPort === DEFAULT_PRISMA_STUDIO_PORT
-          ? DEFAULT_PRISMA_STUDIO_PORT
+          ? void 0
           : prismaStudioPort
     })
   }
