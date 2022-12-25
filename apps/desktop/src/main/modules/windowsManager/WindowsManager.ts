@@ -1,6 +1,5 @@
 import { randomUUID } from 'crypto'
 import { BrowserWindow } from 'electron'
-import { killPortProcess } from 'kill-port-process'
 import { PROJECTS_FOLDER_PATH } from '../../constants'
 import {
   CREATE_COMMAND_ENDPOINT,
@@ -31,10 +30,7 @@ import { Diagram } from '@shared/common/models/Diagram'
 import { DiagramLayout } from '@shared/common/configs/diagrams'
 import { layoutDiagramElements } from '../../services/diagrams'
 import { PrismaCommand } from '@shared/common/models/Prisma'
-import { DEFAULT_PRISMA_STUDIO_PORT } from '@shared/common/configs/prisma'
 import CommandsManager from '../commandsManager/CommandsManager'
-
-const PRISMA_STUDIO_PROCESS_ID = 'prisma-studio-process'
 
 export default class WindowsManager extends WindowsManagerBase {
   protected appWindow: WindowManager | undefined

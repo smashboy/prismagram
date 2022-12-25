@@ -68,6 +68,11 @@ export const theme: MantineThemeOverride = {
         spacing: 'xs'
       }
     },
+    LoadingOverlay: {
+      defaultProps: {
+        overlayBlur: 2
+      }
+    },
     Accordion: {
       defaultProps: {
         variant: 'separated',

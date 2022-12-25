@@ -75,7 +75,7 @@ export const PrismaStudioView = () => {
 
   return (
     <Box w="100%" h="100%" pos="relative">
-      <LoadingOverlay visible={isLoadingWebview} overlayBlur={2} />
+      <LoadingOverlay visible={isLoadingWebview} />
       <webview
         ref={webviewRef}
         src={`http://localhost:${project.prismaStudioPort ?? DEFAULT_PRISMA_STUDIO_PORT}`}

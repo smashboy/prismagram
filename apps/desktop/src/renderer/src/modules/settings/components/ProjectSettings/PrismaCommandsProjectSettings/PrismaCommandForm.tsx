@@ -143,7 +143,7 @@ export const PrismaCommandForm: React.FC<PrismaCommandFormProps> = ({
 
   return (
     <Stack pos="relative">
-      <LoadingOverlay visible={isLoading} overlayBlur={2} />
+      <LoadingOverlay visible={isLoading} />
       <TextInput label="Command name" value={name} onChange={handleInputName} required />
       <Switch
         label="Is default command"
