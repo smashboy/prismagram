@@ -35,6 +35,26 @@ export class Generator extends Block {
     this.data.output = { value, isEnv }
   }
 
+  addPreviewFeature(feature: string) {
+    this.data.previewFeatures = [...new Set([...this.data.previewFeatures, feature])]
+  }
+
+  removePreviewFeature(feature: string) {
+    this.data.previewFeatures = this.data.previewFeatures.filter(
+      (selectedFeature) => selectedFeature !== feature
+    )
+  }
+
+  addBinaryTarget(target: string) {
+    this.data.binaryTargets = [...new Set([...this.data.binaryTargets, target])]
+  }
+
+  removeBinaryTarget(target: string) {
+    this.data.binaryTargets = this.data.binaryTargets.filter(
+      (selectedTarget) => selectedTarget !== target
+    )
+  }
+
   deleteField(field: keyof GeneratorData) {
     this.data = this._deleteField(field, this.data)
   }

@@ -6,8 +6,7 @@ export const getBlockId = (line: string) =>
     .split(' ')
     .filter((substr) => substr !== '' && !blockOptions.includes(substr as BlockType))[0]
 
-export const getCommonField = (line: string) =>
-  line.split(' ').filter((substr) => substr !== '' && substr !== '=')
+export const getCommonField = (line: string) => line.split('=').map((str) => str.trim())
 
 export const getEnvValue = (value: string): EnvValue => {
   if (value.startsWith('env')) {
@@ -23,4 +22,7 @@ export const getEnvValue = (value: string): EnvValue => {
   }
 }
 
-export const stripValue = (value: string) => value.replaceAll('"', '').replaceAll("'", '')
+export const arrayFromString = (str: string) =>
+  str.replace('[', '').replace(']', '').split(',').map(stripValue)
+
+export const stripValue = (value: string) => value.replaceAll('"', '').replaceAll("'", '').trim()

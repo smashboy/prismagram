@@ -9,6 +9,8 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  engineType      = "library"
+  previewFeatures = ["clientExtensions", "metrics"]
 }
 
 // --------------------------------------
