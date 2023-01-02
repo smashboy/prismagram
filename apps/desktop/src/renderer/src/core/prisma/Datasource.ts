@@ -5,6 +5,7 @@ import {
 } from '@shared/common/configs/prisma'
 import { EnvValue } from '@shared/common/models/Prisma'
 import { Block } from './Block'
+import * as lineUtils from './utils/line'
 
 export interface DatasourceData {
   provider: PrismaDatasourceProviderType
@@ -12,6 +13,8 @@ export interface DatasourceData {
   shadowDatabaseUrl?: EnvValue
   relationMode?: PrismaDatasourceRelationModeType
 }
+
+const datasourceEnvFields = ['url', 'shadowDatabaseUrl']
 
 export class Datasource extends Block {
   private data: DatasourceData = {
@@ -50,7 +53,16 @@ export class Datasource extends Block {
     this.data = this._deleteField(field, this.data)
   }
 
-  _setField<K extends keyof DatasourceData>(field: K, value: DatasourceData[K]) {
+  _parseLine(line: string) {
+    const [field, value] = lineUtils.getCommonField(line)
+
+    if (datasourceEnvFields.includes(field))
+      return this._setField(field as keyof DatasourceData, lineUtils.getEnvValue(value))
+
+    this._setField(field as keyof DatasourceData, lineUtils.stripValue(value))
+  }
+
+  private _setField<K extends keyof DatasourceData>(field: K, value: DatasourceData[K]) {
     this.data[field] = value
   }
 }

@@ -1,5 +1,6 @@
 import { EnvValue } from '@shared/common/models/Prisma'
 import { Block } from './Block'
+import * as lineUtils from './utils/line'
 
 export interface GeneratorData {
   provider: EnvValue
@@ -8,6 +9,9 @@ export interface GeneratorData {
   engineType?: string
   binaryTargets: string[]
 }
+
+const generatorEnvFields = ['provider', 'output']
+const generatorArrayLikeFields = ['previewFeatures', 'binaryTargets']
 
 export class Generator extends Block {
   private data: GeneratorData = {
@@ -28,30 +32,32 @@ export class Generator extends Block {
   }
 
   setProvider(value: string, isEnv = false) {
-    this.data.provider = { value, isEnv }
+    this._setField('provider', { value, isEnv })
   }
 
   setOutput(value: string, isEnv = false) {
-    this.data.output = { value, isEnv }
+    this._setField('output', { value, isEnv })
   }
 
   addPreviewFeature(feature: string) {
-    this.data.previewFeatures = [...new Set([...this.data.previewFeatures, feature])]
+    this._setField('previewFeatures', [...new Set([...this.data.previewFeatures, feature])])
   }
 
   removePreviewFeature(feature: string) {
-    this.data.previewFeatures = this.data.previewFeatures.filter(
-      (selectedFeature) => selectedFeature !== feature
+    this._setField(
+      'previewFeatures',
+      this.data.previewFeatures.filter((selectedFeature) => selectedFeature !== feature)
     )
   }
 
   addBinaryTarget(target: string) {
-    this.data.binaryTargets = [...new Set([...this.data.binaryTargets, target])]
+    this._setField('binaryTargets', [...new Set([...this.data.binaryTargets, target])])
   }
 
   removeBinaryTarget(target: string) {
-    this.data.binaryTargets = this.data.binaryTargets.filter(
-      (selectedTarget) => selectedTarget !== target
+    this._setField(
+      'binaryTargets',
+      this.data.binaryTargets.filter((selectedTarget) => selectedTarget !== target)
     )
   }
 
@@ -59,7 +65,19 @@ export class Generator extends Block {
     this.data = this._deleteField(field, this.data)
   }
 
-  _setField<K extends keyof GeneratorData>(field: K, value: GeneratorData[K]) {
+  _parseLine(line: string) {
+    const [field, value] = lineUtils.getCommonField(line)
+
+    if (generatorEnvFields.includes(field))
+      return this._setField(field as keyof GeneratorData, lineUtils.getEnvValue(value))
+
+    if (generatorArrayLikeFields.includes(field))
+      return this._setField(field as keyof GeneratorData, lineUtils.arrayFromString(value))
+
+    this._setField(field as keyof GeneratorData, lineUtils.stripValue(value))
+  }
+
+  private _setField<K extends keyof GeneratorData>(field: K, value: GeneratorData[K]) {
     this.data[field] = value
   }
 }

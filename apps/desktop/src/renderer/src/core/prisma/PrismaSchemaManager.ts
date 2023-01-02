@@ -3,10 +3,6 @@ import { Generator, GeneratorData } from './Generator'
 import { testSchema } from './testSchema'
 import * as lineUtils from './utils/line'
 
-const datasourceEnvFields = ['url', 'shadowDatabaseUrl']
-const generatorEnvFields = ['provider', 'output']
-const generatorArrayLikeFields = ['previewFeatures', 'binaryTargets']
-
 export class PrismaSchemaManager {
   private schema = new Map<string, Datasource | Generator>()
 
@@ -57,37 +53,8 @@ export class PrismaSchemaManager {
       }
 
       if (currentBlock) {
-        switch (currentBlock.type) {
-          case 'datasource': {
-            const [field, value] = lineUtils.getCommonField(line)
-
-            if (datasourceEnvFields.includes(field)) {
-              currentBlock._setField(field as keyof DatasourceData, lineUtils.getEnvValue(value))
-              continue
-            }
-
-            currentBlock._setField(field as keyof DatasourceData, lineUtils.stripValue(value))
-            continue
-          }
-          case 'generator': {
-            const [field, value] = lineUtils.getCommonField(line)
-
-            if (generatorEnvFields.includes(field)) {
-              currentBlock._setField(field as keyof GeneratorData, lineUtils.getEnvValue(value))
-              continue
-            }
-
-            if (generatorArrayLikeFields.includes(field)) {
-              currentBlock._setField(field as keyof GeneratorData, lineUtils.arrayFromString(value))
-              continue
-            }
-
-            currentBlock._setField(field as keyof DatasourceData, lineUtils.stripValue(value))
-            continue
-          }
-          default:
-            continue
-        }
+        currentBlock._parseLine(line)
+        continue
       }
     }
 
