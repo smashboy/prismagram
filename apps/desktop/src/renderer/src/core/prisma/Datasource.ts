@@ -29,10 +29,6 @@ export class Datasource extends Block {
     super(id, 'datasource')
   }
 
-  get id(): string {
-    return `${this.type}.${this.blockId}`
-  }
-
   setProvider(provider: PrismaDatasourceProviderType) {
     this._setField('provider', provider)
   }

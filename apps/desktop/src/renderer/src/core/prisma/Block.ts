@@ -11,6 +11,10 @@ export class Block {
     this.type = type
   }
 
+  get id(): string {
+    return `${this.type}.${this.blockId}`
+  }
+
   _deleteField<R extends Object>(field: string, record: R): R {
     return Object.entries(record).reduce(
       (acc, [key, value]) => (key === field ? acc : { ...acc, [key]: value }),

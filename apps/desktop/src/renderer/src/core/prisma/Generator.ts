@@ -27,10 +27,6 @@ export class Generator extends Block {
     super(id, 'generator')
   }
 
-  get id(): string {
-    return `${this.type}.${this.blockId}`
-  }
-
   setProvider(value: string, isEnv = false) {
     this._setField('provider', { value, isEnv })
   }
