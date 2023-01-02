@@ -1,6 +1,6 @@
 import {
-  PrismaDatasourceProvider,
-  PrismaDatasourceRelationMode,
+  PrismaDatasourceProviderType,
+  PrismaDatasourceRelationModeType,
   PrismaDbCommand,
   PrismaDbExecuteCommandInput,
   PrismaGeneralCommand,
@@ -9,13 +9,10 @@ import {
 } from '../configs/prisma'
 
 export interface PrismaDatasource {
-  provider: PrismaDatasourceProvider | string
+  provider: PrismaDatasourceProviderType | string
   url: EnvValue
-  // TODO
   shadowDatabaseUrl?: string
-  // TODO
-  relationMode?: PrismaDatasourceRelationMode
-  // TODO
+  relationMode?: PrismaDatasourceRelationModeType
   extensions?: string[]
 }
 

@@ -616,10 +616,10 @@
     "@monaco-editor/loader" "^1.3.2"
     prop-types "^15.7.2"
 
-"@mrleebo/prisma-ast@^0.4.2":
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/@mrleebo/prisma-ast/-/prisma-ast-0.4.2.tgz#1bbea18c716ed2f8a4fe40fa808a5f6a80ad3bc8"
-  integrity sha512-uwPcqTkOFaXRV8uZE5rL+5zpkA/VAF+kTA5RkVX6KqXoAOSUo8PdQuTKDxEv4WwFEMPlz6Qas0v7wLnhkZ9pxg==
+"@mrleebo/prisma-ast@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@mrleebo/prisma-ast/-/prisma-ast-0.5.0.tgz#741e82237189d8d141b5b9b858694852f2421a40"
+  integrity sha512-GosAAd13p+8VstP7wFHYz4ufJhEz5zzqYIt2y3vg82Jw5VpArGd0CzFu5iud/53bfAzzfgSVGUDkXiqPxKZENg==
   dependencies:
     chevrotain "^10.4.2"
 

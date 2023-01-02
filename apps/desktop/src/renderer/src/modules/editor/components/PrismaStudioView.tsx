@@ -71,7 +71,7 @@ export const PrismaStudioView = () => {
   }
 
   if (!project) return null
-  if (isLoading) return 'Is loading studio...'
+  if (isLoading) return <>{'Is loading studio...'}</>
 
   return (
     <Box w="100%" h="100%" pos="relative">

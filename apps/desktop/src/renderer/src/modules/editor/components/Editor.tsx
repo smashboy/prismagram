@@ -30,7 +30,9 @@ export const Editor = () => {
         description="Create new project or open existing one."
       >
         <Group>
-          <Button onClick={handleOpenCreateProjectModal}>Create new project</Button>
+          <Button onClick={handleOpenCreateProjectModal} variant="filled">
+            Create new project
+          </Button>
           <Button onClick={handleOpenSelectProjectModal} color="pink">
             Open project
           </Button>

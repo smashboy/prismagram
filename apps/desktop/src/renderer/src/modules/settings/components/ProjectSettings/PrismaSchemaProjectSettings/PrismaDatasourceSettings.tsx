@@ -1,4 +1,4 @@
-import { useStoreMap } from 'effector-react'
+import { useStore, useStoreMap } from 'effector-react'
 import { Select, Stack } from '@mantine/core'
 import {
   prismaDatasourceProvidersArray,
@@ -6,8 +6,8 @@ import {
 } from '@shared/common/configs/prisma'
 import { SettingsSectionPaper } from '../../SettingsSectionPaper'
 import { EnvInput } from '../../EnvInput'
-import { $schemaDatasources } from '@renderer/modules/editor'
-import { Assignment } from '@mrleebo/prisma-ast'
+import { $schema, $schemaDatasources } from '@renderer/modules/editor'
+import { Assignment, createPrismaSchemaBuilder, getSchema } from '@mrleebo/prisma-ast'
 import { cleanupAssignmentValue, extractAssignmentValue } from '@renderer/modules/settings/utils'
 
 interface PrismaDatasourceSettingsProps {
@@ -21,6 +21,15 @@ export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> =
     store: $schemaDatasources,
     keys: [settingsId],
     fn: (datasources, [id]) => datasources.get(id)!
+  })
+
+  const schema = useStore($schema)
+
+  console.log({
+    schema: getSchema(schema),
+    updated: createPrismaSchemaBuilder(schema)
+      .datasource('"postgresql"', { env: 'DATABASE_URL' })
+      .print()
   })
 
   const assignments = lines.filter((a) => a.type === 'assignment') as Assignment[]
@@ -43,7 +52,14 @@ export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> =
     value: ''
   }
 
+  const relationMode = assignments.find((a) => a.key === 'relationMode') || {
+    type: 'assignment',
+    key: 'relationMode',
+    value: ''
+  }
+
   const providerValue = cleanupAssignmentValue(provider.value as string)
+  const relationModeValue = cleanupAssignmentValue(relationMode.value as string)
 
   const urlInput = extractAssignmentValue(url)
   const shadowDatabaseUrlInput = extractAssignmentValue(shadowDatabaseUrl)
@@ -76,7 +92,7 @@ export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> =
         <Select
           label="Relation mode"
           description="Sets whether referential integrity is enforced by foreign keys in the database or emulated in the Prisma Client."
-          // value={}
+          value={relationModeValue}
           data={prismaRelationModesList}
           searchable
         />

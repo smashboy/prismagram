@@ -50,7 +50,7 @@ export default class CommandsManager {
     port = port ?? DEFAULT_PRISMA_STUDIO_PORT
 
     await this.runCommand(
-      'npx prisma studio',
+      'dotenv -e .env.local -- npx prisma studio',
       { port: port ?? DEFAULT_PRISMA_STUDIO_PORT, browser: 'none' },
       {
         execDirectory: directory,

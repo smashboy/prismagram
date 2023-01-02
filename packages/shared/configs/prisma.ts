@@ -1,11 +1,14 @@
-export enum PrismaDatasourceProvider {
-  POSTGRESQL = 'postgresql',
-  MYSQL = 'mysql',
-  SQLLITE = 'sqlite',
-  SQLSERVER = 'sqlserver',
-  MONGODB = 'mongodb',
-  COCKROACHDB = 'cockroachdb'
-}
+export const PrismaDatasourceProvider = {
+  POSTGRESQL: 'postgresql',
+  MYSQL: 'mysql',
+  SQLLITE: 'sqlite',
+  SQLSERVER: 'sqlserver',
+  MONGODB: 'mongodb',
+  COCKROACHDB: 'cockroachdb'
+} as const
+
+export type PrismaDatasourceProviderType =
+  typeof PrismaDatasourceProvider[keyof typeof PrismaDatasourceProvider]
 
 export const prismaDatasourceProvidersArray = [
   PrismaDatasourceProvider.COCKROACHDB,
@@ -16,10 +19,13 @@ export const prismaDatasourceProvidersArray = [
   PrismaDatasourceProvider.SQLSERVER
 ]
 
-export enum PrismaDatasourceRelationMode {
-  FOREIGN_KEYS = 'foreignKeys',
-  PRISMA = 'prisma'
-}
+export const PrismaDatasourceRelationMode = {
+  FOREIGN_KEYS: 'foreignKeys',
+  PRISMA: 'prisma'
+} as const
+
+export type PrismaDatasourceRelationModeType =
+  typeof PrismaDatasourceRelationMode[keyof typeof PrismaDatasourceRelationMode]
 
 export const prismaDatasourceRelationModesArray = [
   PrismaDatasourceRelationMode.FOREIGN_KEYS,
@@ -30,9 +36,9 @@ export enum PrismaGeneratorProvider {
   PRISMA_CLIENT_JS = 'prisma-client-js'
 }
 
-export const prismaRelationModesList = ['foreignKeys', 'prisma']
+export const prismaRelationModesList = ['foreignKeys', 'prisma'] as const
 
-export const prismaEngineTypesList = ['binary', 'dataproxy', 'library']
+export const prismaEngineTypesList = ['binary', 'dataproxy', 'library'] as const
 
 export const DEFAULT_PRISMA_STUDIO_PORT = 5555
 
@@ -61,7 +67,7 @@ export const prismaBinaryTargetsList = [
   'openbsd',
   'netbsd',
   'arm'
-]
+] as const
 
 export enum PrismaGeneralCommand {
   // VERSION = 'version',
