@@ -34,19 +34,19 @@ export class Datasource extends Block {
   }
 
   setProvider(provider: PrismaDatasourceProviderType) {
-    this.data.provider = provider
+    this._setField('provider', provider)
   }
 
   setUrl(value: string, isEnv = false) {
-    this.data.url = { value, isEnv }
+    this._setField('url', { value, isEnv })
   }
 
   setShadowDatabaseUrl(value: string, isEnv = false) {
-    this.data.shadowDatabaseUrl = { value, isEnv }
+    this._setField('shadowDatabaseUrl', { value, isEnv })
   }
 
   setRelationMode(value: PrismaDatasourceRelationModeType) {
-    this.data.relationMode = value
+    this._setField('relationMode', value)
   }
 
   deleteField(field: keyof DatasourceData) {
