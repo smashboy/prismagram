@@ -1,5 +1,5 @@
-import { Datasource, DatasourceData } from './Datasource'
-import { Generator, GeneratorData } from './Generator'
+import { Datasource } from './Datasource'
+import { Generator } from './Generator'
 import { testSchema } from './testSchema'
 import * as lineUtils from './utils/line'
 
