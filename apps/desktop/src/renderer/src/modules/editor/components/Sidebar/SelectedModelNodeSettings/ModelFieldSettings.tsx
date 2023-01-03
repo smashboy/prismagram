@@ -1,9 +1,10 @@
 import { useStore } from 'effector-react'
 import { Accordion, Badge, Group, Select, Stack, Text, TextInput } from '@mantine/core'
-import { ScalarFieldColor, scalarOptionsArray } from '@renderer/modules/editor/config'
+import { ScalarFieldColor } from '@renderer/modules/editor/config'
 import { $modelsIds, $nodesColors } from '@renderer/modules/editor/stores'
 import { combine } from 'effector'
 import { Field } from '@mrleebo/prisma-ast'
+import { scalarOptionsArray } from '@shared/common/configs/prisma'
 
 interface ModelFieldSettingsProps {
   field: Field

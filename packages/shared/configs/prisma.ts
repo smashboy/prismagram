@@ -69,6 +69,30 @@ export const prismaBinaryTargetsList = [
   'arm'
 ] as const
 
+export enum ScalarType {
+  STRING = 'String',
+  BOOLEAN = 'Boolean',
+  INT = 'Int',
+  BIG_INT = 'BigInt',
+  FLOAT = 'Float',
+  DECIMAL = 'Decimal',
+  DATE_TIME = 'DateTime',
+  JSON = 'Json',
+  BYTES = 'Bytes'
+}
+
+export const scalarOptionsArray = [
+  ScalarType.BIG_INT,
+  ScalarType.BOOLEAN,
+  ScalarType.BYTES,
+  ScalarType.DATE_TIME,
+  ScalarType.DECIMAL,
+  ScalarType.FLOAT,
+  ScalarType.INT,
+  ScalarType.JSON,
+  ScalarType.STRING
+]
+
 export enum PrismaGeneralCommand {
   // VERSION = 'version',
   // INIT = 'init',

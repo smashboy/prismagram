@@ -1,5 +1,5 @@
 import { string2Color } from '@renderer/core/utils'
-import { ScalarType } from '@shared/common/configs/diagrams'
+import { ScalarType } from '@shared/common/configs/prisma'
 
 export enum EditorView {
   DIAGRAM = 'd',
@@ -18,15 +18,3 @@ export const ScalarFieldColor = {
   [ScalarType.JSON]: string2Color(ScalarType.JSON),
   [ScalarType.BYTES]: string2Color(ScalarType.BYTES)
 }
-
-export const scalarOptionsArray = [
-  ScalarType.BIG_INT,
-  ScalarType.BOOLEAN,
-  ScalarType.BYTES,
-  ScalarType.DATE_TIME,
-  ScalarType.DECIMAL,
-  ScalarType.FLOAT,
-  ScalarType.INT,
-  ScalarType.JSON,
-  ScalarType.STRING
-]

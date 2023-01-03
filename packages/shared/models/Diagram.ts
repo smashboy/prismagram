@@ -1,5 +1,6 @@
 import { Edge as ReactEdge, Node as ReactNode } from 'reactflow'
-import { RelationType, ScalarType } from '../configs/diagrams'
+import { ScalarType } from '../configs/prisma'
+import { RelationType } from '../configs/diagrams'
 
 export type Node = ReactNode<ModelNodeData>
 export type Edge = ReactEdge<EdgeData>
