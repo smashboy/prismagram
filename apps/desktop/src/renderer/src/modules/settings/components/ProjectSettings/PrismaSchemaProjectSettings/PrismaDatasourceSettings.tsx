@@ -6,8 +6,8 @@ import {
 } from '@shared/common/configs/prisma'
 import { SettingsSectionPaper } from '../../SettingsSectionPaper'
 import { EnvInput } from '../../EnvInput'
-import { $schema, $schemaDatasources } from '@renderer/modules/editor'
-import { Assignment, createPrismaSchemaBuilder, getSchema } from '@mrleebo/prisma-ast'
+import { $schemaDatasources } from '@renderer/modules/editor'
+import { Assignment } from '@mrleebo/prisma-ast'
 import { cleanupAssignmentValue, extractAssignmentValue } from '@renderer/modules/settings/utils'
 
 interface PrismaDatasourceSettingsProps {
@@ -21,15 +21,6 @@ export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> =
     store: $schemaDatasources,
     keys: [settingsId],
     fn: (datasources, [id]) => datasources.get(id)!
-  })
-
-  const schema = useStore($schema)
-
-  console.log({
-    schema: getSchema(schema),
-    updated: createPrismaSchemaBuilder(schema)
-      .datasource('"postgresql"', { env: 'DATABASE_URL' })
-      .print()
   })
 
   const assignments = lines.filter((a) => a.type === 'assignment') as Assignment[]

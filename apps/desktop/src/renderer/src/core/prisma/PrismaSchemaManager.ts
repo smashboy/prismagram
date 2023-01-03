@@ -1,10 +1,11 @@
-import { Datasource } from './Datasource'
-import { Generator } from './Generator'
+import { Datasource } from './blocks/Datasource'
+import { Enum } from './blocks/Enum'
+import { Generator } from './blocks/Generator'
 import { testSchema } from './testSchema'
 import * as lineUtils from './utils/line'
 
 export class PrismaSchemaManager {
-  private schema = new Map<string, Datasource | Generator>()
+  private schema = new Map<string, Datasource | Generator | Enum>()
 
   constructor(schema: string) {
     this.parseSchemaString(schema)
@@ -13,7 +14,7 @@ export class PrismaSchemaManager {
   private parseSchemaString(schema: string) {
     const lines = schema.trim().split(/\r?\n/)
 
-    let currentBlock: Datasource | Generator | null = null
+    let currentBlock: Datasource | Generator | Enum | null = null
 
     for (const index in lines) {
       const line = lines[index].trim()
@@ -53,17 +54,20 @@ export class PrismaSchemaManager {
       }
 
       if (currentBlock) {
-        currentBlock._parseLine(line)
+        currentBlock._parseLine(line, index)
         continue
       }
     }
 
-    console.log(this.schema)
+    console.log({
+      schema: this.schema,
+      string: `${[...this.schema.values()].map((block) => block._toString()).join('\r\n')}`
+    })
   }
 
-  createModel() {}
-  editModel() {}
-  deleteModel() {}
+  // createModel() {}
+  // editModel() {}
+  // deleteModel() {}
 }
 
 new PrismaSchemaManager(testSchema)
