@@ -22,7 +22,7 @@ export class Generator extends Block<EnvField | ArrayField | OptionField, FieldK
     super(id, 'generator')
   }
 
-  _parseLine(line: string, lineIndex: number) {
+  _parseLine(line: string, lineIndex: string) {
     const [field, value] = lineUtils.getCommonField(line)
 
     if (generatorEnvFields.includes(field)) {

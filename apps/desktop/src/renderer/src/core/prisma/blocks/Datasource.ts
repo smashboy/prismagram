@@ -19,7 +19,7 @@ export class Datasource extends Block<OptionField | EnvField, FieldKey> {
     super(id, 'datasource')
   }
 
-  _parseLine(line: string, lineIndex: number) {
+  _parseLine(line: string, lineIndex: string) {
     const [field, value] = lineUtils.getCommonField(line)
 
     if (datasourceEnvFields.includes(field)) {

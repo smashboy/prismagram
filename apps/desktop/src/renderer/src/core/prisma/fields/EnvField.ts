@@ -5,7 +5,7 @@ export class EnvField extends Field {
   value = ''
   isEnv = false
 
-  constructor(name: string, lineIndex: number) {
+  constructor(name: string, lineIndex: string) {
     super(name, lineIndex)
   }
 

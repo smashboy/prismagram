@@ -1,8 +1,8 @@
 export class Field {
   protected name: string
-  protected readonly lineIndex: number
+  protected readonly lineIndex: string
 
-  constructor(name: string, lineIndex: number) {
+  constructor(name: string, lineIndex: string) {
     this.name = name
     this.lineIndex = lineIndex
   }

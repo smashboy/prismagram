@@ -7,7 +7,7 @@ export class ModelField extends Field {
   type: ModelFieldType
   modifier: 'optional' | 'list' | null = null
 
-  constructor(name: string, lineIndex: number, type: ModelFieldType) {
+  constructor(name: string, lineIndex: string, type: ModelFieldType) {
     super(name, lineIndex)
     this.type = type
   }

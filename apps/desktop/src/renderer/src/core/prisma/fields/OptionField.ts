@@ -4,7 +4,7 @@ import { Field } from './Field'
 export class OptionField extends Field {
   value = ''
 
-  constructor(name: string, lineIndex: number) {
+  constructor(name: string, lineIndex: string) {
     super(name, lineIndex)
   }
 

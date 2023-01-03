@@ -2,7 +2,7 @@ import { ScalarType } from '@shared/common/configs/prisma'
 import { ModelField } from '../ModelField'
 
 export class BigIntField extends ModelField {
-  constructor(name: string, lineIndex: number) {
+  constructor(name: string, lineIndex: string) {
     super(name, lineIndex, ScalarType.BIG_INT)
   }
 }
