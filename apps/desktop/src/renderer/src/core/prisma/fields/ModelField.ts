@@ -15,4 +15,18 @@ export class ModelField extends Field {
   protected _isScalarType() {
     return scalarOptionsArray.includes(this.type as ScalarType)
   }
+
+  _parseModifier(type: string) {
+    if (type.endsWith('[]')) {
+      this.modifier = 'list'
+      return
+    }
+
+    if (type.endsWith('?')) {
+      this.modifier = 'optional'
+      return
+    }
+
+    this.modifier = null
+  }
 }

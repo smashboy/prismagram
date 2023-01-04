@@ -1,5 +1,5 @@
 import { Block } from './Block'
-import { ArrayField } from '../fields/ArrayField'
+import { OptionsListField } from '../fields/OptionsListField'
 import { EnvField } from '../fields/EnvField'
 import { OptionField } from '../fields/OptionField'
 import * as lineUtils from '../utils/line'
@@ -17,7 +17,7 @@ const generatorArrayLikeFields = ['previewFeatures', 'binaryTargets']
 
 type FieldKey = 'provider' | 'output' | 'previewFeatures' | 'binaryTargets'
 
-export class Generator extends Block<EnvField | ArrayField | OptionField, FieldKey> {
+export class Generator extends Block<EnvField | OptionsListField | OptionField, FieldKey> {
   constructor(id: string) {
     super(id, 'generator')
   }
@@ -32,9 +32,9 @@ export class Generator extends Block<EnvField | ArrayField | OptionField, FieldK
     }
 
     if (generatorArrayLikeFields.includes(field)) {
-      const arrayField = new ArrayField(field, lineIndex)
-      arrayField._parse(value)
-      return this.addField(field as FieldKey, arrayField)
+      const optionsListField = new OptionsListField(field, lineIndex)
+      optionsListField._parse(value)
+      return this.addField(field as FieldKey, optionsListField)
     }
 
     const optionField = new OptionField(field, lineIndex)

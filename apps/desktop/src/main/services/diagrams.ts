@@ -1,7 +1,7 @@
 import dagre from 'dagre'
 import { groupBy } from 'lodash'
 import type { DMMF } from '@prisma/generator-helper'
-import { DiagramLayout, NodeType, RelationType, ScalarType } from '@shared/common/configs/diagrams'
+import { DiagramLayout, NodeType, RelationType } from '@shared/common/configs/diagrams'
 import {
   ModelField,
   ModelNodeData,
@@ -12,6 +12,7 @@ import {
 } from '@shared/common/models/Diagram'
 import { graphDirectionOption } from '../constants'
 import { string2Color } from '../utils'
+import { ScalarType } from '@shared/common/configs/prisma'
 
 export const prismaSchema2Diagram = (document: DMMF.Document): Diagram => {
   const {
