@@ -1,10 +1,14 @@
-import { Block } from '@mrleebo/prisma-ast'
+import { Block, BlockType } from '@renderer/core/prisma/blocks/Block'
+import { PrismaSchemaStateData } from '@renderer/core/prisma/PrismaSchemaState'
 
-export const extractBlocksByType = <B = Block>(type: string, list: Block[]): Map<string, B> => {
+export const extractBlocksByType = <B extends Block>(
+  type: BlockType,
+  list: PrismaSchemaStateData
+): Map<string, B> => {
   const blocks = new Map<string, B>()
 
-  for (const block of list) {
-    if (block.type === type) blocks.set(block.name, block)
+  for (const block of [...list.values()]) {
+    if (block.type === type) blocks.set(block.blockId, block)
   }
 
   return blocks

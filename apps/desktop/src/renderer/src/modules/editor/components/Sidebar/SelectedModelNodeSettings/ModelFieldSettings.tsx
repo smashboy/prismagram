@@ -3,11 +3,11 @@ import { Accordion, Badge, Group, Select, Stack, Text, TextInput } from '@mantin
 import { ScalarFieldColor } from '@renderer/modules/editor/config'
 import { $modelsIds, $nodesColors } from '@renderer/modules/editor/stores'
 import { combine } from 'effector'
-import { Field } from '@mrleebo/prisma-ast'
 import { scalarOptionsArray } from '@shared/common/configs/prisma'
+import { ModelField } from '@renderer/core/prisma/fields/ModelField'
 
 interface ModelFieldSettingsProps {
-  field: Field
+  field: ModelField
 }
 
 const $store = combine({
@@ -16,15 +16,13 @@ const $store = combine({
 })
 
 export const ModelFieldSettings: React.FC<ModelFieldSettingsProps> = ({
-  field: { fieldType: type, name, array, optional }
+  field: { type, displayType, name }
 }) => {
   const { modelsIds, nodesColors } = useStore($store)
 
   const typeOptions = [...scalarOptionsArray, ...modelsIds]
 
   const typeColor = ScalarFieldColor[type as string] || nodesColors[type as string]
-
-  const displayType = `${type}${array ? '[]' : optional ? '?' : ''}`
 
   return (
     <Accordion.Item

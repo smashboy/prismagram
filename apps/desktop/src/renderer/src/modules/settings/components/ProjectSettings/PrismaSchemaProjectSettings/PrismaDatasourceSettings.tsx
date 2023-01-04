@@ -1,4 +1,4 @@
-import { useStore, useStoreMap } from 'effector-react'
+import { useStoreMap } from 'effector-react'
 import { Select, Stack } from '@mantine/core'
 import {
   prismaDatasourceProvidersArray,
@@ -7,8 +7,8 @@ import {
 import { SettingsSectionPaper } from '../../SettingsSectionPaper'
 import { EnvInput } from '../../EnvInput'
 import { $schemaDatasources } from '@renderer/modules/editor'
-import { Assignment } from '@mrleebo/prisma-ast'
-import { cleanupAssignmentValue, extractAssignmentValue } from '@renderer/modules/settings/utils'
+import { OptionField } from '@renderer/core/prisma/fields/OptionField'
+import { EnvField } from '@renderer/core/prisma/fields/EnvField'
 
 interface PrismaDatasourceSettingsProps {
   settingsId: string
@@ -17,43 +17,16 @@ interface PrismaDatasourceSettingsProps {
 export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> = ({
   settingsId
 }) => {
-  const { assignments: lines } = useStoreMap({
+  const datasource = useStoreMap({
     store: $schemaDatasources,
     keys: [settingsId],
     fn: (datasources, [id]) => datasources.get(id)!
   })
 
-  const assignments = lines.filter((a) => a.type === 'assignment') as Assignment[]
-
-  const provider = assignments.find((a) => a.key === 'provider') || {
-    type: 'assignment',
-    key: 'provider',
-    value: ''
-  }
-
-  const url = assignments.find((a) => a.key === 'url') || {
-    type: 'assignment',
-    key: 'url',
-    value: ''
-  }
-
-  const shadowDatabaseUrl = assignments.find((a) => a.key === 'shadowDatabaseUrl') || {
-    type: 'assignment',
-    key: 'shadowDatabaseUrl',
-    value: ''
-  }
-
-  const relationMode = assignments.find((a) => a.key === 'relationMode') || {
-    type: 'assignment',
-    key: 'relationMode',
-    value: ''
-  }
-
-  const providerValue = cleanupAssignmentValue(provider.value as string)
-  const relationModeValue = cleanupAssignmentValue(relationMode.value as string)
-
-  const urlInput = extractAssignmentValue(url)
-  const shadowDatabaseUrlInput = extractAssignmentValue(shadowDatabaseUrl)
+  const provider = datasource.field<OptionField>('provider')
+  const url = datasource.field<EnvField>('url')
+  const shadowDatabaseUrl = datasource.field<EnvField>('shadowDatabaseUrl')
+  const relationMode = datasource.field<OptionField>('relationMode')
 
   return (
     <SettingsSectionPaper title="Datasource">
@@ -62,7 +35,7 @@ export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> =
         <Select
           label="Provider"
           description="Describes which data source connectors to use."
-          value={providerValue}
+          value={provider?.value ?? ''}
           data={prismaDatasourceProvidersArray}
           searchable
           required
@@ -70,21 +43,21 @@ export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> =
         <EnvInput
           label="Url"
           description="Connection URL including authentication info."
-          value={urlInput.value}
-          isEnv={urlInput.isEnv}
+          value={url?.value ?? ''}
+          isEnv={url?.isEnv ?? false}
           required
         />
         <EnvInput
           label="Shadow database url"
           description="Connection URL to the shadow database used by Prisma Migrate. Allows you to use a cloud-hosted database as the shadow database."
-          value={shadowDatabaseUrlInput.value}
-          isEnv={shadowDatabaseUrlInput.isEnv}
+          value={shadowDatabaseUrl?.value ?? ''}
+          isEnv={shadowDatabaseUrl?.isEnv ?? false}
         />
         <Select
           label="Relation mode"
           description="Sets whether referential integrity is enforced by foreign keys in the database or emulated in the Prisma Client."
-          value={relationModeValue}
-          data={prismaRelationModesList}
+          value={relationMode?.value ?? ''}
+          data={prismaRelationModesList as unknown as string[]}
           searchable
         />
       </Stack>

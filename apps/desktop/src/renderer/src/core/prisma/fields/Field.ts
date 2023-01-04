@@ -1,5 +1,5 @@
 export class Field {
-  protected name: string
+  name: string
   protected readonly lineIndex: string
 
   constructor(name: string, lineIndex: string) {

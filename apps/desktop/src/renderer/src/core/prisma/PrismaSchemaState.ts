@@ -5,8 +5,10 @@ import { Model } from './blocks/Model'
 import { testSchema } from './testSchema'
 import * as lineUtils from './utils/line'
 
+export type PrismaSchemaStateData = Map<string, Datasource | Generator | Enum | Model>
+
 export class PrismaSchemaState {
-  private state = new Map<string, Datasource | Generator | Enum | Model>()
+  readonly state: PrismaSchemaStateData = new Map()
 
   constructor(schema: string) {
     this.parseSchemaString(schema)

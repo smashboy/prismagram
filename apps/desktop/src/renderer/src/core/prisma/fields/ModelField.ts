@@ -16,6 +16,12 @@ export class ModelField extends Field {
     return scalarOptionsArray.includes(this.type as ScalarType)
   }
 
+  get displayType() {
+    return `${this.type}${
+      this.modifier === 'list' ? '[]' : this.modifier === 'optional' ? '?' : ''
+    }`
+  }
+
   _parseModifier(type: string) {
     if (type.endsWith('[]')) {
       this.modifier = 'list'

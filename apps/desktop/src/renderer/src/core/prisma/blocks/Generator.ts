@@ -15,7 +15,7 @@ import * as lineUtils from '../utils/line'
 const generatorEnvFields = ['provider', 'output']
 const generatorArrayLikeFields = ['previewFeatures', 'binaryTargets']
 
-type FieldKey = 'provider' | 'output' | 'previewFeatures' | 'binaryTargets'
+type FieldKey = 'provider' | 'output' | 'previewFeatures' | 'binaryTargets' | 'engineType'
 
 export class Generator extends Block<EnvField | OptionsListField | OptionField, FieldKey> {
   constructor(id: string) {

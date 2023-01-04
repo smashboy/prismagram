@@ -15,7 +15,7 @@ const $store = combine({
 })
 
 export const ModelNavItem: React.FC<ModelNavItemProps> = ({ nodeId }) => {
-  const { name } = useStoreMap({
+  const { blockId } = useStoreMap({
     store: $schemaModels,
     keys: [nodeId],
     fn: (models, [id]) => models.get(id)!
@@ -32,7 +32,7 @@ export const ModelNavItem: React.FC<ModelNavItemProps> = ({ nodeId }) => {
 
   return (
     <NavLink
-      label={name}
+      label={blockId}
       variant="filled"
       active={isSelected}
       onClick={handleSelectMode}

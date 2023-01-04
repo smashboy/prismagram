@@ -2,7 +2,7 @@ import { arrayFromString } from '../utils/line'
 import { Field } from './Field'
 
 export class OptionsListField extends Field {
-  options = new Set<string>()
+  readonly options = new Set<string>()
 
   constructor(name: string, lineIndex: string) {
     super(name, lineIndex)
@@ -17,7 +17,9 @@ export class OptionsListField extends Field {
   }
 
   _parse(str: string) {
-    this.options = new Set(arrayFromString(str))
+    for (const option of arrayFromString(str)) {
+      this.options.add(option)
+    }
   }
 
   _toString() {

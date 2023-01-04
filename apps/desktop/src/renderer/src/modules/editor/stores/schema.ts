@@ -1,40 +1,36 @@
 import { combine, createEvent, createStore } from 'effector'
-import { Datasource, Enum, getSchema, Model, Generator } from '@mrleebo/prisma-ast'
 import { $selectedModelId } from './ui'
 import { extractBlocksByType } from './utils'
+import { PrismaSchemaState } from '@renderer/core/prisma/PrismaSchemaState'
+import { Enum } from '@renderer/core/prisma/blocks/Enum'
+import { Datasource } from '@renderer/core/prisma/blocks/Datasource'
+import { Generator } from '@renderer/core/prisma/blocks/Generator'
+import { Model } from '@renderer/core/prisma/blocks/Model'
 
 export const setPrismaSchema = createEvent<string>()
 
 export const $schema = createStore<string>('').on(setPrismaSchema, (_, schema) => schema)
 
-export const $schemaDataModel = $schema.map((schema) => getSchema(schema))
+export const $schemaState = $schema.map((schema) => new PrismaSchemaState(schema))
 
-export const $schemaModels = $schemaDataModel.map(({ list }) => {
-  const models = new Map<string, Model>()
-
-  for (const block of list) {
-    if (block.type === 'model') models.set(block.name, block)
-  }
-
-  console.log(models)
-
-  return models
-})
+export const $schemaModels = $schemaState.map(({ state }) =>
+  extractBlocksByType<Model>('model', state)
+)
 
 export const $selectedSchemaModel = combine([$schemaModels, $selectedModelId]).map(([models, id]) =>
   id ? models.get(id)! : null
 )
 
-export const $schemaEnums = $schemaDataModel.map(({ list }) =>
-  extractBlocksByType<Enum>('enum', list)
+export const $schemaEnums = $schemaState.map(({ state }) =>
+  extractBlocksByType<Enum>('enum', state)
 )
 
-export const $schemaDatasources = $schemaDataModel.map(({ list }) =>
-  extractBlocksByType<Datasource>('datasource', list)
+export const $schemaDatasources = $schemaState.map(({ state }) =>
+  extractBlocksByType<Datasource>('datasource', state)
 )
 
-export const $schemaGenerators = $schemaDataModel.map(({ list }) =>
-  extractBlocksByType<Generator>('generator', list)
+export const $schemaGenerators = $schemaState.map(({ state }) =>
+  extractBlocksByType<Generator>('generator', state)
 )
 
 // TODO: move to common
