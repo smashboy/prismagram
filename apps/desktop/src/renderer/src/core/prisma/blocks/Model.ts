@@ -1,4 +1,5 @@
 import { ScalarType } from '@shared/common/configs/prisma'
+import { BlockAttribute } from '../attributes/BlockAttribute'
 import { BigIntField } from '../fields/scalarFields/BigIntField'
 import { BooleanField } from '../fields/scalarFields/BooleanField'
 import { BytesField } from '../fields/scalarFields/BytesField'
@@ -33,6 +34,8 @@ export class Model extends Block<
   | IntField
   | JsonField
 > {
+  readonly attributes: BlockAttribute[] = []
+
   constructor(id: string) {
     super(id, 'model')
   }

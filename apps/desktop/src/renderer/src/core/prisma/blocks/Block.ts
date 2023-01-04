@@ -4,7 +4,7 @@ export type BlockType = 'generator' | 'datasource' | 'model' | 'enum'
 
 export const blockOptions: BlockType[] = ['datasource', 'enum', 'generator', 'model']
 
-export class Block<F = Field, K = string> {
+export class Block<F extends Field, K = string> {
   readonly fields = new Map<K, F>()
   readonly blockId: string
   readonly type: BlockType
@@ -18,11 +18,15 @@ export class Block<F = Field, K = string> {
     return `${this.type}.${this.blockId}`
   }
 
+  get fieldNames() {
+    return [...this.fields.values()].map((field) => field.name)
+  }
+
   field<SF = Field>(fieldId: K) {
     return this.fields.get(fieldId) as SF | undefined
   }
 
-  addField(fieldId: K, field: F) {
+  protected addField(fieldId: K, field: F) {
     this.fields.set(fieldId, field)
   }
 

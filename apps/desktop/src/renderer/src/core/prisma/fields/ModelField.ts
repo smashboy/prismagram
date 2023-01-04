@@ -1,4 +1,5 @@
 import { scalarOptionsArray, ScalarType } from '@shared/common/configs/prisma'
+import { FieldAttribute } from '../attributes/FieldAttribute'
 import { Field } from './Field'
 
 type ModelFieldType = ScalarType | string
@@ -6,6 +7,7 @@ type ModelFieldType = ScalarType | string
 export class ModelField extends Field {
   type: ModelFieldType
   modifier: 'optional' | 'list' | null = null
+  readonly attributes: FieldAttribute[] = []
 
   constructor(name: string, lineIndex: string, type: ModelFieldType) {
     super(name, lineIndex)

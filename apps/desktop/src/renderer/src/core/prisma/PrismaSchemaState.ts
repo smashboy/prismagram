@@ -3,6 +3,7 @@ import { Enum } from './blocks/Enum'
 import { Generator } from './blocks/Generator'
 import { Model } from './blocks/Model'
 import { testSchema } from './testSchema'
+import { extractBlockIdsByType } from './utils/block'
 import * as lineUtils from './utils/line'
 
 export type PrismaSchemaStateData = Map<string, Datasource | Generator | Enum | Model>
@@ -77,6 +78,14 @@ export class PrismaSchemaState {
       state: this.state,
       schema: `${[...this.state.values()].map((block) => block._toString()).join('\r\n')}`
     })
+  }
+
+  get modelIds() {
+    return extractBlockIdsByType('model', this.state)
+  }
+
+  get enumIds() {
+    return extractBlockIdsByType('enum', this.state)
   }
 
   // createModel() {}
