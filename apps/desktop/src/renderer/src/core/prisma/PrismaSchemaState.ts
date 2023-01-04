@@ -5,7 +5,7 @@ import { Model } from './blocks/Model'
 import { testSchema } from './testSchema'
 import * as lineUtils from './utils/line'
 
-export class PrismaSchemaManager {
+export class PrismaSchemaState {
   private state = new Map<string, Datasource | Generator | Enum | Model>()
 
   constructor(schema: string) {
@@ -82,4 +82,4 @@ export class PrismaSchemaManager {
   // deleteModel() {}
 }
 
-new PrismaSchemaManager(testSchema)
+new PrismaSchemaState(testSchema)
