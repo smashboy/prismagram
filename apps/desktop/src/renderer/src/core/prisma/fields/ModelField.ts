@@ -4,7 +4,6 @@ import { DefaultAttribute } from '../attributes/fieldAttributes/DefaultAttribute
 import { IdAttribute } from '../attributes/fieldAttributes/IdAttribute'
 import { IgnoreAttribute } from '../attributes/fieldAttributes/IgnoreAttribute'
 import { UpdatedAtAttribute } from '../attributes/fieldAttributes/UpdatedAtAttribute'
-// import { FieldAttribute } from '../attributes/FieldAttribute'
 import { Field } from './Field'
 
 type ModelFieldType = ScalarType | string
@@ -56,45 +55,21 @@ export class ModelField<A = FieldAttribute> extends Field {
     if (attributeStrings.length === 0) return
 
     for (const attributeStr of attributeStrings) {
-      if (attributeStr.indexOf('(') > -1) {
+      const bracketIndex = attributeStr.indexOf('(')
+      if (bracketIndex > -1) {
+        const name = attributeStr.substring(0, bracketIndex)
+        const args = attributeStr.substring(bracketIndex + 1, attributeStr.lastIndexOf(')'))
+
+        console.log(name, args)
         continue
       }
 
-      if (fieldAttributeMap[attributeStr]) {
-        const attr = new fieldAttributeMap[attributeStr]()
-        this.attributes.set(attributeStr, attr)
+      const name = attributeStr
+
+      if (fieldAttributeMap[name]) {
+        const attr = new fieldAttributeMap[name]()
+        this.attributes.set(name, attr)
       }
     }
-
-    // const currentFieldAttribute: A | null = null
-
-    // if (substrings[0]?.startsWith('@')) console.log(substrings)
-
-    // for (const str of substrings) {
-    //   if (str.startsWith('@')) {
-    //     let name = ''
-    //     let hasArguments = false
-
-    //     if (str.indexOf('(') > -1) {
-    //       name = str.substring(str.indexOf('@') + 1, str.indexOf('('))
-    //       hasArguments = true
-    //     } else {
-    //       name = str.replace('@', '')
-    //     }
-
-    //     if (fieldAttributeMap[name]) {
-    //       const attr = new fieldAttributeMap[name]()
-
-    //       if (!hasArguments) {
-    //         this.attributes.set(name, attr)
-    //         continue
-    //       }
-
-    //       // if (hasArguments) {
-
-    //       // }
-    //     }
-    //   }
-    // }
   }
 }
