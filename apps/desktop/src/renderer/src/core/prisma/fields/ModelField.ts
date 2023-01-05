@@ -47,36 +47,41 @@ export class ModelField<A = FieldAttribute> extends Field {
   }
 
   _parseAttributes(substrings: string[]) {
-    const currentFieldAttribute: A | null = null
+    const attributes = substrings.join(' ').split('@').filter(Boolean)
 
-    for (const str of substrings) {
-      if (str.startsWith('@')) {
-        let name = ''
-        let hasArguments = false
+    if (attributes.length === 0) return
 
-        if (str.indexOf('(') > -1) {
-          name = str.substring(str.indexOf('@') + 1, str.indexOf('('))
-          hasArguments = true
-        } else {
-          name = str.replace('@', '')
-        }
+    console.log(attributes)
 
-        if (fieldAttributeMap[name]) {
-          const attr = new fieldAttributeMap[name]()
+    // const currentFieldAttribute: A | null = null
 
-          if (!hasArguments) {
-            this.attributes.set(name, attr)
-            continue
-          }
+    // if (substrings[0]?.startsWith('@')) console.log(substrings)
 
-          if (hasArguments) {
-            if (attr instanceof DefaultAttribute) {
-              attr._parse(str)
-              this.attributes.set(name, attr)
-            }
-          }
-        }
-      }
-    }
+    // for (const str of substrings) {
+    //   if (str.startsWith('@')) {
+    //     let name = ''
+    //     let hasArguments = false
+
+    //     if (str.indexOf('(') > -1) {
+    //       name = str.substring(str.indexOf('@') + 1, str.indexOf('('))
+    //       hasArguments = true
+    //     } else {
+    //       name = str.replace('@', '')
+    //     }
+
+    //     if (fieldAttributeMap[name]) {
+    //       const attr = new fieldAttributeMap[name]()
+
+    //       if (!hasArguments) {
+    //         this.attributes.set(name, attr)
+    //         continue
+    //       }
+
+    //       // if (hasArguments) {
+
+    //       // }
+    //     }
+    //   }
+    // }
   }
 }
