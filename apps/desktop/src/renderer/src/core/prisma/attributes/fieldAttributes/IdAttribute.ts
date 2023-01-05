@@ -22,4 +22,6 @@ export class IdAttribute extends FieldAttribute<IdAttributeArgument> {
   setClustered(value: boolean) {
     this.setArgument('clustered', value)
   }
+
+  _parse(str: string) {}
 }

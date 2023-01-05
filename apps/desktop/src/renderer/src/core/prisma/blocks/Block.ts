@@ -1,4 +1,5 @@
 import { Field } from '../fields/Field'
+import { PrismaSchemaState } from '../PrismaSchemaState'
 
 export type BlockType = 'generator' | 'datasource' | 'model' | 'enum'
 
@@ -8,10 +9,12 @@ export class Block<F extends Field, K = string> {
   readonly fields = new Map<K, F>()
   readonly blockId: string
   readonly type: BlockType
+  readonly state: PrismaSchemaState
 
-  constructor(id: string, type: BlockType) {
+  constructor(id: string, type: BlockType, state: PrismaSchemaState) {
     this.blockId = id
     this.type = type
+    this.state = state
   }
 
   get id(): string {

@@ -3,6 +3,7 @@ import { OptionsListField } from '../fields/OptionsListField'
 import { EnvField } from '../fields/EnvField'
 import { OptionField } from '../fields/OptionField'
 import * as lineUtils from '../utils/line'
+import { PrismaSchemaState } from '../PrismaSchemaState'
 
 // export interface GeneratorData {
 //   provider: EnvValue
@@ -18,8 +19,8 @@ const generatorArrayLikeFields = ['previewFeatures', 'binaryTargets']
 type FieldKey = 'provider' | 'output' | 'previewFeatures' | 'binaryTargets' | 'engineType'
 
 export class Generator extends Block<EnvField | OptionsListField | OptionField, FieldKey> {
-  constructor(id: string) {
-    super(id, 'generator')
+  constructor(id: string, state: PrismaSchemaState) {
+    super(id, 'generator', state)
   }
 
   _parseLine(line: string, lineIndex: string) {

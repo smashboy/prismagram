@@ -25,6 +25,22 @@ export class PrismaSchemaState {
     for (const index in lines) {
       const line = lines[index].trim()
 
+      if (lineUtils.isBlock('model', line)) {
+        const id = lineUtils.getBlockId(line)
+        const model = new Model(id, this)
+        this.state.set(model.id, model)
+      }
+
+      if (lineUtils.isBlock('enum', line)) {
+        const id = lineUtils.getBlockId(line)
+        const enumBlock = new Enum(id, this)
+        this.state.set(enumBlock.id, enumBlock)
+      }
+    }
+
+    for (const index in lines) {
+      const line = lines[index].trim()
+
       // TODO: store breaks ?
       if (line === '') {
         continue
@@ -35,29 +51,27 @@ export class PrismaSchemaState {
         continue
       }
 
-      if (line.startsWith('model')) {
+      if (lineUtils.isBlock('model', line)) {
         const id = lineUtils.getBlockId(line)
-        currentBlock = new Model(id)
+        currentBlock = new Model(id, this)
         continue
       }
 
-      if (line.startsWith('enum')) {
+      if (lineUtils.isBlock('enum', line)) {
         const id = lineUtils.getBlockId(line)
-        currentBlock = new Enum(id)
+        currentBlock = new Enum(id, this)
         continue
       }
 
-      if (line.startsWith('datasource')) {
+      if (lineUtils.isBlock('datasource', line)) {
         const id = lineUtils.getBlockId(line)
-
-        currentBlock = new Datasource(id)
+        currentBlock = new Datasource(id, this)
         continue
       }
 
-      if (line.startsWith('generator')) {
+      if (lineUtils.isBlock('generator', line)) {
         const id = lineUtils.getBlockId(line)
-
-        currentBlock = new Generator(id)
+        currentBlock = new Generator(id, this)
         continue
       }
 

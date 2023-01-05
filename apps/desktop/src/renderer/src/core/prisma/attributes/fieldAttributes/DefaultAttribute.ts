@@ -1,4 +1,8 @@
-import { AttributeFunction } from '../AttributeFunction'
+import {
+  AttributeFunction,
+  attributeFunctionsList,
+  AttributeFunctionType
+} from '../AttributeFunction'
 import { FieldAttribute } from '../FieldAttribute'
 
 type DefaultAttributePossibleValue =
@@ -19,5 +23,15 @@ export class DefaultAttribute extends FieldAttribute {
 
   setValue(value: DefaultAttributePossibleValue) {
     this.value = value
+  }
+
+  _parse(str: string) {
+    const attributeFunc = attributeFunctionsList.find((func) => str.indexOf(func) > -1)
+
+    if (attributeFunc) {
+      this.value = new AttributeFunction(
+        attributeFunc.replace('(', '').replace(')', '') as AttributeFunctionType
+      )
+    }
   }
 }

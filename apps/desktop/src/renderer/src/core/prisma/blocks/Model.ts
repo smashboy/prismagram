@@ -1,5 +1,8 @@
 import { ScalarType } from '@shared/common/configs/prisma'
 import { BlockAttribute } from '../attributes/BlockAttribute'
+
+import { EnumModelField } from '../fields/EnumModelField'
+import { RelationField } from '../fields/RelationField'
 import { BigIntField } from '../fields/scalarFields/BigIntField'
 import { BooleanField } from '../fields/scalarFields/BooleanField'
 import { BytesField } from '../fields/scalarFields/BytesField'
@@ -9,6 +12,7 @@ import { FloatField } from '../fields/scalarFields/FloatField'
 import { IntField } from '../fields/scalarFields/IntField'
 import { JsonField } from '../fields/scalarFields/JsonField'
 import { StringField } from '../fields/scalarFields/StringField'
+import { PrismaSchemaState } from '../PrismaSchemaState'
 import { Block } from './Block'
 
 const scalarFieldMap = {
@@ -33,15 +37,17 @@ export class Model extends Block<
   | FloatField
   | IntField
   | JsonField
+  | EnumModelField
+  | RelationField
 > {
   readonly attributes: BlockAttribute[] = []
 
-  constructor(id: string) {
-    super(id, 'model')
+  constructor(id: string, state: PrismaSchemaState) {
+    super(id, 'model', state)
   }
 
   _parseLine(line: string, lineIndex: string) {
-    const [name, type] = line
+    const [name, type, ...rest] = line
       .split(' ')
       .filter(Boolean)
       .map((str) => str.trim())
@@ -53,8 +59,22 @@ export class Model extends Block<
     if (ScalarField) {
       const scalarField = new ScalarField(name, lineIndex)
       scalarField._parseModifier(type)
-
+      scalarField._parseAttributes(rest)
       this.addField(name, scalarField)
+      return
+    }
+
+    if (this.state.modelIds.includes(typeWithoutModifier)) {
+      const relationField = new RelationField(name, lineIndex, type)
+      relationField._parseAttributes(rest)
+      this.addField(name, relationField)
+      return
+    }
+
+    if (this.state.enumIds.includes(typeWithoutModifier)) {
+      const enumField = new EnumModelField(name, lineIndex, type)
+      enumField._parseAttributes(rest)
+      this.addField(name, enumField)
       return
     }
   }

@@ -2,6 +2,7 @@ import { Block } from './Block'
 import { EnvField } from '../fields/EnvField'
 import { OptionField } from '../fields/OptionField'
 import * as lineUtils from '../utils/line'
+import { PrismaSchemaState } from '../PrismaSchemaState'
 
 // export interface DatasourceData {
 //   provider: PrismaDatasourceProviderType
@@ -15,8 +16,8 @@ type FieldKey = 'provider' | 'url' | 'shadowDatabaseUrl' | 'relationMode'
 const datasourceEnvFields = ['url', 'shadowDatabaseUrl']
 
 export class Datasource extends Block<OptionField | EnvField, FieldKey> {
-  constructor(id: string) {
-    super(id, 'datasource')
+  constructor(id: string, state: PrismaSchemaState) {
+    super(id, 'datasource', state)
   }
 
   _parseLine(line: string, lineIndex: string) {

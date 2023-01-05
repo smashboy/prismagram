@@ -81,6 +81,14 @@ export enum ScalarType {
   BYTES = 'Bytes'
 }
 
+export enum ReferentialAction {
+  CASCADE = 'Cascade',
+  RESTRICT = 'Restrict',
+  NO_ACTION = 'NoAction',
+  SET_NULL = 'SetNull',
+  SET_DEFAULT = 'SetDefault'
+}
+
 export const scalarOptionsArray = [
   ScalarType.BIG_INT,
   ScalarType.BOOLEAN,
