@@ -1,3 +1,4 @@
+// import { ModelField } from '../fields/ModelField'
 import { Attribute } from './Attribute'
 
 export type FieldAttributeType =
@@ -9,9 +10,13 @@ export type FieldAttributeType =
   | 'updatedAt'
   | 'ignore'
 
-export class FieldAttribute<AK = string> extends Attribute<FieldAttributeType, AK> {
-  constructor(type: FieldAttributeType) {
+// TODO: fix circular field type
+export class FieldAttribute<AK = string, F = unknown> extends Attribute<FieldAttributeType, AK> {
+  protected readonly field: F
+
+  constructor(type: FieldAttributeType, field: F) {
     super(type, '@')
+    this.field = field
   }
 
   _toString() {

@@ -1,4 +1,5 @@
 import { ReferentialAction } from '@shared/common/configs/prisma'
+import { RelationField } from '../../fields/RelationField'
 import { FieldAttribute } from '../FieldAttribute'
 
 export type RelationAttributeArgument =
@@ -9,9 +10,9 @@ export type RelationAttributeArgument =
   | 'onUpdate'
   | 'onDelete'
 
-export class RelationAttribute extends FieldAttribute<RelationAttributeArgument> {
-  constructor() {
-    super('relation')
+export class RelationAttribute extends FieldAttribute<RelationAttributeArgument, RelationField> {
+  constructor(field: RelationField) {
+    super('relation', field)
   }
 
   setName(value: string) {

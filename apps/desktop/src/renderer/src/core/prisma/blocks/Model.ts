@@ -1,7 +1,6 @@
 import { ScalarType } from '@shared/common/configs/prisma'
 import { BlockAttribute } from '../attributes/BlockAttribute'
-
-import { EnumModelField } from '../fields/EnumModelField'
+import { EnumModelField } from '../fields/scalarFields/EnumModelField'
 import { RelationField } from '../fields/RelationField'
 import { BigIntField } from '../fields/scalarFields/BigIntField'
 import { BooleanField } from '../fields/scalarFields/BooleanField'
@@ -14,6 +13,7 @@ import { JsonField } from '../fields/scalarFields/JsonField'
 import { StringField } from '../fields/scalarFields/StringField'
 import { PrismaSchemaState } from '../PrismaSchemaState'
 import { Block } from './Block'
+import { ScalarField } from '../fields/types'
 
 const scalarFieldMap = {
   [ScalarType.STRING]: StringField,
@@ -27,19 +27,7 @@ const scalarFieldMap = {
   [ScalarType.BYTES]: BytesField
 }
 
-export class Model extends Block<
-  | BigIntField
-  | StringField
-  | BooleanField
-  | BytesField
-  | DateTimeField
-  | DecimalField
-  | FloatField
-  | IntField
-  | JsonField
-  | EnumModelField
-  | RelationField
-> {
+export class Model extends Block<ScalarField | RelationField> {
   readonly attributes: BlockAttribute[] = []
 
   constructor(id: string, state: PrismaSchemaState) {
@@ -65,15 +53,17 @@ export class Model extends Block<
     }
 
     if (this.state.modelIds.indexOf(typeWithoutModifier) > -1) {
-      const relationField = new RelationField(name, lineIndex, type)
+      const relationField = new RelationField(name, lineIndex, typeWithoutModifier)
       relationField._parseAttributes(rest)
+      relationField._parseModifier(type)
       this.addField(name, relationField)
       return
     }
 
     if (this.state.enumIds.indexOf(typeWithoutModifier) > -1) {
-      const enumField = new EnumModelField(name, lineIndex, type)
+      const enumField = new EnumModelField(name, lineIndex, typeWithoutModifier)
       enumField._parseAttributes(rest)
+      enumField._parseModifier(type)
       this.addField(name, enumField)
       return
     }

@@ -1,10 +1,11 @@
+import { ScalarField } from '../../fields/types'
 import { FieldAttribute } from '../FieldAttribute'
 
 export type IdAttributeArgument = 'map' | 'length' | 'sort' | 'clustered'
 
-export class IdAttribute extends FieldAttribute<IdAttributeArgument> {
-  constructor() {
-    super('id')
+export class IdAttribute extends FieldAttribute<IdAttributeArgument, ScalarField> {
+  constructor(field: ScalarField) {
+    super('id', field)
   }
 
   setMap(value: string) {
@@ -23,5 +24,5 @@ export class IdAttribute extends FieldAttribute<IdAttributeArgument> {
     this.setArgument('clustered', value)
   }
 
-  _parse(str: string) {}
+  _parseArgs(args: string) {}
 }

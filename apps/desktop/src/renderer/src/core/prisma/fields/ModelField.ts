@@ -50,7 +50,11 @@ export class ModelField<A = FieldAttribute> extends Field {
   }
 
   _parseAttributes(substrings: string[]) {
-    const attributeStrings = substrings.join(' ').split('@').filter(Boolean)
+    const attributeStrings = substrings
+      .join(' ')
+      .split('@')
+      .filter(Boolean)
+      .map((str) => str.trim())
 
     if (attributeStrings.length === 0) return
 
@@ -58,16 +62,23 @@ export class ModelField<A = FieldAttribute> extends Field {
       const bracketIndex = attributeStr.indexOf('(')
       if (bracketIndex > -1) {
         const name = attributeStr.substring(0, bracketIndex)
-        const args = attributeStr.substring(bracketIndex + 1, attributeStr.lastIndexOf(')'))
 
-        console.log(name, args)
-        continue
+        if (fieldAttributeMap[name]) {
+          const attr = new fieldAttributeMap[name](this)
+          const args = attributeStr.substring(bracketIndex + 1, attributeStr.lastIndexOf(')'))
+          attr._parseArgs(args)
+
+          this.attributes.set(name, attr)
+
+          // console.log(name, args)
+          continue
+        }
       }
 
       const name = attributeStr
 
       if (fieldAttributeMap[name]) {
-        const attr = new fieldAttributeMap[name]()
+        const attr = new fieldAttributeMap[name](this)
         this.attributes.set(name, attr)
       }
     }

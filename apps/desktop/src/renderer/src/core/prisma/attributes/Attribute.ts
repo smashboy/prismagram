@@ -1,6 +1,13 @@
+import { AttributeFunction } from './AttributeFunction'
+
 export type AttributePrefix = '@' | '@@'
 
-export type ArgumentValue = string | number | boolean | Array<string | number | boolean>
+export type ArgumentValue =
+  | string
+  | number
+  | boolean
+  | Array<string | number | boolean>
+  | AttributeFunction
 
 export class Attribute<T extends string, AK = string> {
   readonly arguments = new Map<AK, ArgumentValue>()

@@ -1,4 +1,4 @@
-import { ModelField } from './ModelField'
+import { ModelField } from '../ModelField'
 
 export class EnumModelField extends ModelField {
   constructor(name: string, lineIndex: string, enumOption: string) {

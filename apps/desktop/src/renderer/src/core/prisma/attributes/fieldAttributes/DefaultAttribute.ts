@@ -1,3 +1,4 @@
+import { ScalarField } from '../../fields/types'
 import {
   AttributeFunction,
   attributeFunctionsList,
@@ -5,33 +6,16 @@ import {
 } from '../AttributeFunction'
 import { FieldAttribute } from '../FieldAttribute'
 
-type DefaultAttributePossibleValue =
-  | string
-  | number
-  | boolean
-  | Array<string | number | boolean>
-  | AttributeFunction
-
-export class DefaultAttribute extends FieldAttribute {
-  value!: DefaultAttributePossibleValue
-
-  constructor(value: DefaultAttributePossibleValue) {
-    super('default')
-
-    this.setValue(value)
+export class DefaultAttribute extends FieldAttribute<string, ScalarField> {
+  constructor(field: ScalarField) {
+    super('default', field)
   }
 
-  setValue(value: DefaultAttributePossibleValue) {
-    this.value = value
-  }
-
-  _parse(str: string) {
-    const attributeFunc = attributeFunctionsList.find((func) => str.indexOf(func) > -1)
-
-    if (attributeFunc) {
-      this.value = new AttributeFunction(
-        attributeFunc.replace('(', '').replace(')', '') as AttributeFunctionType
-      )
+  _parseArgs(args: string) {
+    if (attributeFunctionsList.includes(args as `${AttributeFunctionType}()`)) {
+      const type = args.replace('(', '').replace(')', '') as AttributeFunctionType
+      const attrFunc = new AttributeFunction(type)
+      return this.setArgument(type, attrFunc)
     }
   }
 }
