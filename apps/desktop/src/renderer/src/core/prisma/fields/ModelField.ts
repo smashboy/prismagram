@@ -2,6 +2,8 @@ import { scalarOptionsArray, ScalarType } from '@shared/common/configs/prisma'
 import { FieldAttribute } from '../attributes/FieldAttribute'
 import { DefaultAttribute } from '../attributes/fieldAttributes/DefaultAttribute'
 import { IdAttribute } from '../attributes/fieldAttributes/IdAttribute'
+import { IgnoreAttribute } from '../attributes/fieldAttributes/IgnoreAttribute'
+import { UpdatedAtAttribute } from '../attributes/fieldAttributes/UpdatedAtAttribute'
 // import { FieldAttribute } from '../attributes/FieldAttribute'
 import { Field } from './Field'
 
@@ -9,7 +11,9 @@ type ModelFieldType = ScalarType | string
 
 const fieldAttributeMap = {
   id: IdAttribute,
-  default: DefaultAttribute
+  default: DefaultAttribute,
+  updatedAt: UpdatedAtAttribute,
+  ignore: IgnoreAttribute
 }
 
 export class ModelField<A = FieldAttribute> extends Field {
@@ -47,11 +51,20 @@ export class ModelField<A = FieldAttribute> extends Field {
   }
 
   _parseAttributes(substrings: string[]) {
-    const attributes = substrings.join(' ').split('@').filter(Boolean)
+    const attributeStrings = substrings.join(' ').split('@').filter(Boolean)
 
-    if (attributes.length === 0) return
+    if (attributeStrings.length === 0) return
 
-    console.log(attributes)
+    for (const attributeStr of attributeStrings) {
+      if (attributeStr.indexOf('(') > -1) {
+        continue
+      }
+
+      if (fieldAttributeMap[attributeStr]) {
+        const attr = new fieldAttributeMap[attributeStr]()
+        this.attributes.set(attributeStr, attr)
+      }
+    }
 
     // const currentFieldAttribute: A | null = null
 
