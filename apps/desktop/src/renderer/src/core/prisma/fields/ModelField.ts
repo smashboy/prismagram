@@ -27,7 +27,7 @@ export class ModelField<A = FieldAttribute> extends Field {
   }
 
   protected _isScalarType() {
-    return scalarOptionsArray.includes(this.type as ScalarType)
+    return scalarOptionsArray.indexOf(this.type as ScalarType) > -1
   }
 
   get displayType() {
