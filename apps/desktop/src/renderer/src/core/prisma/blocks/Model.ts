@@ -64,14 +64,14 @@ export class Model extends Block<
       return
     }
 
-    if (this.state.modelIds.includes(typeWithoutModifier)) {
+    if (this.state.modelIds.indexOf(typeWithoutModifier) > -1) {
       const relationField = new RelationField(name, lineIndex, type)
       relationField._parseAttributes(rest)
       this.addField(name, relationField)
       return
     }
 
-    if (this.state.enumIds.includes(typeWithoutModifier)) {
+    if (this.state.enumIds.indexOf(typeWithoutModifier) > -1) {
       const enumField = new EnumModelField(name, lineIndex, type)
       enumField._parseAttributes(rest)
       this.addField(name, enumField)
