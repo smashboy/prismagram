@@ -3,7 +3,7 @@ import { Enum } from './blocks/Enum'
 import { Generator } from './blocks/Generator'
 import { Model } from './blocks/Model'
 import { testSchema } from './testSchema'
-import { extractBlockIdsByType } from './utils/block'
+import { extractBlockIdsByType, extractBlocksByType } from './utils/block'
 import * as lineUtils from './utils/line'
 
 export type PrismaSchemaStateData = Map<string, Datasource | Generator | Enum | Model>
@@ -14,6 +14,34 @@ export class PrismaSchemaState {
   constructor(schema: string) {
     this.parseSchemaString(schema)
   }
+
+  get modelIds() {
+    return extractBlockIdsByType('model', this.state)
+  }
+
+  get enumIds() {
+    return extractBlockIdsByType('enum', this.state)
+  }
+
+  get models() {
+    return extractBlocksByType<Model>('model', this.state)
+  }
+
+  get enums() {
+    return extractBlocksByType<Enum>('enum', this.state)
+  }
+
+  model(id: string) {
+    return this.models.get(`model.${id}`)
+  }
+
+  enum(id: string) {
+    return this.enums.get(`enum.${id}`)
+  }
+
+  // createModel() {}
+  // editModel() {}
+  // deleteModel() {}
 
   private parseSchemaString(schema: string) {
     console.log('START')
@@ -93,18 +121,6 @@ export class PrismaSchemaState {
       schema: `${[...this.state.values()].map((block) => block._toString()).join('\r\n')}`
     })
   }
-
-  get modelIds() {
-    return extractBlockIdsByType('model', this.state)
-  }
-
-  get enumIds() {
-    return extractBlockIdsByType('enum', this.state)
-  }
-
-  // createModel() {}
-  // editModel() {}
-  // deleteModel() {}
 }
 
 new PrismaSchemaState(testSchema)

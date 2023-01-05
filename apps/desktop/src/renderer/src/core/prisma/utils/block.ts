@@ -1,4 +1,4 @@
-import { BlockType } from '../blocks/Block'
+import { Block, BlockType } from '../blocks/Block'
 import { PrismaSchemaStateData } from '../PrismaSchemaState'
 
 export const extractBlockIdsByType = (type: BlockType, state: PrismaSchemaStateData) => {
@@ -9,4 +9,17 @@ export const extractBlockIdsByType = (type: BlockType, state: PrismaSchemaStateD
   }
 
   return ids
+}
+
+export const extractBlocksByType = <B extends Block>(
+  type: BlockType,
+  list: PrismaSchemaStateData
+): Map<string, B> => {
+  const blocks = new Map<string, B>()
+
+  for (const block of [...list.values()]) {
+    if (block.type === type) blocks.set(block.blockId, block)
+  }
+
+  return blocks
 }

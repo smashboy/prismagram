@@ -1,10 +1,10 @@
 export class Field {
   name: string
-  protected readonly lineIndex: string
+  protected readonly _lineIndex: string
 
   constructor(name: string, lineIndex: string) {
     this.name = name
-    this.lineIndex = lineIndex
+    this._lineIndex = lineIndex
   }
 
   setName(name: string) {

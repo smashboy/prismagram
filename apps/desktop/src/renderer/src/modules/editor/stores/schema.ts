@@ -2,10 +2,8 @@ import { combine, createEvent, createStore } from 'effector'
 import { $selectedModelId } from './ui'
 import { extractBlocksByType } from './utils'
 import { PrismaSchemaState } from '@renderer/core/prisma/PrismaSchemaState'
-import { Enum } from '@renderer/core/prisma/blocks/Enum'
 import { Datasource } from '@renderer/core/prisma/blocks/Datasource'
 import { Generator } from '@renderer/core/prisma/blocks/Generator'
-import { Model } from '@renderer/core/prisma/blocks/Model'
 
 export const setPrismaSchema = createEvent<string>()
 
@@ -13,17 +11,13 @@ export const $schema = createStore<string>('').on(setPrismaSchema, (_, schema) =
 
 export const $schemaState = $schema.map((schema) => new PrismaSchemaState(schema))
 
-export const $schemaModels = $schemaState.map(({ state }) =>
-  extractBlocksByType<Model>('model', state)
-)
+export const $schemaModels = $schemaState.map(({ models }) => models)
 
 export const $selectedSchemaModel = combine([$schemaModels, $selectedModelId]).map(([models, id]) =>
   id ? models.get(id)! : null
 )
 
-export const $schemaEnums = $schemaState.map(({ state }) =>
-  extractBlocksByType<Enum>('enum', state)
-)
+export const $schemaEnums = $schemaState.map(({ enums }) => enums)
 
 export const $schemaDatasources = $schemaState.map(({ state }) =>
   extractBlocksByType<Datasource>('datasource', state)
