@@ -38,4 +38,8 @@ export class RelationAttribute extends FieldAttribute<RelationAttributeArgument,
   setOnDelete(value: ReferentialAction) {
     this.setArgument('onDelete', value)
   }
+
+  _parseArgs(args: string) {
+    super._parseArgs(args, 'name')
+  }
 }

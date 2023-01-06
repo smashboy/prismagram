@@ -1,4 +1,9 @@
-import { AttributeFunction } from './AttributeFunction'
+import { stripValue } from '../utils/line'
+import {
+  AttributeFunction,
+  attributeFunctionsList,
+  AttributeFunctionType
+} from './AttributeFunction'
 
 export type AttributePrefix = '@' | '@@'
 
@@ -19,15 +24,68 @@ export class Attribute<T extends string, AK = string> {
     this._prefix = prefix
   }
 
-  _toString() {
-    return `${this._prefix}${this.type}${this.arguments.size > 0 ? '()' : ''}`
-  }
-
   protected setArgument(key: AK, value: ArgumentValue) {
     this.arguments.set(key, value)
   }
 
   removeArgument(key: AK) {
     this.arguments.delete(key)
+  }
+
+  // TODO rework this method to be non recursive
+  private _parseSingleArgument(arg: string) {
+    if (attributeFunctionsList.includes(arg as `${AttributeFunctionType}()`)) {
+      const type = arg.replace('(', '').replace(')', '') as AttributeFunctionType
+      const attrFunc = new AttributeFunction(type)
+      return attrFunc
+    }
+
+    if (arg.startsWith('"')) {
+      return stripValue(arg)
+    }
+
+    if (arg.startsWith('[')) {
+      const arrStr = arg.replace('[', '').replace(']', '').split(',')
+      const options: Array<string | AttributeFunction> = []
+
+      for (let str of arrStr) {
+        str = str.trim()
+
+        if (!str) continue
+
+        options.push(this._parseSingleArgument(str))
+      }
+
+      return options
+    }
+
+    return arg
+  }
+
+  _parseArgs(str: string, firstArgName?: AK) {
+    const stringargs = str.split(',')
+
+    for (const index in stringargs) {
+      const argstr = stringargs[index].trim()
+
+      if (!argstr) continue
+
+      const nameSeparatorIndex = argstr.indexOf(':')
+
+      if (index === '0' && nameSeparatorIndex === -1 && firstArgName) {
+        this.setArgument(firstArgName, this._parseSingleArgument(argstr))
+        continue
+      }
+
+      const argName = argstr.substring(0, nameSeparatorIndex) as unknown as AK
+      const argValue = argstr.substring(nameSeparatorIndex + 1, argstr.length)
+
+      // TODO figure out why value should be trimmed
+      this.setArgument(argName, this._parseSingleArgument(argValue.trim()))
+    }
+  }
+
+  _toString() {
+    return `${this._prefix}${this.type}${this.arguments.size > 0 ? '()' : ''}`
   }
 }

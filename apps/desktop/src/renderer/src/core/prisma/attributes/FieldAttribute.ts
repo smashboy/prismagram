@@ -1,4 +1,3 @@
-// import { ModelField } from '../fields/ModelField'
 import { Attribute } from './Attribute'
 
 export type FieldAttributeType =
@@ -17,9 +16,5 @@ export class FieldAttribute<AK = string, F = unknown> extends Attribute<FieldAtt
   constructor(type: FieldAttributeType, field: F) {
     super(type, '@')
     this.field = field
-  }
-
-  _toString() {
-    return super._toString()
   }
 }

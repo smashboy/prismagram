@@ -3,6 +3,7 @@ import { FieldAttribute } from '../attributes/FieldAttribute'
 import { DefaultAttribute } from '../attributes/fieldAttributes/DefaultAttribute'
 import { IdAttribute } from '../attributes/fieldAttributes/IdAttribute'
 import { IgnoreAttribute } from '../attributes/fieldAttributes/IgnoreAttribute'
+import { RelationAttribute } from '../attributes/fieldAttributes/RelationAttribute'
 import { UpdatedAtAttribute } from '../attributes/fieldAttributes/UpdatedAtAttribute'
 import { Field } from './Field'
 
@@ -12,7 +13,8 @@ const fieldAttributeMap = {
   id: IdAttribute,
   default: DefaultAttribute,
   updatedAt: UpdatedAtAttribute,
-  ignore: IgnoreAttribute
+  ignore: IgnoreAttribute,
+  relation: RelationAttribute
 }
 
 export class ModelField<A = FieldAttribute> extends Field {
@@ -66,11 +68,10 @@ export class ModelField<A = FieldAttribute> extends Field {
         if (fieldAttributeMap[name]) {
           const attr = new fieldAttributeMap[name](this)
           const args = attributeStr.substring(bracketIndex + 1, attributeStr.lastIndexOf(')'))
-          attr._parseArgs(args)
 
+          attr._parseArgs(args)
           this.attributes.set(name, attr)
 
-          // console.log(name, args)
           continue
         }
       }
