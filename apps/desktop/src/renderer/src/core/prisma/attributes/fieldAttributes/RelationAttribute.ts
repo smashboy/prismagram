@@ -2,15 +2,10 @@ import { ReferentialAction } from '@shared/common/configs/prisma'
 import { RelationField } from '../../fields/RelationField'
 import { FieldAttribute } from '../FieldAttribute'
 
-export type RelationAttributeArgument =
-  | 'name'
-  | 'fields'
-  | 'references'
-  | 'map'
-  | 'onUpdate'
-  | 'onDelete'
-
-export class RelationAttribute extends FieldAttribute<RelationAttributeArgument, RelationField> {
+export class RelationAttribute extends FieldAttribute<
+  'name' | 'fields' | 'references' | 'map' | 'onUpdate' | 'onDelete',
+  RelationField
+> {
   constructor(field: RelationField) {
     super('relation', field)
   }

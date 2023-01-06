@@ -1,316 +1,233 @@
 export const testSchema = `
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-  engineType      = "library"
-  previewFeatures = ["clientExtensions", "metrics"]
-}
-
-// --------------------------------------
-
 model User {
-  id                Int                      @id @default(autoincrement())
-  createdAt         DateTime                 @default(now())
-  updatedAt         DateTime                 @updatedAt
-  email             String                   @unique
-  username          String                   @unique
-  hashedPassword    String?
-  isEmailVerified   Boolean                  @default(false)
-  isVerified        Boolean                  @default(false)
-  avatarUrl         String?
-  bio               String?
-  role              UserRole                 @default(USER)
-  tokens            Token[]
-  sessions          Session[]
-  projectMember     ProjectMember[]
-  feedback          ProjectFeedback[]        @relation("ProjectFeedbackAuthor")
-  changelogFeedback ChangelogFeedback[]
-  upvoted           ProjectFeedback[]
-  messages          ProjectFeedbackMessage[]
-  project           Project[]
-  notifications     Notification[]
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  authId    String      @unique
+  username  String      @unique
+  firstName String
+  lastName  String?
+  avatarId  String?
+  orders    UserOrder[]
 }
 
-model Notification {
-  id                       Int                       @id @default(autoincrement())
-  createdAt                DateTime                  @default(now())
-  isRead                   Boolean                   @default(false)
-  isSaved                  Boolean                   @default(false)
-  user                     User                      @relation(fields: [userId], references: [id])
-  userId                   Int
-  feedbackNotification     FeedbackNotification?
-  newChangelogNotification NewChangelogNotification?
-  projectInvite            ProjectInvite?
+model BusinessUser {
+  id        String        @id @default(cuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  authId    String        @unique
+  firstName String
+  lastName  String
+  companies Company[]
+  positions StaffMember[]
 }
 
-model FeedbackNotification {
-  id             Int                      @id @default(autoincrement())
-  createdAt      DateTime                 @default(now())
-  type           FeedbackNotificationType
-  projectSlug    String
-  feedbackTitle  String
-  newStatus      FeedbackStatus?
-  feedbackId     Int
-  notification   Notification             @relation(fields: [notificationId], references: [id])
-  notificationId Int                      @unique
+model Company {
+  id             String          @id @default(cuid())
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  name           String
+  isVerified     Boolean         @default(false)
+  description    String?
+  logoId         String?
+  staff          StaffMember[]
+  dishes         Dish[]
+  dishCategories DishCategory[]
+  establishments Establishment[]
+  owner          BusinessUser    @relation(fields: [ownerId], references: [id])
+  ownerId        String
+  menus          Menu[]
 }
 
-model NewChangelogNotification {
-  id              Int          @id @default(autoincrement())
-  createdAt       DateTime     @default(now())
-  title           String
-  projectSlug     String
-  projectName     String
-  previewImageUrl String?
-  changelogSlug   String
-  notification    Notification @relation(fields: [notificationId], references: [id])
-  notificationId  Int          @unique
-}
-
-model Session {
-  id                 Int       @id @default(autoincrement())
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
-  expiresAt          DateTime?
-  handle             String    @unique
-  hashedSessionToken String?
-  antiCSRFToken      String?
-  publicData         String?
-  privateData        String?
-  user               User?     @relation(fields: [userId], references: [id])
-  userId             Int?
-}
-
-model Token {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  hashedToken String
-  type        TokenType
-  expiresAt   DateTime
-  sentTo      String
-  user        User      @relation(fields: [userId], references: [id])
-  userId      Int
-
-  @@unique([hashedToken, type])
-}
-
-model Project {
-  id          Int                @id @default(autoincrement())
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
+model Establishment {
+  id          String                    @id @default(cuid())
+  createdAt   DateTime                  @default(now())
+  updatedAt   DateTime                  @updatedAt
   name        String
-  color       String
-  isPrivate   Boolean
-  slug        String             @unique
+  isVerified  Boolean                   @default(false)
   description String?
-  websiteUrl  String?
-  logoUrl     String?
-  feedback    ProjectFeedback[]
-  members     ProjectMember[]
-  followers   User[]
-  landing     ProjectLanding?
-  changelogs  ProjectChangelog[]
-  roadmaps    ProjectRoadmap[]
-  settings    ProjectSettings?
-  invites     ProjectInvite[]
+  logoId      String?
+  staff       StaffMember[]
+  orders      Order[]
+  qrCodes     EstablishmentMenuQrCode[]
+  dishes      MenuDish[]
+  categories  MenuDishCategory[]
+  menu        Menu?
+  company     Company                   @relation(fields: [companyId], references: [id])
+  companyId   String
 }
 
-model ProjectMember {
-  id        Int               @id @default(autoincrement())
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
-  user      User              @relation(fields: [userId], references: [id])
-  role      ProjectMemberRole @default(MEMBER)
-  project   Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId Int
-  userId    Int
-  assigned  ProjectFeedback[]
-
-  @@unique([projectId, userId])
+model EstablishmentMenuQrCode {
+  id              String        @id @default(cuid())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  name            String
+  establishment   Establishment @relation(fields: [establishmentId], references: [id])
+  establishmentId String
 }
 
-model ProjectInvite {
-  id             Int          @id @default(autoincrement())
-  createdAt      DateTime     @default(now())
-  project        Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId      Int
-  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
-  notificationId Int          @unique
+model Menu {
+  id              String             @id @default(cuid())
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  categories      MenuDishCategory[]
+  dishes          MenuDish[]
+  dishes_         Dish[]
+  company         Company            @relation(fields: [companyId], references: [id])
+  establishment   Establishment      @relation(fields: [establishmentId], references: [id])
+  establishmentId String             @unique
+  companyId       String
 }
 
-model ProjectLanding {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  content   String
-  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId Int      @unique
-}
-
-model ProjectChangelog {
-  id              Int                 @id @default(autoincrement())
-  createdAt       DateTime            @default(now())
-  updatedAt       DateTime            @updatedAt
-  title           String
-  previewImageUrl String?
-  slug            String
-  content         String
-  project         Project             @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId       Int
-  feedback        ChangelogFeedback[]
-
-  @@unique([projectId, slug])
-}
-
-model ChangelogFeedback {
-  id          Int              @id @default(autoincrement())
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-  rating      Int
-  description String?
-  changelog   ProjectChangelog @relation(fields: [changelogId], references: [id], onDelete: Cascade)
-  changelogId Int
-  user        User?            @relation(fields: [userId], references: [id])
-  userId      Int?
-
-  @@unique([userId, changelogId])
-}
-
-model ProjectRoadmap {
-  id          Int               @id @default(autoincrement())
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-  slug        String
+model Dish {
+  id          String       @id @default(cuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   name        String
-  dueTo       DateTime?
+  isAlcohol   Boolean
+  isArchived  Boolean      @default(false)
   description String?
-  isArchived  Boolean           @default(false)
-  project     Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId   Int
-  feedback    ProjectFeedback[]
-
-  @@unique([projectId, slug])
+  thumbnailId String?
+  orders      DishOrder[]
+  menuDishes  MenuDish[]
+  menus       Menu[]
+  company     Company      @relation(fields: [companyId], references: [id])
+  category    DishCategory @relation(fields: [categoryId], references: [id])
+  companyId   String
+  categoryId  String
 }
 
-model ProjectFeedback {
-  id           Int                      @id @default(autoincrement())
-  createdAt    DateTime                 @default(now())
-  updatedAt    DateTime                 @updatedAt
-  participants ProjectMember[]
-  roadmaps     ProjectRoadmap[]
-  labels       ProjectFeedbackLabel[]
-  project      Project                  @relation(fields: [projectSlug], references: [slug], onDelete: Cascade)
-  projectSlug  String
-  author       User                     @relation("ProjectFeedbackAuthor", fields: [authorId], references: [id])
-  authorId     Int
-  upvotedBy    User[]
-  messages     ProjectFeedbackMessage[]
-  content      ProjectFeedbackContent?  @relation("Feedback_migration")
+model MenuDishCategory {
+  id              String        @id @default(cuid())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  order           Int
+  dishes          MenuDish[]
+  menu            Menu          @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  category        DishCategory  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  establishment   Establishment @relation(fields: [establishmentId], references: [id], onDelete: Cascade)
+  establishmentId String
+  categoryId      String
+  menuId          String
+
+  @@unique([categoryId, menuId, establishmentId])
 }
 
-model ProjectFeedbackMessage {
-  id         Int                     @id @default(autoincrement())
-  createdAt  DateTime                @default(now())
-  updatedAt  DateTime                @updatedAt
-  category   FeedbackMessageCategory @default(PUBLIC)
-  content    String
-  author     User                    @relation(fields: [userId], references: [id])
-  userId     Int
-  feedback   ProjectFeedback         @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
-  feedbackId Int
+model MenuDish {
+  id              String           @id @default(cuid())
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  order           Int
+  isAvailable     Boolean          @default(true)
+  isPromoting     Boolean          @default(false)
+  menu            Menu             @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  dish            Dish             @relation(fields: [dishId], references: [id], onDelete: Cascade)
+  category        MenuDishCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  establishment   Establishment    @relation(fields: [establishmentId], references: [id], onDelete: Cascade)
+  establishmentId String
+  categoryId      String
+  dishId          String
+  menuId          String
+
+  @@unique([dishId, categoryId, menuId, establishmentId])
 }
 
-model ProjectFeedbackContent {
-  id                Int
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-  title             String
-  category          FeedbackCategory
-  status            FeedbackStatus   @default(PENDING)
-  content           String
-  projectSlug       String
-  projectFeedback   ProjectFeedback  @relation("Feedback_migration", fields: [projectFeedbackId], references: [id], onDelete: Cascade)
-  projectFeedbackId Int              @unique
-
-  @@id([id, projectSlug])
+model DishCategory {
+  id             String             @id @default(uuid())
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  name           String
+  dishes         Dish[]
+  menuCategories MenuDishCategory[]
+  company        Company            @relation(fields: [companyId], references: [id])
+  companyId      String
 }
 
-model ProjectSettings {
-  id        Int                    @id @default(autoincrement())
-  createdAt DateTime               @default(now())
-  updatedAt DateTime               @updatedAt
-  project   Project                @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  labels    ProjectFeedbackLabel[]
-  projectId Int                    @unique
+model StaffMember {
+  id             String          @id @default(uuid())
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  role           StaffRole       @default(MEMBER)
+  establishments Establishment[]
+  user           BusinessUser    @relation(fields: [userId], references: [id])
+  company        Company         @relation(fields: [companyId], references: [id])
+  companyId      String
+  userId         String
+
+  @@unique([companyId, userId])
 }
 
-model ProjectFeedbackLabel {
-  id          String            @id @default(cuid())
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-  name        String
-  description String?
-  color       String
-  settings    ProjectSettings   @relation(fields: [settingsId], references: [id], onDelete: Cascade)
-  settingsId  Int
-  feedback    ProjectFeedback[]
+model Order {
+  id              Int           @id @default(autoincrement())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  status          OrderStatus   @default(PENDING)
+  userOrders      UserOrder[]
+  establishment   Establishment @relation(fields: [establishmentId], references: [id])
+  establishmentId String
 }
 
-enum FeedbackCategory {
-  BUG
-  FEATURE
-  IMPROVEMENT
+model UserOrder {
+  id      Int         @id @default(autoincrement())
+  dishes  DishOrder[]
+  order   Order       @relation(fields: [orderId], references: [id])
+  user    User        @relation(fields: [userId], references: [id])
+  orderId Int
+  userId  String
+
+  @@unique([orderId, userId])
 }
 
-enum TokenType {
-  RESET_PASSWORD
+model DishOrder {
+  id          String          @id @default(uuid())
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  status      DishOrderStatus @default(PENDING)
+  amount      Int
+  dishes      Dish            @relation(fields: [dishId], references: [id])
+  userOrder   UserOrder       @relation(fields: [userOrderId], references: [id])
+  dishId      String
+  userOrderId Int
+
+  @@unique([dishId, userOrderId])
 }
 
-enum UserRole {
-  ADMIN
-  MODERATOR
-  USER
-}
-
-enum FeedbackStatus {
-  ON_REVIEW
-  PLANNED
+enum OrderStatus {
+  PENDING
   IN_PROGRESS
-  BLOCKED
   CANCELED
   COMPLETED
-  PENDING
-  DUPLICATE
 }
 
-enum FeedbackMessageCategory {
-  PUBLIC
-  PRIVATE
-  INTERNAL
-}
-
-enum ProjectMemberRole {
-  FOUNDER
-  ADMIN
-  MODERATOR
+enum StaffRole {
   MEMBER
+  ADMINISTRATOR
+  ESTABLISHMENT_ADMINISTRATOR
+  ATTENDANT
 }
 
-enum FeedbackNotificationType {
-  ASSIGNED
-  STATUS_CHANGED
-  ADDED_TO_ROADMAP
-  NEW_PUBLIC_MESSAGE
-  NEW_PRIVATE_MESSAGE
-  NEW_INTERNAL_MESSAGE
+// enum MenuStatus {
+//   DRAFT
+//   PUBLISHED
+//   ARCHIVED
+// }
+
+enum DishOrderStatus {
+  PENDING
+  ACCEPTED
+  IN_PROGRESS
+  CANCELED
+  COMPLETED
 }
+
 
 `

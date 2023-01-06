@@ -3,7 +3,9 @@ import { FieldAttribute } from '../attributes/FieldAttribute'
 import { DefaultAttribute } from '../attributes/fieldAttributes/DefaultAttribute'
 import { IdAttribute } from '../attributes/fieldAttributes/IdAttribute'
 import { IgnoreAttribute } from '../attributes/fieldAttributes/IgnoreAttribute'
+import { MapAttribute } from '../attributes/fieldAttributes/MapAttribute'
 import { RelationAttribute } from '../attributes/fieldAttributes/RelationAttribute'
+import { UniqueAttribute } from '../attributes/fieldAttributes/UniqueAttribute'
 import { UpdatedAtAttribute } from '../attributes/fieldAttributes/UpdatedAtAttribute'
 import { Field } from './Field'
 
@@ -14,7 +16,9 @@ const fieldAttributeMap = {
   default: DefaultAttribute,
   updatedAt: UpdatedAtAttribute,
   ignore: IgnoreAttribute,
-  relation: RelationAttribute
+  relation: RelationAttribute,
+  unique: UniqueAttribute,
+  map: MapAttribute
 }
 
 export class ModelField<A = FieldAttribute> extends Field {
