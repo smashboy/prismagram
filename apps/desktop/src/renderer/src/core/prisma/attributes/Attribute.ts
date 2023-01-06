@@ -34,15 +34,10 @@ export class Attribute<T extends string, AK = string> {
 
   // TODO rework this method to be non recursive
   private _parseSingleArgument(arg: string) {
-    if (attributeFunctionsList.includes(arg as `${AttributeFunctionType}()`)) {
-      const type = arg.replace('(', '').replace(')', '') as AttributeFunctionType
-      const attrFunc = new AttributeFunction(type)
-      return attrFunc
-    }
+    if (attributeFunctionsList.includes(arg as `${AttributeFunctionType}()`))
+      return new AttributeFunction(arg.replace('(', '').replace(')', '') as AttributeFunctionType)
 
-    if (arg.startsWith('"')) {
-      return stripValue(arg)
-    }
+    if (arg.startsWith('"')) return stripValue(arg)
 
     if (arg.startsWith('[')) {
       const arrStr = arg.replace('[', '').replace(']', '').split(',')
