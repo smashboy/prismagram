@@ -5,7 +5,7 @@ export type BlockType = 'generator' | 'datasource' | 'model' | 'enum'
 
 export const blockOptions: BlockType[] = ['datasource', 'enum', 'generator', 'model']
 
-export class Block<F = Field, K = string> {
+export class Block<F extends Field = Field, K = string> {
   readonly fields = new Map<K, F>()
   blockId: string
   readonly type: BlockType
