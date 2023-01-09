@@ -7,6 +7,7 @@ import { FloatField } from './scalarFields/FloatField'
 import { IntField } from './scalarFields/IntField'
 import { JsonField } from './scalarFields/JsonField'
 import { StringField } from './scalarFields/StringField'
+import { DecimalField } from './scalarFields/DecimalField'
 
 export type ScalarField =
   | EnumModelField
@@ -18,3 +19,4 @@ export type ScalarField =
   | IntField
   | JsonField
   | StringField
+  | DecimalField

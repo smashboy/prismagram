@@ -1,12 +1,15 @@
 import { scalarOptionsArray, ScalarType } from '@shared/common/configs/prisma'
-import { FieldAttribute } from '../attributes/FieldAttribute'
-import { DefaultAttribute } from '../attributes/fieldAttributes/DefaultAttribute'
-import { IdAttribute } from '../attributes/fieldAttributes/IdAttribute'
-import { IgnoreAttribute } from '../attributes/fieldAttributes/IgnoreAttribute'
-import { MapAttribute } from '../attributes/fieldAttributes/MapAttribute'
-import { RelationAttribute } from '../attributes/fieldAttributes/RelationAttribute'
-import { UniqueAttribute } from '../attributes/fieldAttributes/UniqueAttribute'
-import { UpdatedAtAttribute } from '../attributes/fieldAttributes/UpdatedAtAttribute'
+import {
+  IgnoreAttribute,
+  MapAttribute,
+  RelationAttribute,
+  IdAttribute,
+  DefaultAttribute,
+  UniqueAttribute,
+  UpdatedAtAttribute,
+  FieldAttribute
+} from '../attributes'
+
 import { Field } from './Field'
 
 type ModelFieldType = ScalarType | string

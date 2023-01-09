@@ -1,6 +1,5 @@
 import { Block } from './Block'
-import { EnvField } from '../fields/EnvField'
-import { OptionField } from '../fields/OptionField'
+import { EnvField, OptionField } from '../fields'
 import * as lineUtils from '../utils/line'
 import { PrismaSchemaState } from '../PrismaSchemaState'
 

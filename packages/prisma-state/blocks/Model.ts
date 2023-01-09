@@ -1,19 +1,21 @@
 import { ScalarType } from '@shared/common/configs/prisma'
-import { BlockAttribute } from '../attributes/BlockAttribute'
-import { EnumModelField } from '../fields/scalarFields/EnumModelField'
-import { RelationField } from '../fields/RelationField'
-import { BigIntField } from '../fields/scalarFields/BigIntField'
-import { BooleanField } from '../fields/scalarFields/BooleanField'
-import { BytesField } from '../fields/scalarFields/BytesField'
-import { DateTimeField } from '../fields/scalarFields/DateTimeField'
-import { DecimalField } from '../fields/scalarFields/DecimalField'
-import { FloatField } from '../fields/scalarFields/FloatField'
-import { IntField } from '../fields/scalarFields/IntField'
-import { JsonField } from '../fields/scalarFields/JsonField'
-import { StringField } from '../fields/scalarFields/StringField'
+import { BlockAttribute } from '../attributes'
+import {
+  StringField,
+  JsonField,
+  IntField,
+  FloatField,
+  DecimalField,
+  DateTimeField,
+  BytesField,
+  BooleanField,
+  BigIntField,
+  RelationField,
+  EnumModelField,
+  type ScalarField
+} from '../fields'
 import { PrismaSchemaState } from '../PrismaSchemaState'
 import { Block } from './Block'
-import { ScalarField } from '../fields/types'
 
 const scalarFieldMap = {
   [ScalarType.STRING]: StringField,
