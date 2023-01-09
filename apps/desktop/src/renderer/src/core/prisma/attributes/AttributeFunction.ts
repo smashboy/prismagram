@@ -24,6 +24,10 @@ export class AttributeFunction {
     this.type = type
   }
 
+  get displayType() {
+    return `${this.type}()`
+  }
+
   _toString() {
     return `${this.type}()`
   }

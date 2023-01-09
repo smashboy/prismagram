@@ -1,0 +1,1 @@
+export { AttributeSettings } from './AttributeSettings'

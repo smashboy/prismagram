@@ -5,6 +5,7 @@ import { $modelsIds, $nodesColors } from '@renderer/modules/editor/stores'
 import { combine } from 'effector'
 import { scalarOptionsArray } from '@shared/common/configs/prisma'
 import { ModelField } from '@renderer/core/prisma/fields/ModelField'
+import { AttributeSettings } from './AttributeSettings'
 
 interface ModelFieldSettingsProps {
   field: ModelField
@@ -16,13 +17,15 @@ const $store = combine({
 })
 
 export const ModelFieldSettings: React.FC<ModelFieldSettingsProps> = ({
-  field: { type, displayType, name }
+  field: { type, displayType, name, attributes }
 }) => {
   const { modelsIds, nodesColors } = useStore($store)
 
   const typeOptions = [...scalarOptionsArray, ...modelsIds]
 
   const typeColor = ScalarFieldColor[type as string] || nodesColors[type as string]
+
+  const attributesList = [...attributes.entries()]
 
   return (
     <Accordion.Item
@@ -47,6 +50,13 @@ export const ModelFieldSettings: React.FC<ModelFieldSettingsProps> = ({
         <Stack>
           <TextInput label="Name" value={name} readOnly />
           <Select label="Type" value={type as string} data={typeOptions} readOnly />
+          {attributesList.length > 0 && (
+            <Accordion>
+              {[...attributes.entries()].map(([id, attr]) => (
+                <AttributeSettings key={id} attribute={attr} />
+              ))}
+            </Accordion>
+          )}
         </Stack>
       </Accordion.Panel>
     </Accordion.Item>

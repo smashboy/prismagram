@@ -24,6 +24,10 @@ export class Attribute<T extends string, AK = string> {
     this._prefix = prefix
   }
 
+  get displayAttributeType() {
+    return `${this._prefix}${this.type}`
+  }
+
   protected setArgument(key: AK, value: ArgumentValue) {
     this.arguments.set(key, value)
   }
