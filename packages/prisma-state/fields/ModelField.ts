@@ -1,4 +1,3 @@
-import { scalarOptionsArray, ScalarType } from '@shared/common/configs/prisma'
 import {
   IgnoreAttribute,
   MapAttribute,
@@ -9,10 +8,11 @@ import {
   UpdatedAtAttribute,
   FieldAttribute
 } from '../attributes'
+import { scalarOptionsArray, ScalarTypeOption } from '../constants'
 
 import { Field } from './Field'
 
-type ModelFieldType = ScalarType | string
+type ModelFieldType = ScalarTypeOption | string
 
 const fieldAttributeMap = {
   id: IdAttribute,
@@ -35,7 +35,7 @@ export class ModelField<A = FieldAttribute> extends Field {
   }
 
   protected _isScalarType() {
-    return scalarOptionsArray.indexOf(this.type as ScalarType) > -1
+    return scalarOptionsArray.indexOf(this.type as ScalarTypeOption) > -1
   }
 
   get displayType() {

@@ -3,6 +3,7 @@
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
-    "allowJs": true
+    "allowJs": true,
+    "lib": ["ES2021"],
   }
 }

@@ -1,4 +1,4 @@
-import { ScalarType } from '@shared/common/configs/prisma'
+import { ScalarType } from '../../constants'
 import { ModelField } from '../ModelField'
 
 export class JsonField extends ModelField {

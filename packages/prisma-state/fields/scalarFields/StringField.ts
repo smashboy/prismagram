@@ -1,6 +1,6 @@
-import { ScalarType } from '@shared/common/configs/prisma'
-import { DefaultAttribute } from '../../attributes/fieldAttributes/DefaultAttribute'
-import { IdAttribute } from '../../attributes/fieldAttributes/IdAttribute'
+import { ScalarType } from '../../constants'
+import { DefaultAttribute } from '../../attributes'
+import { IdAttribute } from '../../attributes'
 import { ModelField } from '../ModelField'
 
 export class StringField extends ModelField<DefaultAttribute | IdAttribute> {

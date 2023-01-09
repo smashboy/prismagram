@@ -1,4 +1,4 @@
-import { ModelField } from '../../fields/ModelField'
+import { ModelField } from '../../fields'
 import { FieldAttribute } from '../FieldAttribute'
 
 export class IgnoreAttribute extends FieldAttribute<ModelField> {

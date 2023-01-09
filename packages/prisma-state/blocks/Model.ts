@@ -1,5 +1,5 @@
-import { ScalarType } from '@shared/common/configs/prisma'
 import { BlockAttribute } from '../attributes'
+import { ScalarType, ScalarTypeOption } from '../constants'
 import {
   StringField,
   JsonField,
@@ -44,7 +44,7 @@ export class Model extends Block<ScalarField | RelationField> {
 
     const typeWithoutModifier = type.replace('[]', '').replace('?', '')
 
-    const ScalarField = scalarFieldMap[typeWithoutModifier as ScalarType]
+    const ScalarField = scalarFieldMap[typeWithoutModifier as ScalarTypeOption]
 
     if (ScalarField) {
       const scalarField = new ScalarField(name, lineIndex)

@@ -1,4 +1,4 @@
-import { Block, BlockType } from '../blocks/Block'
+import { Block, type BlockType } from '../blocks'
 import { PrismaSchemaStateData } from '../PrismaSchemaState'
 
 export const extractBlockIdsByType = (type: BlockType, state: PrismaSchemaStateData) => {

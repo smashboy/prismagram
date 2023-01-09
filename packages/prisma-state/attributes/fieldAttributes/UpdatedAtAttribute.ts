@@ -1,4 +1,4 @@
-import { DateTimeField } from '../../fields/scalarFields/DateTimeField'
+import { DateTimeField } from '../../fields'
 import { FieldAttribute } from '../FieldAttribute'
 
 export class UpdatedAtAttribute extends FieldAttribute<DateTimeField> {

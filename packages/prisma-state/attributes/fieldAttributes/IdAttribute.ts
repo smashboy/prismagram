@@ -1,4 +1,4 @@
-import { ScalarField } from '../../fields/types'
+import { ScalarField } from '../../fields'
 import { FieldAttribute } from '../FieldAttribute'
 
 export type IdAttributeArgument = 'map' | 'length' | 'sort' | 'clustered'

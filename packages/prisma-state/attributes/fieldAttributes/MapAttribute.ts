@@ -1,4 +1,4 @@
-import { RelationField } from '../../fields/RelationField'
+import { RelationField } from '../../fields'
 import { ScalarField } from '../../fields/types'
 import { FieldAttribute } from '../FieldAttribute'
 

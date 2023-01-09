@@ -1,4 +1,4 @@
-export { Block } from './Block'
+export { Block, type BlockType } from './Block'
 export { Enum } from './Enum'
 export { Datasource } from './Datasource'
 export { Generator } from './Generator'

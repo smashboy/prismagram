@@ -1,5 +1,5 @@
-import { ReferentialAction } from '@shared/common/configs/prisma'
-import { RelationField } from '../../fields/RelationField'
+import { ReferentialActionOption } from '../../constants'
+import { RelationField } from '../../fields'
 import { FieldAttribute } from '../FieldAttribute'
 
 export class RelationAttribute extends FieldAttribute<
@@ -26,11 +26,11 @@ export class RelationAttribute extends FieldAttribute<
     this.setArgument('map', value)
   }
 
-  setOnUpdate(value: ReferentialAction) {
+  setOnUpdate(value: ReferentialActionOption) {
     this.setArgument('onUpdate', value)
   }
 
-  setOnDelete(value: ReferentialAction) {
+  setOnDelete(value: ReferentialActionOption) {
     this.setArgument('onDelete', value)
   }
 

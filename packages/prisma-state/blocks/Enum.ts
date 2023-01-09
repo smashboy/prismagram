@@ -1,4 +1,4 @@
-import { EnumField } from '../fields/EnumField'
+import { EnumField } from '../fields'
 import { PrismaSchemaState } from '../PrismaSchemaState'
 import { Block } from './Block'
 
