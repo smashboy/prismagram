@@ -7,7 +7,7 @@ export const blockOptions: BlockType[] = ['datasource', 'enum', 'generator', 'mo
 
 export class Block<F = Field, K = string> {
   readonly fields = new Map<K, F>()
-  readonly blockId: string
+  blockId: string
   readonly type: BlockType
   protected readonly state: PrismaSchemaState
 
@@ -23,6 +23,10 @@ export class Block<F = Field, K = string> {
 
   get fieldNames() {
     return [...this.fields.values()].map((field) => field.name)
+  }
+
+  setName(name: string) {
+    this.blockId = name
   }
 
   field<SF = Field>(fieldId: K) {

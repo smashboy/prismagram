@@ -8,7 +8,11 @@ export const setPrismaSchema = createEvent<string>()
 
 export const $schema = createStore<string>('').on(setPrismaSchema, (_, schema) => schema)
 
-export const $schemaState = $schema.map((schema) => new PrismaSchemaState(schema))
+export const $schemaState = $schema.map((schema) => {
+  const state = new PrismaSchemaState()
+  state.parseSchemaString(schema)
+  return state
+})
 
 export const $schemaModels = $schemaState.map(({ models }) => models)
 

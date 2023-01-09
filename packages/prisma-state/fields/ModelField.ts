@@ -8,11 +8,14 @@ import {
   UpdatedAtAttribute,
   FieldAttribute
 } from '../attributes'
+import { Model } from '../blocks'
 import { scalarOptionsArray, ScalarTypeOption } from '../constants'
 
 import { Field } from './Field'
 
 type ModelFieldType = ScalarTypeOption | string
+
+type FieldModifier = 'optional' | 'list' | null
 
 const fieldAttributeMap = {
   id: IdAttribute,
@@ -26,12 +29,31 @@ const fieldAttributeMap = {
 
 export class ModelField<A = FieldAttribute> extends Field {
   type: ModelFieldType
-  modifier: 'optional' | 'list' | null = null
+  modifier: FieldModifier = null
   readonly attributes = new Map<string, A>()
 
-  constructor(name: string, lineIndex: string, type: ModelFieldType) {
+  private readonly model: Model
+
+  constructor(name: string, lineIndex: string, type: ModelFieldType, model: Model) {
     super(name, lineIndex)
     this.type = type
+    this.model = model
+  }
+
+  setName(name: string) {
+    // TODO: handle auto renaming in references
+    super.setName(name)
+  }
+
+  setType(type: ModelFieldType) {
+    this.type = type
+    this.modifier = null
+    // this.attributes.clear()
+  }
+
+  setModifier(modifier: FieldModifier) {
+    this.modifier = modifier
+    // this.attributes.clear()
   }
 
   protected _isScalarType() {

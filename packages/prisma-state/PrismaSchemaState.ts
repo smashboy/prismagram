@@ -7,10 +7,7 @@ export type PrismaSchemaStateData = Map<string, Datasource | Generator | Enum | 
 
 export class PrismaSchemaState {
   readonly state: PrismaSchemaStateData = new Map()
-
-  constructor(schema: string) {
-    this.parseSchemaString(schema)
-  }
+  private lines: string[] = []
 
   get modelIds() {
     return extractBlockIdsByType('model', this.state)
@@ -29,26 +26,22 @@ export class PrismaSchemaState {
   }
 
   model(id: string) {
-    return this.models.get(`model.${id}`)
+    return this.models.get(id)
   }
 
   enum(id: string) {
-    return this.enums.get(`enum.${id}`)
+    return this.enums.get(id)
   }
 
-  // createModel() {}
-  // editModel() {}
-  // deleteModel() {}
-
-  private parseSchemaString(schema: string) {
+  parseSchemaString(schema: string) {
     console.log('START')
     console.time()
-    const lines = schema.trim().split(/\r?\n/)
+    this.lines = schema.trim().split(/\r?\n/)
 
     let currentBlock: Datasource | Generator | Enum | Model | null = null
 
-    for (const index in lines) {
-      const line = lines[index].trim()
+    for (const index in this.lines) {
+      const line = this.lines[index].trim()
 
       if (lineUtils.isBlock('model', line)) {
         const id = lineUtils.getBlockId(line)
@@ -63,8 +56,8 @@ export class PrismaSchemaState {
       }
     }
 
-    for (const index in lines) {
-      const line = lines[index].trim()
+    for (const index in this.lines) {
+      const line = this.lines[index].trim()
 
       // TODO: store breaks ?
       if (line === '') {
@@ -113,11 +106,20 @@ export class PrismaSchemaState {
     }
 
     console.timeEnd()
-    console.log({
-      state: this.state,
-      schema: `${[...this.state.values()].map((block) => block._toString()).join('\r\n')}`
-    })
+    // console.log({
+    //   state: this.state,
+    //   schema: `${[...this.state.values()].map((block) => block._toString()).join('\r\n')}`
+    // })
   }
 }
 
-new PrismaSchemaState(testSchema)
+const schema = new PrismaSchemaState()
+
+schema.parseSchemaString(testSchema)
+
+// const userModel = schema.model('User')!
+
+// userModel.field('email')!.setName('emailUpdate')
+// userModel.setName('UserUpdate')
+
+console.log(schema.state)

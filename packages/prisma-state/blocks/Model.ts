@@ -47,7 +47,7 @@ export class Model extends Block<ScalarField | RelationField> {
     const ScalarField = scalarFieldMap[typeWithoutModifier as ScalarTypeOption]
 
     if (ScalarField) {
-      const scalarField = new ScalarField(name, lineIndex)
+      const scalarField = new ScalarField(name, lineIndex, this)
       scalarField._parseModifier(type)
       scalarField._parseAttributes(rest)
       this.addField(name, scalarField)
@@ -55,7 +55,7 @@ export class Model extends Block<ScalarField | RelationField> {
     }
 
     if (this.state.modelIds.indexOf(typeWithoutModifier) > -1) {
-      const relationField = new RelationField(name, lineIndex, typeWithoutModifier)
+      const relationField = new RelationField(name, lineIndex, this)
       relationField._parseAttributes(rest)
       relationField._parseModifier(type)
       this.addField(name, relationField)
@@ -63,7 +63,7 @@ export class Model extends Block<ScalarField | RelationField> {
     }
 
     if (this.state.enumIds.indexOf(typeWithoutModifier) > -1) {
-      const enumField = new EnumModelField(name, lineIndex, typeWithoutModifier)
+      const enumField = new EnumModelField(name, lineIndex, typeWithoutModifier, this)
       enumField._parseAttributes(rest)
       enumField._parseModifier(type)
       this.addField(name, enumField)
