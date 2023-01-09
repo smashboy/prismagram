@@ -26,11 +26,11 @@ export class PrismaSchemaState {
   }
 
   model(id: string) {
-    return this.models.get(id)
+    return this.models.get(id)!
   }
 
   enum(id: string) {
-    return this.enums.get(id)
+    return this.enums.get(id)!
   }
 
   parseSchemaString(schema: string) {
@@ -117,9 +117,9 @@ const schema = new PrismaSchemaState()
 
 schema.parseSchemaString(testSchema)
 
-// const userModel = schema.model('User')!
+// const userModel = schema.model('User')
 
 // userModel.field('email')!.setName('emailUpdate')
 // userModel.setName('UserUpdate')
 
-console.log(schema.state)
+console.log(schema.models)
