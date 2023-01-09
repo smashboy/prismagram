@@ -4,7 +4,7 @@ import { ScalarFieldColor } from '@renderer/modules/editor/config'
 import { $modelsIds, $nodesColors } from '@renderer/modules/editor/stores'
 import { combine } from 'effector'
 import { scalarOptionsArray } from '@shared/common/configs/prisma'
-import { ModelField } from '@renderer/core/prisma/fields/ModelField'
+import { ModelField } from 'prisma-state/fields'
 import { AttributeSettings } from './AttributeSettings'
 
 interface ModelFieldSettingsProps {

@@ -1,7 +1,4 @@
-import { Datasource } from './blocks/Datasource'
-import { Enum } from './blocks/Enum'
-import { Generator } from './blocks/Generator'
-import { Model } from './blocks/Model'
+import { Enum, Datasource, Generator, Model } from './blocks'
 import { testSchema } from './testSchema'
 import { extractBlockIdsByType, extractBlocksByType } from './utils/block'
 import * as lineUtils from './utils/line'

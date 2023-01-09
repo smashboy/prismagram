@@ -5,9 +5,7 @@ import { EnvInput } from '../../EnvInput'
 import { $schemaGenerators } from '@renderer/modules/editor'
 import { $prismaSettings } from '@renderer/modules/settings/stores'
 import { prismaBinaryTargetsList, prismaEngineTypesList } from '@shared/common/configs/prisma'
-import { EnvField } from '@renderer/core/prisma/fields/EnvField'
-import { OptionsListField } from '@renderer/core/prisma/fields/OptionsListField'
-import { OptionField } from '@renderer/core/prisma/fields/OptionField'
+import { EnvField, OptionsListField, OptionField } from 'prisma-state/fields'
 
 interface PrismaDatasourceSettingsProps {
   settingsId: string

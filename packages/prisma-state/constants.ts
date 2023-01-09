@@ -1,3 +1,5 @@
+import { AttributeFunctionType } from './attributes/AttributeFunction'
+
 export const ScalarType = {
   STRING: 'String',
   BOOLEAN: 'Boolean',
@@ -63,3 +65,13 @@ export const prismaBinaryTargetsList = [
   'netbsd',
   'arm'
 ] as const
+
+export const attributeFunctionOptions = [
+  'auto',
+  'autoincrement',
+  'cuid',
+  'dbgenerated',
+  'now',
+  'sequence',
+  'uuid'
+].map((func) => `${func}()`) as `${AttributeFunctionType}()`[]

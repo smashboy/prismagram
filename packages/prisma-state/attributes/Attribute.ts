@@ -1,9 +1,6 @@
+import { attributeFunctionOptions } from '../constants'
 import { stripValue } from '../utils/line'
-import {
-  AttributeFunction,
-  attributeFunctionsList,
-  AttributeFunctionType
-} from './AttributeFunction'
+import { AttributeFunction, AttributeFunctionType } from './AttributeFunction'
 
 export type AttributePrefix = '@' | '@@'
 
@@ -38,7 +35,7 @@ export class Attribute<T extends string, AK = string> {
 
   // TODO rework this method to be non recursive
   private _parseSingleArgument(arg: string) {
-    if (attributeFunctionsList.includes(arg as `${AttributeFunctionType}()`))
+    if (attributeFunctionOptions.includes(arg as `${AttributeFunctionType}()`))
       return new AttributeFunction(arg.replace('(', '').replace(')', '') as AttributeFunctionType)
 
     if (arg.startsWith('"')) return stripValue(arg)

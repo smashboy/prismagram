@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Accordion, MultiSelect, Table, Text, TextInput } from '@mantine/core'
-import { FieldAttribute } from '@renderer/core/prisma/attributes/FieldAttribute'
+import { FieldAttribute, AttributeFunction } from 'prisma-state/attributes'
 import { string2Color } from '@renderer/core/utils'
-import { AttributeFunction } from '@renderer/core/prisma/attributes/AttributeFunction'
 
 interface AttributesSettingsProps {
   attribute: FieldAttribute

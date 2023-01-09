@@ -1,5 +1,5 @@
-import { Block, BlockType } from '@renderer/core/prisma/blocks/Block'
-import { PrismaSchemaStateData } from '@renderer/core/prisma/PrismaSchemaState'
+import { Block, BlockType } from 'prisma-state/blocks'
+import { PrismaSchemaStateData } from 'prisma-state/PrismaSchemaState'
 
 export const extractBlocksByType = <B extends Block>(
   type: BlockType,

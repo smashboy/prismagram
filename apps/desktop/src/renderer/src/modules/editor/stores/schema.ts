@@ -1,9 +1,8 @@
 import { combine, createEvent, createStore } from 'effector'
 import { $selectedModelId } from './ui'
 import { extractBlocksByType } from './utils'
-import { PrismaSchemaState } from '@renderer/core/prisma/PrismaSchemaState'
-import { Datasource } from '@renderer/core/prisma/blocks/Datasource'
-import { Generator } from '@renderer/core/prisma/blocks/Generator'
+import { PrismaSchemaState } from 'prisma-state'
+import { Datasource, Generator } from 'prisma-state/blocks'
 
 export const setPrismaSchema = createEvent<string>()
 

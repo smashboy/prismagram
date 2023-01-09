@@ -7,16 +7,6 @@ export type AttributeFunctionType =
   | 'now'
   | 'dbgenerated'
 
-export const attributeFunctionsList = [
-  'auto',
-  'autoincrement',
-  'cuid',
-  'dbgenerated',
-  'now',
-  'sequence',
-  'uuid'
-].map((func) => `${func}()`) as `${AttributeFunctionType}()`[]
-
 export class AttributeFunction {
   readonly type: AttributeFunctionType
 

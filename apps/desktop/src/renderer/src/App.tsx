@@ -6,7 +6,7 @@ import { loadGlobalSettingsEffect, SettingsModal } from './modules/settings'
 import 'reactflow/dist/style.css'
 import './transports'
 
-import './core/prisma/PrismaSchemaState'
+import 'prisma-state/PrismaSchemaState'
 
 function App() {
   useEffect(() => {

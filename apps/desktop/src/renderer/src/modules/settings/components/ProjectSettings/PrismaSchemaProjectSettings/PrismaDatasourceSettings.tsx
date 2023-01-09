@@ -7,8 +7,7 @@ import {
 import { SettingsSectionPaper } from '../../SettingsSectionPaper'
 import { EnvInput } from '../../EnvInput'
 import { $schemaDatasources } from '@renderer/modules/editor'
-import { OptionField } from '@renderer/core/prisma/fields/OptionField'
-import { EnvField } from '@renderer/core/prisma/fields/EnvField'
+import { OptionField, EnvField } from 'prisma-state/fields'
 
 interface PrismaDatasourceSettingsProps {
   settingsId: string
