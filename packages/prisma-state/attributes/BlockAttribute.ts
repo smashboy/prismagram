@@ -1,8 +1,17 @@
+import { Block } from '../blocks'
 import { Attribute } from './Attribute'
 
-export class BlockAttribute extends Attribute<string> {
-  constructor(type: string) {
+export type BlockAttributeType = 'id' | 'index' | 'unique' | 'map' | 'ignore'
+
+export class BlockAttribute<B extends Block = Block, AK = string> extends Attribute<
+  BlockAttributeType,
+  AK
+> {
+  protected readonly model: B
+
+  constructor(type: BlockAttributeType, model: B) {
     super(type, '@@')
+    this.model = model
   }
 
   _toString() {

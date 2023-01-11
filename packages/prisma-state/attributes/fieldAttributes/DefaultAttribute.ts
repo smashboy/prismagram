@@ -1,8 +1,7 @@
 import { ScalarField } from '../../fields'
-
 import { FieldAttribute } from '../FieldAttribute'
 
-export class DefaultAttribute extends FieldAttribute<'value' | 'map', ScalarField> {
+export class DefaultAttribute extends FieldAttribute<ScalarField, 'value' | 'map'> {
   constructor(field: ScalarField) {
     super('default', field)
   }

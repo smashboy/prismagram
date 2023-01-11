@@ -3,8 +3,8 @@ import { RelationField } from '../../fields'
 import { FieldAttribute } from '../FieldAttribute'
 
 export class RelationAttribute extends FieldAttribute<
-  'name' | 'fields' | 'references' | 'map' | 'onUpdate' | 'onDelete',
-  RelationField
+  RelationField,
+  'name' | 'fields' | 'references' | 'map' | 'onUpdate' | 'onDelete'
 > {
   constructor(field: RelationField) {
     super('relation', field)

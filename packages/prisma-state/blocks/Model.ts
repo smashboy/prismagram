@@ -1,4 +1,3 @@
-import { BlockAttribute } from '../attributes'
 import { ScalarType, ScalarTypeOption } from '../constants'
 import {
   StringField,
@@ -30,8 +29,6 @@ const scalarFieldMap = {
 }
 
 export class Model extends Block<ScalarField | RelationField> {
-  readonly attributes: BlockAttribute[] = []
-
   constructor(id: string, state: PrismaSchemaState) {
     super(id, 'model', state)
   }
@@ -72,5 +69,7 @@ export class Model extends Block<ScalarField | RelationField> {
         new EnumModelField(name, lineIndex, typeWithoutModifier, this),
         rest
       )
+
+    if (line.startsWith('@@')) this._parseAttributes(line)
   }
 }

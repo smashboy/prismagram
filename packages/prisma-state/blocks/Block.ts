@@ -1,3 +1,11 @@
+import {
+  BlockAttribute,
+  IdBlockAttribute,
+  IgnoreBlockAttribute,
+  IndexBlockAttribute,
+  MapBlockAttribute,
+  UniqueBlockAttribute
+} from '../attributes'
 import { Field } from '../fields/Field'
 import { PrismaSchemaState } from '../PrismaSchemaState'
 
@@ -5,8 +13,17 @@ export type BlockType = 'generator' | 'datasource' | 'model' | 'enum'
 
 export const blockOptions: BlockType[] = ['datasource', 'enum', 'generator', 'model']
 
+const blockAttributesMap = {
+  id: IdBlockAttribute,
+  ignore: IgnoreBlockAttribute,
+  index: IndexBlockAttribute,
+  map: MapBlockAttribute,
+  unique: UniqueBlockAttribute
+}
+
 export class Block<F extends Field = Field, K = string> {
   readonly fields = new Map<K, F>()
+  readonly attributes: BlockAttribute[] = []
   name: string
   readonly type: BlockType
   protected readonly state: PrismaSchemaState
@@ -58,5 +75,30 @@ export class Block<F extends Field = Field, K = string> {
       ${[...this.fields.values()].map((field) => `${field._toString()}`).join('\r\n')}
     }
   `
+  }
+
+  _parseAttributes(line: string) {
+    line = line.replace('@@', '')
+
+    const bracketIndex = line.indexOf('(')
+
+    if (bracketIndex > -1) {
+      const name = line.substring(0, bracketIndex)
+
+      if (blockAttributesMap[name]) {
+        const attr = new blockAttributesMap[name](this)
+        const args = line.substring(bracketIndex + 1, line.lastIndexOf(')'))
+
+        attr._parseArgs(args)
+        return this.attributes.push(attr)
+      }
+    }
+
+    const name = line
+
+    if (blockAttributesMap[name]) {
+      const attr = new blockAttributesMap[name](this)
+      this.attributes.push(attr)
+    }
   }
 }
