@@ -12,4 +12,5 @@ export const arrayFromString = (str: string) =>
 
 export const stripValue = (value: string) => value.replaceAll('"', '').replaceAll("'", '').trim()
 
-export const isBlock = (type: BlockType, line: string) => line.startsWith(type)
+export const isBlock = (type: BlockType, line: string) =>
+  line.startsWith(type) && line.endsWith('{')

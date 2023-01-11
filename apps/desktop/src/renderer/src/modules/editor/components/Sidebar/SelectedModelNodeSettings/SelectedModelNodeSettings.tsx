@@ -9,12 +9,12 @@ export const SelectedModelNodeSettings = () => {
 
   if (!model) return null
 
-  const { blockId, fields } = model
+  const { name, fields } = model
 
   return (
     <ScrollArea h="100%" type="scroll" offsetScrollbars>
       <Stack>
-        <TextInput label="Model name" value={blockId} readOnly />
+        <TextInput label="Model name" value={name} readOnly />
         <Button variant="subtle" rightIcon={<IconPlus size={16} />}>
           New field
         </Button>

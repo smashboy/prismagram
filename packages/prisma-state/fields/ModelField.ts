@@ -42,7 +42,7 @@ export class ModelField<A = FieldAttribute> extends Field {
 
   setName(name: string) {
     // TODO: handle auto renaming in references
-    super.setName(name)
+    this.name = name
   }
 
   setType(type: ModelFieldType) {

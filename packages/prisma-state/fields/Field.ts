@@ -7,10 +7,6 @@ export class Field {
     this._lineIndex = lineIndex
   }
 
-  setName(name: string) {
-    this.name = name
-  }
-
   _toString(): string {
     return ''
   }

@@ -3,18 +3,22 @@ import { testSchema } from './testSchema'
 import { extractBlockIdsByType, extractBlocksByType } from './utils/block'
 import * as lineUtils from './utils/line'
 
-export type PrismaSchemaStateData = Map<string, Datasource | Generator | Enum | Model>
+export type PrismaSchemaStateItem = Datasource | Generator | Enum | Model
+export type PrismaSchemaStateData = Map<string, PrismaSchemaStateItem>
+
+// export type OnBlockUpdate = (id: string, item: PrismaSchemaStateItem) => void
+// export type OnBlockDelete = (id: string) => void
 
 export class PrismaSchemaState {
   readonly state: PrismaSchemaStateData = new Map()
   private lines: string[] = []
 
-  get modelIds() {
-    return extractBlockIdsByType('model', this.state)
+  get datasource() {
+    return [...this.state.values()].find((block) => block.type === 'datasource')!
   }
 
-  get enumIds() {
-    return extractBlockIdsByType('enum', this.state)
+  get generators() {
+    return extractBlocksByType<Generator>('generator', this.state)
   }
 
   get models() {
@@ -23,6 +27,14 @@ export class PrismaSchemaState {
 
   get enums() {
     return extractBlocksByType<Enum>('enum', this.state)
+  }
+
+  get modelIds() {
+    return extractBlockIdsByType('model', this.state)
+  }
+
+  get enumIds() {
+    return extractBlockIdsByType('enum', this.state)
   }
 
   model(id: string) {
@@ -38,7 +50,7 @@ export class PrismaSchemaState {
     console.time()
     this.lines = schema.trim().split(/\r?\n/)
 
-    let currentBlock: Datasource | Generator | Enum | Model | null = null
+    let currentBlock: PrismaSchemaStateItem | null = null
 
     for (const index in this.lines) {
       const line = this.lines[index].trim()
@@ -117,9 +129,10 @@ const schema = new PrismaSchemaState()
 
 schema.parseSchemaString(testSchema)
 
-// const userModel = schema.model('User')
+const userModel = schema.model('User')
 
-// userModel.field('email')!.setName('emailUpdate')
-// userModel.setName('UserUpdate')
+userModel.field('email')!.setName('emailUpdate')
+userModel.setName('UserUpdate')
+userModel.setName('UserUpdate2')
 
 console.log(schema.models)

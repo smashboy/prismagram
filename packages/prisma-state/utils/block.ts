@@ -5,7 +5,7 @@ export const extractBlockIdsByType = (type: BlockType, state: PrismaSchemaStateD
   const ids: string[] = []
 
   for (const block of [...state.values()]) {
-    if (block.type === type) ids.push(block.blockId)
+    if (block.type === type) ids.push(block.name)
   }
 
   return ids
@@ -18,7 +18,7 @@ export const extractBlocksByType = <B extends Block>(
   const blocks = new Map<string, B>()
 
   for (const block of [...list.values()]) {
-    if (block.type === type) blocks.set(block.blockId, block)
+    if (block.type === type) blocks.set(block.name, block)
   }
 
   return blocks

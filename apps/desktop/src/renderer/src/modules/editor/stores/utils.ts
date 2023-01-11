@@ -8,7 +8,7 @@ export const extractBlocksByType = <B extends Block>(
   const blocks = new Map<string, B>()
 
   for (const block of [...list.values()]) {
-    if (block.type === type) blocks.set(block.blockId, block)
+    if (block.type === type) blocks.set(block.name, block)
   }
 
   return blocks

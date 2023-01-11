@@ -36,6 +36,17 @@ export class Model extends Block<ScalarField | RelationField> {
     super(id, 'model', state)
   }
 
+  private createField(
+    name: string,
+    type: string,
+    field: ScalarField | RelationField | EnumModelField,
+    rest: string[]
+  ) {
+    field._parseModifier(type)
+    field._parseAttributes(rest)
+    this.addField(name, field)
+  }
+
   _parseLine(line: string, lineIndex: string) {
     const [name, type, ...rest] = line
       .split(' ')
@@ -46,28 +57,20 @@ export class Model extends Block<ScalarField | RelationField> {
 
     const ScalarField = scalarFieldMap[typeWithoutModifier as ScalarTypeOption]
 
-    if (ScalarField) {
-      const scalarField = new ScalarField(name, lineIndex, this)
-      scalarField._parseModifier(type)
-      scalarField._parseAttributes(rest)
-      this.addField(name, scalarField)
-      return
-    }
+    if (ScalarField)
+      return this.createField(name, type, new ScalarField(name, lineIndex, this), rest)
 
-    if (this.state.modelIds.indexOf(typeWithoutModifier) > -1) {
-      const relationField = new RelationField(name, lineIndex, this)
-      relationField._parseAttributes(rest)
-      relationField._parseModifier(type)
-      this.addField(name, relationField)
-      return
-    }
+    const state = this.state
 
-    if (this.state.enumIds.indexOf(typeWithoutModifier) > -1) {
-      const enumField = new EnumModelField(name, lineIndex, typeWithoutModifier, this)
-      enumField._parseAttributes(rest)
-      enumField._parseModifier(type)
-      this.addField(name, enumField)
-      return
-    }
+    if (state.modelIds.indexOf(typeWithoutModifier) > -1)
+      return this.createField(name, type, new RelationField(name, lineIndex, this), rest)
+
+    if (state.enumIds.indexOf(typeWithoutModifier) > -1)
+      return this.createField(
+        name,
+        type,
+        new EnumModelField(name, lineIndex, typeWithoutModifier, this),
+        rest
+      )
   }
 }

@@ -7,18 +7,18 @@ export const blockOptions: BlockType[] = ['datasource', 'enum', 'generator', 'mo
 
 export class Block<F extends Field = Field, K = string> {
   readonly fields = new Map<K, F>()
-  blockId: string
+  name: string
   readonly type: BlockType
   protected readonly state: PrismaSchemaState
 
   constructor(id: string, type: BlockType, state: PrismaSchemaState) {
-    this.blockId = id
+    this.name = id
     this.type = type
     this.state = state
   }
 
   get id(): string {
-    return `${this.type}.${this.blockId}`
+    return `${this.type}.${this.name}`
   }
 
   get fieldNames() {
@@ -26,24 +26,35 @@ export class Block<F extends Field = Field, K = string> {
   }
 
   setName(name: string) {
-    this.blockId = name
+    this.state.state.delete(this.id)
+
+    this.name = name
+
+    this.state.state.set(this.id, this)
+
+    console.log('UPDATED STATE', new Map([...this.state.state]))
   }
 
-  field<SF = Field>(fieldId: K) {
-    return this.fields.get(fieldId) as SF | undefined
+  remove() {
+    this.state.state.delete(this.id)
+  }
+
+  field(fieldId: K) {
+    return this.fields.get(fieldId) as F | undefined
   }
 
   protected addField(fieldId: K, field: F) {
     this.fields.set(fieldId, field)
   }
 
-  deleteField(fieldId: K) {
+  removeField(fieldId: K) {
     this.fields.delete(fieldId)
+    this.state.state.set(this.id, this)
   }
 
   _toString() {
     return `
-    ${this.type} ${this.blockId} {
+    ${this.type} ${this.name} {
       ${[...this.fields.values()].map((field) => `${field._toString()}`).join('\r\n')}
     }
   `
