@@ -1,11 +1,5 @@
-import {
-  BlockAttribute,
-  IdBlockAttribute,
-  IgnoreBlockAttribute,
-  IndexBlockAttribute,
-  MapBlockAttribute,
-  UniqueBlockAttribute
-} from '../attributes'
+import { Datasource as AstDatasource, Generator as AstGenerator } from '@mrleebo/prisma-ast'
+import { EnvField, OptionField, OptionsListField } from '../fields'
 import { Field } from '../fields/Field'
 import { PrismaSchemaState } from '../PrismaSchemaState'
 
@@ -13,23 +7,14 @@ export type BlockType = 'generator' | 'datasource' | 'model' | 'enum'
 
 export const blockOptions: BlockType[] = ['datasource', 'enum', 'generator', 'model']
 
-const blockAttributesMap = {
-  id: IdBlockAttribute,
-  ignore: IgnoreBlockAttribute,
-  index: IndexBlockAttribute,
-  map: MapBlockAttribute,
-  unique: UniqueBlockAttribute
-}
-
 export class Block<F extends Field = Field, K = string> {
   readonly fields = new Map<K, F>()
-  readonly attributes: BlockAttribute[] = []
   name: string
   readonly type: BlockType
   protected readonly state: PrismaSchemaState
 
-  constructor(id: string, type: BlockType, state: PrismaSchemaState) {
-    this.name = id
+  constructor(name: string, type: BlockType, state: PrismaSchemaState) {
+    this.name = name
     this.type = type
     this.state = state
   }
@@ -48,8 +33,6 @@ export class Block<F extends Field = Field, K = string> {
     this.name = name
 
     this.state.state.set(this.id, this)
-
-    console.log('UPDATED STATE', new Map([...this.state.state]))
   }
 
   remove() {
@@ -69,36 +52,37 @@ export class Block<F extends Field = Field, K = string> {
     this.state.state.set(this.id, this)
   }
 
+  _parseAssignments(list: (AstGenerator | AstDatasource)['assignments']) {
+    for (const assignment of list) {
+      if (assignment.type !== 'assignment') continue
+
+      const { key, value } = assignment
+
+      if (value?.type === 'function' && value?.name === 'env') {
+        const envField = new EnvField(key)
+        envField._parse(value.params)
+        this.fields.set(envField.name as unknown as K, envField as unknown as F)
+        continue
+      }
+
+      if (value?.type === 'array') {
+        const optionsField = new OptionsListField(key)
+        optionsField._parse(value.args)
+        this.fields.set(optionsField.name as unknown as K, optionsField as unknown as F)
+        continue
+      }
+
+      const optionField = new OptionField(key)
+      optionField._parse(value)
+      this.fields.set(optionField.name as unknown as K, optionField as unknown as F)
+    }
+  }
+
   _toString() {
     return `
     ${this.type} ${this.name} {
       ${[...this.fields.values()].map((field) => `${field._toString()}`).join('\r\n')}
     }
   `
-  }
-
-  _parseAttributes(line: string) {
-    line = line.replace('@@', '')
-
-    const bracketIndex = line.indexOf('(')
-
-    if (bracketIndex > -1) {
-      const name = line.substring(0, bracketIndex)
-
-      if (blockAttributesMap[name]) {
-        const attr = new blockAttributesMap[name](this)
-        const args = line.substring(bracketIndex + 1, line.lastIndexOf(')'))
-
-        attr._parseArgs(args)
-        return this.attributes.push(attr)
-      }
-    }
-
-    const name = line
-
-    if (blockAttributesMap[name]) {
-      const attr = new blockAttributesMap[name](this)
-      this.attributes.push(attr)
-    }
   }
 }

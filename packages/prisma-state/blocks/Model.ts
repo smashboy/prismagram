@@ -1,4 +1,5 @@
-import { ScalarType, ScalarTypeOption } from '../constants'
+import type { Model as AstModel } from '@mrleebo/prisma-ast'
+import { ScalarType } from '../constants'
 import {
   StringField,
   JsonField,
@@ -16,7 +17,7 @@ import {
 import { PrismaSchemaState } from '../PrismaSchemaState'
 import { Block } from './Block'
 
-const scalarFieldMap = {
+const ScalarFieldMap = {
   [ScalarType.STRING]: StringField,
   [ScalarType.INT]: IntField,
   [ScalarType.BOOLEAN]: BooleanField,
@@ -29,47 +30,44 @@ const scalarFieldMap = {
 }
 
 export class Model extends Block<ScalarField | RelationField> {
-  constructor(id: string, state: PrismaSchemaState) {
-    super(id, 'model', state)
+  constructor(name: string, state: PrismaSchemaState) {
+    super(name, 'model', state)
   }
 
-  private createField(
-    name: string,
-    type: string,
-    field: ScalarField | RelationField | EnumModelField,
-    rest: string[]
-  ) {
-    field._parseModifier(type)
-    field._parseAttributes(rest)
-    this.addField(name, field)
-  }
+  _parse(model: AstModel) {
+    for (const prop of model.properties) {
+      if (prop.type === 'field') {
+        const { fieldType, name } = prop
+        const ScalarField = ScalarFieldMap[fieldType as unknown]
 
-  _parseLine(line: string, lineIndex: string) {
-    const [name, type, ...rest] = line
-      .split(' ')
-      .filter(Boolean)
-      .map((str) => str.trim())
+        if (ScalarField) {
+          const scalarField = new ScalarField(name, this)
+          scalarField._parse(prop)
+          this.fields.set(name, scalarField)
 
-    const typeWithoutModifier = type.replace('[]', '').replace('?', '')
+          continue
+        }
 
-    const ScalarField = scalarFieldMap[typeWithoutModifier as ScalarTypeOption]
+        if (this.state.modelIds.indexOf(fieldType as string) > -1) {
+          const relationField = new RelationField(name, fieldType as string, this)
+          relationField._parse(prop)
+          this.fields.set(name, relationField)
 
-    if (ScalarField)
-      return this.createField(name, type, new ScalarField(name, lineIndex, this), rest)
+          continue
+        }
 
-    const state = this.state
+        if (this.state.enumIds.indexOf(fieldType as string) > -1) {
+          const enumField = new EnumModelField(name, fieldType as string, this)
+          enumField._parse(prop)
+          this.fields.set(name, enumField)
+        }
 
-    if (state.modelIds.indexOf(typeWithoutModifier) > -1)
-      return this.createField(name, type, new RelationField(name, lineIndex, this), rest)
+        continue
+      }
 
-    if (state.enumIds.indexOf(typeWithoutModifier) > -1)
-      return this.createField(
-        name,
-        type,
-        new EnumModelField(name, lineIndex, typeWithoutModifier, this),
-        rest
-      )
+      // if (prop.type === 'attribute') {
 
-    if (line.startsWith('@@')) this._parseAttributes(line)
+      // }
+    }
   }
 }

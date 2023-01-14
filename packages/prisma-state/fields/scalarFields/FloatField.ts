@@ -3,7 +3,7 @@ import { ScalarType } from '../../constants'
 import { ModelField } from '../ModelField'
 
 export class FloatField extends ModelField {
-  constructor(name: string, lineIndex: string, model: Model) {
-    super(name, lineIndex, ScalarType.FLOAT, model)
+  constructor(name: string, model: Model) {
+    super(name, ScalarType.FLOAT, model)
   }
 }

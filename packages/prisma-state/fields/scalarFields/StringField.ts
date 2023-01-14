@@ -5,7 +5,7 @@ import { ModelField } from '../ModelField'
 import { Model } from '../../blocks'
 
 export class StringField extends ModelField<DefaultAttribute | IdAttribute> {
-  constructor(name: string, lineIndex: string, model: Model) {
-    super(name, lineIndex, ScalarType.STRING, model)
+  constructor(name: string, model: Model) {
+    super(name, ScalarType.STRING, model)
   }
 }

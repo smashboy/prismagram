@@ -1,3 +1,4 @@
+import { Enum as AstEnum } from '@mrleebo/prisma-ast'
 import { EnumField } from '../fields'
 import { PrismaSchemaState } from '../PrismaSchemaState'
 import { Block } from './Block'
@@ -7,14 +8,13 @@ export class Enum extends Block<EnumField> {
     super(id, 'enum', state)
   }
 
-  _parseLine(line: string, lineIndex: string) {
-    const name = line.trim()
+  _parse(list: AstEnum['enumerators']) {
+    for (const item of list) {
+      if (item.type !== 'enumerator') continue
 
-    if (line.startsWith('@@')) {
-      this._parseAttributes(line)
-      return
+      const { name } = item
+
+      this.addField(name, new EnumField(name))
     }
-
-    this.addField(name, new EnumField(name, lineIndex))
   }
 }

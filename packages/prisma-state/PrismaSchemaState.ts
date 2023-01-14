@@ -1,7 +1,7 @@
+import { Assignment, getSchema } from '@mrleebo/prisma-ast'
 import { Enum, Datasource, Generator, Model } from './blocks'
 import { testSchema } from './testSchema'
 import { extractBlockIdsByType, extractBlocksByType } from './utils/block'
-import * as lineUtils from './utils/line'
 
 export type PrismaSchemaStateItem = Datasource | Generator | Enum | Model
 export type PrismaSchemaStateData = Map<string, PrismaSchemaStateItem>
@@ -48,72 +48,47 @@ export class PrismaSchemaState {
   parseSchemaString(schema: string) {
     console.log('START')
     console.time()
-    this.lines = schema.trim().split(/\r?\n/)
 
-    let currentBlock: PrismaSchemaStateItem | null = null
+    const { list } = getSchema(schema)
 
-    for (const index in this.lines) {
-      const line = this.lines[index].trim()
+    // console.log(list)
 
-      if (lineUtils.isBlock('model', line)) {
-        const id = lineUtils.getBlockId(line)
-        const model = new Model(id, this)
-        this.state.set(model.id, model)
+    for (const block of list) {
+      if (block.type === 'datasource') {
+        const datasource = new Datasource(block.name, this)
+        datasource._parseAssignments(block.assignments)
+        this.state.set(datasource.id, datasource)
+
+        continue
       }
 
-      if (lineUtils.isBlock('enum', line)) {
-        const id = lineUtils.getBlockId(line)
-        const enumBlock = new Enum(id, this)
+      if (block.type === 'generator') {
+        const generator = new Generator(block.name, this)
+        generator._parseAssignments(block.assignments)
+        this.state.set(generator.id, generator)
+
+        continue
+      }
+
+      if (block.type === 'model') {
+        const model = new Model(block.name, this)
+        this.state.set(model.id, model)
+
+        continue
+      }
+
+      if (block.type === 'enum') {
+        const enumBlock = new Enum(block.name, this)
+        enumBlock._parse(block.enumerators)
         this.state.set(enumBlock.id, enumBlock)
       }
     }
 
-    for (const index in this.lines) {
-      const line = this.lines[index].trim()
-
-      // TODO: store breaks ?
-      if (line === '') {
-        continue
-      }
-
-      // TODO
-      if (line.startsWith('//')) {
-        continue
-      }
-
-      if (lineUtils.isBlock('model', line)) {
-        const id = lineUtils.getBlockId(line)
-        currentBlock = new Model(id, this)
-        continue
-      }
-
-      if (lineUtils.isBlock('enum', line)) {
-        const id = lineUtils.getBlockId(line)
-        currentBlock = new Enum(id, this)
-        continue
-      }
-
-      if (lineUtils.isBlock('datasource', line)) {
-        const id = lineUtils.getBlockId(line)
-        currentBlock = new Datasource(id, this)
-        continue
-      }
-
-      if (lineUtils.isBlock('generator', line)) {
-        const id = lineUtils.getBlockId(line)
-        currentBlock = new Generator(id, this)
-        continue
-      }
-
-      if (currentBlock && line.startsWith('}')) {
-        this.state.set(currentBlock.id, currentBlock)
-        currentBlock = null
-        continue
-      }
-
-      if (currentBlock) {
-        currentBlock._parseLine(line, index)
-        continue
+    for (const block of list) {
+      if (block.type === 'model') {
+        const model = this.model(block.name)
+        model._parse(block)
+        this.state.set(model.id, model)
       }
     }
 
@@ -129,10 +104,10 @@ const schema = new PrismaSchemaState()
 
 schema.parseSchemaString(testSchema)
 
-const userModel = schema.model('User')
+// const userModel = schema.model('User')
 
-userModel.field('email')!.setName('emailUpdate')
-userModel.setName('UserUpdate')
-userModel.setName('UserUpdate2')
+// userModel.field('email')!.setName('emailUpdate')
+// userModel.setName('UserUpdate')
+// userModel.setName('UserUpdate2')
 
-console.log(schema.models)
+console.log(schema.state)

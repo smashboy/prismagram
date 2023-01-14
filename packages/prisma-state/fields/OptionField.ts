@@ -1,11 +1,11 @@
-import { stripValue } from '../utils/line'
+import { cleanupStr } from '../utils/string'
 import { Field } from './Field'
 
 export class OptionField extends Field {
   value = ''
 
-  constructor(name: string, lineIndex: string) {
-    super(name, lineIndex)
+  constructor(name: string) {
+    super(name)
   }
 
   setValue(value: string) {
@@ -13,7 +13,7 @@ export class OptionField extends Field {
   }
 
   _parse(value: string) {
-    this.value = stripValue(value)
+    this.value = cleanupStr(value)
   }
 
   _toString() {

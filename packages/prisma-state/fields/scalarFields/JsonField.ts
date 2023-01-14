@@ -3,7 +3,7 @@ import { ScalarType } from '../../constants'
 import { ModelField } from '../ModelField'
 
 export class JsonField extends ModelField {
-  constructor(name: string, lineIndex: string, model: Model) {
-    super(name, lineIndex, ScalarType.JSON, model)
+  constructor(name: string, model: Model) {
+    super(name, ScalarType.JSON, model)
   }
 }

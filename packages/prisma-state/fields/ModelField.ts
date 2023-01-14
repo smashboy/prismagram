@@ -1,3 +1,4 @@
+import type { Field as AstField } from '@mrleebo/prisma-ast'
 import {
   IgnoreAttribute,
   MapAttribute,
@@ -32,10 +33,10 @@ export class ModelField<A = FieldAttribute> extends Field {
   modifier: FieldModifier = null
   readonly attributes = new Map<string, A>()
 
-  private readonly model: Model
+  protected readonly model: Model
 
-  constructor(name: string, lineIndex: string, type: ModelFieldType, model: Model) {
-    super(name, lineIndex)
+  constructor(name: string, type: ModelFieldType, model: Model) {
+    super(name)
     this.type = type
     this.model = model
   }
@@ -45,11 +46,11 @@ export class ModelField<A = FieldAttribute> extends Field {
     this.name = name
   }
 
-  setType(type: ModelFieldType) {
-    this.type = type
-    this.modifier = null
-    // this.attributes.clear()
-  }
+  // setType(type: ModelFieldType) {
+  //   this.type = type
+  //   this.modifier = null
+  //   // this.attributes.clear()
+  // }
 
   setModifier(modifier: FieldModifier) {
     this.modifier = modifier
@@ -66,51 +67,13 @@ export class ModelField<A = FieldAttribute> extends Field {
     }`
   }
 
-  _parseModifier(type: string) {
-    if (type.endsWith('[]')) {
-      this.modifier = 'list'
-      return
-    }
+  _parse(field: AstField) {
+    const { array = false, optional = false, attributes = [] } = field
 
-    if (type.endsWith('?')) {
-      this.modifier = 'optional'
-      return
-    }
+    if (array) this.modifier = 'list'
+    if (optional) this.modifier = 'optional'
 
-    this.modifier = null
-  }
-
-  _parseAttributes(substrings: string[]) {
-    const attributeStrings = substrings
-      .join(' ')
-      .split('@')
-      .filter(Boolean)
-      .map((str) => str.trim())
-
-    if (attributeStrings.length === 0) return
-
-    for (const attributeStr of attributeStrings) {
-      const bracketIndex = attributeStr.indexOf('(')
-      if (bracketIndex > -1) {
-        const name = attributeStr.substring(0, bracketIndex)
-
-        if (fieldAttributeMap[name]) {
-          const attr = new fieldAttributeMap[name](this)
-          const args = attributeStr.substring(bracketIndex + 1, attributeStr.lastIndexOf(')'))
-
-          attr._parseArgs(args)
-          this.attributes.set(name, attr)
-
-          continue
-        }
-      }
-
-      const name = attributeStr
-
-      if (fieldAttributeMap[name]) {
-        const attr = new fieldAttributeMap[name](this)
-        this.attributes.set(name, attr)
-      }
+    for (const attr of attributes) {
     }
   }
 }

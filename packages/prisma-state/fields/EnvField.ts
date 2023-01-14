@@ -1,12 +1,12 @@
-import { stripValue } from '../utils/line'
+import { cleanupStr } from '../utils/string'
 import { Field } from './Field'
 
 export class EnvField extends Field {
   value = ''
-  isEnv = false
+  isEnv = true
 
-  constructor(name: string, lineIndex: string) {
-    super(name, lineIndex)
+  constructor(name: string) {
+    super(name)
   }
 
   setValue(value: string) {
@@ -17,18 +17,9 @@ export class EnvField extends Field {
     this.isEnv = isEnv ?? !this.isEnv
   }
 
-  _parse(str: string) {
-    str = stripValue(str)
-
-    if (str.startsWith('env')) {
-      this.isEnv = true
-      this.value = str.replace('env', '').replace('(', '').replace(')', '')
-
-      return
-    }
-
-    this.isEnv = false
-    this.value = str
+  _parse(params: string[]) {
+    const value = params[0]
+    this.value = cleanupStr(value)
   }
 
   _toString() {

@@ -3,7 +3,7 @@ import { ScalarType } from '../../constants'
 import { ModelField } from '../ModelField'
 
 export class IntField extends ModelField {
-  constructor(name: string, lineIndex: string, model: Model) {
-    super(name, lineIndex, ScalarType.INT, model)
+  constructor(name: string, model: Model) {
+    super(name, ScalarType.INT, model)
   }
 }
