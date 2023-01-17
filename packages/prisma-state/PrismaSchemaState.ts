@@ -1,4 +1,4 @@
-import { Assignment, getSchema } from '@mrleebo/prisma-ast'
+import { getSchema } from '@mrleebo/prisma-ast'
 import { Enum, Datasource, Generator, Model } from './blocks'
 import { testSchema } from './testSchema'
 import { extractBlockIdsByType, extractBlocksByType } from './utils/block'
@@ -51,7 +51,7 @@ export class PrismaSchemaState {
 
     const { list } = getSchema(schema)
 
-    // console.log(list)
+    console.log(list)
 
     for (const block of list) {
       if (block.type === 'datasource') {

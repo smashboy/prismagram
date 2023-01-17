@@ -1,3 +1,4 @@
+import { AttributeArgument as AstAttributeArgument } from '@mrleebo/prisma-ast'
 import { ReferentialActionOption } from '../../constants'
 import { RelationField } from '../../fields'
 import { FieldAttribute } from '../FieldAttribute'
@@ -34,7 +35,7 @@ export class RelationAttribute extends FieldAttribute<
     this.setArgument('onDelete', value)
   }
 
-  _parseArgs(args: string) {
+  _parseArgs(args: AstAttributeArgument[]) {
     super._parseArgs(args, 'name')
   }
 }

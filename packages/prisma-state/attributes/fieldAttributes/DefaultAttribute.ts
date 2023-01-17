@@ -1,3 +1,4 @@
+import { AttributeArgument as AstAttributeArgument } from '@mrleebo/prisma-ast'
 import { ScalarField } from '../../fields'
 import { FieldAttribute } from '../FieldAttribute'
 
@@ -6,7 +7,7 @@ export class DefaultAttribute extends FieldAttribute<ScalarField, 'value' | 'map
     super('default', field)
   }
 
-  _parseArgs(args: string) {
+  _parseArgs(args: AstAttributeArgument[]) {
     super._parseArgs(args, 'value')
   }
 }

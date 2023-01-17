@@ -73,7 +73,15 @@ export class ModelField<A = FieldAttribute> extends Field {
     if (array) this.modifier = 'list'
     if (optional) this.modifier = 'optional'
 
-    for (const attr of attributes) {
+    for (const { name, args = [] } of attributes) {
+      const Attribute = fieldAttributeMap[name]
+
+      if (Attribute) {
+        const attribute = new Attribute()
+        attribute._parseArgs(args)
+
+        this.attributes.set(name, attribute)
+      }
     }
   }
 }

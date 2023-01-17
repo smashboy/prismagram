@@ -1,3 +1,4 @@
+import { AttributeArgument as AstAttributeArgument } from '@mrleebo/prisma-ast'
 import { RelationField } from '../../fields'
 import { ScalarField } from '../../fields/types'
 import { FieldAttribute } from '../FieldAttribute'
@@ -7,7 +8,7 @@ export class MapAttribute extends FieldAttribute<ScalarField | RelationField, 'n
     super('map', field)
   }
 
-  _parseArgs(args: string) {
+  _parseArgs(args: AstAttributeArgument[]) {
     super._parseArgs(args, 'name')
   }
 }

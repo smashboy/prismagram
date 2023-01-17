@@ -66,7 +66,7 @@ export const prismaBinaryTargetsList = [
   'arm'
 ] as const
 
-export const attributeFunctionOptions = [
+export const attributeFunctionsList = [
   'auto',
   'autoincrement',
   'cuid',
@@ -74,4 +74,4 @@ export const attributeFunctionOptions = [
   'now',
   'sequence',
   'uuid'
-].map((func) => `${func}()`) as `${AttributeFunctionType}()`[]
+] as const
