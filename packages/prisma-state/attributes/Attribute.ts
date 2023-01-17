@@ -1,5 +1,4 @@
 import { AttributeArgument as AstAttributeArgument, KeyValue } from '@mrleebo/prisma-ast'
-import { attributeFunctionsList } from '../constants'
 import { cleanupStr } from '../utils/string'
 import { AttributeFunction } from './AttributeFunction'
 
@@ -41,8 +40,7 @@ export class Attribute<T extends string, AK = string> {
 
     if (arg instanceof Array) return arg.map(this._parseSingleArg)
 
-    if (arg.type === 'function' && attributeFunctionsList.includes(arg.name))
-      return new AttributeFunction(arg.name)
+    if (arg.type === 'function') return new AttributeFunction(arg.name)
 
     if (arg.type === 'array') return arg.args.map(this._parseSingleArg)
   }
