@@ -1,14 +1,16 @@
 import { useEffect, useRef } from 'react'
 import { Accordion, MultiSelect, Table, Text, TextInput } from '@mantine/core'
-import { FieldAttribute, AttributeFunction } from 'prisma-state/attributes'
+import { Attribute, AttributeFunction } from 'prisma-state/attributes'
 import { string2Color } from '@renderer/core/utils'
 
 interface AttributesSettingsProps {
-  attribute: FieldAttribute
+  attribute: Attribute<string, string>
+  isBlock?: boolean
 }
 
 export const AttributeSettings: React.FC<AttributesSettingsProps> = ({
-  attribute: { displayAttributeType, type, arguments: args }
+  attribute: { displayAttributeType, type, arguments: args },
+  isBlock = false
 }) => {
   const controlRef = useRef<HTMLButtonElement>(null)
 
@@ -25,7 +27,22 @@ export const AttributeSettings: React.FC<AttributesSettingsProps> = ({
   }, [hasArguments])
 
   return (
-    <Accordion.Item value={type}>
+    <Accordion.Item
+      value={type}
+      sx={
+        isBlock
+          ? (theme) => ({
+              boxShadow: theme.shadows.sm,
+              ['&:not(:first-child)']: {
+                marginTop: theme.spacing.xs
+              },
+              ['&:last-child']: {
+                marginBottom: theme.spacing.xl
+              }
+            })
+          : void 0
+      }
+    >
       <Accordion.Control
         ref={controlRef}
         sx={{

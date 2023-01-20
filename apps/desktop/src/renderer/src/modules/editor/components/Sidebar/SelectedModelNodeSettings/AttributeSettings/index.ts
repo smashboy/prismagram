@@ -1,1 +1,0 @@
-export { AttributeSettings } from './AttributeSettings'
