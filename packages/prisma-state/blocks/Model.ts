@@ -1,4 +1,12 @@
 import type { Model as AstModel } from '@mrleebo/prisma-ast'
+import {
+  BlockAttribute,
+  IdBlockAttribute,
+  IgnoreBlockAttribute,
+  IndexBlockAttribute,
+  MapBlockAttribute,
+  UniqueBlockAttribute
+} from '../attributes'
 import { ScalarType } from '../constants'
 import {
   StringField,
@@ -29,7 +37,17 @@ const ScalarFieldMap = {
   [ScalarType.BYTES]: BytesField
 }
 
-export class Model extends Block<ScalarField | RelationField> {
+const attributesMap = {
+  id: IdBlockAttribute,
+  ignore: IgnoreBlockAttribute,
+  index: IndexBlockAttribute,
+  map: MapBlockAttribute,
+  unique: UniqueBlockAttribute
+}
+
+export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField> {
+  readonly attributes = new Map<string, A>()
+
   constructor(name: string, state: PrismaSchemaState) {
     super(name, 'model', state)
   }
@@ -65,9 +83,17 @@ export class Model extends Block<ScalarField | RelationField> {
         continue
       }
 
-      // if (prop.type === 'attribute') {
+      if (prop.type === 'attribute') {
+        const { name, args } = prop
+        const Attribute = attributesMap[name]
 
-      // }
+        if (Attribute) {
+          const attribute = new Attribute(this)
+          attribute._parseArgs(args)
+
+          this.attributes.set(name, attribute)
+        }
+      }
     }
   }
 }

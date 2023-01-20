@@ -77,7 +77,7 @@ export class ModelField<A = FieldAttribute> extends Field {
       const Attribute = fieldAttributeMap[name]
 
       if (Attribute) {
-        const attribute = new Attribute()
+        const attribute = new Attribute(this)
         attribute._parseArgs(args)
 
         this.attributes.set(name, attribute)
