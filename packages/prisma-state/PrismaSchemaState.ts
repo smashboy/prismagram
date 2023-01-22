@@ -110,4 +110,7 @@ schema.parseSchemaString(testSchema)
 // userModel.setName('UserUpdate')
 // userModel.setName('UserUpdate2')
 
-console.log(schema.state)
+console.log({
+  state: schema.state,
+  str: `${[...schema.state.values()].map((block) => block._toString()).join('\r\n')}`
+})

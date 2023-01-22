@@ -96,4 +96,13 @@ export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField
       }
     }
   }
+
+  _toString() {
+    const blockstr = `
+    ${super._toString().replace('}', '')}
+    ${[...this.attributes.values()].map((attr) => attr._toString()).join('\r\n')}
+    }
+  `
+    return blockstr
+  }
 }

@@ -84,4 +84,10 @@ export class ModelField<A = FieldAttribute> extends Field {
       }
     }
   }
+
+  _toString() {
+    return `${this.name} ${this.displayType} ${[...this.attributes.values()]
+      .map((attr) => attr._toString())
+      .join(' ')}`
+  }
 }

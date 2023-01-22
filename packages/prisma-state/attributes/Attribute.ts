@@ -34,9 +34,9 @@ export class Attribute<T extends string, AK = string> {
   }
 
   private _parseSingleArg(arg: AstAttributeArgument['value']) {
-    if (typeof arg === 'string') return cleanupStr(arg)
+    // if (typeof arg === 'string') return cleanupStr(arg)
 
-    if (typeof arg === 'boolean' || typeof arg === 'number') return arg
+    if (typeof arg === 'boolean' || typeof arg === 'number' || typeof arg === 'string') return arg
 
     if (arg instanceof Array) return arg.map(this._parseSingleArg)
 
@@ -73,7 +73,23 @@ export class Attribute<T extends string, AK = string> {
     }
   }
 
+  _argument2String(arg: ArgumentValue) {
+    if (typeof arg === 'string' || typeof arg === 'boolean' || typeof arg === 'number') return arg
+    if (arg instanceof Array) return `[${arg.map(this._argument2String).join(', ')}]`
+    if (arg instanceof AttributeFunction) return arg._toString()
+  }
+
   _toString() {
-    return `${this._prefix}${this.type}${this.arguments.size > 0 ? '()' : ''}`
+    const args: Array<[string, string]> = []
+
+    for (const [name, arg] of [...this.arguments.entries()]) {
+      const strArg = this._argument2String(arg)
+
+      if (strArg) args.push([name as unknown as string, strArg])
+    }
+
+    return `${this._prefix}${this.type}${
+      this.arguments.size > 0 ? `(${args.map(([name, arg]) => `${name}: ${arg}`).join(', ')})` : ''
+    }`
   }
 }
