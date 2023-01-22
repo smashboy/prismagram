@@ -29,7 +29,7 @@ const fieldAttributeMap = {
 }
 
 export class ModelField<A = FieldAttribute> extends Field {
-  type: ModelFieldType
+  readonly type: ModelFieldType
   modifier: FieldModifier = null
   readonly attributes = new Map<string, A>()
 
