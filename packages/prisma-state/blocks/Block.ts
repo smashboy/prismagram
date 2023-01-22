@@ -39,8 +39,8 @@ export class Block<F extends Field = Field, K = string> {
     this.state.state.delete(this.id)
   }
 
-  field(fieldId: K) {
-    return this.fields.get(fieldId) as F | undefined
+  field<FF = F>(fieldId: K) {
+    return this.fields.get(fieldId) as FF | undefined
   }
 
   protected addField(fieldId: K, field: F) {
