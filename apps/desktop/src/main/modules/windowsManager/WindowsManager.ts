@@ -1,6 +1,4 @@
-import { randomUUID } from 'crypto'
 import { BrowserWindow } from 'electron'
-import { PROJECTS_FOLDER_PATH } from '../../constants'
 import {
   CREATE_COMMAND_ENDPOINT,
   CREATE_PROJECT_ENDPOINT,
@@ -8,7 +6,7 @@ import {
   EDITOR_LAUNCH_PRISMA_STUDIO_ENDPOINT,
   EDITOR_LAYOUT_NODES_ENDPOINT,
   GET_EDITOR_DATA_ENDPOINT,
-  GET_FOLDER_DIRECTORY_ENDPOINT,
+  GET_PROJECTS_DIRECTORY_ENDPOINT,
   GET_GLOBAL_SETTINGS_ENDPOINT,
   GET_PRISMA_DOCUMENT_ENDPOINT,
   GET_PRISMA_SCHEMA_PATH_ENDPOINT,
@@ -16,7 +14,6 @@ import {
   UPDATE_PROJECT_ENDPOINT
 } from '@shared/common/configs/api'
 import { GlobalSettings, Project } from '@shared/common/models/Project'
-import { createFile, readDirectoryFiles, readDirectoryPath } from '../../services/filesManager'
 import {
   getPrismaDocument,
   getPrismaPreviewFeaturesList,
@@ -25,17 +22,18 @@ import {
 } from '../../services/prisma'
 import { WindowManager } from './models'
 import WindowsManagerBase from './WindowsManagerBase'
-import { readEditorData, ReadEditorDataOptions } from '../../services/editor'
 import { Diagram } from '@shared/common/models/Diagram'
 import { DiagramLayout } from '@shared/common/configs/diagrams'
 import { layoutDiagramElements } from '../../services/diagrams'
 import { PrismaCommand } from '@shared/common/models/Prisma'
 import CommandsManager from '../commandsManager/CommandsManager'
+import { ProjectsManager } from '../projectsManager/ProjectsManager'
 
 export default class WindowsManager extends WindowsManagerBase {
   protected appWindow: WindowManager | undefined
 
   private readonly commandsManager = new CommandsManager()
+  private readonly projectsManager = new ProjectsManager()
 
   protected createAppWindow() {
     this.appWindow = this.createWindow({
@@ -59,33 +57,44 @@ export default class WindowsManager extends WindowsManagerBase {
       readPrismaSchemaFilePath(browserWindow)
     )
 
-    this.appWindow.createApiRoute(GET_FOLDER_DIRECTORY_ENDPOINT, () =>
-      readDirectoryPath(browserWindow, {
-        title: 'Open project directory',
-        buttonLabel: 'Open'
-      })
+    this.appWindow.createApiRoute(GET_PROJECTS_LIST_ENDPOINT, () =>
+      this.projectsManager.getProjectsList()
     )
 
-    this.appWindow.createApiRoute(GET_PROJECTS_LIST_ENDPOINT, async () => {
-      const projects = await readDirectoryFiles(PROJECTS_FOLDER_PATH)
-
-      return projects.map((project) => JSON.parse(project))
-    })
-
-    this.appWindow.createApiRoute(CREATE_PROJECT_ENDPOINT, async (args: Omit<Project, 'id'>) => {
-      const id = randomUUID()
-      const fileName = `${id}.json`
-
-      const project: Project = { id, ...args }
-
-      await createFile(PROJECTS_FOLDER_PATH, fileName, JSON.stringify(project))
-
-      return project
-    })
-
-    this.appWindow.createApiRoute(GET_EDITOR_DATA_ENDPOINT, (args: ReadEditorDataOptions) =>
-      readEditorData(args)
+    this.appWindow.createApiRoute(CREATE_PROJECT_ENDPOINT, (args: Omit<Project, 'id'>) =>
+      this.projectsManager.createProject(args)
     )
+
+    this.appWindow.createApiRoute(UPDATE_PROJECT_ENDPOINT, (project: Project) =>
+      this.projectsManager.updateProject(project)
+    )
+
+    this.appWindow.createApiRoute(GET_PROJECTS_DIRECTORY_ENDPOINT, async () => {
+      const directory = await this.projectsManager.getProjectDirectory(browserWindow)
+
+      if (!directory) return
+
+      const schemaPath = this.projectsManager.getProjectSchemaPath(directory)
+
+      return [directory, schemaPath]
+    })
+
+    this.appWindow.createApiRoute(
+      CREATE_COMMAND_ENDPOINT,
+      (args: { project: Project; command: PrismaCommand }) =>
+        this.projectsManager.createCommand(args.command, args.project)
+    )
+
+    this.appWindow.createApiRoute(GET_EDITOR_DATA_ENDPOINT, async (project: Project) => {
+      const schemaPath = this.projectsManager.getProjectSchemaPath(project.projectDirectory)
+
+      if (schemaPath) {
+        const schema = this.projectsManager.getProjectSchema(project)
+        const diagram = await this.projectsManager.getSchemaDiagram(schema!)
+
+        return { schema, diagram, schemaPath }
+      }
+    })
 
     this.appWindow.createApiRoute(
       EDITOR_LAYOUT_NODES_ENDPOINT,
@@ -102,32 +111,6 @@ export default class WindowsManager extends WindowsManagerBase {
 
       return settings
     })
-
-    this.appWindow.createApiRoute(UPDATE_PROJECT_ENDPOINT, async (project: Project) => {
-      const fileName = `${project.id}.json`
-
-      await createFile(PROJECTS_FOLDER_PATH, fileName, JSON.stringify(project))
-
-      return project
-    })
-
-    this.appWindow.createApiRoute(
-      CREATE_COMMAND_ENDPOINT,
-      async (args: { project: Project; command: PrismaCommand }) => {
-        const { project, command } = args
-
-        const id = randomUUID()
-        const fileName = `${project.id}.json`
-
-        const fragment = { [id]: command }
-
-        project.commands = project.commands ? { ...project.commands, ...fragment } : fragment
-
-        await createFile(PROJECTS_FOLDER_PATH, fileName, JSON.stringify(project))
-
-        return project
-      }
-    )
 
     this.appWindow.createApiRoute(
       EDITOR_LAUNCH_PRISMA_STUDIO_ENDPOINT,

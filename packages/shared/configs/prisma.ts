@@ -129,3 +129,8 @@ export enum PrismaDbExecuteCommandInput {
   STDIN = '--stdin',
   FILE = '--file'
 }
+
+export const defaultSchemaPaths = {
+  root: './schema.prisma',
+  prismaRoot: './prisma/schema.prisma'
+}

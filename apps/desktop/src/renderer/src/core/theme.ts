@@ -84,6 +84,16 @@ export const theme: MantineThemeOverride = {
       defaultProps: {
         dropdownPosition: 'flip'
       }
+    },
+    Alert: {
+      styles: {
+        root: {
+          '& .mantine-Alert-icon': {
+            height: 'inherit',
+            alignItems: 'center'
+          }
+        }
+      }
     }
   }
 }

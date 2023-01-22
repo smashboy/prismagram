@@ -12,20 +12,22 @@ import {
 import { DEFAULT_PRISMA_STUDIO_PORT } from '@shared/common/configs/prisma'
 import { SettingsSection } from '../SettingsSection'
 import { SettingsSectionPaper } from '../SettingsSectionPaper'
+import { $schemaPath } from '../../stores'
 
 const $store = combine({
   project: $selectedProject,
-  isLoading: $isUpdatingProject
+  isLoading: $isUpdatingProject,
+  schemaPath: $schemaPath
 })
 
 export const ProjectGeneralSettings = () => {
-  const { project, isLoading } = useStore($store)
+  const { project, isLoading, schemaPath } = useStore($store)
 
-  const { name, schema, projectDirectory, prismaStudioPort } = project!
+  const { name, projectDirectory, prismaStudioPort } = project!
 
   const [settings, setSettings] = useState({
     name,
-    schema,
+    schemaPath,
     projectDirectory: projectDirectory ?? '',
     prismaStudioPort: prismaStudioPort ?? DEFAULT_PRISMA_STUDIO_PORT
   })
@@ -51,12 +53,11 @@ export const ProjectGeneralSettings = () => {
   }
 
   const handleSaveProject = () => {
-    const { name, schema, projectDirectory, prismaStudioPort } = settings
+    const { name, projectDirectory, prismaStudioPort } = settings
 
     return updateProjectEffect({
       ...project!,
       name,
-      schema,
       projectDirectory: projectDirectory ?? void 0,
       prismaStudioPort:
         !prismaStudioPort || prismaStudioPort === DEFAULT_PRISMA_STUDIO_PORT
@@ -65,7 +66,7 @@ export const ProjectGeneralSettings = () => {
     })
   }
 
-  const disableSaveButton = !settings.name || !settings.schema
+  const disableSaveButton = !settings.name || !settings.schemaPath
 
   return (
     <SettingsSection>

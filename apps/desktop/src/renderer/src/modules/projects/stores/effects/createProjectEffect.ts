@@ -5,7 +5,6 @@ import { Project } from '@shared/common/models/Project'
 
 interface CreateProjectEffectProps {
   name: string
-  schema: string
   projectDirectory: string
 }
 

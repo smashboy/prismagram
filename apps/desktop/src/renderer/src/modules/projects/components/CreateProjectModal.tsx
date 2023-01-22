@@ -13,7 +13,7 @@ const $store = combine({
 
 const initialFormValues: ProjectFormBaseValues = {
   name: '',
-  schema: '',
+  schemaPath: '',
   projectDirectory: ''
 }
 
@@ -22,7 +22,7 @@ export const CreateProjectModal = () => {
 
   const [project, setProject] = useState<ProjectFormBaseValues>(initialFormValues)
 
-  const { name, schema, projectDirectory } = project
+  const { name, projectDirectory, schemaPath } = project
 
   const handleCloseDialog = () => {
     toggleCreateProjectModal(false)
@@ -32,14 +32,13 @@ export const CreateProjectModal = () => {
   const handleCreateProject = async () => {
     await createProjectEffect({
       name,
-      schema,
       projectDirectory: projectDirectory ?? void 0
     })
 
     handleCloseDialog()
   }
 
-  const disableCreateButton = !schema || !name
+  const disableCreateButton = !schemaPath || !name
 
   return (
     <Modal opened={isOpen} onClose={handleCloseDialog} title="Create project">
