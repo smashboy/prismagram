@@ -50,8 +50,6 @@ export class PrismaSchemaState {
 
     const { list } = getSchema(schema)
 
-    console.log(list)
-
     for (const block of list) {
       if (block.type === 'datasource') {
         const datasource = new Datasource(block.name, this)
@@ -92,10 +90,6 @@ export class PrismaSchemaState {
     }
 
     console.timeEnd()
-    // console.log({
-    //   state: this.state,
-    //   schema: `${[...this.state.values()].map((block) => block._toString()).join('\r\n')}`
-    // })
   }
 
   toString() {
