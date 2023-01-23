@@ -8,6 +8,10 @@ import { SettingsSectionPaper } from '../../SettingsSectionPaper'
 import { EnvInput } from '../../EnvInput'
 import { $schemaDatasources, $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor'
 import { OptionField, EnvField } from 'prisma-state/fields'
+import {
+  PrismaDatasourceProviderType,
+  PrismaDatasourceRelationModeType
+} from 'prisma-state/constants'
 
 interface PrismaDatasourceSettingsProps {
   settingsId: string
@@ -48,9 +52,9 @@ export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> =
       } else if (value && optionField) {
         optionField.setValue(value)
       } else if (input === 'provider') {
-        datasource.addProvider(value)
+        datasource.addProvider(value as PrismaDatasourceProviderType)
       } else if (input === 'relationMode') {
-        datasource.addRelationMode(value)
+        datasource.addRelationMode(value as PrismaDatasourceRelationModeType)
       }
 
       setPrismaSchemaEvent(state.toString())

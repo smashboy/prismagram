@@ -11,6 +11,9 @@ interface PrismaDatasourceSettingsProps {
   settingsId: string
 }
 
+const engineTypeOptions = prismaEngineTypesList
+const binaryTargetsOptions = prismaBinaryTargetsList
+
 export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = ({
   settingsId
 }) => {
@@ -32,9 +35,6 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
     new Set([...(previewFeatures?.options.values() || []), ...previewFeaturesList])
   )
 
-  const engineTypeOptions = prismaEngineTypesList
-  const binaryTargetsOptions = prismaBinaryTargetsList
-
   return (
     <SettingsSectionPaper title="Generator">
       <Stack>
@@ -55,6 +55,7 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
           value={previewFeatures ? [...previewFeatures.options.values()] : []}
           data={previewFeatureOptions}
           searchable
+          clearable
         />
         <Select
           label="Engine type"
@@ -62,6 +63,7 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
           value={engineType?.value ?? ''}
           data={engineTypeOptions as unknown as string[]}
           searchable
+          clearable
         />
         <MultiSelect
           label="Binary targets"
@@ -69,6 +71,7 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
           value={[]}
           data={binaryTargetsOptions as unknown as string[]}
           searchable
+          clearable
         />
       </Stack>
     </SettingsSectionPaper>
