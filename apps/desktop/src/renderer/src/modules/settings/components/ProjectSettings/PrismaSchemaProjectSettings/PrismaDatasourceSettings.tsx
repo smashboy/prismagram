@@ -34,12 +34,27 @@ export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> =
     shadowDatabaseUrl
   }
 
-  const handleProviderChange = (value: string | null) => {
-    if (value) {
-      provider.setValue(value)
+  const optionFields = {
+    provider,
+    relationMode
+  }
+
+  const handleSelectInputChange =
+    (input: 'provider' | 'relationMode') => (value: string | null) => {
+      const optionField = optionFields[input]
+
+      if (!value) {
+        datasource.removeField(input)
+      } else if (value && optionField) {
+        optionField.setValue(value)
+      } else if (input === 'provider') {
+        datasource.addProvider(value)
+      } else if (input === 'relationMode') {
+        datasource.addRelationMode(value)
+      }
+
       setPrismaSchemaEvent(state.toString())
     }
-  }
 
   const handleEnvFlagChange = (input: 'url' | 'shadowDatabaseUrl') => (flag: boolean) => {
     const envField = envFields[input]
@@ -52,19 +67,16 @@ export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> =
   const handleEnvInputChange =
     (input: 'url' | 'shadowDatabaseUrl') => (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value
+      const envField = envFields[input]
 
       if (!value) {
         datasource.removeField(input)
-      } else {
-        const envField = envFields[input]
-
-        if (envField) {
-          envField.setValue(event.target.value)
-        } else if (input === 'shadowDatabaseUrl') {
-          datasource.addShadowDatabaseUrl(value)
-        } else if (input === 'url') {
-          datasource.addUrl(value)
-        }
+      } else if (envField) {
+        envField.setValue(event.target.value)
+      } else if (input === 'shadowDatabaseUrl') {
+        datasource.addShadowDatabaseUrl(value)
+      } else if (input === 'url') {
+        datasource.addUrl(value)
       }
 
       setPrismaSchemaEvent(state.toString())
@@ -78,7 +90,7 @@ export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> =
           label="Provider"
           description="Describes which data source connectors to use."
           value={provider?.value ?? ''}
-          onChange={handleProviderChange}
+          onChange={handleSelectInputChange('provider')}
           data={prismaDatasourceProvidersArray}
           searchable
           required
@@ -102,8 +114,10 @@ export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> =
           label="Relation mode"
           description="Sets whether referential integrity is enforced by foreign keys in the database or emulated in the Prisma Client."
           value={relationMode?.value ?? ''}
+          onChange={handleSelectInputChange('relationMode')}
           data={prismaRelationModesList as unknown as string[]}
           searchable
+          clearable
         />
       </Stack>
     </SettingsSectionPaper>
