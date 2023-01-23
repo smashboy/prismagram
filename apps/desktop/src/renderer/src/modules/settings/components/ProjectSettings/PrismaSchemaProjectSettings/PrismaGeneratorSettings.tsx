@@ -42,15 +42,13 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
         <EnvInput
           label="Provider"
           description="Describes which generator  to use. This can point to a file that implements a generator or specify a built-in generator directly."
-          value={provider?.value ?? ''}
-          isEnv={provider?.isEnv ?? false}
+          field={provider}
           required
         />
         <EnvInput
           label="Output"
           description="Determines the location for the generated client. Default: node_modules/.prisma/client"
-          value={output?.value ?? ''}
-          isEnv={output?.isEnv ?? false}
+          field={output}
         />
         <MultiSelect
           label="Preview features"

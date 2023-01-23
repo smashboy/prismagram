@@ -75,3 +75,37 @@ export const attributeFunctionsList = [
   'sequence',
   'uuid'
 ] as const
+
+export const PrismaDatasourceProvider = {
+  POSTGRESQL: 'postgresql',
+  MYSQL: 'mysql',
+  SQLLITE: 'sqlite',
+  SQLSERVER: 'sqlserver',
+  MONGODB: 'mongodb',
+  COCKROACHDB: 'cockroachdb'
+} as const
+
+export type PrismaDatasourceProviderType =
+  typeof PrismaDatasourceProvider[keyof typeof PrismaDatasourceProvider]
+
+export const prismaDatasourceProvidersArray = [
+  PrismaDatasourceProvider.COCKROACHDB,
+  PrismaDatasourceProvider.MONGODB,
+  PrismaDatasourceProvider.MYSQL,
+  PrismaDatasourceProvider.POSTGRESQL,
+  PrismaDatasourceProvider.SQLLITE,
+  PrismaDatasourceProvider.SQLSERVER
+]
+
+export const PrismaDatasourceRelationMode = {
+  FOREIGN_KEYS: 'foreignKeys',
+  PRISMA: 'prisma'
+} as const
+
+export type PrismaDatasourceRelationModeType =
+  typeof PrismaDatasourceRelationMode[keyof typeof PrismaDatasourceRelationMode]
+
+export const prismaDatasourceRelationModesArray = [
+  PrismaDatasourceRelationMode.FOREIGN_KEYS,
+  PrismaDatasourceRelationMode.PRISMA
+]

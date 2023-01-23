@@ -1,1 +1,0 @@
-export { useEndpoint } from './useEndpoint'

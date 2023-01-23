@@ -11,7 +11,6 @@ export type PrismaSchemaStateData = Map<string, PrismaSchemaStateItem>
 
 export class PrismaSchemaState {
   readonly state: PrismaSchemaStateData = new Map()
-  private lines: string[] = []
 
   get datasource() {
     return [...this.state.values()].find((block) => block.type === 'datasource')!
@@ -98,6 +97,10 @@ export class PrismaSchemaState {
     //   schema: `${[...this.state.values()].map((block) => block._toString()).join('\r\n')}`
     // })
   }
+
+  toString() {
+    return `${[...this.state.values()].map((block) => block._toString()).join('\r\n')}`
+  }
 }
 
 const schema = new PrismaSchemaState()
@@ -112,5 +115,5 @@ schema.parseSchemaString(testSchema)
 
 console.log({
   state: schema.state,
-  str: `${[...schema.state.values()].map((block) => block._toString()).join('\r\n')}`
+  str: schema.toString()
 })

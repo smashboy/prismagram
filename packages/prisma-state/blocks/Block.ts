@@ -7,6 +7,9 @@ export type BlockType = 'generator' | 'datasource' | 'model' | 'enum'
 
 export const blockOptions: BlockType[] = ['datasource', 'enum', 'generator', 'model']
 
+const datasourceEnvFields = ['url', 'shadowDatabaseUrl']
+const generatorEnvFields = ['provider', 'output']
+
 export class Block<F extends Field = Field, K = string> {
   readonly fields = new Map<K, F>()
   name: string
@@ -40,7 +43,7 @@ export class Block<F extends Field = Field, K = string> {
   }
 
   field<FF = F>(fieldId: K) {
-    return this.fields.get(fieldId) as FF | undefined
+    return this.fields.get(fieldId)! as FF
   }
 
   protected addField(fieldId: K, field: F) {
@@ -58,9 +61,18 @@ export class Block<F extends Field = Field, K = string> {
 
       const { key, value } = assignment
 
-      if (value?.type === 'function' && value?.name === 'env') {
+      if (
+        (value?.type === 'function' && value?.name === 'env') ||
+        (this.type === 'datasource' && datasourceEnvFields.includes(key)) ||
+        (this.type === 'generator' && generatorEnvFields.includes(key))
+      ) {
         const envField = new EnvField(key)
-        envField._parse(value.params)
+        envField._parse(value?.params ?? [value])
+
+        if (!value?.params) {
+          envField.toggleIsEnv(false)
+        }
+
         this.fields.set(envField.name as unknown as K, envField as unknown as F)
         continue
       }

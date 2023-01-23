@@ -3,6 +3,11 @@ import { MantineThemeOverride } from '@mantine/core'
 export const theme: MantineThemeOverride = {
   colorScheme: 'light',
   defaultRadius: 'md',
+  defaultGradient: {
+    from: 'blue',
+    to: 'pink',
+    deg: 20
+  },
   globalStyles: (theme) => ({
     'html, body, #root': {
       width: '100%',
@@ -10,10 +15,7 @@ export const theme: MantineThemeOverride = {
       overflow: 'hidden'
     },
     body: {
-      background:
-        theme.colorScheme === 'dark'
-          ? `linear-gradient(277deg, rgba(33, 0, 75, 0.24) 3.65%, rgba(60, 0, 136, 0) 40.32%),linear-gradient(44deg, rgba(209, 21, 111, 0.16) 0%, rgba(209, 25, 80, 0) 36.63%),linear-gradient(201deg, rgba(58, 19, 255, 0) 29.79%, rgba(98, 19, 255, 0.01) 85.72%),#13111C`
-          : `linear-gradient(6deg, ${theme.colors.blue[3]}, ${theme.colors.pink[3]})`
+      background: theme.fn.gradient()
     }
   }),
   components: {

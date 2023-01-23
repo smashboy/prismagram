@@ -4,10 +4,10 @@ import { randomUUID } from 'crypto'
 import * as path from 'path'
 import { Project } from '@shared/common/models/Project'
 import { createFile, readDirectoryFiles, readDirectoryPath } from '../../services/filesManager'
-import { PROJECTS_FOLDER_PATH } from '../../constants'
+import { PRISMA_SCHEMA_FILE_NAME, PROJECTS_FOLDER_PATH } from '../../constants'
 import { PrismaCommand } from '@shared/common/models/Prisma'
 import { defaultSchemaPaths } from '@shared/common/configs/prisma'
-import { getPrismaDocument } from '../../services/prisma'
+import { getPrismaDocument, formatPrismaSchema } from '../../services/prisma'
 import { prismaSchema2Diagram } from '../../services/diagrams'
 
 export class ProjectsManager {
@@ -41,6 +41,22 @@ export class ProjectsManager {
 
   projectExists(project: Project) {
     return fs.existsSync(project.projectDirectory)
+  }
+
+  async saveSchema(schema: string, project: Project) {
+    const schemaPath = this.getProjectSchemaPath(project.projectDirectory)
+
+    if (schemaPath) {
+      const formattedSchema = await formatPrismaSchema(schema)
+
+      await createFile(
+        schemaPath.replace(`${PRISMA_SCHEMA_FILE_NAME}`, ''),
+        PRISMA_SCHEMA_FILE_NAME,
+        formattedSchema
+      )
+
+      return formattedSchema
+    }
   }
 
   getProjectDirectory(browserWindow: BrowserWindow) {

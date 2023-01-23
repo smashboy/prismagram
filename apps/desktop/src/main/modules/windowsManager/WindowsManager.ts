@@ -11,7 +11,8 @@ import {
   GET_PRISMA_DOCUMENT_ENDPOINT,
   GET_PRISMA_SCHEMA_PATH_ENDPOINT,
   GET_PROJECTS_LIST_ENDPOINT,
-  UPDATE_PROJECT_ENDPOINT
+  UPDATE_PROJECT_ENDPOINT,
+  EDITOR_SAVE_SCHEMA
 } from '@shared/common/configs/api'
 import { GlobalSettings, Project } from '@shared/common/models/Project'
 import {
@@ -67,6 +68,12 @@ export default class WindowsManager extends WindowsManagerBase {
 
     this.appWindow.createApiRoute(UPDATE_PROJECT_ENDPOINT, (project: Project) =>
       this.projectsManager.updateProject(project)
+    )
+
+    this.appWindow.createApiRoute(
+      EDITOR_SAVE_SCHEMA,
+      (args: { project: Project; schema: string }) =>
+        this.projectsManager.saveSchema(args.schema, args.project)
     )
 
     this.appWindow.createApiRoute(GET_PROJECTS_DIRECTORY_ENDPOINT, async () => {

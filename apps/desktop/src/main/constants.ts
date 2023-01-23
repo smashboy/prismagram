@@ -12,6 +12,8 @@ export const RENDERER_HTML_PATH = path.join(__dirname, '../renderer/index.html')
 
 export const PROJECTS_FOLDER_PATH = path.join(DOCUMENTS_FOLDER_PATH, 'projects')
 
+export const PRISMA_SCHEMA_FILE_NAME = 'schema.prisma'
+
 export const graphDirectionOption = {
   [DiagramLayout.HORIZONTAL]: 'LR',
   [DiagramLayout.VERTICAL]: 'TB'

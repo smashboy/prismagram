@@ -2,3 +2,4 @@ export { loadEditorDataEffect, $isLoadingEditorData } from './loadEditorDataEffe
 export { layoutDiagramEffect } from './layoutDiagramEffect'
 export { launchPrismaStudioEffect, $isLaunchingPrismaStudio } from './launchPrismaStudioEffect'
 export { closePrismaStudioEffect } from './closePrismaStudioEffect'
+export { saveSchemaEffect } from './saveSchemaEffect'
