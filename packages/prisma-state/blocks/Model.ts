@@ -7,36 +7,10 @@ import {
   MapBlockAttribute,
   UniqueBlockAttribute
 } from '../attributes'
-import { ScalarType } from '../constants'
-import {
-  StringField,
-  JsonField,
-  IntField,
-  FloatField,
-  DecimalField,
-  DateTimeField,
-  BytesField,
-  BooleanField,
-  BigIntField,
-  RelationField,
-  EnumModelField,
-  type ScalarField
-} from '../fields'
+import { RelationField, type ScalarField } from '../fields'
 import { PrismaSchemaState } from '../PrismaSchemaState'
 import { createFieldFromType } from '../utils/field'
 import { Block } from './Block'
-
-export const ScalarFieldMap = {
-  [ScalarType.STRING]: StringField,
-  [ScalarType.INT]: IntField,
-  [ScalarType.BOOLEAN]: BooleanField,
-  [ScalarType.DATE_TIME]: DateTimeField,
-  [ScalarType.FLOAT]: FloatField,
-  [ScalarType.DECIMAL]: DecimalField,
-  [ScalarType.BIG_INT]: BigIntField,
-  [ScalarType.JSON]: JsonField,
-  [ScalarType.BYTES]: BytesField
-}
 
 const attributesMap = {
   id: IdBlockAttribute,
