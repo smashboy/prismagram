@@ -40,7 +40,7 @@ export const FieldForm: React.FC<FieldFormProps> = ({ model, field, onChange }) 
 
     const newField = createFieldFromType(field.name, type, model, enumIds, modelIds)
 
-    if (newField) onChange(field)
+    if (newField) onChange(newField)
   }
 
   const selectOptions = [
