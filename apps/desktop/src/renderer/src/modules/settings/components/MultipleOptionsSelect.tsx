@@ -19,8 +19,6 @@ export const MultipleOptionsSelect: React.FC<MultipleOptionsSelectProps> = ({
   const field = block.field<OptionsListField>(name)
 
   const handleChange = (values: string[]) => {
-    console.log(values)
-
     if (values.length === 0) {
       block.removeField(name)
     } else if (!field) {
