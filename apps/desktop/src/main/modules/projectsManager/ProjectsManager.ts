@@ -31,12 +31,14 @@ export class ProjectsManager {
     return project
   }
 
-  updateProject(project: Project) {
-    return createFile(
+  async updateProject(project: Project) {
+    await createFile(
       PROJECTS_FOLDER_PATH,
-      this.createProjectFileName(project.id)[1],
+      this.createProjectFileName(project.id)[0],
       JSON.stringify(project)
     )
+
+    return project
   }
 
   projectExists(project: Project) {

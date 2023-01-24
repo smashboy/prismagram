@@ -1,3 +1,5 @@
+import { combine } from 'effector'
+import { useStore, useStoreMap } from 'effector-react'
 import { Accordion, Button, Text } from '@mantine/core'
 import {
   $isUpdatingProject,
@@ -6,8 +8,6 @@ import {
   updateProjectEffect
 } from '@renderer/modules/projects'
 import { PrismaCommand } from '@shared/common/models/Prisma'
-import { combine } from 'effector'
-import { useStore, useStoreMap } from 'effector-react'
 import { PrismaCommandForm } from './PrismaCommandForm'
 
 interface EditPrismaCommandFormProps {
@@ -32,13 +32,13 @@ export const EditPrismaCommandForm: React.FC<EditPrismaCommandFormProps> = ({ co
 
   const handleSaveChanges = (updatedCommand: PrismaCommand) =>
     updateProjectEffect({
-      ...project,
+      ...project!,
       commands: { ...project?.commands, [commandId]: updatedCommand }
     })
 
   const handleDeleteCommand = () =>
     updateProjectEffect({
-      ...project,
+      ...project!,
       commands: project?.commands
         ? Object.entries(project.commands).reduce((acc, [id, cmd]) => {
             if (id === commandId) return acc
