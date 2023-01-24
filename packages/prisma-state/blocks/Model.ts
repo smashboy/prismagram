@@ -23,9 +23,10 @@ import {
   type ScalarField
 } from '../fields'
 import { PrismaSchemaState } from '../PrismaSchemaState'
+import { createFieldFromType } from '../utils/field'
 import { Block } from './Block'
 
-const ScalarFieldMap = {
+export const ScalarFieldMap = {
   [ScalarType.STRING]: StringField,
   [ScalarType.INT]: IntField,
   [ScalarType.BOOLEAN]: BooleanField,
@@ -58,31 +59,18 @@ export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField
     for (const prop of props) {
       if (prop.type === 'field') {
         const { fieldType, name } = prop
-        const ScalarField = ScalarFieldMap[fieldType as unknown]
+        const field = createFieldFromType(
+          name,
+          fieldType as string,
+          this,
+          this.state.enumIds,
+          this.state.modelIds
+        )
 
-        if (ScalarField) {
-          const scalarField = new ScalarField(name, this)
-          scalarField._parse(prop)
-          this.fields.set(name, scalarField)
-
-          continue
+        if (field) {
+          field._parse(prop)
+          this.fields.set(name, field)
         }
-
-        if (this.state.modelIds.indexOf(fieldType as string) > -1) {
-          const relationField = new RelationField(name, fieldType as string, this)
-          relationField._parse(prop)
-          this.fields.set(name, relationField)
-
-          continue
-        }
-
-        if (this.state.enumIds.indexOf(fieldType as string) > -1) {
-          const enumField = new EnumModelField(name, fieldType as string, this)
-          enumField._parse(prop)
-          this.fields.set(name, enumField)
-        }
-
-        continue
       }
 
       if (prop.type === 'attribute') {

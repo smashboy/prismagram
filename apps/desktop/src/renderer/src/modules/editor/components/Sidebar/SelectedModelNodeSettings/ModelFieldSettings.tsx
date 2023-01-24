@@ -52,7 +52,7 @@ export const ModelFieldSettings: React.FC<ModelFieldSettingsProps> = ({
           <Select label="Type" value={type as string} data={typeOptions} readOnly />
           {attributesList.length > 0 && (
             <Accordion>
-              {[...attributes.entries()].map(([id, attr]) => (
+              {attributesList.map(([id, attr]) => (
                 <AttributeSettings key={id} attribute={attr} />
               ))}
             </Accordion>

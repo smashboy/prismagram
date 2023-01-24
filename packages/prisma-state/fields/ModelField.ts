@@ -18,7 +18,7 @@ type ModelFieldType = ScalarTypeOption | string
 
 type FieldModifier = 'optional' | 'list' | null
 
-const fieldAttributeMap = {
+export const fieldAttributeMap = {
   id: IdAttribute,
   default: DefaultAttribute,
   updatedAt: UpdatedAtAttribute,
@@ -83,6 +83,10 @@ export class ModelField<A = FieldAttribute> extends Field {
         this.attributes.set(name, attribute)
       }
     }
+  }
+
+  _clone() {
+    return Object.assign(Object.create(Object.getPrototypeOf(this)), this)
   }
 
   _toString() {

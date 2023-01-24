@@ -1,5 +1,3 @@
-import { AttributeFunctionType } from './attributes/AttributeFunction'
-
 export const ScalarType = {
   STRING: 'String',
   BOOLEAN: 'Boolean',

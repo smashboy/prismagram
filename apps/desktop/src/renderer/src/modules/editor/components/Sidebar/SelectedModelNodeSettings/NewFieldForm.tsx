@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useStore } from 'effector-react'
-import { Button, Group, Paper, Select, Stack, TextInput, Transition } from '@mantine/core'
+import { Button, Group, Paper, Stack, Transition } from '@mantine/core'
 import { IconPlus } from '@tabler/icons'
 import { $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor/stores'
-import { scalarOptionsArray } from 'prisma-state/constants'
 import { Model } from 'prisma-state/blocks'
 import { IntField } from 'prisma-state/fields'
+import { FieldForm } from './FieldForm/FieldForm'
 
 interface NewFieldFormProps {
   model: Model
@@ -14,25 +14,14 @@ interface NewFieldFormProps {
 export const NewFieldForm: React.FC<NewFieldFormProps> = ({ model }) => {
   const schemaState = useStore($schemaState)
 
-  const { modelIds, enumIds } = schemaState
-
   const [isOpen, setIsOpen] = useState(false)
 
-  const [name, setName] = useState('')
+  const [field, setField] = useState(new IntField('', model))
 
-  const isCreateButtonDisabled = !name || !!model.field(name)
-
-  const handleNameInput = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setName(event.target.value)
-
-  const selectOptions = [
-    ...scalarOptionsArray,
-    ...modelIds.filter((id) => id !== model.name),
-    ...enumIds
-  ]
+  const isCreateButtonDisabled = !field.name || !!model.field(field.name)
 
   const handleCreateField = () => {
-    model.addField(name, new IntField(name, model))
+    model.addField(field.name, field)
     setPrismaSchemaEvent(schemaState.toString())
     setIsOpen(false)
   }
@@ -64,8 +53,7 @@ export const NewFieldForm: React.FC<NewFieldFormProps> = ({ model }) => {
             withBorder
           >
             <Stack>
-              <TextInput label="Name" value={name} onChange={handleNameInput} />
-              <Select label="Type" data={selectOptions} searchable />
+              <FieldForm field={field} onChange={setField} model={model} />
               <Group position="right" sx={{ alignItems: 'flex-end' }}>
                 <Button color="gray" onClick={() => setIsOpen(false)}>
                   Cancel
