@@ -1,12 +1,12 @@
 import { useStore, useStoreMap } from 'effector-react'
-import { MultiSelect, Stack } from '@mantine/core'
+import { Stack } from '@mantine/core'
 import { SettingsSectionPaper } from '../../SettingsSectionPaper'
 import { EnvInput } from '../../EnvInput'
 import { $schemaGenerators } from '@renderer/modules/editor'
 import { $prismaSettings } from '@renderer/modules/settings/stores'
 import { prismaBinaryTargetsList, prismaEngineTypesList } from '@shared/common/configs/prisma'
-import { OptionsListField } from 'prisma-state/fields'
 import { SelectOptionInput } from '../../SelectOptionInput'
+import { MultipleOptionsSelect } from '../../MultipleOptionsSelect'
 
 interface PrismaDatasourceSettingsProps {
   settingsId: string
@@ -26,13 +26,6 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
     fn: (settings, [id]) => settings.get(id)!
   })
 
-  const previewFeatures = generator.field<OptionsListField>('previewFeatures')
-  // const binaryTargets = generator.field<OptionsListField>('binaryTargets')
-
-  const previewFeatureOptions = Array.from(
-    new Set([...(previewFeatures?.options.values() || []), ...previewFeaturesList])
-  )
-
   return (
     <SettingsSectionPaper title="Generator">
       <Stack>
@@ -50,10 +43,11 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
           block={generator}
           name="output"
         />
-        <MultiSelect
+        <MultipleOptionsSelect
           label="Preview features"
-          value={previewFeatures ? [...previewFeatures.options.values()] : []}
-          data={previewFeatureOptions}
+          name="previewFeatures"
+          block={generator}
+          data={previewFeaturesList}
           searchable
           clearable
         />
@@ -66,10 +60,11 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
           searchable
           clearable
         />
-        <MultiSelect
+        <MultipleOptionsSelect
           label="Binary targets"
           description="Specify the OS on which the Prisma Client will run to ensure compatibility of the query engine. Default: native"
-          value={[]}
+          name="binaryTargets"
+          block={generator}
           data={binaryTargetsOptions as unknown as string[]}
           searchable
           clearable

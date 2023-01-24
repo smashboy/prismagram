@@ -1,5 +1,4 @@
 import { AttributeArgument as AstAttributeArgument, KeyValue } from '@mrleebo/prisma-ast'
-import { cleanupStr } from '../utils/string'
 import { AttributeFunction } from './AttributeFunction'
 
 export type AttributePrefix = '@' | '@@'

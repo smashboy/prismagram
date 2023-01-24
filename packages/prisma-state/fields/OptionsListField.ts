@@ -2,27 +2,41 @@ import { cleanupStr } from '../utils/string'
 import { Field } from './Field'
 
 export class OptionsListField extends Field {
-  readonly options = new Set<string>()
+  private readonly _options = new Set<string>()
 
   constructor(name: string) {
     super(name)
   }
 
-  addOption(option: string) {
-    this.options.add(option)
+  get values() {
+    return [...this._options.values()]
   }
 
-  removeOption(option: string) {
-    this.options.delete(option)
+  addValues(options: string[]) {
+    options.forEach((option) => this._options.add(option))
+  }
+
+  addValue(option: string) {
+    this._options.add(option)
+  }
+
+  removeValues(option: string) {
+    this._options.delete(option)
+  }
+
+  reset() {
+    this._options.clear()
   }
 
   _parse(args: string[]) {
     for (const option of args) {
-      this.options.add(cleanupStr(option))
+      this._options.add(cleanupStr(option))
     }
   }
 
   _toString() {
-    return `${this.name} = [${[...this.options].map((option) => `"${option}"`).join(', ')}]`
+    return `${this.name} = [${[...this._options.values()]
+      .map((option) => `"${option}"`)
+      .join(', ')}]`
   }
 }
