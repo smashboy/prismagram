@@ -5,8 +5,8 @@ import { ProjectsList } from './ProjectsList'
 import { $projectsArray } from '../stores/projects'
 import {
   $isOpenSelectProjectModal,
-  toggleCreateProjectModal,
-  toggleSelectProjectModal
+  toggleCreateProjectModalEvent,
+  toggleSelectProjectModalEvent
 } from '@renderer/stores/ui/modals'
 import { Message } from '@renderer/core/components'
 import { IconBriefcase } from '@tabler/icons'
@@ -19,10 +19,10 @@ const $store = combine({
 export const ProjectSelectorModal = () => {
   const { isOpen, projects } = useStore($store)
 
-  const handleCloseDialog = () => toggleSelectProjectModal(false)
+  const handleCloseDialog = () => toggleSelectProjectModalEvent(false)
   const handleOpenCreateProjectModal = () => {
     handleCloseDialog()
-    toggleCreateProjectModal(true)
+    toggleCreateProjectModalEvent(true)
   }
 
   return (

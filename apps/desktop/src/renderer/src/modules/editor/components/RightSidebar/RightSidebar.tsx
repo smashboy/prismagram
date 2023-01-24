@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react'
-import { $isOpenDetailsView, toggleModelNodeSidebar } from '@renderer/stores/ui/modals'
+import { $isOpenDetailsView, toggleModelNodeSidebarEvent } from '@renderer/stores/ui/modals'
 import { ActionIcon, Group, Paper, Stack, Transition } from '@mantine/core'
 import { IconX } from '@tabler/icons'
 import { combine } from 'effector'
@@ -17,7 +17,7 @@ export const RightSidebar = () => {
 
   const isMounted = isOpen ? isOpenDebounced : isOpen
 
-  const handleCloseSidebar = () => toggleModelNodeSidebar(false)
+  const handleCloseSidebar = () => toggleModelNodeSidebarEvent(false)
 
   return (
     <Transition mounted={isMounted} transition="slide-left" duration={400} timingFunction="ease">

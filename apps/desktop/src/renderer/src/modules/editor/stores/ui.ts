@@ -4,7 +4,7 @@ import { createGate } from 'effector-react'
 import { EditorView } from '../config'
 
 export const changeEditorViewEvent = createEvent<EditorView>()
-export const selectModelNodeEvent = createEvent<string>()
+export const selectModelEvent = createEvent<string>()
 export const resetSelectedModelEvent = createEvent()
 
 export const $selectedEditorView = createStore(EditorView.DIAGRAM).on(
@@ -13,7 +13,7 @@ export const $selectedEditorView = createStore(EditorView.DIAGRAM).on(
 )
 
 export const $selectedModelId = createStore<string | null>(null)
-  .on(selectModelNodeEvent, (_, id) => id)
+  .on(selectModelEvent, (_, id) => id)
   .reset(resetSelectedModelEvent)
 
 export const $isEditorEnabled = $selectedProjectId.map((id) => !!id)

@@ -1,5 +1,5 @@
 import { Box, Divider, Group, Modal } from '@mantine/core'
-import { $isOpenSettingsModal, toggleSettingsModal } from '@renderer/stores/ui/modals'
+import { $isOpenSettingsModal, toggleSettingsModalEvent } from '@renderer/stores/ui/modals'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { SettingsRoute } from '../constants'
@@ -23,7 +23,7 @@ const settingsRoutesComponents = new Map<SettingsRoute, React.FC>([
 export const SettingsModal = () => {
   const { isOpen, selectedSection } = useStore($store)
 
-  const handleCloseDialog = () => toggleSettingsModal(false)
+  const handleCloseDialog = () => toggleSettingsModalEvent(false)
 
   const SelectedSection = settingsRoutesComponents.get(selectedSection)
 

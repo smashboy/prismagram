@@ -44,6 +44,13 @@ export class PrismaSchemaState {
     return this.enums.get(id)!
   }
 
+  addModel(name: string) {
+    const model = new Model(name, this)
+    this.state.set(model.id, model)
+
+    return this.model(name)
+  }
+
   parseSchemaString(schema: string) {
     console.log('START')
     console.time()

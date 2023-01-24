@@ -53,7 +53,9 @@ export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField
   }
 
   _parse(model: AstModel) {
-    for (const prop of model.properties) {
+    const props = model?.properties || []
+
+    for (const prop of props) {
       if (prop.type === 'field') {
         const { fieldType, name } = prop
         const ScalarField = ScalarFieldMap[fieldType as unknown]

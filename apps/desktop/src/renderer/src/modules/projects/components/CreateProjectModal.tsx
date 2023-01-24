@@ -2,7 +2,10 @@ import { useState } from 'react'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { Button, Group, Modal, Stack } from '@mantine/core'
-import { $isOpenCreateProjectModal, toggleCreateProjectModal } from '@renderer/stores/ui/modals'
+import {
+  $isOpenCreateProjectModal,
+  toggleCreateProjectModalEvent
+} from '@renderer/stores/ui/modals'
 import { $isCreatingProject, createProjectEffect } from '../stores'
 import { ProjectFormBase, ProjectFormBaseValues } from './ProjectFormBase'
 
@@ -25,7 +28,7 @@ export const CreateProjectModal = () => {
   const { name, projectDirectory, schemaPath } = project
 
   const handleCloseDialog = () => {
-    toggleCreateProjectModal(false)
+    toggleCreateProjectModalEvent(false)
     setProject(initialFormValues)
   }
 

@@ -1,8 +1,8 @@
 import { ActionIcon, Group } from '@mantine/core'
 import {
-  toggleCreateProjectModal,
-  toggleSelectProjectModal,
-  toggleSettingsModal
+  toggleCreateProjectModalEvent,
+  toggleSelectProjectModalEvent,
+  toggleSettingsModalEvent
 } from '@renderer/stores/ui/modals'
 import { IconList, IconPlus, IconSettings } from '@tabler/icons'
 
@@ -10,9 +10,9 @@ const ICON_SIZE = 20
 const ICON_COLOR = 'black'
 
 export const SidebarFooter = () => {
-  const handleOpenSettingsModal = () => toggleSettingsModal(true)
-  const handleOpenCreateProjectModal = () => toggleCreateProjectModal(true)
-  const handleOpenSelectProjectModal = () => toggleSelectProjectModal(true)
+  const handleOpenSettingsModal = () => toggleSettingsModalEvent(true)
+  const handleOpenCreateProjectModal = () => toggleCreateProjectModalEvent(true)
+  const handleOpenSelectProjectModal = () => toggleSelectProjectModalEvent(true)
 
   return (
     <Group position="center">

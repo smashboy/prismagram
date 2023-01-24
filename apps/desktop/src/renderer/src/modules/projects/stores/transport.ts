@@ -1,12 +1,15 @@
 import { sample } from 'effector'
 import { closePrismaStudioEffect, loadEditorDataEffect } from '@renderer/modules/editor'
-import { $isOpenSelectProjectModal, toggleSelectProjectModal } from '@renderer/stores/ui/modals'
+import {
+  $isOpenSelectProjectModal,
+  toggleSelectProjectModalEvent
+} from '@renderer/stores/ui/modals'
 import { projectEvents, selectProjectEvent } from './projects'
 import { createProjectEffect, getProjectsListEffect, updateProjectEffect } from './effects'
 import { createPrismaCommandEffect } from '@renderer/modules/settings'
 
 sample({
-  clock: toggleSelectProjectModal,
+  clock: toggleSelectProjectModalEvent,
   filter: (status) => !!status,
   target: getProjectsListEffect
 })
@@ -28,7 +31,7 @@ sample({
   source: $isOpenSelectProjectModal,
   filter: (isOpen) => isOpen,
   fn: () => void 0,
-  target: toggleSelectProjectModal
+  target: toggleSelectProjectModalEvent
 })
 
 sample({

@@ -1,7 +1,7 @@
 import { useStore } from 'effector-react'
 import { Accordion, Badge, Group, Select, Stack, Text, TextInput } from '@mantine/core'
 import { ScalarFieldColor } from '@renderer/modules/editor/config'
-import { $modelsIds, $nodesColors } from '@renderer/modules/editor/stores'
+import { $modelIds, $nodesColors } from '@renderer/modules/editor/stores'
 import { combine } from 'effector'
 import { scalarOptionsArray } from '@shared/common/configs/prisma'
 import { ModelField } from 'prisma-state/fields'
@@ -12,7 +12,7 @@ interface ModelFieldSettingsProps {
 }
 
 const $store = combine({
-  modelsIds: $modelsIds,
+  modelsIds: $modelIds,
   nodesColors: $nodesColors
 })
 

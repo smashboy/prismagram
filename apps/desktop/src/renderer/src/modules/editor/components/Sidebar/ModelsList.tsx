@@ -1,13 +1,13 @@
-import { Button, ScrollArea, Stack, TextInput } from '@mantine/core'
-import {} from '@renderer/modules/projects'
-import { IconPlus, IconSearch } from '@tabler/icons'
+import { ScrollArea, Stack, TextInput } from '@mantine/core'
+import { IconSearch } from '@tabler/icons'
 import { useList, useStore } from 'effector-react'
-import { $isEditorEnabled, $modelsIds } from '../../stores'
+import { $isEditorEnabled, $modelIds } from '../../stores'
+import { CreateModelForm } from './CreateModelForm'
 import { ModelNavItem } from './ModelNavItem'
 
 export const ModelsList = () => {
   const isEditorEnabled = useStore($isEditorEnabled)
-  const models = useList($modelsIds, (id) => <ModelNavItem nodeId={id} />)
+  const models = useList($modelIds, (id) => <ModelNavItem modelId={id} />)
 
   return (
     <>
@@ -17,9 +17,7 @@ export const ModelsList = () => {
           placeholder="Search models..."
           disabled={!isEditorEnabled}
         />
-        <Button variant="subtle" rightIcon={<IconPlus size={16} />} disabled={!isEditorEnabled}>
-          New model
-        </Button>
+        <CreateModelForm />
       </Stack>
       <ScrollArea offsetScrollbars h="100%">
         <Stack h="100%" spacing={5}>

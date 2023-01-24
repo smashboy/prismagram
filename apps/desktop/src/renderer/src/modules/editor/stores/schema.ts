@@ -33,8 +33,8 @@ export const $schemaGenerators = $schemaState.map(({ state }) =>
   extractBlocksByType<Generator>('generator', state)
 )
 
-// TODO: move to common
-export const $schemaEnumIds = $schemaEnums.map((models) => [...models.keys()])
+export const $modelIds = $schemaModels.map((models) => [...models.keys()])
+export const $schemaEnumIds = $schemaEnums.map((enums) => [...enums.keys()])
 
-export const $schemaDatasourceIds = $schemaDatasources.map((models) => [...models.keys()])
-export const $schemaGeneratorIds = $schemaGenerators.map((models) => [...models.keys()])
+export const $schemaDatasourceIds = $schemaDatasources.map((datasources) => [...datasources.keys()])
+export const $schemaGeneratorIds = $schemaGenerators.map((generators) => [...generators.keys()])

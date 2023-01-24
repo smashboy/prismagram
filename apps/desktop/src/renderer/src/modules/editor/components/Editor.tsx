@@ -4,7 +4,10 @@ import { Message } from '@renderer/core/components'
 import { Button, Group } from '@mantine/core'
 import { DiagramEditor } from './DiagramEditor'
 import { $selectedProjectId } from '@renderer/modules/projects'
-import { toggleCreateProjectModal, toggleSelectProjectModal } from '@renderer/stores/ui/modals'
+import {
+  toggleCreateProjectModalEvent,
+  toggleSelectProjectModalEvent
+} from '@renderer/stores/ui/modals'
 import { combine } from 'effector'
 import { $selectedEditorView } from '../stores'
 import { EditorView } from '../config'
@@ -19,8 +22,8 @@ const $store = combine({
 export const Editor = () => {
   const { projectId, selectedView } = useStore($store)
 
-  const handleOpenCreateProjectModal = () => toggleCreateProjectModal(true)
-  const handleOpenSelectProjectModal = () => toggleSelectProjectModal(true)
+  const handleOpenCreateProjectModal = () => toggleCreateProjectModalEvent(true)
+  const handleOpenSelectProjectModal = () => toggleSelectProjectModalEvent(true)
 
   if (!projectId)
     return (
@@ -30,9 +33,7 @@ export const Editor = () => {
         description="Create new project or open existing one."
       >
         <Group>
-          <Button onClick={handleOpenCreateProjectModal} variant="filled">
-            Create new project
-          </Button>
+          <Button onClick={handleOpenCreateProjectModal}>Create new project</Button>
           <Button onClick={handleOpenSelectProjectModal} color="pink">
             Open project
           </Button>
