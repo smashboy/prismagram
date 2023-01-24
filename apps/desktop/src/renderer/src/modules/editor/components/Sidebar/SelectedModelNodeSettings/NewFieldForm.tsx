@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { Button, Group, Paper, Select, Stack, TextInput, Transition } from '@mantine/core'
 import { IconPlus } from '@tabler/icons'
@@ -26,11 +25,14 @@ export const NewFieldForm: React.FC<NewFieldFormProps> = ({ model }) => {
   const handleNameInput = (event: React.ChangeEvent<HTMLInputElement>) =>
     setName(event.target.value)
 
-  const selectOptions = [...scalarOptionsArray, ...modelIds, ...enumIds]
+  const selectOptions = [
+    ...scalarOptionsArray,
+    ...modelIds.filter((id) => id !== model.name),
+    ...enumIds
+  ]
 
   const handleCreateField = () => {
     model.addField(name, new IntField(name, model))
-    console.log('NEW FIELD', schemaState.state)
     setPrismaSchemaEvent(schemaState.toString())
     setIsOpen(false)
   }
@@ -63,7 +65,7 @@ export const NewFieldForm: React.FC<NewFieldFormProps> = ({ model }) => {
           >
             <Stack>
               <TextInput label="Name" value={name} onChange={handleNameInput} />
-              <Select label="Type" data={selectOptions} />
+              <Select label="Type" data={selectOptions} searchable />
               <Group position="right" sx={{ alignItems: 'flex-end' }}>
                 <Button color="gray" onClick={() => setIsOpen(false)}>
                   Cancel
