@@ -1,11 +1,12 @@
 import { useStore, useStoreMap } from 'effector-react'
-import { MultiSelect, Select, Stack } from '@mantine/core'
+import { MultiSelect, Stack } from '@mantine/core'
 import { SettingsSectionPaper } from '../../SettingsSectionPaper'
 import { EnvInput } from '../../EnvInput'
 import { $schemaGenerators } from '@renderer/modules/editor'
 import { $prismaSettings } from '@renderer/modules/settings/stores'
 import { prismaBinaryTargetsList, prismaEngineTypesList } from '@shared/common/configs/prisma'
-import { EnvField, OptionsListField, OptionField } from 'prisma-state/fields'
+import { OptionsListField } from 'prisma-state/fields'
+import { SelectOptionInput } from '../../SelectOptionInput'
 
 interface PrismaDatasourceSettingsProps {
   settingsId: string
@@ -25,9 +26,6 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
     fn: (settings, [id]) => settings.get(id)!
   })
 
-  const provider = generator.field<EnvField>('provider')
-  const output = generator.field<EnvField>('output')
-  const engineType = generator.field<OptionField>('engineType')
   const previewFeatures = generator.field<OptionsListField>('previewFeatures')
   // const binaryTargets = generator.field<OptionsListField>('binaryTargets')
 
@@ -42,13 +40,15 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
         <EnvInput
           label="Provider"
           description="Describes which generator  to use. This can point to a file that implements a generator or specify a built-in generator directly."
-          field={provider}
+          block={generator}
+          name="provider"
           required
         />
         <EnvInput
           label="Output"
           description="Determines the location for the generated client. Default: node_modules/.prisma/client"
-          field={output}
+          block={generator}
+          name="output"
         />
         <MultiSelect
           label="Preview features"
@@ -57,10 +57,11 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
           searchable
           clearable
         />
-        <Select
+        <SelectOptionInput
           label="Engine type"
           description="Defines the query engine type to download and use. Default: library"
-          value={engineType?.value ?? ''}
+          name="engineType"
+          block={generator}
           data={engineTypeOptions as unknown as string[]}
           searchable
           clearable

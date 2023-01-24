@@ -46,8 +46,9 @@ export class Block<F extends Field = Field, K = string> {
     return this.fields.get(fieldId)! as FF
   }
 
-  protected addField(fieldId: K, field: F) {
+  addField(fieldId: K, field: F) {
     this.fields.set(fieldId, field)
+    return this.field<F>(fieldId)!
   }
 
   removeField(fieldId: K) {
