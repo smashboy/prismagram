@@ -1,6 +1,9 @@
+// import { Handle, Position } from 'reactflow'
 import { Card, Table, Text } from '@mantine/core'
+import { toggleModelNodeSidebarEvent } from '@renderer/stores/ui/modals'
 import { ModelNodeData } from '@shared/common/models/Diagram'
-import { useDiagramEditorStore } from '../stores/context'
+import { selectModelEvent } from '../../stores'
+import { useDiagramEditorStore } from '../../stores/context'
 import { ModelNodeField } from './ModelNodeField'
 
 interface ModelNodeProps {
@@ -32,12 +35,20 @@ export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
 
   const { selectedModelNode, nodesColors } = useDiagramEditorStore()
 
+  const isSelected = selectedModelNode === name
+
+  const handleSelectModel = () => {
+    toggleModelNodeSidebarEvent(true)
+    selectModelEvent(name)
+  }
+
   return (
     <Card
       sx={(theme) => ({
         overflow: 'unset',
-        borderColor: selectedModelNode === name ? theme.primaryColor : void 0
+        borderColor: isSelected ? theme.primaryColor : void 0
       })}
+      onClick={handleSelectModel}
       withBorder
       shadow="lg"
     >
@@ -69,6 +80,8 @@ export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
           ))}
         </tbody>
       </Table>
+      {/* <Handle id={name} type="source" position={Position.Right} isConnectable />
+      <Handle id={name} type="target" position={Position.Left} isConnectable /> */}
       {/* <HandlesContainer position={Position.Right}>
         {sourceHandlers.map((relation) => (
           <Box

@@ -1,7 +1,7 @@
 import { Box } from '@mantine/core'
 import { ModelField, Handler } from '@shared/common/models/Diagram'
 import { Handle, Position } from 'reactflow'
-import { ScalarFieldColor } from '../config'
+import { ScalarFieldColor } from '../../config'
 
 interface ModelNodeFieldProps {
   fieldId: string

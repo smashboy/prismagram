@@ -1,14 +1,21 @@
 import { useEffect } from 'react'
+import { useStore } from 'effector-react'
 import { Group, Paper, Stack } from '@mantine/core'
 import { Editor, EditorToolbar, Sidebar } from './modules/editor'
 import { CreateProjectModal, ProjectSelectorModal } from './modules/projects'
 import { loadGlobalSettingsEffect, SettingsModal } from './modules/settings'
+import { $isOpenDetailsView } from './stores/ui/modals'
 import 'reactflow/dist/style.css'
 import './transports'
 
 import 'prisma-state/PrismaSchemaState'
+import { RightSidebar } from './modules/editor/components/RightSidebar'
 
 function App() {
+  const { isOpen, isOpenDebounced } = useStore($isOpenDetailsView)
+
+  const isRighSidebarOpen = isOpen ? isOpenDebounced : isOpen
+
   useEffect(() => {
     loadGlobalSettingsEffect()
   }, [])
@@ -20,8 +27,8 @@ function App() {
         <Stack w="100%" h="100%" sx={{ flex: 1 }}>
           <EditorToolbar />
           <Paper
-            // w={isRighSidebarOpen ? 'calc(100vw - 690px)' : 'calc(100vw - 330px)'}
-            w="100%"
+            w={isRighSidebarOpen ? 'calc(100vw - 690px)' : 'calc(100vw - 330px)'}
+            // w="100%"
             h="100%"
             shadow="md"
             sx={{ transition: 'width 400ms ease', overflow: 'hidden' }}
@@ -29,6 +36,7 @@ function App() {
             <Editor />
           </Paper>
         </Stack>
+        <RightSidebar />
         <SettingsModal />
         <CreateProjectModal />
         <ProjectSelectorModal />

@@ -2,7 +2,7 @@ import { ScrollArea, Stack, TextInput } from '@mantine/core'
 import { IconSearch } from '@tabler/icons'
 import { useList, useStore } from 'effector-react'
 import { $isEditorEnabled, $modelIds } from '../../stores'
-import { CreateModelForm } from './CreateModelForm'
+import { CreateModelForm } from '../forms/CreateModelForm'
 import { ModelNavItem } from './ModelNavItem'
 
 export const ModelsList = () => {

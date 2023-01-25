@@ -1,9 +1,10 @@
+import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { $isOpenDetailsView, toggleModelNodeSidebarEvent } from '@renderer/stores/ui/modals'
-import { ActionIcon, Group, Paper, Stack, Transition } from '@mantine/core'
+import { ActionIcon, Group, Paper, ScrollArea, Stack, Transition } from '@mantine/core'
 import { IconX } from '@tabler/icons'
-import { combine } from 'effector'
-import { $selectedModelId } from '../../stores'
+import { $selectedModelId, resetSelectedModelEvent } from '../stores'
+import { ModelSettings } from './forms/ModelSettings'
 
 const $store = combine({
   isOpenDetailsView: $isOpenDetailsView,
@@ -12,12 +13,16 @@ const $store = combine({
 
 export const RightSidebar = () => {
   const {
-    isOpenDetailsView: { isOpen, isOpenDebounced }
+    isOpenDetailsView: { isOpen, isOpenDebounced },
+    selectedModelNode
   } = useStore($store)
 
   const isMounted = isOpen ? isOpenDebounced : isOpen
 
-  const handleCloseSidebar = () => toggleModelNodeSidebarEvent(false)
+  const handleCloseSidebar = () => {
+    toggleModelNodeSidebarEvent(false)
+    resetSelectedModelEvent()
+  }
 
   return (
     <Transition mounted={isMounted} transition="slide-left" duration={400} timingFunction="ease">
@@ -26,6 +31,8 @@ export const RightSidebar = () => {
           w={350}
           h="100%"
           shadow="md"
+          py="xs"
+          pl="xs"
           sx={{
             backgroundColor: 'rgba(255, 255, 255, .5)',
             backdropFilter: 'blur(5px)',
@@ -34,15 +41,13 @@ export const RightSidebar = () => {
           }}
           style={styles}
         >
-          <Group p="xs" position="right">
+          <Group pr="xs" position="right">
             <ActionIcon onClick={handleCloseSidebar}>
               <IconX size={16} />
             </ActionIcon>
           </Group>
           <Stack h="100%" sx={{ overflowY: 'auto' }}>
-            {/* <ScrollArea offsetScrollbars>
-              {selectedModelNode && <SelectedModelNodeSettings />}
-            </ScrollArea> */}
+            <ScrollArea>{selectedModelNode && <ModelSettings />}</ScrollArea>
           </Stack>
         </Paper>
       )}

@@ -1,6 +1,6 @@
+import { useState } from 'react'
 import { Button, Transition } from '@mantine/core'
 import { IconPlus } from '@tabler/icons'
-import { useState } from 'react'
 
 export const NewFieldAttributeForm = () => {
   const [isOpen, setIsOpen] = useState(false)

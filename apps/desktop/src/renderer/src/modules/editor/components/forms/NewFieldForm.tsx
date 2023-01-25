@@ -5,7 +5,7 @@ import { IconPlus } from '@tabler/icons'
 import { $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor/stores'
 import { Model } from 'prisma-state/blocks'
 import { IntField } from 'prisma-state/fields'
-import { FieldForm } from './FieldForm/FieldForm'
+import { FieldForm } from './FieldForm'
 
 interface NewFieldFormProps {
   model: Model

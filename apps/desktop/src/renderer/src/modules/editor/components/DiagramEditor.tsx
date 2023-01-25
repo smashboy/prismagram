@@ -3,9 +3,9 @@ import ReactFlow, { applyNodeChanges, Background, OnNodesChange } from 'reactflo
 import { useStore } from 'effector-react'
 import { $edgesArray, $nodesArray, nodesChangeEvent } from '../stores'
 import { DiagramEditorContextProvider } from '../stores/context'
-import '../css/editor.css'
-import { ModelNode } from './ModelNode'
+import { ModelNode } from './nodes/ModelNode'
 import { NodeType } from '@shared/common/configs/diagrams'
+import '../css/editor.css'
 
 const $store = combine({
   nodes: $nodesArray,
