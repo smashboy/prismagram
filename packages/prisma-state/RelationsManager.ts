@@ -43,8 +43,8 @@ export class RelationsManager {
       const targetRelationField = new RelationField(sourceName, source.name, target)
       const targetRelationAttr = new RelationAttribute(targetRelationField)
 
-      targetRelationAttr.setReferences([idField.name])
       targetRelationAttr.setFields([targetTypeField.name])
+      targetRelationAttr.setReferences([idField.name])
 
       targetRelationField.attributes.set('relation', targetRelationAttr)
       targetTypeField.attributes.set('unique', new UniqueAttribute(targetTypeField))
