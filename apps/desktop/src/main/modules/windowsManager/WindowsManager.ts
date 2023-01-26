@@ -97,9 +97,8 @@ export default class WindowsManager extends WindowsManagerBase {
 
       if (schemaPath) {
         const schema = this.projectsManager.getProjectSchema(project)
-        const diagram = await this.projectsManager.getSchemaDiagram(schema!)
 
-        return { schema, diagram, schemaPath }
+        return { schema, schemaPath }
       }
     })
 

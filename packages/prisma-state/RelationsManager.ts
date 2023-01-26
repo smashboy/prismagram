@@ -52,5 +52,19 @@ export class RelationsManager {
       target.addField(sourceName, targetRelationField)
       target.addField(targetTypeFieldName, targetTypeField)
     }
+
+    if (type === RelationType.MANY_TO_MANY) {
+      const sourceNamePlural = `${sourceName}s`
+      const targetNamePlural = `${targetName}s`
+
+      const targetRelationField = new RelationField(sourceNamePlural, source.name, target)
+      targetRelationField.setModifier('list')
+
+      const sourceRelationField = new RelationField(targetNamePlural, target.name, source)
+      sourceRelationField.setModifier('list')
+
+      target.addField(sourceNamePlural, targetRelationField)
+      source.addField(targetNamePlural, sourceRelationField)
+    }
   }
 }
