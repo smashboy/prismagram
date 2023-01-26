@@ -1,5 +1,5 @@
-// import { Handle, Position } from 'reactflow'
-import { Card, Table, Text } from '@mantine/core'
+import { Handle, Position } from 'reactflow'
+import { Box, Card, Table, Text } from '@mantine/core'
 import { toggleModelNodeSidebarEvent } from '@renderer/stores/ui/modals'
 import { ModelNodeData } from '@shared/common/models/Diagram'
 import { selectModelEvent } from '../../stores'
@@ -36,6 +36,7 @@ export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
   const { selectedModelNode, nodesColors } = useDiagramEditorStore()
 
   const isSelected = selectedModelNode === name
+  const test = !!(selectedModelNode && selectedModelNode !== name)
 
   const handleSelectModel = () => {
     toggleModelNodeSidebarEvent(true)
@@ -46,7 +47,9 @@ export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
     <Card
       sx={(theme) => ({
         overflow: 'unset',
-        borderColor: isSelected ? theme.primaryColor : void 0
+        borderColor: selectedModelNode ? theme.primaryColor : void 0,
+        position: 'relative',
+        borderStyle: test ? 'dashed' : 'solid'
       })}
       onClick={handleSelectModel}
       withBorder
@@ -80,8 +83,38 @@ export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
           ))}
         </tbody>
       </Table>
-      {/* <Handle id={name} type="source" position={Position.Right} isConnectable />
-      <Handle id={name} type="target" position={Position.Left} isConnectable /> */}
+      <Handle
+        id={name}
+        type="source"
+        position={Position.Bottom}
+        isConnectable={isSelected}
+        style={{
+          width: 8,
+          height: 8,
+          ...(!isSelected && { opacity: 0, pointerEvents: 'none' })
+        }}
+      />
+
+      <Handle
+        id={name}
+        type="target"
+        position={Position.Left}
+        isConnectable={test}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          bottom: 0,
+          width: '100%',
+          height: '100%',
+          transform: 'translate(0%, 0%)',
+          borderRadius: 0,
+          opacity: 0,
+          ...(!test && { pointerEvents: 'none' })
+          // opacity: 0
+        }}
+      />
+
       {/* <HandlesContainer position={Position.Right}>
         {sourceHandlers.map((relation) => (
           <Box

@@ -1,4 +1,13 @@
-import { ActionIcon, Center, Flex, Group, Paper, SegmentedControl, Transition } from '@mantine/core'
+import {
+  ActionIcon,
+  Center,
+  Flex,
+  Group,
+  Menu,
+  Paper,
+  SegmentedControl,
+  Transition
+} from '@mantine/core'
 import { $selectedProject } from '@renderer/modules/projects'
 import { DiagramLayout } from '@shared/common/configs/diagrams'
 import {
@@ -7,6 +16,7 @@ import {
   IconBoxMargin,
   IconCode,
   IconDatabase,
+  IconHierarchy,
   IconPlayerPlay,
   IconSchema,
   IconZoomInArea
@@ -18,6 +28,7 @@ import {
   $diagram,
   $isEditorEnabled,
   $selectedEditorView,
+  $selectedRelationType,
   changeEditorViewEvent,
   layoutDiagramEffect
 } from '../stores'
@@ -29,7 +40,8 @@ const $store = combine({
   selectedView: $selectedEditorView,
   diagram: $diagram,
   isEditorEnabled: $isEditorEnabled,
-  project: $selectedProject
+  project: $selectedProject,
+  selectedRelationType: $selectedRelationType
 })
 
 const OptionsContainer: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -39,7 +51,7 @@ const OptionsContainer: React.FC<{ children: React.ReactNode }> = ({ children })
 )
 
 export const EditorToolbar = () => {
-  const { selectedView, diagram, isEditorEnabled, project } = useStore($store)
+  const { selectedView, diagram, isEditorEnabled, project, selectedRelationType } = useStore($store)
 
   const editorViewOptions = [
     {
@@ -92,11 +104,23 @@ export const EditorToolbar = () => {
               </ActionIcon>
             </OptionsContainer>
             <OptionsContainer>
+              <Menu>
+                <Menu.Target>
+                  <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
+                    {selectedRelationType}
+                  </ActionIcon>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item>One-to-one</Menu.Item>
+                  <Menu.Item>One-to-many</Menu.Item>
+                  <Menu.Item>Many-to-many</Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            </OptionsContainer>
+            <OptionsContainer>
               <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
                 <IconZoomInArea size={ICON_SIZE} />
               </ActionIcon>
-            </OptionsContainer>
-            <OptionsContainer>
               <ActionIcon
                 onClick={handleDiagramLayout(DiagramLayout.HORIZONTAL)}
                 size={ICON_BUTTON_SIZE}

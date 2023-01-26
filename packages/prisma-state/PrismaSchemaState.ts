@@ -1,5 +1,6 @@
 import { getSchema } from '@mrleebo/prisma-ast'
 import { Enum, Datasource, Generator, Model } from './blocks'
+import { RelationsManager } from './RelationsManager'
 import { testSchema } from './testSchema'
 import { extractBlockIdsByType, extractBlocksByType } from './utils/block'
 
@@ -11,6 +12,7 @@ export type PrismaSchemaStateData = Map<string, PrismaSchemaStateItem>
 
 export class PrismaSchemaState {
   readonly state: PrismaSchemaStateData = new Map()
+  readonly relations = new RelationsManager(this.state)
 
   get datasource() {
     return [...this.state.values()].find((block) => block.type === 'datasource')!
@@ -51,7 +53,7 @@ export class PrismaSchemaState {
     return this.model(name)
   }
 
-  parseSchemaString(schema: string) {
+  fromString(schema: string) {
     console.log('START')
     console.time()
 
@@ -106,7 +108,7 @@ export class PrismaSchemaState {
 
 const schema = new PrismaSchemaState()
 
-schema.parseSchemaString(testSchema)
+schema.fromString(testSchema)
 
 // const userModel = schema.model('User')
 

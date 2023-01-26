@@ -13,6 +13,7 @@ import { $selectedEditorView } from '../stores'
 import { EditorView } from '../config'
 import { SchemaEditor } from './SchemaEditor'
 import { PrismaStudioView } from './PrismaStudioView'
+import { useEditorHotkeys } from '../hooks/useEditorHotkeys'
 
 const $store = combine({
   projectId: $selectedProjectId,
@@ -21,6 +22,8 @@ const $store = combine({
 
 export const Editor = () => {
   const { projectId, selectedView } = useStore($store)
+
+  useEditorHotkeys()
 
   const handleOpenCreateProjectModal = () => toggleCreateProjectModalEvent(true)
   const handleOpenSelectProjectModal = () => toggleSelectProjectModalEvent(true)

@@ -1,4 +1,4 @@
-import { PrismaCommand, PrismaDatasource, PrismaGenerator } from './Prisma'
+import { PrismaCommand } from './Prisma'
 
 export interface Project {
   id: string
@@ -6,11 +6,6 @@ export interface Project {
   projectDirectory: string
   prismaStudioPort?: number
   commands?: Record<string, PrismaCommand>
-}
-
-export interface ProjectPrismaSettings {
-  datasources: Record<string, PrismaDatasource>
-  generators: Record<string, PrismaGenerator>
 }
 
 export interface GlobalSettings {

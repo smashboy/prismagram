@@ -10,7 +10,7 @@ export const $schema = createStore<string>('').on(setPrismaSchemaEvent, (_, sche
 
 export const $schemaState = $schema.map((schema) => {
   const state = new PrismaSchemaState()
-  state.parseSchemaString(schema)
+  state.fromString(schema)
 
   console.log(state)
 
