@@ -1,24 +1,18 @@
 import { sample } from 'effector'
 import { throttle } from 'patronum'
-import { loadDiagramEvent } from './diagram'
+import { layoutDiagramEvent, prismaState2DiagramEvent } from './diagram'
 import {
   launchPrismaStudioEffect,
   layoutDiagramEffect,
   loadEditorDataEffect,
   saveSchemaEffect
 } from './effects'
-import { $schema, setPrismaSchemaEvent } from './schema'
+import { $schema, $schemaState, setPrismaSchemaEvent } from './schema'
 import { PrismaStudioGate } from './ui'
 
 sample({
-  source: loadEditorDataEffect.doneData,
-  fn: (data) => data.diagram,
-  target: loadDiagramEvent
-})
-
-sample({
   source: layoutDiagramEffect.doneData,
-  target: loadDiagramEvent
+  target: layoutDiagramEvent
 })
 
 sample({
@@ -37,6 +31,11 @@ sample({
   source: saveSchemaEffect.doneData,
   filter: (schema) => !!schema,
   target: setPrismaSchemaEvent
+})
+
+sample({
+  source: $schemaState,
+  target: prismaState2DiagramEvent
 })
 
 throttle({

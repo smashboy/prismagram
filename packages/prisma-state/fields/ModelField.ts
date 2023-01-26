@@ -33,7 +33,7 @@ export class ModelField<A = FieldAttribute> extends Field {
   modifier: FieldModifier = null
   readonly attributes = new Map<string, A>()
 
-  protected readonly model: Model
+  readonly model: Model
 
   constructor(name: string, type: ModelFieldType, model: Model) {
     super(name)

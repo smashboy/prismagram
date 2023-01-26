@@ -1,13 +1,19 @@
 import { createEvent, createStore } from 'effector'
 import { Diagram, Node } from '@shared/common/models/Diagram'
 import { RelationType, RelationTypeOption } from 'prisma-state/constants'
+import { prismaSchemaState2Diagram } from './utils'
+import { PrismaSchemaState } from 'prisma-state'
 
-export const loadDiagramEvent = createEvent<Diagram>()
+export const layoutDiagramEvent = createEvent<Diagram>()
+
+export const prismaState2DiagramEvent = createEvent<PrismaSchemaState>()
+
 export const nodesChangeEvent = createEvent<Node[]>()
 export const setSelectedRelationTypeEvent = createEvent<RelationTypeOption>()
 
 export const $diagram = createStore<Diagram | null>(null)
-  .on(loadDiagramEvent, (_, diagram) => diagram)
+  .on(prismaState2DiagramEvent, (_, state) => prismaSchemaState2Diagram(state))
+  .on(layoutDiagramEvent, (_, diagram) => diagram)
   .on(nodesChangeEvent, (diagram, nodes) => ({
     ...diagram!,
     nodes: nodes.reduce((acc, node) => ({ ...acc, [node.id]: node }), {})
