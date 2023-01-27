@@ -24,13 +24,13 @@
     "@emotion/react": "^11.10.5",
     "@mantine/core": "^5.9.2",
     "@mantine/hooks": "^5.9.2",
+    "@mantine/spotlight": "^5.10.2",
     "@mantine/tiptap": "^5.9.2",
     "@monaco-editor/react": "^4.4.6",
     "@prisma/internals": "^4.7.1",
     "@prisma/prisma-fmt-wasm": "^4.8.0-44.574e45f3fd7c55b8ffcea000812329a79e7f2a22",
     "@prisma/text-editors": "^0.0.22",
     "@shared/common": "*",
-    "prisma-state": "*",
     "@tabler/icons": "^1.115.0",
     "@tiptap/extension-code-block-lowlight": "^2.0.0-beta.207",
     "@tiptap/extension-link": "^2.0.0-beta.207",
@@ -46,6 +46,7 @@
     "lowlight": "^2.8.0",
     "monaco-editor": "^0.34.1",
     "patronum": "^1.12.3",
+    "prisma-state": "*",
     "reactflow": "^11.3.2"
   },
   "devDependencies": {

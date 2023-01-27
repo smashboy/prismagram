@@ -581,6 +581,13 @@
   resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-5.9.2.tgz#803df4d4f0b77bda14141b96c0a910f3b4cec52a"
   integrity sha512-XOG0rpfVYpe9eQtYiWtAHpDdAsC7TymcR+yHvS0kgoCOEbgBQLaQOcD4qn0pWADx9dxQXD87/3/1KKn4L3OGrg==
 
+"@mantine/spotlight@^5.10.2":
+  version "5.10.2"
+  resolved "https://registry.yarnpkg.com/@mantine/spotlight/-/spotlight-5.10.2.tgz#158319b5d8beb0dac5523eb68c5e9b7dde626722"
+  integrity sha512-x0vtYXrRWyn5oesbjeyRheMz8iOJoCc/uXidljEbmzCty/ESju4DSfRtOMpHwoWl76ZHC0KBMVd5QdFg+6zmiQ==
+  dependencies:
+    "@mantine/utils" "5.10.2"
+
 "@mantine/styles@5.9.2":
   version "5.9.2"
   resolved "https://registry.yarnpkg.com/@mantine/styles/-/styles-5.9.2.tgz#226dfdac1d40c31084f28eaf9a469498643a3f79"
@@ -595,6 +602,11 @@
   integrity sha512-d82RN8hX8fQKp2M5Z390TNv6ho2tQ2xo30+rmk8PWEjdpFYzgCyu0Zh6jmYbmwIMDBSBe9zwBjaXPoqkeN9XBQ==
   dependencies:
     "@mantine/utils" "5.9.2"
+
+"@mantine/utils@5.10.2":
+  version "5.10.2"
+  resolved "https://registry.yarnpkg.com/@mantine/utils/-/utils-5.10.2.tgz#207a4e8434b521305bb63563244765db1022b005"
+  integrity sha512-mpXTPG9X2nPfHGg3ejcWkSlYVxuiTx6RxWbbFHEk/U2fSikEAQdMNdVPaKI2c0/S2jksqJXlODZJv2Qt9HAFMQ==
 
 "@mantine/utils@5.9.2":
   version "5.9.2"

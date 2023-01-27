@@ -1,8 +1,22 @@
+import { toggleSpotlight } from '@mantine/spotlight'
 import {
   toggleCreateProjectModalEvent,
   toggleSelectProjectModalEvent,
   toggleSettingsModalEvent
 } from '@renderer/stores/ui/modals'
+import {
+  IconDeviceFloppy,
+  IconList,
+  IconPlus,
+  IconPower,
+  IconSettings,
+  IconArrowBackUp,
+  IconArrowForwardUp,
+  IconSearch,
+  IconDatabase,
+  IconCode,
+  IconSchema
+} from '@tabler/icons'
 import { RelationType } from 'prisma-state/constants'
 import { changeEditorViewEvent, setSelectedRelationTypeEvent } from '../editor'
 import { EditorView } from '../editor/config'
@@ -12,26 +26,36 @@ export const generalShortcuts: Shortcut[] = [
   {
     keys: ['K'],
     isCtrlOrCmd: true,
-    name: 'Open spotlight',
-    onExecute: () => {}
-  },
-  {
-    keys: [','],
-    isCtrlOrCmd: true,
-    name: 'Open settings',
-    onExecute: () => toggleSettingsModalEvent(true)
+    name: 'Toggle spotlight',
+    onExecute: () => toggleSpotlight()
   },
   {
     keys: ['Shift', 'N'],
     isCtrlOrCmd: true,
     name: 'New project',
-    onExecute: () => toggleCreateProjectModalEvent(true)
+    onExecute: () => toggleCreateProjectModalEvent(true),
+    icon: IconPlus
   },
   {
     keys: ['Shift', 'P'],
     isCtrlOrCmd: true,
     name: 'Open project',
-    onExecute: () => toggleSelectProjectModalEvent(true)
+    onExecute: () => toggleSelectProjectModalEvent(true),
+    icon: IconList
+  },
+  {
+    keys: [','],
+    isCtrlOrCmd: true,
+    name: 'Open settings',
+    onExecute: () => toggleSettingsModalEvent(true),
+    icon: IconSettings
+  },
+  {
+    keys: ['Shift', 'X'],
+    isCtrlOrCmd: true,
+    name: 'Close application',
+    onExecute: () => {},
+    icon: IconPower
   }
 ]
 
@@ -41,44 +65,51 @@ export const editorShortcuts: Shortcut[] = [
     isCtrlOrCmd: true,
     name: 'Save changes',
     description: 'Works only when auto saving is disabled',
-    onExecute: () => {}
+    onExecute: () => {},
+    icon: IconDeviceFloppy
   },
   {
     keys: ['Z'],
     isCtrlOrCmd: true,
     name: 'Undo',
-    onExecute: () => {}
+    onExecute: () => {},
+    icon: IconArrowBackUp
   },
   {
     keys: ['Y'],
     isCtrlOrCmd: true,
     name: 'Redo',
-    onExecute: () => {}
+    onExecute: () => {},
+    icon: IconArrowForwardUp
   },
   {
     keys: ['F'],
     isCtrlOrCmd: true,
     name: 'Find',
     description: 'Search for models and fields in your schema',
-    onExecute: () => {}
+    onExecute: () => {},
+    icon: IconSearch
   },
   {
     keys: ['D'],
     isCtrlOrCmd: true,
     name: 'Open diagram editor',
-    onExecute: () => changeEditorViewEvent(EditorView.DIAGRAM)
+    onExecute: () => changeEditorViewEvent(EditorView.DIAGRAM),
+    icon: IconSchema
   },
   {
     keys: ['T'],
     isCtrlOrCmd: true,
     name: 'Open schema editor',
-    onExecute: () => changeEditorViewEvent(EditorView.SCHEMA)
+    onExecute: () => changeEditorViewEvent(EditorView.SCHEMA),
+    icon: IconCode
   },
   {
     keys: ['P'],
     isCtrlOrCmd: true,
     name: 'Open prisma studio',
-    onExecute: () => changeEditorViewEvent(EditorView.PRISMA_STUDIO)
+    onExecute: () => changeEditorViewEvent(EditorView.PRISMA_STUDIO),
+    icon: IconDatabase
   }
 ]
 

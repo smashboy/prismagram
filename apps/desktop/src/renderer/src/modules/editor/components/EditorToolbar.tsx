@@ -16,7 +16,6 @@ import {
   IconBoxMargin,
   IconCode,
   IconDatabase,
-  IconHierarchy,
   IconPlayerPlay,
   IconSchema,
   IconZoomInArea
