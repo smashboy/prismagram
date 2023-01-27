@@ -11,9 +11,13 @@ export const ShortcutItem: React.FC<ShortcutItemProps> = ({ shortcut }) => {
   return (
     <Card sx={{ userSelect: 'none' }} withBorder>
       <Group position="apart">
-        <Stack>
+        <Stack spacing={0}>
           <Text>{name}</Text>
-          {description && <Text>{description}</Text>}
+          {description && (
+            <Text color="dimmed" size="sm">
+              {description}
+            </Text>
+          )}
         </Stack>
         <Group>
           {isCtrlOrCmd && <Kbd>Ctrl</Kbd>} +{' '}

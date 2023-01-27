@@ -13,7 +13,7 @@ import { $selectedEditorView } from '../stores'
 import { EditorView } from '../config'
 import { SchemaEditor } from './SchemaEditor'
 import { PrismaStudioView } from './PrismaStudioView'
-import { useEditorHotkeys } from '../hooks/useEditorHotkeys'
+import { useEditorShortcuts } from '@renderer/modules/spotlight'
 
 const $store = combine({
   projectId: $selectedProjectId,
@@ -23,7 +23,7 @@ const $store = combine({
 export const Editor = () => {
   const { projectId, selectedView } = useStore($store)
 
-  useEditorHotkeys()
+  useEditorShortcuts()
 
   const handleOpenCreateProjectModal = () => toggleCreateProjectModalEvent(true)
   const handleOpenSelectProjectModal = () => toggleSelectProjectModalEvent(true)

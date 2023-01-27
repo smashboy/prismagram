@@ -1,6 +1,5 @@
-import { Stack, Text } from '@mantine/core'
+import { Stack } from '@mantine/core'
 import { Shortcut } from '@renderer/modules/spotlight'
-import { SettingsSection } from '../SettingsSection'
 import { SettingsSectionPaper } from '../SettingsSectionPaper'
 import { ShortcutItem } from './ShortcutItem'
 

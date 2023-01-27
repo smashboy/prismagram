@@ -10,9 +10,12 @@ import './transports'
 
 import 'prisma-state/PrismaSchemaState'
 import { RightSidebar } from './modules/editor/components/RightSidebar'
+import { useGeneralShortcuts } from './modules/spotlight'
 
 function App() {
   const { isOpen, isOpenDebounced } = useStore($isOpenDetailsView)
+
+  useGeneralShortcuts()
 
   const isRighSidebarOpen = isOpen ? isOpenDebounced : isOpen
 

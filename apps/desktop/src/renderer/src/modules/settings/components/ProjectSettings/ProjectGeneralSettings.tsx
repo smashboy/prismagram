@@ -10,7 +10,6 @@ import {
   updateProjectEffect
 } from '@renderer/modules/projects'
 import { DEFAULT_PRISMA_STUDIO_PORT } from '@shared/common/configs/prisma'
-import { SettingsSection } from '../SettingsSection'
 import { SettingsSectionPaper } from '../SettingsSectionPaper'
 import { $schemaPath } from '../../stores'
 
@@ -69,28 +68,26 @@ export const ProjectGeneralSettings = () => {
   const disableSaveButton = !settings.name || !settings.schemaPath
 
   return (
-    <SettingsSection>
-      <SettingsSectionPaper title="Project settings">
-        <Stack pos="relative">
-          <LoadingOverlay visible={isLoading} />
-          <ProjectFormBase values={settings} onChange={handleBaseFormChange} />
-          <TextInput
-            label="Prisma studio port"
-            description="What port should prisma studio run on. The default port is 5555."
-            type="number"
-            value={settings.prismaStudioPort}
-            onChange={handlePortInput}
-            onBlur={handlePortInputBlur}
-            min={0}
-            step={1}
-          />
-          <Group position="right">
-            <Button variant="filled" onClick={handleSaveProject} disabled={disableSaveButton}>
-              Save
-            </Button>
-          </Group>
-        </Stack>
-      </SettingsSectionPaper>
-    </SettingsSection>
+    <SettingsSectionPaper title="Project settings">
+      <Stack pos="relative">
+        <LoadingOverlay visible={isLoading} />
+        <ProjectFormBase values={settings} onChange={handleBaseFormChange} />
+        <TextInput
+          label="Prisma studio port"
+          description="What port should prisma studio run on. The default port is 5555."
+          type="number"
+          value={settings.prismaStudioPort}
+          onChange={handlePortInput}
+          onBlur={handlePortInputBlur}
+          min={0}
+          step={1}
+        />
+        <Group position="right">
+          <Button variant="filled" onClick={handleSaveProject} disabled={disableSaveButton}>
+            Save
+          </Button>
+        </Group>
+      </Stack>
+    </SettingsSectionPaper>
   )
 }

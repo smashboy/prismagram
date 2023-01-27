@@ -1,7 +1,8 @@
-import { ScrollArea, Stack } from '@mantine/core'
+import { Stack } from '@mantine/core'
 import { useStore } from 'effector-react'
 import { ProjectSettingsRoute } from '../../constants'
 import { $selectedProjectSettingsSection } from '../../stores'
+import { SettingsSection } from '../SettingsSection'
 import { PrismaCommandsProjectSettings } from './PrismaCommandsProjectSettings'
 import { PrismaSchemaProjectSettings } from './PrismaSchemaProjectSettings'
 import { ProjectGeneralSettings } from './ProjectGeneralSettings'
@@ -21,7 +22,7 @@ export const ProjectSettings = () => {
   return (
     <Stack h="100%" sx={{ overflow: 'hidden' }}>
       <ProjectSettingsNavigation />
-      <ScrollArea h="100%">{SelectedSection && <SelectedSection />}</ScrollArea>
+      <SettingsSection>{SelectedSection && <SelectedSection />}</SettingsSection>
     </Stack>
   )
 }

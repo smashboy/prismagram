@@ -1,11 +1,10 @@
+import { useStore } from 'effector-react'
 import { Button, Group, Transition } from '@mantine/core'
 import {
   $isOpenCreateNewCommand,
   toggleOpenCreateNewCommandEvent
 } from '@renderer/modules/settings/stores'
 import { IconPlus } from '@tabler/icons'
-import { useStore } from 'effector-react'
-import { SettingsSection } from '../../SettingsSection'
 import { NewPrismaCommandForm } from './NewPrismaCommandForm'
 import { PrismaCommandsList } from './PrismaCommandsList'
 
@@ -15,7 +14,7 @@ export const PrismaCommandsProjectSettings = () => {
   const handleOpenNewCommandForm = () => toggleOpenCreateNewCommandEvent()
 
   return (
-    <SettingsSection>
+    <>
       <Transition mounted={!isOpenNewCommandForm} transition="fade">
         {(style) => (
           <Group style={style}>
@@ -27,6 +26,6 @@ export const PrismaCommandsProjectSettings = () => {
       </Transition>
       <NewPrismaCommandForm />
       <PrismaCommandsList />
-    </SettingsSection>
+    </>
   )
 }

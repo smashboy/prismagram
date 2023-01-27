@@ -1,4 +1,4 @@
-import { ScrollArea, Stack } from '@mantine/core'
+import { Stack } from '@mantine/core'
 import {
   diagramEditorShortcuts,
   editorShortcuts,
@@ -9,14 +9,12 @@ import { ShortcutsList } from './ShortcutsList'
 
 export const ShortcutsSettings = () => {
   return (
-    <ScrollArea h="100%">
-      <SettingsSection>
-        <Stack pr="md">
-          <ShortcutsList category="General" shortcuts={generalShortcuts} />
-          <ShortcutsList category="Editor" shortcuts={editorShortcuts} />
-          <ShortcutsList category="Diagram editor" shortcuts={diagramEditorShortcuts} />
-        </Stack>
-      </SettingsSection>
-    </ScrollArea>
+    <SettingsSection>
+      <Stack pr="md">
+        <ShortcutsList category="General" shortcuts={generalShortcuts} />
+        <ShortcutsList category="Editor" shortcuts={editorShortcuts} />
+        <ShortcutsList category="Diagram editor" shortcuts={diagramEditorShortcuts} />
+      </Stack>
+    </SettingsSection>
   )
 }

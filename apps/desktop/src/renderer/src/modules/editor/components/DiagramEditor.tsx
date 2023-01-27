@@ -20,6 +20,7 @@ import { DiagramEditorContextProvider } from '../stores/context'
 import { ModelNode } from './nodes/ModelNode'
 import { NodeType } from '@shared/common/configs/diagrams'
 import '../css/editor.css'
+import { useDiagramEditorShortcuts } from '@renderer/modules/spotlight'
 
 const $store = combine({
   nodes: $nodesArray,
@@ -34,6 +35,8 @@ const nodeTypes = {
 
 export const DiagramEditor = () => {
   const { nodes, edges, state, selectedRelationType } = useStore($store)
+
+  useDiagramEditorShortcuts()
 
   const onNodesChange: OnNodesChange = (changes) =>
     nodesChangeEvent(applyNodeChanges(changes, nodes))

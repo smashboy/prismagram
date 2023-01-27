@@ -32,6 +32,7 @@ export const NewFieldForm: React.FC<NewFieldFormProps> = ({ model }) => {
         {(style) => (
           <Button
             variant="subtle"
+            color="dark"
             style={style}
             onClick={() => setIsOpen(true)}
             rightIcon={<IconPlus size={16} />}

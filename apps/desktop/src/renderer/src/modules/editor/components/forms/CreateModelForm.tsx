@@ -35,6 +35,7 @@ export const CreateModelForm = () => {
         {(style) => (
           <Button
             variant="subtle"
+            color="dark"
             rightIcon={<IconPlus size={16} />}
             disabled={!isEditorEnabled}
             style={style}

@@ -1,5 +1,11 @@
+import {
+  toggleCreateProjectModalEvent,
+  toggleSelectProjectModalEvent,
+  toggleSettingsModalEvent
+} from '@renderer/stores/ui/modals'
 import { RelationType } from 'prisma-state/constants'
-import { setSelectedRelationTypeEvent } from '../editor'
+import { changeEditorViewEvent, setSelectedRelationTypeEvent } from '../editor'
+import { EditorView } from '../editor/config'
 import { Shortcut } from './types'
 
 export const generalShortcuts: Shortcut[] = [
@@ -13,19 +19,19 @@ export const generalShortcuts: Shortcut[] = [
     keys: [','],
     isCtrlOrCmd: true,
     name: 'Open settings',
-    onExecute: () => {}
+    onExecute: () => toggleSettingsModalEvent(true)
   },
   {
     keys: ['Shift', 'N'],
     isCtrlOrCmd: true,
     name: 'New project',
-    onExecute: () => {}
+    onExecute: () => toggleCreateProjectModalEvent(true)
   },
   {
     keys: ['Shift', 'P'],
     isCtrlOrCmd: true,
     name: 'Open project',
-    onExecute: () => {}
+    onExecute: () => toggleSelectProjectModalEvent(true)
   }
 ]
 
@@ -34,6 +40,7 @@ export const editorShortcuts: Shortcut[] = [
     keys: ['S'],
     isCtrlOrCmd: true,
     name: 'Save changes',
+    description: 'Works only when auto saving is disabled',
     onExecute: () => {}
   },
   {
@@ -52,25 +59,26 @@ export const editorShortcuts: Shortcut[] = [
     keys: ['F'],
     isCtrlOrCmd: true,
     name: 'Find',
+    description: 'Search for models and fields in your schema',
     onExecute: () => {}
   },
   {
     keys: ['D'],
     isCtrlOrCmd: true,
     name: 'Open diagram editor',
-    onExecute: () => {}
+    onExecute: () => changeEditorViewEvent(EditorView.DIAGRAM)
   },
   {
     keys: ['T'],
     isCtrlOrCmd: true,
     name: 'Open schema editor',
-    onExecute: () => {}
+    onExecute: () => changeEditorViewEvent(EditorView.SCHEMA)
   },
   {
     keys: ['P'],
     isCtrlOrCmd: true,
     name: 'Open prisma studio',
-    onExecute: () => {}
+    onExecute: () => changeEditorViewEvent(EditorView.PRISMA_STUDIO)
   }
 ]
 
