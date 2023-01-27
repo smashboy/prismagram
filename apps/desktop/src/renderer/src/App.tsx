@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { useStore } from 'effector-react'
-
 import { Group, Paper, Stack } from '@mantine/core'
 import { Editor, EditorToolbar, Sidebar } from './modules/editor'
 import { CreateProjectModal, ProjectSelectorModal } from './modules/projects'
