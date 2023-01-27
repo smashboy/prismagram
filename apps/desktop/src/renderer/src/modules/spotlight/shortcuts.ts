@@ -125,19 +125,19 @@ export const diagramEditorShortcuts: Shortcut[] = [
   {
     keys: ['O'],
     isCtrlOrCmd: true,
-    name: 'Select one-to-one relation',
+    name: 'One-to-one relation',
     onExecute: () => setSelectedRelationTypeEvent(RelationType.ONE_TO_ONE)
   },
   {
     keys: ['M'],
     isCtrlOrCmd: true,
-    name: 'Select many-to-many relation',
+    name: 'Many-to-many relation',
     onExecute: () => setSelectedRelationTypeEvent(RelationType.MANY_TO_MANY)
   },
   {
     keys: ['N'],
     isCtrlOrCmd: true,
-    name: 'Select one-to-many relation',
+    name: 'One-to-many relation',
     onExecute: () => setSelectedRelationTypeEvent(RelationType.ONE_TO_MANY)
   }
 ]
