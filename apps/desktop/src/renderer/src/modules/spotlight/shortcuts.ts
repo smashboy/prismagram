@@ -1,4 +1,4 @@
-import { toggleSpotlight } from '@mantine/spotlight'
+import { openSpotlight } from '@mantine/spotlight'
 import {
   toggleCreateProjectModalEvent,
   toggleSelectProjectModalEvent,
@@ -28,7 +28,7 @@ export const generalShortcuts: Shortcut[] = [
     keys: ['K'],
     isCtrlOrCmd: true,
     name: 'Toggle spotlight',
-    onExecute: () => toggleSpotlight()
+    onExecute: () => openSpotlight()
   },
   {
     keys: ['Shift', 'N'],
