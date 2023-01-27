@@ -7,6 +7,7 @@ import { $selectedSettingsSection } from '../stores'
 import { GeneralSettings } from './GeneralSettings'
 import { ProjectSettings } from './ProjectSettings'
 import { SettingsSidebar } from './SettingsSidebar'
+import { ShortcutsSettings } from './ShortcutsSettings/ShortcutsSettings'
 
 const $store = combine({
   isOpen: $isOpenSettingsModal,
@@ -15,7 +16,7 @@ const $store = combine({
 
 const settingsRoutesComponents = new Map<SettingsRoute, React.FC>([
   [SettingsRoute.GENERAL, GeneralSettings],
-  // [SettingsRoute.SHORTCUTS, null],
+  [SettingsRoute.SHORTCUTS, ShortcutsSettings],
   [SettingsRoute.PROJECT, ProjectSettings]
   // [SettingsRoute.ABOUT, null]
 ])
