@@ -15,7 +15,8 @@ import {
   IconSearch,
   IconDatabase,
   IconCode,
-  IconSchema
+  IconSchema,
+  IconBoxMargin
 } from '@tabler/icons'
 import { RelationType } from 'prisma-state/constants'
 import { changeEditorViewEvent, setSelectedRelationTypeEvent } from '../editor'
@@ -114,6 +115,13 @@ export const editorShortcuts: Shortcut[] = [
 ]
 
 export const diagramEditorShortcuts: Shortcut[] = [
+  {
+    keys: ['L'],
+    isCtrlOrCmd: true,
+    name: 'Auto layout diagram',
+    onExecute: () => {},
+    icon: IconBoxMargin
+  },
   {
     keys: ['O'],
     isCtrlOrCmd: true,
