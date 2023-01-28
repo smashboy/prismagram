@@ -42,6 +42,12 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
               type="target"
               position={Position.Left}
               isConnectable={false}
+              style={{
+                borderColor: 'white',
+                marginLeft: -6,
+                borderWidth: 3,
+                boxSizing: 'unset'
+              }}
             />
           </Box>
         )}
@@ -63,6 +69,12 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
               type="source"
               position={Position.Right}
               isConnectable={false}
+              style={{
+                borderColor: 'white',
+                marginRight: -6,
+                borderWidth: 3,
+                boxSizing: 'unset'
+              }}
             />
           </Box>
         )}

@@ -3,18 +3,20 @@ import ReactFlow, {
   applyNodeChanges,
   Background,
   OnConnect,
-  OnEdgesChange,
+  OnMove,
   OnNodesChange
 } from 'reactflow'
 import { useStore } from 'effector-react'
 import {
+  $diagramViewport,
   $edgesArray,
   $nodesArray,
   $schemaState,
   $selectedRelationType,
   loadEditorDataEffect,
   nodesChangeEvent,
-  setPrismaSchemaEvent
+  setPrismaSchemaEvent,
+  viewportChangeEvent
 } from '../stores'
 import { DiagramEditorContextProvider } from '../stores/context'
 import { ModelNode } from './nodes/ModelNode'
@@ -25,6 +27,7 @@ import { useDiagramEditorShortcuts } from '@renderer/modules/spotlight'
 const $store = combine({
   nodes: $nodesArray,
   edges: $edgesArray,
+  viewport: $diagramViewport,
   state: $schemaState,
   selectedRelationType: $selectedRelationType
 })
@@ -34,14 +37,14 @@ const nodeTypes = {
 }
 
 export const DiagramEditor = () => {
-  const { nodes, edges, state, selectedRelationType } = useStore($store)
+  const { nodes, edges, state, selectedRelationType, viewport } = useStore($store)
 
   useDiagramEditorShortcuts()
 
   const onNodesChange: OnNodesChange = (changes) =>
     nodesChangeEvent(applyNodeChanges(changes, nodes))
 
-  const onEdgesChange: OnEdgesChange = (changes) => console.log(changes)
+  const onViewportChange: OnMove = (_, viewport) => viewportChangeEvent(viewport)
 
   const onConnect: OnConnect = ({ source, target }) => {
     if (!source || !target) return
@@ -66,12 +69,14 @@ export const DiagramEditor = () => {
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
+        defaultViewport={viewport ?? void 0}
+        onMove={onViewportChange}
         // edgeTypes={edgeTypes}
         onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         snapToGrid
         minZoom={0.05}
+        fitView={!viewport}
       >
         <Background />
       </ReactFlow>

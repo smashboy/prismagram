@@ -49,7 +49,7 @@ export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
     <Card
       sx={(theme) => ({
         overflow: 'unset',
-        borderColor: selectedModelNode ? theme.primaryColor : void 0,
+        borderColor: selectedModelNode ? theme.primaryColor : 'transparent',
         position: 'relative',
         borderWidth: 3,
         borderStyle: selectedModelNode !== name ? 'dashed' : 'solid'
