@@ -17,11 +17,15 @@ import {
   IconCode,
   IconDatabase,
   IconPlayerPlay,
+  IconRelationManyToMany,
+  IconRelationOneToMany,
+  IconRelationOneToOne,
   IconSchema,
   IconZoomInArea
 } from '@tabler/icons'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
+import { RelationType } from 'prisma-state/constants'
 import { EditorView } from '../config'
 import {
   $diagram,
@@ -49,8 +53,16 @@ const OptionsContainer: React.FC<{ children: React.ReactNode }> = ({ children })
   </Paper>
 )
 
+const relationIconsMap = {
+  [RelationType.ONE_TO_ONE]: IconRelationOneToOne,
+  [RelationType.ONE_TO_MANY]: IconRelationOneToMany,
+  [RelationType.MANY_TO_MANY]: IconRelationManyToMany
+}
+
 export const EditorToolbar = () => {
-  const { selectedView, diagram, isEditorEnabled, project, selectedRelationType } = useStore($store)
+  const { selectedView, isEditorEnabled, project, selectedRelationType } = useStore($store)
+
+  const RelationIcon = relationIconsMap[selectedRelationType]
 
   const editorViewOptions = [
     {
@@ -105,13 +117,13 @@ export const EditorToolbar = () => {
               <Menu>
                 <Menu.Target>
                   <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
-                    {selectedRelationType}
+                    <RelationIcon />
                   </ActionIcon>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item>One-to-one</Menu.Item>
-                  <Menu.Item>One-to-many</Menu.Item>
-                  <Menu.Item>Many-to-many</Menu.Item>
+                  <Menu.Item icon={<IconRelationOneToOne size={14} />}>One-to-one</Menu.Item>
+                  <Menu.Item icon={<IconRelationOneToMany size={14} />}>One-to-many</Menu.Item>
+                  <Menu.Item icon={<IconRelationManyToMany size={14} />}>Many-to-many</Menu.Item>
                 </Menu.Dropdown>
               </Menu>
             </OptionsContainer>
