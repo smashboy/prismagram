@@ -20,6 +20,8 @@ export const extractBlocksByType = <B extends Block>(
   const blocks = new Map<string, B>()
 
   for (const block of [...list.values()]) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     if (block.type === type) blocks.set(block.name, block)
   }
 

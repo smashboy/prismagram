@@ -38,6 +38,8 @@ sample({
   target: prismaState2DiagramEvent
 })
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 throttle({
   source: $schema,
   timeout: 1000,

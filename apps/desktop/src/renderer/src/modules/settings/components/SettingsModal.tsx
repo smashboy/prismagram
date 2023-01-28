@@ -7,7 +7,7 @@ import { $selectedSettingsSection } from '../stores'
 import { GeneralSettings } from './GeneralSettings'
 import { ProjectSettings } from './ProjectSettings'
 import { SettingsSidebar } from './SettingsSidebar'
-import { ShortcutsSettings } from './ShortcutsSettings/ShortcutsSettings'
+import { ShortcutsSettings } from './ShortcutsSettings'
 
 const $store = combine({
   isOpen: $isOpenSettingsModal,

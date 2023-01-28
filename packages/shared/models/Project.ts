@@ -1,3 +1,4 @@
+import { PackageManager } from '../configs/projects'
 import { PrismaCommand } from './Prisma'
 
 export interface Project {
@@ -6,6 +7,13 @@ export interface Project {
   projectDirectory: string
   prismaStudioPort?: number
   commands?: Record<string, PrismaCommand>
+  packageManager?: PackageManager | 'app-default'
+  customization?: {
+    showMiniMap?: boolean
+    backgroundVariant?: string
+    snapToGrid?: boolean
+    snapGrid?: number
+  }
 }
 
 export interface GlobalSettings {
@@ -14,4 +22,5 @@ export interface GlobalSettings {
 
 export interface GlobalPrismaSettings {
   previewFeaturesList: string[]
+  packageManager: PackageManager
 }

@@ -35,6 +35,8 @@ export class Block<F extends Field = Field, K = string> {
 
     this.name = name
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.state.state.set(this.id, this)
   }
 
@@ -43,6 +45,8 @@ export class Block<F extends Field = Field, K = string> {
   }
 
   field<FF = F>(fieldId: K) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return this.fields.get(fieldId)! as FF
   }
 
@@ -53,6 +57,8 @@ export class Block<F extends Field = Field, K = string> {
 
   removeField(fieldId: K) {
     this.fields.delete(fieldId)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.state.state.set(this.id, this)
   }
 
@@ -63,13 +69,19 @@ export class Block<F extends Field = Field, K = string> {
       const { key, value } = assignment
 
       if (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         (value?.type === 'function' && value?.name === 'env') ||
         (this.type === 'datasource' && datasourceEnvFields.includes(key)) ||
         (this.type === 'generator' && generatorEnvFields.includes(key))
       ) {
         const envField = new EnvField(key)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         envField._parse(value?.params ?? [value])
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         if (!value?.params) {
           envField.toggleIsEnv(false)
         }
@@ -78,14 +90,20 @@ export class Block<F extends Field = Field, K = string> {
         continue
       }
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       if (value?.type === 'array') {
         const optionsField = new OptionsListField(key)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         optionsField._parse(value.args)
         this.fields.set(optionsField.name as unknown as K, optionsField as unknown as F)
         continue
       }
 
       const optionField = new OptionField(key)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       optionField._parse(value)
       this.fields.set(optionField.name as unknown as K, optionField as unknown as F)
     }

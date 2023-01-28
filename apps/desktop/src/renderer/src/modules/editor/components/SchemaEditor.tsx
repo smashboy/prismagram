@@ -3,7 +3,7 @@ import { Box } from '@mantine/core'
 import { Editor } from '@prisma/text-editors'
 import { useStore } from 'effector-react'
 import { $schema } from '../stores'
-import '../monacoImports'
+// import '../monacoImports'
 
 // const path = window.api.path
 // const __dirname = window.api.__dirname

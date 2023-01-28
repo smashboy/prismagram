@@ -36,6 +36,8 @@ export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField
         const field = createFieldFromType(
           name,
           fieldType as string,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           this,
           this.state.enumIds,
           this.state.modelIds
@@ -49,6 +51,8 @@ export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField
 
       if (prop.type === 'attribute') {
         const { name, args } = prop
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const Attribute = attributesMap[name]
 
         if (Attribute) {
@@ -64,7 +68,14 @@ export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField
   _toString() {
     const blockstr = `
     ${super._toString().replace('}', '')}
-    ${[...this.attributes.values()].map((attr) => attr._toString()).join('\r\n')}
+
+    ${[...this.attributes.values()]
+      .map((attr) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return attr._toString()
+      })
+      .join('\r\n')}
     }
   `
     return blockstr

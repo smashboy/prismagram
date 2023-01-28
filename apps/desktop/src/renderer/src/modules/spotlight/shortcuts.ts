@@ -19,7 +19,8 @@ import {
   IconBoxMargin,
   IconRelationOneToOne,
   IconRelationManyToMany,
-  IconRelationOneToMany
+  IconRelationOneToMany,
+  IconZoomInArea
 } from '@tabler/icons'
 import { RelationType } from 'prisma-state/constants'
 import { changeEditorViewEvent, layoutDiagramEffect, setSelectedRelationTypeEvent } from '../editor'
@@ -124,6 +125,13 @@ export const diagramEditorShortcuts: Shortcut[] = [
     name: 'Auto layout diagram',
     onExecute: () => layoutDiagramEffect(),
     icon: IconBoxMargin
+  },
+  {
+    keys: ['V'],
+    isCtrlOrCmd: true,
+    name: 'Fit into view',
+    onExecute: () => {},
+    icon: IconZoomInArea
   },
   {
     keys: ['O'],

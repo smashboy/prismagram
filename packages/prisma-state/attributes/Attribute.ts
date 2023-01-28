@@ -1,5 +1,5 @@
 import { AttributeArgument as AstAttributeArgument, KeyValue } from '@mrleebo/prisma-ast'
-import { AttributeFunction } from './AttributeFunction'
+import { AttributeFunction, AttributeFunctionType } from './AttributeFunction'
 
 export type AttributePrefix = '@' | '@@'
 
@@ -32,6 +32,8 @@ export class Attribute<T extends string, AK = string> {
     this.arguments.delete(key)
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   private _parseSingleArg(arg: AstAttributeArgument['value']) {
     // if (typeof arg === 'string') return cleanupStr(arg)
 
@@ -39,7 +41,7 @@ export class Attribute<T extends string, AK = string> {
 
     if (arg instanceof Array) return arg.map(this._parseSingleArg)
 
-    if (arg.type === 'function') return new AttributeFunction(arg.name)
+    if (arg.type === 'function') return new AttributeFunction(arg.name as AttributeFunctionType)
 
     if (arg.type === 'array') return arg.args.map(this._parseSingleArg)
   }
@@ -50,7 +52,11 @@ export class Attribute<T extends string, AK = string> {
       const parsedArg = this._parseSingleArg(value)
 
       if (parsedArg) return [key, parsedArg] as const
+
+      return void 0
     }
+
+    return void 0
   }
 
   _parseArgs(args: AstAttributeArgument[], firstArgName?: AK) {
@@ -63,7 +69,7 @@ export class Attribute<T extends string, AK = string> {
         continue
       }
 
-      const parsedArg = this._parseKeyValueArg(arg.value)
+      const parsedArg = this._parseKeyValueArg(arg.value as KeyValue)
 
       if (parsedArg) {
         const [name, value] = parsedArg
@@ -72,6 +78,8 @@ export class Attribute<T extends string, AK = string> {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   _argument2String(arg: ArgumentValue) {
     if (typeof arg === 'string' || typeof arg === 'boolean' || typeof arg === 'number') return arg
     if (arg instanceof Array) return `[${arg.map(this._argument2String).join(', ')}]`

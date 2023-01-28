@@ -9,7 +9,6 @@ import {
   Transition
 } from '@mantine/core'
 import { $selectedProject } from '@renderer/modules/projects'
-import { DiagramLayout } from '@shared/common/configs/diagrams'
 import {
   IconArrowBackUp,
   IconArrowForwardUp,
@@ -93,7 +92,7 @@ export const EditorToolbar = () => {
   ]
 
   const handleChangeEditorView = (view: EditorView) => changeEditorViewEvent(view)
-  const handleDiagramLayout = (layout: DiagramLayout) => () => layoutDiagramEffect()
+  const handleDiagramLayout = () => layoutDiagramEffect()
 
   return (
     <Group position="right">
@@ -132,7 +131,7 @@ export const EditorToolbar = () => {
                 <IconZoomInArea size={ICON_SIZE} />
               </ActionIcon>
               <ActionIcon
-                onClick={handleDiagramLayout(DiagramLayout.HORIZONTAL)}
+                onClick={handleDiagramLayout}
                 size={ICON_BUTTON_SIZE}
                 disabled={!isEditorEnabled}
               >

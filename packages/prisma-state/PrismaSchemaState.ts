@@ -12,7 +12,7 @@ export type PrismaSchemaStateData = Map<string, PrismaSchemaStateItem>
 
 export class PrismaSchemaState {
   readonly state: PrismaSchemaStateData = new Map()
-  readonly relations = new RelationsManager(this.state)
+  readonly relations = new RelationsManager()
 
   get datasource() {
     return [...this.state.values()].find((block) => block.type === 'datasource')!

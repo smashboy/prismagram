@@ -1,5 +1,5 @@
 import { Model } from './blocks'
-import { PrismaSchemaStateData } from './PrismaSchemaState'
+// import { PrismaSchemaStateData } from './PrismaSchemaState'
 import { RelationType, RelationTypeOption } from './constants'
 import { uncapitalize } from './utils/string'
 import { ModelField, RelationField } from './fields'
@@ -7,11 +7,11 @@ import { createScalarFieldFromType } from './utils/field'
 import { RelationAttribute, UniqueAttribute } from './attributes'
 
 export class RelationsManager {
-  private readonly state: PrismaSchemaStateData
+  // private readonly state: PrismaSchemaStateData
 
-  constructor(state: PrismaSchemaStateData) {
-    this.state = state
-  }
+  // constructor(state: PrismaSchemaStateData) {
+  //   this.state = state
+  // }
 
   createRelation(source: Model, target: Model, type: RelationTypeOption) {
     const sourceName = uncapitalize(source.name)

@@ -7,8 +7,7 @@ import { createFile, readDirectoryFiles, readDirectoryPath } from '../../service
 import { PRISMA_SCHEMA_FILE_NAME, PROJECTS_FOLDER_PATH } from '../../constants'
 import { PrismaCommand } from '@shared/common/models/Prisma'
 import { defaultSchemaPaths } from '@shared/common/configs/prisma'
-import { getPrismaDocument, formatPrismaSchema } from '../../services/prisma'
-import { prismaSchema2Diagram } from '../../services/diagrams'
+import { formatPrismaSchema } from '../../services/prisma'
 
 export class ProjectsManager {
   private createProjectFileName(id = randomUUID()) {
@@ -59,6 +58,8 @@ export class ProjectsManager {
 
       return formattedSchema
     }
+
+    return void 0
   }
 
   getProjectDirectory(browserWindow: BrowserWindow) {
@@ -120,11 +121,5 @@ export class ProjectsManager {
     const schema = fs.readFileSync(schemaPath, { encoding: 'utf-8' })
 
     return schema
-  }
-
-  async getSchemaDiagram(schema: string) {
-    const prismadoc = await getPrismaDocument(schema)
-
-    return prismaSchema2Diagram(prismadoc)
   }
 }

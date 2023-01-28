@@ -29,7 +29,8 @@ export interface EnvValue<V extends string = string> {
 
 export interface PrismaCommandBase {
   name: string
-  isDefault: boolean
+  command: string
+  // isDefault: boolean
 }
 
 export interface PrismaCommand extends PrismaCommandBase {

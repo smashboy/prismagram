@@ -29,6 +29,7 @@ import { layoutDiagramElements } from '../../services/diagrams'
 import { PrismaCommand } from '@shared/common/models/Prisma'
 import CommandsManager from '../commandsManager/CommandsManager'
 import { ProjectsManager } from '../projectsManager/ProjectsManager'
+import { PackageManager } from '@shared/common/configs/projects'
 
 export default class WindowsManager extends WindowsManagerBase {
   protected appWindow: WindowManager | undefined
@@ -100,6 +101,8 @@ export default class WindowsManager extends WindowsManagerBase {
 
         return { schema, schemaPath }
       }
+
+      return void 0
     })
 
     this.appWindow.createApiRoute(
@@ -111,7 +114,8 @@ export default class WindowsManager extends WindowsManagerBase {
     this.appWindow.createApiRoute(GET_GLOBAL_SETTINGS_ENDPOINT, async () => {
       const settings: GlobalSettings = {
         prisma: {
-          previewFeaturesList: getPrismaPreviewFeaturesList()
+          previewFeaturesList: getPrismaPreviewFeaturesList(),
+          packageManager: PackageManager.NPM
         }
       }
 

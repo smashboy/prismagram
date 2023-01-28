@@ -1,0 +1,1 @@
+export { ShortcutsSettings } from './ShortcutsSettings'

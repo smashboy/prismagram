@@ -1,3 +1,4 @@
+import { AttributeArgument as AstAttributeArgument } from '@mrleebo/prisma-ast'
 import { Model } from '../../blocks'
 import { BlockAttribute } from '../BlockAttribute'
 
@@ -9,7 +10,7 @@ export class IndexBlockAttribute extends BlockAttribute<
     super('index', model)
   }
 
-  _parseArgs(args: string): void {
+  _parseArgs(args: AstAttributeArgument[]): void {
     super._parseArgs(args, 'fields')
   }
 }

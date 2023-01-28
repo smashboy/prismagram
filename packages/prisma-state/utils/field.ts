@@ -13,7 +13,7 @@ import {
   ModelField
 } from '../fields'
 import { Model } from '../blocks'
-import { ScalarType } from '../constants'
+import { ScalarType, ScalarTypeOption } from '../constants'
 
 const ScalarFieldMap = {
   [ScalarType.STRING]: StringField,
@@ -27,10 +27,16 @@ const ScalarFieldMap = {
   [ScalarType.BYTES]: BytesField
 }
 
-export const createScalarFieldFromType = (name: string, type: string, model: Model): ModelField => {
-  const ScalarField = ScalarFieldMap[type]
+export const createScalarFieldFromType = (
+  name: string,
+  type: string,
+  model: Model
+): ModelField | undefined => {
+  const ScalarField = ScalarFieldMap[type as ScalarTypeOption]
 
   if (ScalarField) return new ScalarField(name, model)
+
+  return void 0
 }
 
 export const createFieldFromType = (
@@ -47,4 +53,6 @@ export const createFieldFromType = (
   if (enumIds.indexOf(type) > -1) return new EnumModelField(name, type, model)
 
   if (modelIds.indexOf(type) > -1) return new RelationField(name, type, model)
+
+  return void 0
 }

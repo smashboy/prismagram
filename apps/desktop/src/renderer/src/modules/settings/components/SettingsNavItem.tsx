@@ -1,5 +1,6 @@
 import { MantineColor, NavLink, ThemeIcon } from '@mantine/core'
 import { $selectedProjectId } from '@renderer/modules/projects'
+import { TablerIcon } from '@tabler/icons'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { SettingsRoute } from '../constants'
@@ -8,7 +9,7 @@ import { $selectedSettingsSection, changeSettingsSectionEvent } from '../stores'
 interface SettingsNavItemProps {
   id: SettingsRoute
   label: string
-  icon: React.ReactNode
+  icon: TablerIcon
   color?: MantineColor
 }
 const $store = combine({

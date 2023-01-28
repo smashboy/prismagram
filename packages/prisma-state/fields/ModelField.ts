@@ -74,6 +74,8 @@ export class ModelField<A = FieldAttribute> extends Field {
     if (optional) this.modifier = 'optional'
 
     for (const { name, args = [] } of attributes) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       const Attribute = fieldAttributeMap[name]
 
       if (Attribute) {
@@ -91,6 +93,8 @@ export class ModelField<A = FieldAttribute> extends Field {
 
   _toString() {
     return `${this.name} ${this.displayType} ${[...this.attributes.values()]
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       .map((attr) => attr._toString())
       .join(' ')}`
   }

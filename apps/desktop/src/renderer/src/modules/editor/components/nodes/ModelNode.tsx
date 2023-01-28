@@ -1,5 +1,5 @@
 import { Handle, Position, useStore } from 'reactflow'
-import { Box, Card, Table, Text } from '@mantine/core'
+import { Card, Table, Text } from '@mantine/core'
 import { toggleModelNodeSidebarEvent } from '@renderer/stores/ui/modals'
 import { ModelNodeData } from '@shared/common/models/Diagram'
 import { selectModelEvent } from '../../stores'

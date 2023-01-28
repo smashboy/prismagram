@@ -109,20 +109,18 @@ export const PrismaCommandForm: React.FC<PrismaCommandFormProps> = ({
   onClose,
   onSubmit,
   isLoading = false,
-  defaultValues = {},
+  defaultValues = { command: null, name: '' },
   customActions
 }) => {
-  const {
-    command: initialCommand = null,
-    name: initialName = '',
-    ...initialOptions
-  } = defaultValues
+  const { command: initialCommand, name: initialName, ...initialOptions } = defaultValues
 
   const [command, setCommand] = useState<
     PrismaGeneralCommand | PrismaDbCommand | PrismaMigrateCommand | null | string
   >(initialCommand)
 
   const [name, setName] = useState(initialName)
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const [options, setOptions] = useState<Record<string, string | boolean>>(initialOptions)
 
   const disableSaveButton = !name || !command
@@ -139,7 +137,7 @@ export const PrismaCommandForm: React.FC<PrismaCommandFormProps> = ({
     setOptions({})
   }
 
-  const handleSubmitCommand = () => onSubmit?.({ name, command, ...options })
+  const handleSubmitCommand = () => onSubmit?.({ name, command: command!, ...options })
 
   return (
     <Stack pos="relative">

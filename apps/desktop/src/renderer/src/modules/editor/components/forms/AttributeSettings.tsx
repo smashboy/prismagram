@@ -71,10 +71,14 @@ export const AttributeSettings: React.FC<AttributesSettingsProps> = ({
                 <td>{id}</td>
                 <td>
                   {value instanceof Array ? (
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     <MultiSelect value={value} data={value} searchable readOnly />
                   ) : value instanceof AttributeFunction ? (
                     <TextInput value={value.displayType} readOnly />
                   ) : (
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     <TextInput value={value} readOnly />
                   )}
                 </td>

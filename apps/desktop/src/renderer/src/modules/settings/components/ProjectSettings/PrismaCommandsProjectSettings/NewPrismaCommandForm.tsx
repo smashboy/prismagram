@@ -24,7 +24,7 @@ export const NewPrismaCommandForm = () => {
   const handleClose = () => toggleOpenCreateNewCommandEvent()
   const handleCreateCommand = async (command: PrismaCommand) => {
     await createPrismaCommandEffect({
-      project,
+      project: project!,
       command
     })
     handleClose()
