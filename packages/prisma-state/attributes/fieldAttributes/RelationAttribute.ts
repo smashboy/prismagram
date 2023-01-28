@@ -1,4 +1,4 @@
-import { AttributeArgument as AstAttributeArgument } from '@mrleebo/prisma-ast'
+import { AttributeArgument as AstAttributeArgument } from '@mrleebo/prisma-ast/src/getSchema'
 import { ReferentialActionOption } from '../../constants'
 import { RelationField } from '../../fields'
 import { FieldAttribute } from '../FieldAttribute'

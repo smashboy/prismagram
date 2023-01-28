@@ -1,4 +1,4 @@
-import { getSchema } from '@mrleebo/prisma-ast'
+import { getSchema } from '@mrleebo/prisma-ast/src/getSchema'
 import { Enum, Datasource, Generator, Model } from './blocks'
 import { RelationsManager } from './RelationsManager'
 import { testSchema } from './testSchema'

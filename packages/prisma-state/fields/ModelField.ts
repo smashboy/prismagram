@@ -1,4 +1,4 @@
-import type { Field as AstField } from '@mrleebo/prisma-ast'
+import type { Field as AstField } from '@mrleebo/prisma-ast/src/getSchema'
 import {
   IgnoreAttribute,
   MapAttribute,

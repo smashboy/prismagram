@@ -1,4 +1,7 @@
-import { AttributeArgument as AstAttributeArgument, KeyValue } from '@mrleebo/prisma-ast'
+import {
+  AttributeArgument as AstAttributeArgument,
+  KeyValue
+} from '@mrleebo/prisma-ast/src/getSchema'
 import { AttributeFunction, AttributeFunctionType } from './AttributeFunction'
 
 export type AttributePrefix = '@' | '@@'

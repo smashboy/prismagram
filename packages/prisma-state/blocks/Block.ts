@@ -1,4 +1,7 @@
-import { Datasource as AstDatasource, Generator as AstGenerator } from '@mrleebo/prisma-ast'
+import {
+  Datasource as AstDatasource,
+  Generator as AstGenerator
+} from '@mrleebo/prisma-ast/src/getSchema'
 import { EnvField, OptionField, OptionsListField } from '../fields'
 import { Field } from '../fields/Field'
 import { PrismaSchemaState } from '../PrismaSchemaState'

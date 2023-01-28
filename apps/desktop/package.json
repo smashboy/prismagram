@@ -6,6 +6,7 @@
   "author": "example.com",
   "homepage": "https://www.electronjs.org",
   "scripts": {
+    "postinstall": "electron-builder install-app-deps",
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
@@ -47,7 +48,9 @@
     "monaco-editor": "^0.34.1",
     "patronum": "^1.12.3",
     "prisma-state": "*",
-    "reactflow": "^11.3.2"
+    "reactflow": "^11.3.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
@@ -59,7 +62,7 @@
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",
     "@vitejs/plugin-react": "^2.2.0",
-    "electron": "^21.3.0",
+    "electron": "21.3.0",
     "electron-builder": "^23.6.0",
     "electron-vite": "^1.0.14",
     "eslint": "^8.28.0",
@@ -67,9 +70,6 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.11",
     "prettier": "^2.7.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "turbo": "^1.6.3",
     "typescript": "^4.9.3",
     "vite": "^3.2.4",
     "vite-plugin-monaco-editor": "^1.1.0"

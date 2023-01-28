@@ -1,4 +1,4 @@
-import type { Model as AstModel } from '@mrleebo/prisma-ast'
+import type { Model as AstModel } from '@mrleebo/prisma-ast/src/getSchema'
 import {
   BlockAttribute,
   IdBlockAttribute,

@@ -1,4 +1,4 @@
-import { Enum as AstEnum } from '@mrleebo/prisma-ast'
+import { Enum as AstEnum } from '@mrleebo/prisma-ast/src/getSchema'
 import { EnumField } from '../fields'
 import { PrismaSchemaState } from '../PrismaSchemaState'
 import { Block } from './Block'

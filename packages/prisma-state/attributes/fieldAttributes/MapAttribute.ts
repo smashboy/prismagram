@@ -1,4 +1,4 @@
-import { AttributeArgument as AstAttributeArgument } from '@mrleebo/prisma-ast'
+import { AttributeArgument as AstAttributeArgument } from '@mrleebo/prisma-ast/src/getSchema'
 import { RelationField } from '../../fields'
 import { ScalarField } from '../../fields/types'
 import { FieldAttribute } from '../FieldAttribute'
