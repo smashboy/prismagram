@@ -16,7 +16,10 @@ import {
   IconDatabase,
   IconCode,
   IconSchema,
-  IconBoxMargin
+  IconBoxMargin,
+  IconRelationOneToOne,
+  IconRelationManyToMany,
+  IconRelationOneToMany
 } from '@tabler/icons'
 import { RelationType } from 'prisma-state/constants'
 import { changeEditorViewEvent, layoutDiagramEffect, setSelectedRelationTypeEvent } from '../editor'
@@ -126,18 +129,21 @@ export const diagramEditorShortcuts: Shortcut[] = [
     keys: ['O'],
     isCtrlOrCmd: true,
     name: 'One-to-one relation',
-    onExecute: () => setSelectedRelationTypeEvent(RelationType.ONE_TO_ONE)
-  },
-  {
-    keys: ['M'],
-    isCtrlOrCmd: true,
-    name: 'Many-to-many relation',
-    onExecute: () => setSelectedRelationTypeEvent(RelationType.MANY_TO_MANY)
+    onExecute: () => setSelectedRelationTypeEvent(RelationType.ONE_TO_ONE),
+    icon: IconRelationOneToOne
   },
   {
     keys: ['N'],
     isCtrlOrCmd: true,
     name: 'One-to-many relation',
-    onExecute: () => setSelectedRelationTypeEvent(RelationType.ONE_TO_MANY)
+    onExecute: () => setSelectedRelationTypeEvent(RelationType.ONE_TO_MANY),
+    icon: IconRelationOneToMany
+  },
+  {
+    keys: ['M'],
+    isCtrlOrCmd: true,
+    name: 'Many-to-many relation',
+    onExecute: () => setSelectedRelationTypeEvent(RelationType.MANY_TO_MANY),
+    icon: IconRelationManyToMany
   }
 ]
