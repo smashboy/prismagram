@@ -1,4 +1,4 @@
-import { Handle, Position } from 'reactflow'
+import { Handle, Position, useStore } from 'reactflow'
 import { Box, Card, Table, Text } from '@mantine/core'
 import { toggleModelNodeSidebarEvent } from '@renderer/stores/ui/modals'
 import { ModelNodeData } from '@shared/common/models/Diagram'
@@ -33,10 +33,12 @@ interface ModelNodeProps {
 export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
   const { name, fields, sourceHandlers, targetHandlers } = data
 
+  const connectionNodeId = useStore((state) => state.connectionNodeId)
+
   const { selectedModelNode, nodesColors } = useDiagramEditorStore()
 
   const isSelected = selectedModelNode === name
-  const test = !!(selectedModelNode && selectedModelNode !== name)
+  const isTarget = connectionNodeId && connectionNodeId !== name
 
   const handleSelectModel = () => {
     toggleModelNodeSidebarEvent(true)
@@ -49,7 +51,8 @@ export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
         overflow: 'unset',
         borderColor: selectedModelNode ? theme.primaryColor : void 0,
         position: 'relative',
-        borderStyle: test ? 'dashed' : 'solid'
+        borderWidth: 3,
+        borderStyle: selectedModelNode !== name ? 'dashed' : 'solid'
       })}
       onClick={handleSelectModel}
       withBorder
@@ -99,7 +102,7 @@ export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
         id={name}
         type="target"
         position={Position.Left}
-        isConnectable={test}
+        isConnectable={!!selectedModelNode}
         style={{
           position: 'absolute',
           top: 0,
@@ -108,10 +111,11 @@ export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
           width: '100%',
           height: '100%',
           transform: 'translate(0%, 0%)',
-          borderRadius: 0,
+          borderRadius: 8,
           opacity: 0,
-          ...(!test && { pointerEvents: 'none' })
-          // opacity: 0
+          overflow: 'hidden',
+          ...(isTarget && { backgroundColor: 'red', opacity: 0.5 }),
+          ...(!isTarget && { pointerEvents: 'none' })
         }}
       />
 
