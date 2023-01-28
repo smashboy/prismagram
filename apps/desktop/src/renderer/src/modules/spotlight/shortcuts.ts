@@ -19,7 +19,7 @@ import {
   IconBoxMargin
 } from '@tabler/icons'
 import { RelationType } from 'prisma-state/constants'
-import { changeEditorViewEvent, setSelectedRelationTypeEvent } from '../editor'
+import { changeEditorViewEvent, layoutDiagramEffect, setSelectedRelationTypeEvent } from '../editor'
 import { EditorView } from '../editor/config'
 import { Shortcut } from './types'
 
@@ -119,7 +119,7 @@ export const diagramEditorShortcuts: Shortcut[] = [
     keys: ['L'],
     isCtrlOrCmd: true,
     name: 'Auto layout diagram',
-    onExecute: () => {},
+    onExecute: () => layoutDiagramEffect(),
     icon: IconBoxMargin
   },
   {

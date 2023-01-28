@@ -9,12 +9,6 @@ import { createProjectEffect, getProjectsListEffect, updateProjectEffect } from 
 import { createPrismaCommandEffect } from '@renderer/modules/settings'
 
 sample({
-  clock: toggleSelectProjectModalEvent,
-  filter: (status) => !!status,
-  target: getProjectsListEffect
-})
-
-sample({
   clock: getProjectsListEffect.doneData,
   fn: (projects) => projects.map((project) => ({ key: project.id, item: project })),
   target: projectEvents.addList

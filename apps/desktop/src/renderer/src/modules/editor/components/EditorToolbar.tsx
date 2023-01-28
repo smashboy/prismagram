@@ -81,8 +81,7 @@ export const EditorToolbar = () => {
   ]
 
   const handleChangeEditorView = (view: EditorView) => changeEditorViewEvent(view)
-  const handleDiagramLayout = (layout: DiagramLayout) => () =>
-    layoutDiagramEffect({ diagram: diagram!, layout })
+  const handleDiagramLayout = (layout: DiagramLayout) => () => layoutDiagramEffect()
 
   return (
     <Group position="right">

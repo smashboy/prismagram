@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useStore } from 'effector-react'
 import { Group, Paper, Stack } from '@mantine/core'
 import { Editor, EditorToolbar, Sidebar } from './modules/editor'
-import { CreateProjectModal, ProjectSelectorModal } from './modules/projects'
+import { CreateProjectModal, getProjectsListEffect, ProjectSelectorModal } from './modules/projects'
 import { loadGlobalSettingsEffect, SettingsModal } from './modules/settings'
 import { $isOpenDetailsView } from './stores/ui/modals'
 import { RightSidebar } from './modules/editor/components/RightSidebar'
@@ -20,6 +20,7 @@ function App() {
 
   useEffect(() => {
     loadGlobalSettingsEffect()
+    getProjectsListEffect()
   }, [])
 
   return (

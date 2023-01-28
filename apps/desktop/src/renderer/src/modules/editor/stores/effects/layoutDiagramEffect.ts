@@ -1,14 +1,19 @@
-import { createEffect } from 'effector'
+import { attach, createEffect } from 'effector'
 import { invoke } from '@renderer/core/electron'
 import { EDITOR_LAYOUT_NODES_ENDPOINT } from '@shared/common/configs/api'
-import { Diagram } from '@shared/common/models/Diagram'
 import { DiagramLayout } from '@shared/common/configs/diagrams'
+import { $diagram } from '../diagram'
 
-interface LayoutDiagramEffectProps {
-  diagram: Diagram
-  layout: DiagramLayout
-}
+// interface LayoutDiagramEffectProps {
+//   diagram: Diagram
+//   layout: DiagramLayout
+// }
 
-export const layoutDiagramEffect = createEffect<
-  (props: LayoutDiagramEffectProps) => Promise<Diagram>
->((props: LayoutDiagramEffectProps) => invoke(EDITOR_LAYOUT_NODES_ENDPOINT, props))
+// createEffect<(props: LayoutDiagramEffectProps) => Promise<Diagram>
+
+export const layoutDiagramEffect = attach({
+  effect: createEffect((diagram) =>
+    invoke(EDITOR_LAYOUT_NODES_ENDPOINT, { diagram, layout: DiagramLayout.HORIZONTAL })
+  ),
+  source: $diagram
+})
