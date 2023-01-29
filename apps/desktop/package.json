@@ -48,9 +48,9 @@
     "monaco-editor": "^0.34.1",
     "patronum": "^1.12.3",
     "prisma-state": "*",
-    "reactflow": "^11.3.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "reactflow": "^11.5.1"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
