@@ -10,6 +10,7 @@ import { Spotlight, useGeneralShortcuts } from './modules/spotlight'
 import 'reactflow/dist/style.css'
 import './transports'
 import 'prisma-state/PrismaSchemaState'
+import { ReactFlowProvider } from 'reactflow'
 
 function App() {
   const { isOpen, isOpenDebounced } = useStore($isOpenDetailsView)
@@ -24,27 +25,29 @@ function App() {
   }, [])
 
   return (
-    <Spotlight>
-      <Group w="100%" h="100%" p="xs" noWrap>
-        <Sidebar />
-        <Stack w="100%" h="100%" sx={{ flex: 1 }}>
-          <EditorToolbar />
-          <Paper
-            w={isRighSidebarOpen ? 'calc(100vw - 690px)' : 'calc(100vw - 330px)'}
-            // w="100%"
-            h="100%"
-            shadow="md"
-            sx={{ transition: 'width 400ms ease', overflow: 'hidden' }}
-          >
-            <Editor />
-          </Paper>
-        </Stack>
-        <RightSidebar />
-        <SettingsModal />
-        <CreateProjectModal />
-        <ProjectSelectorModal />
-      </Group>
-    </Spotlight>
+    <ReactFlowProvider>
+      <Spotlight>
+        <Group w="100%" h="100%" p="xs" noWrap>
+          <Sidebar />
+          <Stack w="100%" h="100%" sx={{ flex: 1 }}>
+            <EditorToolbar />
+            <Paper
+              w={isRighSidebarOpen ? 'calc(100vw - 690px)' : 'calc(100vw - 330px)'}
+              // w="100%"
+              h="100%"
+              shadow="md"
+              sx={{ transition: 'width 400ms ease', overflow: 'hidden' }}
+            >
+              <Editor />
+            </Paper>
+          </Stack>
+          <RightSidebar />
+          <SettingsModal />
+          <CreateProjectModal />
+          <ProjectSelectorModal />
+        </Group>
+      </Spotlight>
+    </ReactFlowProvider>
   )
 }
 

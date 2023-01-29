@@ -25,6 +25,7 @@ import {
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { RelationType } from 'prisma-state/constants'
+import { useReactFlow } from 'reactflow'
 import { EditorView } from '../config'
 import {
   $diagram,
@@ -59,6 +60,8 @@ const relationIconsMap = {
 }
 
 export const EditorToolbar = () => {
+  const flow = useReactFlow()
+
   const { selectedView, isEditorEnabled, project, selectedRelationType } = useStore($store)
 
   const RelationIcon = relationIconsMap[selectedRelationType]
@@ -93,6 +96,7 @@ export const EditorToolbar = () => {
 
   const handleChangeEditorView = (view: EditorView) => changeEditorViewEvent(view)
   const handleDiagramLayout = () => layoutDiagramEffect()
+  const handleFitIntoView = () => flow.fitView()
 
   return (
     <Group position="right">
@@ -127,7 +131,11 @@ export const EditorToolbar = () => {
               </Menu>
             </OptionsContainer>
             <OptionsContainer>
-              <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
+              <ActionIcon
+                onClick={handleFitIntoView}
+                size={ICON_BUTTON_SIZE}
+                disabled={!isEditorEnabled}
+              >
                 <IconZoomInArea size={ICON_SIZE} />
               </ActionIcon>
               <ActionIcon

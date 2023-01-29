@@ -36,14 +36,10 @@ const nodeTypes = {
   [NodeType.MODEL]: ModelNode
 }
 
-const Hooks = () => {
-  useDiagramEditorShortcuts()
-
-  return null
-}
-
 export const DiagramEditor = () => {
   const { nodes, edges, state, selectedRelationType, viewport } = useStore($store)
+
+  useDiagramEditorShortcuts()
 
   const onNodesChange: OnNodesChange = (changes) =>
     nodesChangeEvent(applyNodeChanges(changes, nodes))
@@ -82,7 +78,6 @@ export const DiagramEditor = () => {
         minZoom={0.05}
         fitView={!viewport}
       >
-        <Hooks />
         <Background />
       </ReactFlow>
     </DiagramEditorContextProvider>
