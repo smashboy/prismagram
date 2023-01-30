@@ -1,4 +1,4 @@
-export const GET_PROJECTS_DIRECTORY_ENDPOINT = 'projects.get-directory'
+export const GET_PROJECT_DIRECTORY_ENDPOINT = 'projects.get-directory'
 export const CREATE_PROJECT_ENDPOINT = 'projects.create'
 export const UPDATE_PROJECT_ENDPOINT = 'projects.update'
 export const GET_PROJECTS_LIST_ENDPOINT = 'projects.get-list'

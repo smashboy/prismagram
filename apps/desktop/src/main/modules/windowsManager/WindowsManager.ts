@@ -6,7 +6,7 @@ import {
   EDITOR_LAUNCH_PRISMA_STUDIO_ENDPOINT,
   EDITOR_LAYOUT_NODES_ENDPOINT,
   GET_EDITOR_DATA_ENDPOINT,
-  GET_PROJECTS_DIRECTORY_ENDPOINT,
+  GET_PROJECT_DIRECTORY_ENDPOINT,
   GET_GLOBAL_SETTINGS_ENDPOINT,
   GET_PROJECTS_LIST_ENDPOINT,
   UPDATE_PROJECT_ENDPOINT,
@@ -17,9 +17,7 @@ import { GlobalSettings, Project } from '@shared/common/models/Project'
 import {
   formatPrismaSchema,
   getPrismaDocument,
-  getPrismaPreviewFeaturesList,
-  readPrismaSchemaFile,
-  readPrismaSchemaFilePath
+  getPrismaPreviewFeaturesList
 } from '../../services/prisma'
 import { WindowManager } from './models'
 import WindowsManagerBase from './WindowsManagerBase'
@@ -65,7 +63,7 @@ export default class WindowsManager extends WindowsManagerBase {
         this.projectsManager.saveSchema(args.schema, args.project)
     )
 
-    this.appWindow.createApiRoute(GET_PROJECTS_DIRECTORY_ENDPOINT, async () => {
+    this.appWindow.createApiRoute(GET_PROJECT_DIRECTORY_ENDPOINT, async () => {
       const directory = await this.projectsManager.getProjectDirectory(browserWindow)
 
       if (!directory) return

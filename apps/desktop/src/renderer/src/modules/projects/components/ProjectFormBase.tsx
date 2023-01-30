@@ -1,6 +1,6 @@
 import { Alert, Stack, TextInput } from '@mantine/core'
 import { invoke } from '@renderer/core/electron'
-import { GET_PROJECTS_DIRECTORY_ENDPOINT } from '@shared/common/configs/api'
+import { GET_PROJECT_DIRECTORY_ENDPOINT } from '@shared/common/configs/api'
 import { defaultSchemaPaths } from '@shared/common/configs/prisma'
 import { IconFile, IconFolder, IconInfoCircle } from '@tabler/icons'
 
@@ -46,7 +46,7 @@ export const ProjectFormBase: React.FC<ProjectFormBaseProps> = ({ values, onChan
         value={projectDirectory}
         description="From project directory you will be able to run migrations scripts and launch prisma studio."
         icon={<IconFolder size={14} />}
-        onClick={handleFileInput('projectDirectory', GET_PROJECTS_DIRECTORY_ENDPOINT)}
+        onClick={handleFileInput('projectDirectory', GET_PROJECT_DIRECTORY_ENDPOINT)}
         readOnly
         withAsterisk
       />
