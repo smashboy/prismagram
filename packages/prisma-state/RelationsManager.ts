@@ -52,8 +52,6 @@ export class RelationsManager {
       }
     }
 
-    console.log(fields)
-
     return fields
   }
 
