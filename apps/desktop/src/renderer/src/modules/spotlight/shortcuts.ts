@@ -20,7 +20,9 @@ import {
   IconRelationOneToOne,
   IconRelationManyToMany,
   IconRelationOneToMany,
-  IconZoomInArea
+  IconZoomInArea,
+  IconZoomOut,
+  IconZoomIn
 } from '@tabler/icons'
 import { RelationType } from 'prisma-state/constants'
 import { changeEditorViewEvent, layoutDiagramEffect, setSelectedRelationTypeEvent } from '../editor'
@@ -153,5 +155,19 @@ export const diagramEditorShortcuts: Shortcut[] = [
     name: 'Many-to-many relation',
     onExecute: () => setSelectedRelationTypeEvent(RelationType.MANY_TO_MANY),
     icon: IconRelationManyToMany
+  },
+  {
+    keys: ['='],
+    isCtrlOrCmd: true,
+    name: 'Zoom in',
+    onExecute: () => {},
+    icon: IconZoomIn
+  },
+  {
+    keys: ['-'],
+    isCtrlOrCmd: true,
+    name: 'Zoom out',
+    onExecute: () => {},
+    icon: IconZoomOut
   }
 ]

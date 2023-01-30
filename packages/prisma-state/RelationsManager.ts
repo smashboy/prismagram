@@ -1,10 +1,22 @@
 import { Model } from './blocks'
 // import { PrismaSchemaStateData } from './PrismaSchemaState'
-import { RelationType, RelationTypeOption } from './constants'
-import { uncapitalize } from './utils/string'
+import { capitalize, uncapitalize } from './utils/string'
 import { ModelField, RelationField } from './fields'
 import { createScalarFieldFromType } from './utils/field'
-import { RelationAttribute, UniqueAttribute } from './attributes'
+import {
+  IdBlockAttribute,
+  RelationAttribute,
+  UniqueAttribute,
+  UniqueBlockAttribute
+} from './attributes'
+
+interface CreateRelationOptions {
+  name?: string
+}
+
+interface CreateManyToManyRelationOptions extends CreateRelationOptions {
+  explicit?: boolean
+}
 
 export class RelationsManager {
   // private readonly state: PrismaSchemaStateData
@@ -13,79 +25,110 @@ export class RelationsManager {
   //   this.state = state
   // }
 
-  createRelation(source: Model, target: Model, type: RelationTypeOption) {
-    const sourceName = uncapitalize(source.name)
-    const targetName = uncapitalize(target.name)
+  private uncapitalizeModalsNames(source: Model, target: Model) {
+    return [uncapitalize(source.name), uncapitalize(target.name)] as const
+  }
 
-    const targetNamePlural = `${targetName}s`
+  private plurifyModalsNames(sourceName: string, targetName: string) {
+    return [`${sourceName}s`, `${targetName}s`]
+  }
 
-    if (type === RelationType.MANY_TO_MANY) {
-      const sourceNamePlural = `${sourceName}s`
+  private getModelIdFields(model: Model) {
+    const fields: ModelField[] = []
 
-      const targetRelationField = new RelationField(sourceNamePlural, source.name, target)
-      targetRelationField.setModifier('list')
+    if (model.attributes.has('id')) {
+      const idBlockAttribute = model.attributes.get('id') as IdBlockAttribute
 
-      const sourceRelationField = new RelationField(targetNamePlural, target.name, source)
-      sourceRelationField.setModifier('list')
-
-      target.addField(sourceNamePlural, targetRelationField)
-      source.addField(targetNamePlural, sourceRelationField)
-
-      return
+      if (idBlockAttribute.arguments.has('fields')) {
+        const fields = idBlockAttribute.arguments.get('fields')
+        console.log(fields)
+      }
     }
 
-    let idField: ModelField | null = null
-
-    for (const field of [...source.fields.values()]) {
+    for (const field of [...model.fields.values()]) {
       if (field.attributes.has('id')) {
-        idField = field
+        fields.push(field)
         break
       }
     }
 
-    if (!idField) return
+    return fields
+  }
 
-    const targetTypeFieldName = `${uncapitalize(source.name)}Id`
+  private createCommonRelation(
+    source: Model,
+    target: Model,
+    options?: CreateRelationOptions,
+    oneToMany?: boolean
+  ) {
+    const [sourceName, targetName] = this.uncapitalizeModalsNames(source, target)
 
-    const targetTypeField = createScalarFieldFromType(targetTypeFieldName, idField.type, target)
+    const targetIdFields = this.getModelIdFields(target)
 
-    if (!targetTypeField) return
+    if (targetIdFields.length === 0) return
 
-    if (type === RelationType.ONE_TO_ONE) {
-      const sourceRelationField = new RelationField(targetName, target.name, source)
-      sourceRelationField.setModifier('optional')
+    const targetRelationField = new RelationField(sourceName, source.name, target)
+    targetRelationField.setModifier(oneToMany ? 'list' : 'optional')
 
-      const targetRelationField = new RelationField(sourceName, source.name, target)
-      const targetRelationAttr = new RelationAttribute(targetRelationField)
+    const sourceRelationField = new RelationField(targetName, target.name, source)
+    const sourceRelationAttr = new RelationAttribute(sourceRelationField)
 
-      targetRelationAttr.setFields([targetTypeField.name])
-      targetRelationAttr.setReferences([idField.name])
+    if (targetIdFields.length === 1) {
+      const targetIdField = targetIdFields[0]
+      const sourceTypeField = createScalarFieldFromType(
+        this.createFieldName(targetName, targetIdField.name),
+        targetIdField.type,
+        source
+      )
 
-      targetRelationField.attributes.set('relation', targetRelationAttr)
-      targetTypeField.attributes.set('unique', new UniqueAttribute(targetTypeField))
+      if (!sourceTypeField) return
 
-      source.addField(targetName, sourceRelationField)
-      target.addField(sourceName, targetRelationField)
-      target.addField(targetTypeFieldName, targetTypeField)
+      sourceRelationAttr.setFields([sourceTypeField.name])
+      sourceRelationAttr.setReferences([targetIdField.name])
+
+      sourceRelationField.attributes.set('relation', sourceRelationAttr)
+
+      if (!oneToMany) sourceTypeField.attributes.set('unique', new UniqueAttribute(sourceTypeField))
+
+      source.addField(sourceRelationField.name, sourceRelationField)
+      source.addField(sourceTypeField.name, sourceTypeField)
+      target.addField(targetRelationField.name, targetRelationField)
 
       return
     }
 
-    if (type === RelationType.ONE_TO_MANY) {
-      const sourceRelationField = new RelationField(targetNamePlural, target.name, source)
-      sourceRelationField.setModifier('list')
+    // const uniqueBlockAttr = new UniqueBlockAttribute(source)
+    // sourceRelationAttr.setReferences(targetIdFields.map((field) => field.name))
+  }
 
-      const targetRelationField = new RelationField(sourceName, source.name, source)
-      const targetRelationAttr = new RelationAttribute(targetRelationField)
+  private createFieldName(modelName: string, fieldName: string) {
+    return `${uncapitalize(modelName)}${capitalize(fieldName)}`
+  }
 
-      targetRelationAttr.setFields([targetTypeField.name])
-      targetRelationAttr.setReferences([idField.name])
+  createOneToOneRelation(source: Model, target: Model, options?: CreateRelationOptions) {
+    this.createCommonRelation(source, target, options)
+  }
 
-      targetRelationField.attributes.set('relation', targetRelationAttr)
+  createOneToManyRelation(source: Model, target: Model, options?: CreateRelationOptions) {
+    this.createCommonRelation(source, target, options, true)
+  }
 
-      source.addField(targetName, sourceRelationField)
-      target.addField(sourceName, targetRelationField)
-      target.addField(targetTypeFieldName, targetTypeField)
-    }
+  createManyToManyRelation(
+    source: Model,
+    target: Model,
+    options?: CreateManyToManyRelationOptions
+  ) {
+    const [sourceName, targetName] = this.plurifyModalsNames(
+      ...this.uncapitalizeModalsNames(source, target)
+    )
+
+    const targetRelationField = new RelationField(sourceName, source.name, target)
+    targetRelationField.setModifier('list')
+
+    const sourceRelationField = new RelationField(targetName, target.name, source)
+    sourceRelationField.setModifier('list')
+
+    target.addField(sourceName, targetRelationField)
+    source.addField(targetName, sourceRelationField)
   }
 }

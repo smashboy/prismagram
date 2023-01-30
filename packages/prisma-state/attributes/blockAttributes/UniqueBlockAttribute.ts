@@ -10,6 +10,10 @@ export class UniqueBlockAttribute extends BlockAttribute<
     super('unique', model)
   }
 
+  setFields(fields: string[]) {
+    this.setArgument('fields', fields)
+  }
+
   _parseArgs(args: AstAttributeArgument[]) {
     super._parseArgs(args, 'fields')
   }

@@ -13,9 +13,9 @@ import {
   $nodesArray,
   $schemaState,
   $selectedRelationType,
-  loadEditorDataEffect,
   nodesChangeEvent,
-  setPrismaSchemaEvent,
+  setCreateRelationModalData,
+  toggleCreateRelationModal,
   viewportChangeEvent
 } from '../stores'
 import { DiagramEditorContextProvider } from '../stores/context'
@@ -23,6 +23,8 @@ import { ModelNode } from './nodes/ModelNode'
 import { NodeType } from '@shared/common/configs/diagrams'
 import '../css/editor.css'
 import { useDiagramEditorShortcuts } from '@renderer/modules/spotlight'
+import { CreateRelationModal } from './CreateRelationModal'
+import { PrismaSchemaState } from 'prisma-state'
 
 const $store = combine({
   nodes: $nodesArray,
@@ -49,18 +51,24 @@ export const DiagramEditor = () => {
   const onConnect: OnConnect = ({ source, target }) => {
     if (!source || !target) return
 
-    const sourceModel = state.model(source)
-    const targetModel = state.model(target)
+    const prevSchemaString = state.toString()
 
-    if (!sourceModel || !targetModel) return
+    const newState = new PrismaSchemaState()
+    newState.fromString(prevSchemaString)
 
-    state.relations.createRelation(sourceModel, targetModel, selectedRelationType)
+    // const sourceModel = newState.model(source)
+    // const targetModel = newState.model(target)
 
-    setPrismaSchemaEvent(state.toString())
+    // if (!sourceModel || !targetModel) return
 
-    setTimeout(() => {
-      loadEditorDataEffect()
-    }, 5000)
+    // newState.relations.createRelation(targetModel, sourceModel, selectedRelationType)
+
+    toggleCreateRelationModal(true)
+    setCreateRelationModalData({
+      source,
+      target,
+      relation: selectedRelationType
+    })
   }
 
   return (
@@ -80,6 +88,7 @@ export const DiagramEditor = () => {
       >
         <Background />
       </ReactFlow>
+      <CreateRelationModal />
     </DiagramEditorContextProvider>
   )
 }

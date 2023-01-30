@@ -20,7 +20,9 @@ import {
   IconRelationOneToMany,
   IconRelationOneToOne,
   IconSchema,
-  IconZoomInArea
+  IconZoomIn,
+  IconZoomInArea,
+  IconZoomOut
 } from '@tabler/icons'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
@@ -108,6 +110,14 @@ export const EditorToolbar = () => {
       >
         {(styles) => (
           <Group style={styles}>
+            <OptionsContainer>
+              <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
+                <IconZoomOut size={ICON_SIZE} />
+              </ActionIcon>
+              <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
+                <IconZoomIn size={ICON_SIZE} />
+              </ActionIcon>
+            </OptionsContainer>
             <OptionsContainer>
               <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
                 <IconArrowBackUp size={ICON_SIZE} />

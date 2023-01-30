@@ -8,14 +8,14 @@ import {
   GET_EDITOR_DATA_ENDPOINT,
   GET_PROJECTS_DIRECTORY_ENDPOINT,
   GET_GLOBAL_SETTINGS_ENDPOINT,
-  GET_PRISMA_DOCUMENT_ENDPOINT,
-  GET_PRISMA_SCHEMA_PATH_ENDPOINT,
   GET_PROJECTS_LIST_ENDPOINT,
   UPDATE_PROJECT_ENDPOINT,
-  EDITOR_SAVE_SCHEMA
+  EDITOR_SAVE_SCHEMA,
+  EDITOR_FORMAT_SCHEMA
 } from '@shared/common/configs/api'
 import { GlobalSettings, Project } from '@shared/common/models/Project'
 import {
+  formatPrismaSchema,
   getPrismaDocument,
   getPrismaPreviewFeaturesList,
   readPrismaSchemaFile,
@@ -46,18 +46,6 @@ export default class WindowsManager extends WindowsManagerBase {
     })
 
     const browserWindow = this.appWindow!.getWindow()
-
-    this.appWindow.createApiRoute(GET_PRISMA_DOCUMENT_ENDPOINT, async () => {
-      const schemaSrc = await readPrismaSchemaFile(browserWindow)
-
-      if (!schemaSrc) return schemaSrc
-
-      return getPrismaDocument(schemaSrc)
-    })
-
-    this.appWindow.createApiRoute(GET_PRISMA_SCHEMA_PATH_ENDPOINT, () =>
-      readPrismaSchemaFilePath(browserWindow)
-    )
 
     this.appWindow.createApiRoute(GET_PROJECTS_LIST_ENDPOINT, () =>
       this.projectsManager.getProjectsList()
@@ -99,7 +87,13 @@ export default class WindowsManager extends WindowsManagerBase {
       if (schemaPath) {
         const schema = this.projectsManager.getProjectSchema(project)
 
-        return { schema, schemaPath }
+        let dmmf
+
+        if (schema) {
+          dmmf = await getPrismaDocument(schema)
+        }
+
+        return { schema, schemaPath, dmmf }
       }
 
       return void 0
@@ -109,6 +103,10 @@ export default class WindowsManager extends WindowsManagerBase {
       EDITOR_LAYOUT_NODES_ENDPOINT,
       async ({ diagram, layout }: { diagram: Diagram; layout: DiagramLayout }) =>
         layoutDiagramElements(diagram, layout)
+    )
+
+    this.appWindow.createApiRoute(EDITOR_FORMAT_SCHEMA, (schema: string) =>
+      formatPrismaSchema(schema)
     )
 
     this.appWindow.createApiRoute(GET_GLOBAL_SETTINGS_ENDPOINT, async () => {

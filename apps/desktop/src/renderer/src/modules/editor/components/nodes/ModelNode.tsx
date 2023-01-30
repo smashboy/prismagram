@@ -114,7 +114,7 @@ export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
           borderRadius: 8,
           opacity: 0,
           overflow: 'hidden',
-          ...(isTarget && { backgroundColor: 'red', opacity: 0.5 }),
+          ...(isTarget && { backgroundColor: 'blue', opacity: 0.25 }),
           ...(!isTarget && { pointerEvents: 'none' })
         }}
       />
