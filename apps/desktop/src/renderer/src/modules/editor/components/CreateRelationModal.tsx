@@ -10,6 +10,7 @@ import {
   $schemaState,
   resetCreateRelationModalData,
   setCreateRelationModalData,
+  setPrismaSchemaEvent,
   toggleCreateRelationModal
 } from '../stores'
 import { invoke } from '@renderer/core/electron'
@@ -39,6 +40,7 @@ export const CreateRelationModal = () => {
 
   const { modelIds } = schemaState
 
+  const [updatedState, setUpdatedState] = useState(new PrismaSchemaState())
   const [result, setResult] = useState('')
 
   // const state = useMemo(() => {
@@ -101,6 +103,7 @@ export const CreateRelationModal = () => {
 
       const formattedChanges = await invoke(EDITOR_FORMAT_SCHEMA, changes)
 
+      setUpdatedState(newState)
       setResult(formattedChanges)
     }
 
@@ -112,9 +115,10 @@ export const CreateRelationModal = () => {
     resetCreateRelationModalData()
   }
 
-  const handleConfirmCreateRelation = () => {
+  const handleConfirmCreateRelation = async () => {
     handleCloseDialog()
-    // setPrismaSchemaEvent(state.toString())
+    const formatted = await invoke(EDITOR_FORMAT_SCHEMA, updatedState.toString())
+    setPrismaSchemaEvent(formatted)
   }
 
   const handleSelectChange =
