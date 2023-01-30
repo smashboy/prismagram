@@ -40,8 +40,8 @@ export class RelationsManager {
       const idBlockAttribute = model.attributes.get('id') as IdBlockAttribute
 
       if (idBlockAttribute.arguments.has('fields')) {
-        const fields = idBlockAttribute.arguments.get('fields')
-        console.log(fields)
+        const fieldNames = idBlockAttribute.arguments.get('fields') as string[]
+        fields.push(...fieldNames.map((name) => model.field(name)))
       }
     }
 
@@ -52,7 +52,13 @@ export class RelationsManager {
       }
     }
 
+    console.log(fields)
+
     return fields
+  }
+
+  private createFieldName(modelName: string, fieldName: string) {
+    return `${uncapitalize(modelName)}${capitalize(fieldName)}`
   }
 
   private createCommonRelation(
@@ -97,12 +103,25 @@ export class RelationsManager {
       return
     }
 
-    // const uniqueBlockAttr = new UniqueBlockAttribute(source)
-    // sourceRelationAttr.setReferences(targetIdFields.map((field) => field.name))
-  }
+    const uniqueBlockAttr = new UniqueBlockAttribute(source)
+    const sourceTypeFields = targetIdFields
+      .map((field) =>
+        createScalarFieldFromType(this.createFieldName(targetName, field.name), field.type, source)
+      )
+      .filter((field) => !!field)
 
-  private createFieldName(modelName: string, fieldName: string) {
-    return `${uncapitalize(modelName)}${capitalize(fieldName)}`
+    const sourceTypeFieldName = sourceTypeFields.map((field) => field!.name)
+
+    sourceRelationAttr.setFields(sourceTypeFieldName)
+    sourceRelationAttr.setReferences(targetIdFields.map((field) => field.name))
+
+    uniqueBlockAttr.setFields(sourceTypeFieldName)
+
+    if (!oneToMany) source.attributes.set('unique', uniqueBlockAttr)
+
+    source.addField(sourceRelationField.name, sourceRelationField)
+    target.addField(targetRelationField.name, targetRelationField)
+    sourceTypeFields.forEach((field) => source.addField(field!.name, field!))
   }
 
   createOneToOneRelation(source: Model, target: Model, options?: CreateRelationOptions) {

@@ -51,13 +51,17 @@ export const CreateRelationModal = () => {
     const handleFormatSchema = async () => {
       const prevSchemaString = schemaState.toString()
 
+      const formatted = await invoke(EDITOR_FORMAT_SCHEMA, prevSchemaString)
+
       const newState = new PrismaSchemaState()
-      newState.fromString(prevSchemaString)
+      newState.fromString(formatted)
 
       const sourceModel = newState.model(source)
       const targetModel = newState.model(target)
 
       if (!sourceModel || !targetModel) return
+
+      console.log('TARGET:', { targetModel, prevSchemaString, newState })
 
       if (relation === '1-1') {
         newState.relations.createOneToOneRelation(sourceModel, targetModel)
@@ -95,9 +99,9 @@ export const CreateRelationModal = () => {
       //   sourceDiffIndexes
       // })
 
-      const formatted = await invoke(EDITOR_FORMAT_SCHEMA, changes)
+      const formattedChanges = await invoke(EDITOR_FORMAT_SCHEMA, changes)
 
-      setResult(formatted)
+      setResult(formattedChanges)
     }
 
     handleFormatSchema()
