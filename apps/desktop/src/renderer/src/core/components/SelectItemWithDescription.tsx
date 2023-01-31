@@ -12,7 +12,7 @@ export const SelectItemWithDescription = forwardRef<HTMLDivElement, ItemProps>(
       <Group noWrap>
         <div>
           <Text size="sm">{value}</Text>
-          <Text size="xs" opacity={0.65}>
+          <Text size="xs" color="dimmed">
             {description}
           </Text>
         </div>
