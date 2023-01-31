@@ -7,7 +7,7 @@ import { ReferentialAction, ReferentialActionOption } from 'prisma-state/constan
 import { EDITOR_FORMAT_SCHEMA } from '@shared/common/configs/api'
 import { invoke } from '@renderer/core/electron'
 
-interface SelectReferentialActionProps {
+interface ReferentialActionSelectProps {
   name: string
   model: Model
   variant?: 'onUpdate' | 'onDelete'
@@ -95,7 +95,7 @@ const options: SelectItem[] = [
   }
 ]
 
-export const SelectReferentialAction: React.FC<SelectReferentialActionProps> = ({
+export const ReferentialActionSelect: React.FC<ReferentialActionSelectProps> = ({
   name,
   model,
   variant = 'onDelete',

@@ -19,7 +19,7 @@ import { invoke } from '@renderer/core/electron'
 import { EDITOR_FORMAT_SCHEMA } from '@shared/common/configs/api'
 import { IconArrowRight } from '@tabler/icons'
 import { RelationType, RelationTypeOption } from 'prisma-state/constants'
-import { SelectReferentialAction } from './inputs/SelectReferentialAction'
+import { ReferentialActionSelect } from './inputs/ReferentialActionSelect'
 import { uncapitalize } from 'prisma-state/utils/string'
 
 const $store = combine({
@@ -142,14 +142,14 @@ export const CreateRelationModal = () => {
           {(style) => (
             <Stack style={style}>
               <Group grow>
-                <SelectReferentialAction
+                <ReferentialActionSelect
                   name={uncapitalize(target)}
                   model={updatedState.model(source)}
                   state={updatedState}
                   onChange={setUpdatedState}
                   variant="onUpdate"
                 />
-                <SelectReferentialAction
+                <ReferentialActionSelect
                   name={uncapitalize(target)}
                   model={updatedState.model(source)}
                   onChange={setUpdatedState}
