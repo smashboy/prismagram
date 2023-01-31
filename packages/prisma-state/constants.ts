@@ -32,6 +32,8 @@ export const ReferentialAction = {
   SET_DEFAULT: 'SetDefault'
 } as const
 
+export type ReferentialActionOption = typeof ReferentialAction[keyof typeof ReferentialAction]
+
 export const RelationType = {
   ONE_TO_ONE: '1-1',
   ONE_TO_MANY: '1-n',
@@ -39,8 +41,6 @@ export const RelationType = {
 } as const
 
 export type RelationTypeOption = typeof RelationType[keyof typeof RelationType]
-
-export type ReferentialActionOption = typeof ReferentialAction[keyof typeof ReferentialAction]
 
 export const prismaRelationModesList = ['foreignKeys', 'prisma'] as const
 export const prismaEngineTypesList = ['binary', 'dataproxy', 'library'] as const

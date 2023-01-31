@@ -11,6 +11,30 @@ export class RelationAttribute extends FieldAttribute<
     super('relation', field)
   }
 
+  get name() {
+    return (this.arguments.get('name') as string) || null
+  }
+
+  get fields() {
+    return (this.arguments.get('fields') as string[]) || []
+  }
+
+  get references() {
+    return (this.arguments.get('references') as string[]) || []
+  }
+
+  get map() {
+    return (this.arguments.get('map') as string) || null
+  }
+
+  get onUpdate() {
+    return (this.arguments.get('onUpdate') as ReferentialActionOption) || null
+  }
+
+  get onDelete() {
+    return (this.arguments.get('onUpdate') as ReferentialActionOption) || null
+  }
+
   setName(value: string) {
     this.setArgument('name', value)
   }

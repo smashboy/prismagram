@@ -14,7 +14,7 @@ export type ArgumentValue =
   | AttributeFunction
 
 export class Attribute<T extends string, AK = string> {
-  readonly arguments = new Map<AK, ArgumentValue>()
+  protected readonly arguments = new Map<AK, ArgumentValue>()
   private readonly _prefix: AttributePrefix
   readonly type: T
 

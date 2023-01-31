@@ -8,6 +8,14 @@ export class MapAttribute extends FieldAttribute<ScalarField | RelationField, 'n
     super('map', field)
   }
 
+  get name() {
+    return (this.arguments.get('name') as string) || null
+  }
+
+  setName(value: string) {
+    this.setArgument('name', value)
+  }
+
   _parseArgs(args: AstAttributeArgument[]) {
     super._parseArgs(args, 'name')
   }

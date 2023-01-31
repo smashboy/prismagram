@@ -9,9 +9,12 @@ import {
   UniqueAttribute,
   UniqueBlockAttribute
 } from './attributes'
+import { ReferentialActionOption } from './constants'
 
 interface CreateRelationOptions {
   name?: string
+  onUpdate?: ReferentialActionOption
+  onDelete?: ReferentialActionOption
 }
 
 interface CreateManyToManyRelationOptions extends CreateRelationOptions {
@@ -39,10 +42,8 @@ export class RelationsManager {
     if (model.attributes.has('id')) {
       const idBlockAttribute = model.attributes.get('id') as IdBlockAttribute
 
-      if (idBlockAttribute.arguments.has('fields')) {
-        const fieldNames = idBlockAttribute.arguments.get('fields') as string[]
-        fields.push(...fieldNames.map((name) => model.field(name)))
-      }
+      if (idBlockAttribute.fields.length > 0)
+        fields.push(...idBlockAttribute.fields.map((name) => model.field(name)))
     }
 
     for (const field of [...model.fields.values()]) {
@@ -86,6 +87,9 @@ export class RelationsManager {
       )
 
       if (!sourceTypeField) return
+
+      if (options?.onDelete) sourceRelationAttr.setOnDelete(options.onDelete)
+      if (options?.onUpdate) sourceRelationAttr.setOnUpdate(options.onUpdate)
 
       sourceRelationAttr.setFields([sourceTypeField.name])
       sourceRelationAttr.setReferences([targetIdField.name])
