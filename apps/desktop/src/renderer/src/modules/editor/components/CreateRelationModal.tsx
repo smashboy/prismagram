@@ -8,20 +8,25 @@ import {
   $createRelationModalData,
   $isOpenCreateRelationModal,
   $schemaState,
+  $selectedRelationType,
   resetCreateRelationModalData,
   setCreateRelationModalData,
   setPrismaSchemaEvent,
+  setSelectedRelationTypeEvent,
   toggleCreateRelationModal
 } from '../stores'
 import { invoke } from '@renderer/core/electron'
 import { EDITOR_FORMAT_SCHEMA } from '@shared/common/configs/api'
 import { IconArrowRight } from '@tabler/icons'
-import { RelationType } from 'prisma-state/constants'
+import { RelationType, RelationTypeOption } from 'prisma-state/constants'
+import { SelectReferentialAction } from './inputs/SelectReferentialAction'
+import { uncapitalize } from 'prisma-state/utils/string'
 
 const $store = combine({
   isOpen: $isOpenCreateRelationModal,
   data: $createRelationModalData,
-  schemaState: $schemaState
+  schemaState: $schemaState,
+  selectedRelationType: $selectedRelationType
 })
 
 // const deleted = { color: 'red', label: '-' }
@@ -34,20 +39,14 @@ const relationTypeOptions = [
 ]
 
 export const CreateRelationModal = () => {
-  const { isOpen, data, schemaState } = useStore($store)
+  const { isOpen, data, schemaState, selectedRelationType } = useStore($store)
 
-  const { source, target, relation } = data
+  const { source, target } = data
 
   const { modelIds } = schemaState
 
   const [updatedState, setUpdatedState] = useState(new PrismaSchemaState())
   const [result, setResult] = useState('')
-
-  // const state = useMemo(() => {
-  //   const state = new PrismaSchemaState()
-  //   state.fromString(schema)
-  //   return state
-  // }, [schema])
 
   useEffect(() => {
     const handleFormatSchema = async () => {
@@ -63,52 +62,36 @@ export const CreateRelationModal = () => {
 
       if (!sourceModel || !targetModel) return
 
-      console.log('TARGET:', { targetModel, prevSchemaString, newState })
-
-      if (relation === '1-1') {
+      if (selectedRelationType === '1-1') {
         newState.relations.createOneToOneRelation(sourceModel, targetModel)
-      } else if (relation === '1-n') {
+      } else if (selectedRelationType === '1-n') {
         newState.relations.createOneToManyRelation(sourceModel, targetModel)
       } else {
         newState.relations.createManyToManyRelation(sourceModel, targetModel)
       }
 
-      // const oldState = new PrismaSchemaState()
-      // oldState.fromString(prevSchema)
+      setUpdatedState(newState)
+    }
 
-      // const sourceModel = state.model(source)
-      // const targetModel = state.model(target)
+    handleFormatSchema()
+  }, [data, selectedRelationType])
 
-      // const oldSourceModel = oldState.model(source)
-      // const oldTargetModel = oldState.model(target)
-
-      // if (!sourceModel || !targetModel || !oldSourceModel || !oldTargetModel) return
+  useEffect(() => {
+    const handleShowResult = async () => {
+      const sourceModel = updatedState.model(source)
+      const targetModel = updatedState.model(target)
 
       const changes = `
       ${targetModel._toString()}
       ${sourceModel._toString()}
       `
 
-      // const targetDiffIndexes = sourceModel.fieldNames.filter(
-      //   (name) => !oldSourceModel.fieldNames.includes(name)
-      // )
-      // const sourceDiffIndexes = targetModel.fieldNames.filter(
-      //   (name) => !oldTargetModel.fieldNames.includes(name)
-      // )
-
-      // console.log({
-      //   targetDiffIndexes,
-      //   sourceDiffIndexes
-      // })
-
       const formattedChanges = await invoke(EDITOR_FORMAT_SCHEMA, changes)
-
-      setUpdatedState(newState)
       setResult(formattedChanges)
     }
 
-    handleFormatSchema()
-  }, [data])
+    handleShowResult()
+  }, [updatedState])
 
   const handleCloseDialog = () => {
     toggleCreateRelationModal(false)
@@ -121,11 +104,15 @@ export const CreateRelationModal = () => {
     setPrismaSchemaEvent(formatted)
   }
 
-  const handleSelectChange =
-    (field: 'source' | 'target' | 'relation') => (value: string | null) => {
-      if (!value) return
-      setCreateRelationModalData({ ...data, [field]: value })
-    }
+  const handleSelectChange = (field: 'source' | 'target') => (value: string | null) => {
+    if (!value) return
+    setCreateRelationModalData({ ...data, [field]: value })
+  }
+
+  const handeRelationChange = (value: RelationTypeOption | null) => {
+    if (!value) return
+    setSelectedRelationTypeEvent(value)
+  }
 
   return (
     <Modal title="Create relation" opened={isOpen} onClose={handleCloseDialog} size="xl">
@@ -145,12 +132,29 @@ export const CreateRelationModal = () => {
             searchable
           />
           <Select
-            value={relation}
-            onChange={handleSelectChange('relation')}
+            value={selectedRelationType}
+            onChange={handeRelationChange}
             data={relationTypeOptions}
             sx={{ width: 100 }}
           />
         </Group>
+        {selectedRelationType !== 'n-m' && (
+          <Group grow>
+            <SelectReferentialAction
+              name={uncapitalize(target)}
+              model={updatedState.model(source)}
+              state={updatedState}
+              onChange={setUpdatedState}
+              variant="onUpdate"
+            />
+            <SelectReferentialAction
+              name={uncapitalize(target)}
+              model={updatedState.model(source)}
+              onChange={setUpdatedState}
+              state={updatedState}
+            />
+          </Group>
+        )}
         <Prism
           language="json"
           highlightLines={{

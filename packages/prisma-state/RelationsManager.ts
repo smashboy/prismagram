@@ -13,6 +13,9 @@ import { ReferentialActionOption } from './constants'
 
 interface CreateRelationOptions {
   name?: string
+}
+
+interface CreateCommonRelationOptions extends CreateRelationOptions {
   onUpdate?: ReferentialActionOption
   onDelete?: ReferentialActionOption
 }
@@ -63,7 +66,7 @@ export class RelationsManager {
   private createCommonRelation(
     source: Model,
     target: Model,
-    options?: CreateRelationOptions,
+    options?: CreateCommonRelationOptions,
     oneToMany?: boolean
   ) {
     const [sourceName, targetName] = this.uncapitalizeModalsNames(source, target)
@@ -126,13 +129,15 @@ export class RelationsManager {
     sourceTypeFields.forEach((field) => source.addField(field!.name, field!))
   }
 
-  createOneToOneRelation(source: Model, target: Model, options?: CreateRelationOptions) {
+  createOneToOneRelation(source: Model, target: Model, options?: CreateCommonRelationOptions) {
     this.createCommonRelation(source, target, options)
   }
 
-  createOneToManyRelation(source: Model, target: Model, options?: CreateRelationOptions) {
+  createOneToManyRelation(source: Model, target: Model, options?: CreateCommonRelationOptions) {
     this.createCommonRelation(source, target, options, true)
   }
+
+  relationExists(source: Model, target: Model, name?: string) {}
 
   createManyToManyRelation(
     source: Model,

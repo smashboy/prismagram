@@ -11,8 +11,6 @@ import {
   $diagramViewport,
   $edgesArray,
   $nodesArray,
-  $schemaState,
-  $selectedRelationType,
   nodesChangeEvent,
   setCreateRelationModalData,
   toggleCreateRelationModal,
@@ -24,14 +22,11 @@ import { NodeType } from '@shared/common/configs/diagrams'
 import '../css/editor.css'
 import { useDiagramEditorShortcuts } from '@renderer/modules/spotlight'
 import { CreateRelationModal } from './CreateRelationModal'
-import { PrismaSchemaState } from 'prisma-state'
 
 const $store = combine({
   nodes: $nodesArray,
   edges: $edgesArray,
-  viewport: $diagramViewport,
-  state: $schemaState,
-  selectedRelationType: $selectedRelationType
+  viewport: $diagramViewport
 })
 
 const nodeTypes = {
@@ -39,7 +34,7 @@ const nodeTypes = {
 }
 
 export const DiagramEditor = () => {
-  const { nodes, edges, state, selectedRelationType, viewport } = useStore($store)
+  const { nodes, edges, viewport } = useStore($store)
 
   useDiagramEditorShortcuts()
 
@@ -51,23 +46,10 @@ export const DiagramEditor = () => {
   const onConnect: OnConnect = ({ source, target }) => {
     if (!source || !target) return
 
-    const prevSchemaString = state.toString()
-
-    const newState = new PrismaSchemaState()
-    newState.fromString(prevSchemaString)
-
-    // const sourceModel = newState.model(source)
-    // const targetModel = newState.model(target)
-
-    // if (!sourceModel || !targetModel) return
-
-    // newState.relations.createRelation(targetModel, sourceModel, selectedRelationType)
-
     toggleCreateRelationModal(true)
     setCreateRelationModalData({
       source,
-      target,
-      relation: selectedRelationType
+      target
     })
   }
 
