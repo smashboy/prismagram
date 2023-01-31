@@ -32,7 +32,7 @@ export class RelationAttribute extends FieldAttribute<
   }
 
   get onDelete() {
-    return (this.arguments.get('onUpdate') as ReferentialActionOption) || null
+    return (this.arguments.get('onDelete') as ReferentialActionOption) || null
   }
 
   setName(value: string) {
