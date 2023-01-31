@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { PrismaSchemaState } from 'prisma-state'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
-import { Button, Group, Modal, Select, Stack } from '@mantine/core'
+import { Button, Group, Modal, Select, Stack, Switch, Transition } from '@mantine/core'
 import { Prism } from '@mantine/prism'
 import {
   $createRelationModalData,
@@ -138,23 +138,28 @@ export const CreateRelationModal = () => {
             sx={{ width: 100 }}
           />
         </Group>
-        {selectedRelationType !== 'n-m' && (
-          <Group grow>
-            <SelectReferentialAction
-              name={uncapitalize(target)}
-              model={updatedState.model(source)}
-              state={updatedState}
-              onChange={setUpdatedState}
-              variant="onUpdate"
-            />
-            <SelectReferentialAction
-              name={uncapitalize(target)}
-              model={updatedState.model(source)}
-              onChange={setUpdatedState}
-              state={updatedState}
-            />
-          </Group>
-        )}
+        <Transition mounted={selectedRelationType !== 'n-m'} transition="fade">
+          {(style) => (
+            <Stack style={style}>
+              <Group grow>
+                <SelectReferentialAction
+                  name={uncapitalize(target)}
+                  model={updatedState.model(source)}
+                  state={updatedState}
+                  onChange={setUpdatedState}
+                  variant="onUpdate"
+                />
+                <SelectReferentialAction
+                  name={uncapitalize(target)}
+                  model={updatedState.model(source)}
+                  onChange={setUpdatedState}
+                  state={updatedState}
+                />
+              </Group>
+              <Switch label="Optional" sx={{ width: '18%' }} />
+            </Stack>
+          )}
+        </Transition>
         <Prism
           language="json"
           highlightLines={{
