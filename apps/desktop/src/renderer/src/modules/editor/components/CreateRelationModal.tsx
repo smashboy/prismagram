@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { PrismaSchemaState } from 'prisma-state'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
-import { Button, Group, Modal, Select, Stack, Switch, Transition } from '@mantine/core'
+import { Button, Group, Modal, Select, Stack, Transition } from '@mantine/core'
 import { Prism } from '@mantine/prism'
 import {
   $createRelationModalData,
@@ -23,6 +23,7 @@ import { ReferentialActionSelect } from './inputs/ReferentialActionSelect'
 import { uncapitalize } from 'prisma-state/utils/string'
 import { RelationField } from 'prisma-state/fields'
 import { RelationAttribute } from 'prisma-state/attributes'
+import { ModelRelationFieldOptionalSwitch } from './inputs/ModelRelationFieldOptionalSwitch'
 
 const $store = combine({
   isOpen: $isOpenCreateRelationModal,
@@ -47,7 +48,9 @@ export const CreateRelationModal = () => {
   const { modelIds } = schemaState
 
   const [updatedState, setUpdatedState] = useState(new PrismaSchemaState())
+  const [relation, setRelation] = useState<[string, string] | null>(null)
   const [hightligthLineIndexes, setHightligthLineIndexes] = useState<number[]>([])
+
   const [result, setResult] = useState('')
 
   useEffect(() => {
@@ -74,8 +77,11 @@ export const CreateRelationModal = () => {
         relation = newState.relations.createManyToManyRelation(sourceModel, targetModel)
       }
 
-      if (!relation) return
+      if (!relation) return setRelation(null)
 
+      const [sourceRelation, targetRelation] = relation
+
+      setRelation([sourceRelation.name, targetRelation.name])
       setUpdatedState(newState)
     }
 
@@ -84,6 +90,10 @@ export const CreateRelationModal = () => {
 
   useEffect(() => {
     const handleShowResult = async () => {
+      if (!relation) return
+
+      const [sourceRelationName, targetRelationName] = relation
+
       const sourceModel = updatedState.model(source)
       const targetModel = updatedState.model(target)
 
@@ -103,7 +113,7 @@ export const CreateRelationModal = () => {
       for (const index in targetFields) {
         const field = targetFields[index]
 
-        if (field.type === source) {
+        if (field.name === targetRelationName) {
           indexes.push(Number(index) + 2)
         }
       }
@@ -114,7 +124,7 @@ export const CreateRelationModal = () => {
       for (const index in sourceFields) {
         const field = sourceFields[index] as RelationField
 
-        if (field.type === target) {
+        if (field.name === sourceRelationName) {
           indexes.push(Number(index) + 2 + targetFields.length + 3)
           const relatinFields =
             (field.attributes.get('relation') as RelationAttribute)?.fields || []
@@ -195,7 +205,12 @@ export const CreateRelationModal = () => {
                   state={updatedState}
                 />
               </Group>
-              <Switch label="Optional" sx={{ width: '18%' }} />
+              <ModelRelationFieldOptionalSwitch
+                name={relation?.[0] || ''}
+                model={updatedState.model(source)}
+                state={updatedState}
+                onChange={setUpdatedState}
+              />
             </Stack>
           )}
         </Transition>

@@ -52,7 +52,7 @@ export class ModelField<A = FieldAttribute> extends Field {
   //   // this.attributes.clear()
   // }
 
-  setModifier(modifier: FieldModifier) {
+  setModifier(modifier: FieldModifier | null) {
     this.modifier = modifier
     // this.attributes.clear()
   }
