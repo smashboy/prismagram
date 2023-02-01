@@ -1,3 +1,7 @@
+import { EDITOR_FORMAT_SCHEMA } from '@shared/common/configs/api'
+import { PrismaSchemaState } from 'prisma-state'
+import { invoke } from './electron'
+
 export const string2Color = (string: string) => {
   let hash = 0
   let i
@@ -16,4 +20,13 @@ export const string2Color = (string: string) => {
   /* eslint-enable no-bitwise */
 
   return color
+}
+
+export const cloneSchemaState = async (state: PrismaSchemaState) => {
+  const formatted = await invoke(EDITOR_FORMAT_SCHEMA, state.toString())
+
+  const updatedState = new PrismaSchemaState()
+  updatedState.fromString(formatted)
+
+  return updatedState
 }

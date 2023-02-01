@@ -105,7 +105,7 @@ export class RelationsManager {
       source.addField(sourceTypeField.name, sourceTypeField)
       target.addField(targetRelationField.name, targetRelationField)
 
-      return
+      return [sourceRelationField, targetRelationField] as const
     }
 
     const uniqueBlockAttr = new UniqueBlockAttribute(source)
@@ -127,14 +127,16 @@ export class RelationsManager {
     source.addField(sourceRelationField.name, sourceRelationField)
     target.addField(targetRelationField.name, targetRelationField)
     sourceTypeFields.forEach((field) => source.addField(field!.name, field!))
+
+    return [sourceRelationField, targetRelationField] as const
   }
 
   createOneToOneRelation(source: Model, target: Model, options?: CreateCommonRelationOptions) {
-    this.createCommonRelation(source, target, options)
+    return this.createCommonRelation(source, target, options)
   }
 
   createOneToManyRelation(source: Model, target: Model, options?: CreateCommonRelationOptions) {
-    this.createCommonRelation(source, target, options, true)
+    return this.createCommonRelation(source, target, options, true)
   }
 
   relationExists(source: Model, target: Model, name?: string) {}
@@ -154,7 +156,9 @@ export class RelationsManager {
     const sourceRelationField = new RelationField(targetName, target.name, source)
     sourceRelationField.setModifier('list')
 
-    target.addField(sourceName, targetRelationField)
-    source.addField(targetName, sourceRelationField)
+    target.addField(targetRelationField.name, targetRelationField)
+    source.addField(sourceRelationField.name, sourceRelationField)
+
+    return [sourceRelationField, targetRelationField] as const
   }
 }

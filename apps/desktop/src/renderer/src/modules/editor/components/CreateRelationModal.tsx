@@ -21,6 +21,8 @@ import { IconArrowRight } from '@tabler/icons'
 import { RelationType, RelationTypeOption } from 'prisma-state/constants'
 import { ReferentialActionSelect } from './inputs/ReferentialActionSelect'
 import { uncapitalize } from 'prisma-state/utils/string'
+import { RelationField } from 'prisma-state/fields'
+import { RelationAttribute } from 'prisma-state/attributes'
 
 const $store = combine({
   isOpen: $isOpenCreateRelationModal,
@@ -29,7 +31,6 @@ const $store = combine({
   selectedRelationType: $selectedRelationType
 })
 
-// const deleted = { color: 'red', label: '-' }
 const added = { color: 'blue' }
 
 const relationTypeOptions = [
@@ -46,6 +47,7 @@ export const CreateRelationModal = () => {
   const { modelIds } = schemaState
 
   const [updatedState, setUpdatedState] = useState(new PrismaSchemaState())
+  const [hightligthLineIndexes, setHightligthLineIndexes] = useState<number[]>([])
   const [result, setResult] = useState('')
 
   useEffect(() => {
@@ -62,13 +64,17 @@ export const CreateRelationModal = () => {
 
       if (!sourceModel || !targetModel) return
 
+      let relation: [RelationField, RelationField] | undefined
+
       if (selectedRelationType === '1-1') {
-        newState.relations.createOneToOneRelation(sourceModel, targetModel)
+        relation = newState.relations.createOneToOneRelation(sourceModel, targetModel)
       } else if (selectedRelationType === '1-n') {
-        newState.relations.createOneToManyRelation(sourceModel, targetModel)
+        relation = newState.relations.createOneToManyRelation(sourceModel, targetModel)
       } else {
-        newState.relations.createManyToManyRelation(sourceModel, targetModel)
+        relation = newState.relations.createManyToManyRelation(sourceModel, targetModel)
       }
+
+      if (!relation) return
 
       setUpdatedState(newState)
     }
@@ -81,13 +87,46 @@ export const CreateRelationModal = () => {
       const sourceModel = updatedState.model(source)
       const targetModel = updatedState.model(target)
 
-      const changes = `
+      const indexes: number[] = []
+
+      const updatedModels = await invoke(
+        EDITOR_FORMAT_SCHEMA,
+        `
       ${targetModel._toString()}
       ${sourceModel._toString()}
       `
+      )
 
-      const formattedChanges = await invoke(EDITOR_FORMAT_SCHEMA, changes)
-      setResult(formattedChanges)
+      const targetFields = [...targetModel.fields.values()]
+      const sourceFields = [...sourceModel.fields.values()]
+
+      for (const index in targetFields) {
+        const field = targetFields[index]
+
+        if (field.type === source) {
+          indexes.push(Number(index) + 2)
+        }
+      }
+
+      const sourceRelationFields: string[] = []
+
+      // TODO: rework, super dumb way to hightlight line indexes
+      for (const index in sourceFields) {
+        const field = sourceFields[index] as RelationField
+
+        if (field.type === target) {
+          indexes.push(Number(index) + 2 + targetFields.length + 3)
+          const relatinFields =
+            (field.attributes.get('relation') as RelationAttribute)?.fields || []
+          sourceRelationFields.push(...relatinFields)
+        }
+
+        if (sourceRelationFields.includes(field.name))
+          indexes.push(Number(index) + 2 + targetFields.length + 3)
+      }
+
+      setHightligthLineIndexes(indexes)
+      setResult(updatedModels)
     }
 
     handleShowResult()
@@ -162,11 +201,10 @@ export const CreateRelationModal = () => {
         </Transition>
         <Prism
           language="json"
-          highlightLines={{
-            6: added,
-            11: added,
-            12: added
-          }}
+          highlightLines={hightligthLineIndexes.reduce(
+            (acc, index) => ({ ...acc, [index]: added }),
+            {}
+          )}
           withLineNumbers
           noCopy
         >
