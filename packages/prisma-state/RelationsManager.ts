@@ -140,7 +140,27 @@ export class RelationsManager {
     return this.createCommonRelation(source, target, options, true)
   }
 
-  relationExists(source: Model, target: Model, name?: string) {}
+  relationExists(source: Model, target: Model, name?: string) {
+    const sourceRelationField = [...source.fields.values()].find(
+      (field) => field.type === target.name
+    )
+    const targetRelationField = [...target.fields.values()].find(
+      (field) => field.type === source.name
+    )
+
+    if (!sourceRelationField || !targetRelationField) return false
+
+    if (!name) return true
+
+    const sourceRelationAttr = sourceRelationField.attributes.get('relation') as
+      | RelationAttribute
+      | undefined
+    const targetRelationAttr = targetRelationField.attributes.get('relation') as
+      | RelationAttribute
+      | undefined
+
+    return sourceRelationAttr?.name === targetRelationAttr?.name
+  }
 
   createManyToManyRelation(
     source: Model,
