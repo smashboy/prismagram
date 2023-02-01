@@ -29,7 +29,8 @@ export const theme: MantineThemeOverride = {
         centered: true,
         overlayOpacity: 0.55,
         overlayBlur: 5,
-        overlayColor: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2]
+        overlayColor: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2],
+        overflow: 'inside'
       })
     },
     Input: {
