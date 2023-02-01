@@ -17,7 +17,7 @@ export class Block<F extends Field = Field, K = string> {
   readonly fields = new Map<K, F>()
   name: string
   readonly type: BlockType
-  protected readonly state: PrismaSchemaState
+  readonly state: PrismaSchemaState
 
   constructor(name: string, type: BlockType, state: PrismaSchemaState) {
     this.name = name
