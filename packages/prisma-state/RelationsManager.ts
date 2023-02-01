@@ -126,6 +126,7 @@ export class RelationsManager {
 
     source.addField(sourceRelationField.name, sourceRelationField)
     target.addField(targetRelationField.name, targetRelationField)
+    sourceRelationField.attributes.set('relation', sourceRelationAttr)
     sourceTypeFields.forEach((field) => source.addField(field!.name, field!))
 
     return [sourceRelationField, targetRelationField] as const
