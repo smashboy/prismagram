@@ -69,7 +69,12 @@ export class RelationsManager {
     options?: CreateCommonRelationOptions,
     oneToMany?: boolean
   ) {
-    const [sourceName, targetName] = this.uncapitalizeModalsNames(source, target)
+    let [sourceName, targetName] = this.uncapitalizeModalsNames(source, target)
+
+    if (options?.name) {
+      sourceName = `${sourceName}_${options.name}`
+      targetName = `${targetName}_${options.name}`
+    }
 
     const targetIdFields = this.getModelIdFields(target)
 
@@ -93,6 +98,13 @@ export class RelationsManager {
 
       if (options?.onDelete) sourceRelationAttr.setOnDelete(options.onDelete)
       if (options?.onUpdate) sourceRelationAttr.setOnUpdate(options.onUpdate)
+      if (options?.name) {
+        sourceRelationAttr.setName(options.name)
+
+        const targetRelationAttr = new RelationAttribute(targetRelationField)
+        targetRelationAttr.setName(options.name)
+        targetRelationField.attributes.set('relation', targetRelationAttr)
+      }
 
       sourceRelationAttr.setFields([sourceTypeField.name])
       sourceRelationAttr.setReferences([targetIdField.name])
@@ -167,15 +179,30 @@ export class RelationsManager {
     target: Model,
     options?: CreateManyToManyRelationOptions
   ) {
-    const [sourceName, targetName] = this.plurifyModalsNames(
+    let [sourceName, targetName] = this.plurifyModalsNames(
       ...this.uncapitalizeModalsNames(source, target)
     )
+
+    if (options?.name) {
+      sourceName = `${sourceName}_${options.name}`
+      targetName = `${targetName}_${options.name}`
+    }
 
     const targetRelationField = new RelationField(sourceName, source.name, target)
     targetRelationField.setModifier('list')
 
     const sourceRelationField = new RelationField(targetName, target.name, source)
     sourceRelationField.setModifier('list')
+
+    if (options?.name) {
+      const sourceRelationAttr = new RelationAttribute(sourceRelationField)
+      sourceRelationAttr.setName(options.name)
+      sourceRelationField.attributes.set('relation', sourceRelationAttr)
+
+      const targetRelationAttr = new RelationAttribute(targetRelationField)
+      targetRelationAttr.setName(options.name)
+      targetRelationField.attributes.set('relation', targetRelationAttr)
+    }
 
     target.addField(targetRelationField.name, targetRelationField)
     source.addField(sourceRelationField.name, sourceRelationField)
