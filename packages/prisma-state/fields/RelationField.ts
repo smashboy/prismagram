@@ -25,6 +25,6 @@ export class RelationField extends ModelField {
         (field) => field.type === this.type && field.relationName === this.relationName
       )
 
-    return relatedModelFields.find((field) => field.type === this.type)
+    return relatedModelFields.find((field) => field.type === this.type && !field.relationName)
   }
 }
