@@ -7,7 +7,6 @@ import {
 import { IconList, IconPlus, IconSettings } from '@tabler/icons'
 
 const ICON_SIZE = 20
-const ICON_COLOR = 'black'
 
 export const SidebarFooter = () => {
   const handleOpenSettingsModal = () => toggleSettingsModalEvent(true)
@@ -17,13 +16,13 @@ export const SidebarFooter = () => {
   return (
     <Group position="center">
       <ActionIcon onClick={handleOpenSettingsModal}>
-        <IconSettings size={ICON_SIZE} color={ICON_COLOR} />
+        <IconSettings size={ICON_SIZE} />
       </ActionIcon>
       <ActionIcon onClick={handleOpenSelectProjectModal}>
-        <IconList size={ICON_SIZE} color={ICON_COLOR} />
+        <IconList size={ICON_SIZE} />
       </ActionIcon>
       <ActionIcon onClick={handleOpenCreateProjectModal}>
-        <IconPlus size={ICON_SIZE} color={ICON_COLOR} />
+        <IconPlus size={ICON_SIZE} />
       </ActionIcon>
     </Group>
   )

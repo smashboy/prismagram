@@ -1,23 +1,21 @@
 import { useEffect } from 'react'
-import { useStore } from 'effector-react'
-import { Group, Paper, Stack } from '@mantine/core'
-import { Editor, EditorToolbar, Sidebar } from './modules/editor'
+import { ReactFlowProvider } from 'reactflow'
+import { Group, Stack } from '@mantine/core'
+import { Editor, EditorToolbar } from './modules/editor'
 import { CreateProjectModal, getProjectsListEffect, ProjectSelectorModal } from './modules/projects'
 import { loadGlobalSettingsEffect, SettingsModal } from './modules/settings'
-import { $isOpenDetailsView } from './stores/ui/modals'
-import { RightSidebar } from './modules/editor/components/RightSidebar'
 import { Spotlight, useGeneralShortcuts } from './modules/spotlight'
 import 'reactflow/dist/style.css'
 import './transports'
 import 'prisma-state/PrismaSchemaState'
-import { ReactFlowProvider } from 'reactflow'
+import { PaperGlass } from './core/components'
 
 function App() {
-  const { isOpen, isOpenDebounced } = useStore($isOpenDetailsView)
+  // const { isOpen, isOpenDebounced } = useStore($isOpenDetailsView)
 
   useGeneralShortcuts()
 
-  const isRighSidebarOpen = isOpen ? isOpenDebounced : isOpen
+  // const isRighSidebarOpen = isOpen ? isOpenDebounced : isOpen
 
   useEffect(() => {
     loadGlobalSettingsEffect()
@@ -27,21 +25,27 @@ function App() {
   return (
     <ReactFlowProvider>
       <Spotlight>
-        <Group w="100%" h="100%" p="xs" noWrap>
-          <Sidebar />
-          <Stack w="100%" h="100%" sx={{ flex: 1 }}>
+        <Group w="100%" h="100%" spacing={0} noWrap>
+          {/* <Sidebar /> */}
+          <Stack w="100%" h="100%" spacing={0} sx={{ flex: 1 }}>
             <EditorToolbar />
-            <Paper
-              w={isRighSidebarOpen ? 'calc(100vw - 690px)' : 'calc(100vw - 330px)'}
-              // w="100%"
+            <PaperGlass
+              // w={isRighSidebarOpen ? 'calc(100vw - 650px)' : 'calc(100vw - 290px)'}
+              w="100%"
               h="100%"
-              shadow="md"
-              sx={{ transition: 'width 400ms ease', overflow: 'hidden' }}
+              // withBorder
+              style={{
+                transition: 'width 400ms ease',
+                overflow: 'hidden'
+                // borderRadius: 0,
+                // borderTopWidth: 0,
+                // borderBottomWidth: 0
+              }}
             >
               <Editor />
-            </Paper>
+            </PaperGlass>
           </Stack>
-          <RightSidebar />
+          {/* <RightSidebar /> */}
           <SettingsModal />
           <CreateProjectModal />
           <ProjectSelectorModal />

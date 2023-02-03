@@ -52,7 +52,7 @@ export const CreateProjectModal = () => {
             Cancel
           </Button>
           <Button
-            variant="filled"
+            variant="subtle"
             onClick={handleCreateProject}
             loading={isCreatingProject}
             disabled={disableCreateButton}

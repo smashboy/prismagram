@@ -8,18 +8,27 @@ import {
   SegmentedControl,
   Transition
 } from '@mantine/core'
+import { PaperGlass } from '@renderer/core/components'
 import { $selectedProject } from '@renderer/modules/projects'
+import {
+  toggleCreateProjectModalEvent,
+  toggleSelectProjectModalEvent,
+  toggleSettingsModalEvent
+} from '@renderer/stores/ui/modals'
 import {
   IconArrowBackUp,
   IconArrowForwardUp,
   IconBoxMargin,
   IconCode,
   IconDatabase,
+  IconList,
   IconPlayerPlay,
+  IconPlus,
   IconRelationManyToMany,
   IconRelationOneToMany,
   IconRelationOneToOne,
   IconSchema,
+  IconSettings,
   IconZoomIn,
   IconZoomInArea,
   IconZoomOut
@@ -100,78 +109,99 @@ export const EditorToolbar = () => {
   const handleDiagramLayout = () => layoutDiagramEffect()
   const handleFitIntoView = () => flow.fitView()
 
+  const handleOpenSettingsModal = () => toggleSettingsModalEvent(true)
+  const handleOpenCreateProjectModal = () => toggleCreateProjectModalEvent(true)
+  const handleOpenSelectProjectModal = () => toggleSelectProjectModalEvent(true)
+
   return (
-    <Group position="right">
-      <Transition
-        mounted={selectedView === EditorView.DIAGRAM}
-        transition="slide-left"
-        duration={400}
-        timingFunction="ease"
-      >
-        {(styles) => (
-          <Group style={styles}>
-            <OptionsContainer>
-              <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
-                <IconZoomOut size={ICON_SIZE} />
-              </ActionIcon>
-              <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
-                <IconZoomIn size={ICON_SIZE} />
-              </ActionIcon>
-            </OptionsContainer>
-            <OptionsContainer>
-              <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
-                <IconArrowBackUp size={ICON_SIZE} />
-              </ActionIcon>
-              <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
-                <IconArrowForwardUp size={ICON_SIZE} />
-              </ActionIcon>
-            </OptionsContainer>
-            <OptionsContainer>
-              <Menu>
-                <Menu.Target>
+    <PaperGlass withBorder py={5} px="xs">
+      <Group spacing={0}>
+        <Group sx={{ flex: 1 }}>
+          <ActionIcon onClick={handleOpenSettingsModal}>
+            <IconSettings size={ICON_SIZE} />
+          </ActionIcon>
+          <ActionIcon onClick={handleOpenSelectProjectModal}>
+            <IconList size={ICON_SIZE} />
+          </ActionIcon>
+          <ActionIcon onClick={handleOpenCreateProjectModal}>
+            <IconPlus size={ICON_SIZE} />
+          </ActionIcon>
+        </Group>
+        <Group position="right">
+          <Transition
+            mounted={selectedView === EditorView.DIAGRAM}
+            transition="slide-left"
+            duration={400}
+            timingFunction="ease"
+          >
+            {(styles) => (
+              <Group style={styles}>
+                <OptionsContainer>
                   <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
-                    <RelationIcon />
+                    <IconZoomOut size={ICON_SIZE} />
                   </ActionIcon>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item icon={<IconRelationOneToOne size={14} />}>One-to-one</Menu.Item>
-                  <Menu.Item icon={<IconRelationOneToMany size={14} />}>One-to-many</Menu.Item>
-                  <Menu.Item icon={<IconRelationManyToMany size={14} />}>Many-to-many</Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            </OptionsContainer>
-            <OptionsContainer>
-              <ActionIcon
-                onClick={handleFitIntoView}
-                size={ICON_BUTTON_SIZE}
-                disabled={!isEditorEnabled}
-              >
-                <IconZoomInArea size={ICON_SIZE} />
-              </ActionIcon>
-              <ActionIcon
-                onClick={handleDiagramLayout}
-                size={ICON_BUTTON_SIZE}
-                disabled={!isEditorEnabled}
-              >
-                <IconBoxMargin size={ICON_SIZE} />
-              </ActionIcon>
-            </OptionsContainer>
-          </Group>
-        )}
-      </Transition>
-      <Paper h="100%">
-        <SegmentedControl
-          value={selectedView}
-          onChange={handleChangeEditorView}
-          disabled={!isEditorEnabled}
-          data={editorViewOptions}
-        />
-      </Paper>
-      <OptionsContainer>
-        <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
-          <IconPlayerPlay size={ICON_SIZE} />
-        </ActionIcon>
-      </OptionsContainer>
-    </Group>
+                  <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
+                    <IconZoomIn size={ICON_SIZE} />
+                  </ActionIcon>
+                </OptionsContainer>
+                <OptionsContainer>
+                  <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
+                    <IconArrowBackUp size={ICON_SIZE} />
+                  </ActionIcon>
+                  <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
+                    <IconArrowForwardUp size={ICON_SIZE} />
+                  </ActionIcon>
+                </OptionsContainer>
+                <OptionsContainer>
+                  <Menu>
+                    <Menu.Target>
+                      <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
+                        <RelationIcon />
+                      </ActionIcon>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                      <Menu.Item icon={<IconRelationOneToOne size={14} />}>One-to-one</Menu.Item>
+                      <Menu.Item icon={<IconRelationOneToMany size={14} />}>One-to-many</Menu.Item>
+                      <Menu.Item icon={<IconRelationManyToMany size={14} />}>
+                        Many-to-many
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                </OptionsContainer>
+                <OptionsContainer>
+                  <ActionIcon
+                    onClick={handleFitIntoView}
+                    size={ICON_BUTTON_SIZE}
+                    disabled={!isEditorEnabled}
+                  >
+                    <IconZoomInArea size={ICON_SIZE} />
+                  </ActionIcon>
+                  <ActionIcon
+                    onClick={handleDiagramLayout}
+                    size={ICON_BUTTON_SIZE}
+                    disabled={!isEditorEnabled}
+                  >
+                    <IconBoxMargin size={ICON_SIZE} />
+                  </ActionIcon>
+                </OptionsContainer>
+              </Group>
+            )}
+          </Transition>
+          <Paper h="100%">
+            <SegmentedControl
+              value={selectedView}
+              onChange={handleChangeEditorView}
+              disabled={!isEditorEnabled}
+              data={editorViewOptions}
+            />
+          </Paper>
+          <OptionsContainer>
+            <ActionIcon size={ICON_BUTTON_SIZE} disabled={!isEditorEnabled}>
+              <IconPlayerPlay size={ICON_SIZE} />
+            </ActionIcon>
+          </OptionsContainer>
+        </Group>
+      </Group>
+    </PaperGlass>
   )
 }

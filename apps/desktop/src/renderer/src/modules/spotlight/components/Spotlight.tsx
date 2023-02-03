@@ -10,6 +10,7 @@ import { diagramEditorShortcuts, editorShortcuts, generalShortcuts } from '../sh
 import { shortcut2SpotlightAction } from '../utils'
 import { SpotlightActionsWrapper } from './SpotlightActionsWrapper'
 import { EditorView } from '@renderer/modules/editor/config'
+import { useReactFlow } from 'reactflow'
 
 interface SpotlightProps {
   children: React.ReactNode
@@ -23,6 +24,7 @@ const $store = combine({
 })
 
 export const Spotlight: React.FC<SpotlightProps> = ({ children }) => {
+  const flow = useReactFlow()
   const { projects, schemaModels, selectedProjectId, selectedEditorView } = useStore($store)
 
   const generalSpotlightAction = generalShortcuts
@@ -34,6 +36,16 @@ export const Spotlight: React.FC<SpotlightProps> = ({ children }) => {
     group: 'Models',
     icon: <IconBorderAll size={18} color={string2Color(name)} />,
     onTrigger: () => {
+      const node = flow.getNode(name)
+
+      if (node) {
+        flow.setCenter(
+          node.position.x + (node.width || 0) / 2,
+          node.position.y + (node.height || 0) / 2,
+          { duration: 1000 }
+        )
+      }
+
       toggleModelNodeSidebarEvent(true)
       selectModelEvent(name)
     }

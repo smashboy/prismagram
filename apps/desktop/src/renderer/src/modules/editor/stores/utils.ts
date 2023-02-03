@@ -168,6 +168,8 @@ const findRelatedFields = (models: Map<string, Model>) => {
                 continue
               }
 
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               const { from, to } = determineSourceTarget(field, relationModelField)
 
               const id = `${from.model.name}-${to.model.name}`

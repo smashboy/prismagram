@@ -1,10 +1,11 @@
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { $isOpenDetailsView, toggleModelNodeSidebarEvent } from '@renderer/stores/ui/modals'
-import { ActionIcon, Group, Paper, ScrollArea, Stack, Transition } from '@mantine/core'
+import { ActionIcon, Group, ScrollArea, Stack, Transition } from '@mantine/core'
 import { IconX } from '@tabler/icons'
 import { $selectedModelId, resetSelectedModelEvent } from '../stores'
 import { ModelSettings } from './forms/ModelSettings'
+import { PaperGlass } from '@renderer/core/components'
 
 const $store = combine({
   isOpenDetailsView: $isOpenDetailsView,
@@ -27,19 +28,20 @@ export const RightSidebar = () => {
   return (
     <Transition mounted={isMounted} transition="slide-left" duration={400} timingFunction="ease">
       {(styles) => (
-        <Paper
+        <PaperGlass
           w={350}
           h="100%"
-          shadow="md"
           py="xs"
           pl="xs"
-          sx={{
-            backgroundColor: 'rgba(255, 255, 255, .5)',
-            backdropFilter: 'blur(5px)',
+          withBorder
+          style={{
+            ...styles,
             position: 'relative',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            borderLeftWidth: 0,
+            borderRightWidth: 0,
+            borderBottomWidth: 0
           }}
-          style={styles}
         >
           <Group pr="xs" position="right">
             <ActionIcon onClick={handleCloseSidebar}>
@@ -49,7 +51,7 @@ export const RightSidebar = () => {
           <Stack h="100%" sx={{ overflowY: 'auto' }}>
             <ScrollArea>{selectedModelNode && <ModelSettings />}</ScrollArea>
           </Stack>
-        </Paper>
+        </PaperGlass>
       )}
     </Transition>
   )

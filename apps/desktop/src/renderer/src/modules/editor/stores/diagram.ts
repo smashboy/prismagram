@@ -20,7 +20,7 @@ export const $diagram = createStore<Diagram | null>(null)
     nodes: nodes.reduce((acc, node) => ({ ...acc, [node.id]: node }), {})
   }))
 
-export const $diagramViewport = createStore<Viewport | null>(null)
+export const $diagramViewport = createStore<Viewport>({ x: 0, y: 0, zoom: 1 })
   .on(viewportChangeEvent, (_, viewport) => viewport)
   .reset(selectProjectEvent)
 

@@ -1,5 +1,6 @@
 import { Box } from '@mantine/core'
-import { ModelField, Handler } from '@shared/common/models/Diagram'
+import { Handler } from '@shared/common/models/Diagram'
+import { ModelField } from 'prisma-state/fields'
 import { Handle, Position } from 'reactflow'
 import { ScalarFieldColor } from '../../config'
 
@@ -18,15 +19,17 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
   sourceHandlers,
   targetHandlers
 }) => {
-  const { type, displayType } = field
+  const { type, displayType, attributes } = field
 
   const textColor = ScalarFieldColor[type] || nodesColors[type]
 
   const sourceHandler = sourceHandlers[fieldId]
   const targetHandler = targetHandlers[fieldId]
 
+  const attributesList = [...attributes.values()]
+
   return (
-    <tr>
+    <tr style={{ width: '100%' }}>
       <td>
         {targetHandler && (
           <Box
@@ -53,32 +56,36 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
         )}
         {fieldId}
       </td>
+
       <td style={{ color: textColor, width: '100%', display: 'flex' }}>
         <span style={{ flex: 1 }}>{displayType}</span>
-        {sourceHandler && (
-          <Box
-            key={sourceHandler.id}
-            sx={{
-              position: 'relative',
-              right: -25
-            }}
-            component="span"
-          >
-            <Handle
-              id={sourceHandler.id}
-              type="source"
-              position={Position.Right}
-              isConnectable={false}
-              style={{
-                borderColor: 'white',
-                marginRight: -6,
-                borderWidth: 3,
-                boxSizing: 'unset'
-              }}
-            />
-          </Box>
-        )}
       </td>
+      {attributesList.map((attribute) => (
+        <td key={attribute.type}>{attribute.displayAttributeType}</td>
+      ))}
+      {sourceHandler && (
+        <Box
+          key={sourceHandler.id}
+          sx={{
+            position: 'relative',
+            right: -14
+          }}
+          component="td"
+        >
+          <Handle
+            id={sourceHandler.id}
+            type="source"
+            position={Position.Right}
+            isConnectable={false}
+            style={{
+              borderColor: 'white',
+              marginRight: -6,
+              borderWidth: 3,
+              boxSizing: 'unset'
+            }}
+          />
+        </Box>
+      )}
     </tr>
   )
 }

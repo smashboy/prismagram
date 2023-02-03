@@ -40,8 +40,7 @@ export const ModelNavItem: React.FC<ModelNavItemProps> = ({ modelId }) => {
         <IconBorderAll size={16} color={isSelected ? void 0 : nodesColors[modelId]} stroke={1.5} />
       }
       sx={(theme) => ({
-        borderRadius: theme.radius.sm,
-        boxShadow: isSelected ? theme.shadows.xs : void 0
+        borderRadius: theme.radius.sm
       })}
     />
   )

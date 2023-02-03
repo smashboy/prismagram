@@ -36,7 +36,7 @@ export const theme: MantineThemeOverride = {
     Input: {
       defaultProps: {
         radius: 'md',
-        size: 'md'
+        variant: 'filled'
       }
     },
     Stack: {
@@ -89,6 +89,9 @@ export const theme: MantineThemeOverride = {
       }
     },
     Alert: {
+      defaultProps: {
+        variant: 'light'
+      },
       styles: {
         root: {
           '& .mantine-Alert-icon': {

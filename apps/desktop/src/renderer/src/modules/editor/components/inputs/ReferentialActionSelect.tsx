@@ -33,24 +33,24 @@ export const SelectItemWithDescription = forwardRef<HTMLDivElement, ItemProps>(
             </Text>
           )}
           {onUpdate && (
-            <Group spacing={0}>
+            <Stack spacing={0} align="flex-start">
               <Badge color="gray" size="xs" radius="sm" variant="filled">
                 On update
               </Badge>
               <Text size="xs" opacity={0.65}>
                 {onUpdate}
               </Text>
-            </Group>
+            </Stack>
           )}
           {onDelete && (
-            <Group spacing={0}>
+            <Stack spacing={0} align="flex-start">
               <Badge color="gray" size="xs" radius="sm" variant="filled">
                 On delete
               </Badge>
               <Text size="xs" opacity={0.65}>
                 {onDelete}
               </Text>
-            </Group>
+            </Stack>
           )}
         </Stack>
       </Group>

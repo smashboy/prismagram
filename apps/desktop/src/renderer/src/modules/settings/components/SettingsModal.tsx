@@ -1,4 +1,5 @@
-import { Box, Divider, Group, Modal } from '@mantine/core'
+import { Box, Divider, Group } from '@mantine/core'
+import { LargeModal } from '@renderer/core/components'
 import { $isOpenSettingsModal, toggleSettingsModalEvent } from '@renderer/stores/ui/modals'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
@@ -29,20 +30,7 @@ export const SettingsModal = () => {
   const SelectedSection = settingsRoutesComponents.get(selectedSection)
 
   return (
-    <Modal
-      opened={isOpen}
-      onClose={handleCloseDialog}
-      title="Settings"
-      size="95vw"
-      sx={{
-        '& .mantine-Modal-modal': {
-          height: '90vh'
-        },
-        '& .mantine-Modal-body': {
-          height: 'calc(100% - 35px)'
-        }
-      }}
-    >
+    <LargeModal opened={isOpen} onClose={handleCloseDialog} title="Settings">
       <Group h="100%" noWrap>
         <SettingsSidebar />
         <Divider orientation="vertical" />
@@ -50,6 +38,6 @@ export const SettingsModal = () => {
           {SelectedSection && <SelectedSection />}
         </Box>
       </Group>
-    </Modal>
+    </LargeModal>
   )
 }

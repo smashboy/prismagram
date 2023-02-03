@@ -1,15 +1,16 @@
-import { Box, Paper, Stack } from '@mantine/core'
+import { Box, Stack } from '@mantine/core'
+import { PaperGlass } from '@renderer/core/components'
 
 import { ModelsList } from './ModelsList'
 import { SidebarFooter } from './SidebarFooter'
 
 export const Sidebar = () => {
   return (
-    <Paper
+    <PaperGlass
+      withBorder
       w={300}
       h="100%"
-      shadow="md"
-      sx={{ backgroundColor: 'rgba(255, 255, 255, .35)', backdropFilter: 'blur(5px)' }}
+      style={{ borderLeftWidth: 0, borderRightWidth: 0, borderBottomWidth: 0 }}
     >
       <Stack h="100%" py="xs" pl="xs">
         <Box h="calc(100% - 40px)" sx={{ overflow: 'hidden' }}>
@@ -17,6 +18,6 @@ export const Sidebar = () => {
         </Box>
         <SidebarFooter />
       </Stack>
-    </Paper>
+    </PaperGlass>
   )
 }

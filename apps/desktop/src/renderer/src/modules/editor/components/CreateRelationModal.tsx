@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { PrismaSchemaState } from 'prisma-state'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
-import { Button, Group, Modal, Select, Stack, Transition } from '@mantine/core'
+import { Alert, Button, Group, Select, Stack, Text, Transition } from '@mantine/core'
 import { Prism } from '@mantine/prism'
 import {
   $createRelationModalData,
@@ -20,10 +20,11 @@ import { EDITOR_FORMAT_SCHEMA } from '@shared/common/configs/api'
 import { IconArrowRight } from '@tabler/icons'
 import { RelationType, RelationTypeOption } from 'prisma-state/constants'
 import { ReferentialActionSelect } from './inputs/ReferentialActionSelect'
-import { uncapitalize } from 'prisma-state/utils/string'
 import { RelationField } from 'prisma-state/fields'
 import { RelationAttribute } from 'prisma-state/attributes'
 import { ModelRelationFieldOptionalSwitch } from './inputs/ModelRelationFieldOptionalSwitch'
+import { RelationNameInput } from './inputs/RelationNameInput'
+import { LargeModal } from '@renderer/core/components'
 
 const $store = combine({
   isOpen: $isOpenCreateRelationModal,
@@ -53,6 +54,16 @@ export const CreateRelationModal = () => {
 
   const [result, setResult] = useState('')
 
+  const sourceModel = schemaState.model(source)
+  const targetModel = schemaState.model(target)
+
+  const sourceRelationFieldName = relation?.[0] || ''
+
+  const updatedSourceModel = updatedState.model(source)
+
+  const showWarningMessage =
+    sourceModel && targetModel && schemaState.relations.relationExists(sourceModel, targetModel)
+
   useEffect(() => {
     const handleFormatSchema = async () => {
       const prevSchemaString = schemaState.toString()
@@ -70,10 +81,16 @@ export const CreateRelationModal = () => {
       let relation: [RelationField, RelationField] | undefined
 
       if (selectedRelationType === '1-1') {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         relation = newState.relations.createOneToOneRelation(sourceModel, targetModel)
       } else if (selectedRelationType === '1-n') {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         relation = newState.relations.createOneToManyRelation(sourceModel, targetModel)
       } else {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         relation = newState.relations.createManyToManyRelation(sourceModel, targetModel)
       }
 
@@ -164,76 +181,99 @@ export const CreateRelationModal = () => {
   }
 
   return (
-    <Modal title="Create relation" opened={isOpen} onClose={handleCloseDialog} size="xl">
-      <Stack>
-        <Group>
-          <Select
-            value={source}
-            onChange={handleSelectChange('source')}
-            data={modelIds}
-            searchable
-          />
-          <IconArrowRight size={16} />
-          <Select
-            value={target}
-            onChange={handleSelectChange('target')}
-            data={modelIds}
-            searchable
-          />
-          <Select
-            value={selectedRelationType}
-            onChange={handeRelationChange}
-            data={relationTypeOptions}
-            sx={{ width: 100 }}
-          />
-        </Group>
-        <Transition mounted={selectedRelationType !== 'n-m'} transition="fade">
-          {(style) => (
-            <Stack style={style}>
-              <Group grow>
-                <ReferentialActionSelect
-                  name={uncapitalize(target)}
-                  model={updatedState.model(source)}
-                  state={updatedState}
-                  onChange={setUpdatedState}
-                  variant="onUpdate"
-                />
-                <ReferentialActionSelect
-                  name={uncapitalize(target)}
-                  model={updatedState.model(source)}
-                  onChange={setUpdatedState}
-                  state={updatedState}
-                />
-              </Group>
-              <ModelRelationFieldOptionalSwitch
-                name={relation?.[0] || ''}
-                model={updatedState.model(source)}
-                state={updatedState}
-                onChange={setUpdatedState}
+    <LargeModal title="Create relation" opened={isOpen} onClose={handleCloseDialog}>
+      <Stack justify="space-between" h="100%">
+        <Group h="100%" align="flex-start" noWrap>
+          <Stack w="40%">
+            <Group>
+              <Select
+                label="From"
+                value={source}
+                onChange={handleSelectChange('source')}
+                data={modelIds}
+                searchable
               />
-            </Stack>
-          )}
-        </Transition>
-        <Prism
-          language="json"
-          highlightLines={hightligthLineIndexes.reduce(
-            (acc, index) => ({ ...acc, [index]: added }),
-            {}
-          )}
-          withLineNumbers
-          noCopy
-        >
-          {result}
-        </Prism>
+              <IconArrowRight size={16} style={{ marginTop: 23 }} />
+              <Select
+                label="To"
+                value={target}
+                onChange={handleSelectChange('target')}
+                data={modelIds}
+                searchable
+              />
+              <Select
+                label="Type"
+                value={selectedRelationType}
+                onChange={handeRelationChange}
+                data={relationTypeOptions}
+                sx={{ width: 100 }}
+              />
+            </Group>
+            <RelationNameInput
+              name={sourceRelationFieldName}
+              model={updatedSourceModel}
+              state={updatedState}
+              onChange={setUpdatedState}
+            />
+            <Transition mounted={selectedRelationType !== 'n-m'} transition="fade">
+              {(style) => (
+                <Stack style={style}>
+                  <Group grow>
+                    <ReferentialActionSelect
+                      name={sourceRelationFieldName}
+                      model={updatedSourceModel}
+                      state={updatedState}
+                      onChange={setUpdatedState}
+                      variant="onUpdate"
+                    />
+                    <ReferentialActionSelect
+                      name={sourceRelationFieldName}
+                      model={updatedSourceModel}
+                      onChange={setUpdatedState}
+                      state={updatedState}
+                    />
+                  </Group>
+                  <ModelRelationFieldOptionalSwitch
+                    name={sourceRelationFieldName}
+                    model={updatedSourceModel}
+                    state={updatedState}
+                    onChange={setUpdatedState}
+                  />
+                </Stack>
+              )}
+            </Transition>
+            {showWarningMessage && (
+              <Alert title="Warning! This relation already exists" color="yellow">
+                If you want to add another relation between this models, you have to add relation
+                name or previous relation will be overwritten.
+              </Alert>
+            )}
+          </Stack>
+          <Stack sx={{ flex: 1 }}>
+            <Text>Preview</Text>
+            <Prism
+              language="json"
+              highlightLines={hightligthLineIndexes.reduce(
+                (acc, index) => ({ ...acc, [index]: added }),
+                {}
+              )}
+              sx={{ maxHeight: '100%', overflowY: 'auto' }}
+              withLineNumbers
+              noCopy
+            >
+              {result}
+            </Prism>
+          </Stack>
+        </Group>
         <Group position="right">
           <Button variant="subtle" color="gray" onClick={handleCloseDialog}>
             Cancel
           </Button>
-          <Button onClick={handleConfirmCreateRelation} variant="filled">
+          <Button onClick={handleConfirmCreateRelation} variant="subtle">
             Create
           </Button>
         </Group>
       </Stack>
-    </Modal>
+    </LargeModal>
   )
 }

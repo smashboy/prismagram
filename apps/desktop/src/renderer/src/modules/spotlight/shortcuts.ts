@@ -25,7 +25,12 @@ import {
   IconZoomIn
 } from '@tabler/icons'
 import { RelationType } from 'prisma-state/constants'
-import { changeEditorViewEvent, layoutDiagramEffect, setSelectedRelationTypeEvent } from '../editor'
+import {
+  changeEditorViewEvent,
+  layoutDiagramEffect,
+  resetSelectedModelEvent,
+  setSelectedRelationTypeEvent
+} from '../editor'
 import { EditorView } from '../editor/config'
 import { Shortcut } from './types'
 
@@ -134,6 +139,12 @@ export const diagramEditorShortcuts: Shortcut[] = [
     name: 'Fit into view',
     onExecute: () => {},
     icon: IconZoomInArea
+  },
+  {
+    keys: ['Escape'],
+
+    name: 'Deselct model',
+    onExecute: () => resetSelectedModelEvent()
   },
   {
     keys: ['O'],
