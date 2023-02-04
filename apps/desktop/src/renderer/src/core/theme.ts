@@ -8,14 +8,11 @@ export const theme: MantineThemeOverride = {
     to: 'pink',
     deg: 20
   },
-  globalStyles: (theme) => ({
+  globalStyles: () => ({
     'html, body, #root': {
       width: '100%',
       height: '100%',
       overflow: 'hidden'
-    },
-    body: {
-      background: theme.fn.gradient()
     }
   }),
   components: {
