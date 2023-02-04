@@ -1,7 +1,7 @@
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { useReactFlow } from 'reactflow'
-import { RelationType } from 'prisma-state/constants'
+import { RelationType, RelationTypeOption } from 'prisma-state/constants'
 import { ActionIcon, Group, Menu, Tooltip } from '@mantine/core'
 import {
   IconArrowBackUp,
@@ -14,7 +14,12 @@ import {
   IconZoomInArea,
   IconZoomOut
 } from '@tabler/icons'
-import { $isEditorEnabled, $selectedRelationType, layoutDiagramEffect } from '../../stores'
+import {
+  $isEditorEnabled,
+  $selectedRelationType,
+  layoutDiagramEffect,
+  setSelectedRelationTypeEvent
+} from '../../stores'
 import { ICON_SIZE } from './constants'
 
 const relationIconsMap = {
@@ -35,6 +40,9 @@ export const DiagramOptionsSection = () => {
 
   const handleDiagramLayout = () => layoutDiagramEffect()
   const handleFitIntoView = () => flow.fitView()
+
+  const handleSelectRelationType = (type: RelationTypeOption) => () =>
+    setSelectedRelationTypeEvent(type)
 
   const RelationIcon = relationIconsMap[selectedRelationType]
 
@@ -69,9 +77,24 @@ export const DiagramOptionsSection = () => {
           </Tooltip>
         </Menu.Target>
         <Menu.Dropdown>
-          <Menu.Item icon={<IconRelationOneToOne size={14} />}>One-to-one</Menu.Item>
-          <Menu.Item icon={<IconRelationOneToMany size={14} />}>One-to-many</Menu.Item>
-          <Menu.Item icon={<IconRelationManyToMany size={14} />}>Many-to-many</Menu.Item>
+          <Menu.Item
+            onClick={handleSelectRelationType(RelationType.ONE_TO_ONE)}
+            icon={<IconRelationOneToOne size={14} />}
+          >
+            One-to-one
+          </Menu.Item>
+          <Menu.Item
+            onClick={handleSelectRelationType(RelationType.ONE_TO_MANY)}
+            icon={<IconRelationOneToMany size={14} />}
+          >
+            One-to-many
+          </Menu.Item>
+          <Menu.Item
+            onClick={handleSelectRelationType(RelationType.MANY_TO_MANY)}
+            icon={<IconRelationManyToMany size={14} />}
+          >
+            Many-to-many
+          </Menu.Item>
         </Menu.Dropdown>
       </Menu>
 
