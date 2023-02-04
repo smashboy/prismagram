@@ -20,3 +20,6 @@ export const ScalarFieldColor = {
 }
 
 export const NEW_MODEL_NODE_ID = 'new-model-node'
+export const NEW_ENUM_NODE_ID = 'new-enum-node'
+
+export const notSavableNodeIds = [NEW_MODEL_NODE_ID, NEW_ENUM_NODE_ID]
