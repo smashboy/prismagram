@@ -1,5 +1,5 @@
 import { string2Color } from '@renderer/core/utils'
-import { ScalarType } from '@shared/common/configs/prisma'
+import { ScalarType } from 'prisma-state/constants'
 
 export enum EditorView {
   DIAGRAM = 'd',

@@ -1,13 +1,11 @@
 import { useStoreMap } from 'effector-react'
 import { Stack } from '@mantine/core'
-import {
-  prismaDatasourceProvidersArray,
-  prismaRelationModesList
-} from '@shared/common/configs/prisma'
+
 import { SettingsSectionPaper } from '../../SettingsSectionPaper'
 import { EnvInput } from '../../EnvInput'
 import { $schemaDatasources } from '@renderer/modules/editor'
 import { SelectOptionInput } from '../../SelectOptionInput'
+import { prismaDatasourceProvidersArray, prismaRelationModesList } from 'prisma-state/constants'
 
 interface PrismaDatasourceSettingsProps {
   settingsId: string

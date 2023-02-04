@@ -4,9 +4,9 @@ import { SettingsSectionPaper } from '../../SettingsSectionPaper'
 import { EnvInput } from '../../EnvInput'
 import { $schemaGenerators } from '@renderer/modules/editor'
 import { $prismaSettings } from '@renderer/modules/settings/stores'
-import { prismaBinaryTargetsList, prismaEngineTypesList } from '@shared/common/configs/prisma'
 import { SelectOptionInput } from '../../SelectOptionInput'
 import { MultipleOptionsSelect } from '../../MultipleOptionsSelect'
+import { prismaBinaryTargetsList, prismaEngineTypesList } from 'prisma-state/constants'
 
 interface PrismaDatasourceSettingsProps {
   settingsId: string

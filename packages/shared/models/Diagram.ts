@@ -1,5 +1,4 @@
 import { Edge as ReactEdge, Node as ReactNode } from 'reactflow'
-import { ScalarType } from '../configs/prisma'
 import { RelationType } from '../configs/diagrams'
 
 export type Node = ReactNode<ModelNodeData>
@@ -17,14 +16,6 @@ export interface Handler {
 
 export interface EdgeData {
   color: string
-}
-
-export interface ModelField {
-  type: ScalarType | string
-  displayType: string
-  // isList: boolean
-  // isRequired: boolean
-  // relation?: FieldRelationIO
 }
 
 export interface Diagram {
