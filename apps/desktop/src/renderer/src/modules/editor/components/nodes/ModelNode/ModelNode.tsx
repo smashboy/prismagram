@@ -1,24 +1,29 @@
 import { combine } from 'effector'
 import { useStore, useStoreMap } from 'effector-react'
-import { Handle, Position, useStore as useFlowStore } from 'reactflow'
-import { Stack, Table, Text } from '@mantine/core'
+import { Handle, NodeProps, Position, useStore as useFlowStore } from 'reactflow'
+import { Stack, Table } from '@mantine/core'
 import { ModelNodeData } from '@shared/common/models/Diagram'
-import { $nodesColors, $schemaModels, $selectedNodeId } from '../../../stores'
+import {
+  $nodesColors,
+  $schemaModels,
+  $schemaState,
+  $selectedNodeId,
+  setPrismaSchemaEvent
+} from '../../../stores'
 import { ModelNodeField } from './ModelNodeField'
 import { ModelNodeToolbar } from './ModelNodeToolbar'
 import { NodeCard } from '../NodeCard'
+import { ModelNameInput } from '../../inputs/ModelNameInput'
+import { cloneSchemaState } from '@renderer/core/utils'
 
 const $store = combine({
   nodesColors: $nodesColors,
-  selectedNodeId: $selectedNodeId
+  selectedNodeId: $selectedNodeId,
+  state: $schemaState
 })
 
-interface ModelNodeProps {
-  data: ModelNodeData
-}
-
-export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
-  const { name, sourceHandlers, targetHandlers } = data
+export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }) => {
+  const { sourceHandlers, targetHandlers } = data
 
   const model = useStoreMap({
     store: $schemaModels,
@@ -26,7 +31,7 @@ export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
     fn: (models, [name]) => models.get(name)!
   })
 
-  const { selectedNodeId, nodesColors } = useStore($store)
+  const { selectedNodeId, nodesColors, state } = useStore($store)
 
   const connectionNodeId = useFlowStore((state) => state.connectionNodeId)
 
@@ -47,13 +52,17 @@ export const ModelNode: React.FC<ModelNodeProps> = ({ data }) => {
   //   )
   // }, [selectedModelNode])
 
+  const handleSaveNewModelName = async (name: string) => {
+    model.setName(name)
+    const updatedState = await cloneSchemaState(state)
+    setPrismaSchemaEvent(updatedState.toString())
+  }
+
   return (
     <Stack sx={{ minWidth: 150 }}>
       <ModelNodeToolbar isSelected={isSelected} />
       <NodeCard nodeId={name} isSelected={isSelected} selectedNodeId={selectedNodeId}>
-        <Text size="xl" color={nodesColors[name]}>
-          {name}
-        </Text>
+        <ModelNameInput model={model} onSave={handleSaveNewModelName} />
         <Table verticalSpacing="md" fontSize="xl">
           <tbody>
             {fields.map((field) => (

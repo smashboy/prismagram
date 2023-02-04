@@ -29,7 +29,7 @@ export const fieldAttributeMap = {
 }
 
 export class ModelField<A = FieldAttribute> extends Field {
-  readonly type: ModelFieldType
+  type: ModelFieldType
   modifier: FieldModifier = null
   readonly attributes = new Map<string, A>()
 
@@ -44,6 +44,10 @@ export class ModelField<A = FieldAttribute> extends Field {
   setName(name: string) {
     // TODO: handle auto renaming in references
     this.name = name
+  }
+
+  setType(type: ModelFieldType) {
+    this.type = type
   }
 
   // setType(type: ModelFieldType) {

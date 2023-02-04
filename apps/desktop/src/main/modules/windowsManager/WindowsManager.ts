@@ -85,13 +85,7 @@ export default class WindowsManager extends WindowsManagerBase {
       if (schemaPath) {
         const schema = this.projectsManager.getProjectSchema(project)
 
-        let dmmf
-
-        if (schema) {
-          dmmf = await getPrismaDocument(schema)
-        }
-
-        return { schema, schemaPath, dmmf }
+        return { schema, schemaPath }
       }
 
       return void 0

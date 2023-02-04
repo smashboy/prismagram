@@ -11,6 +11,7 @@ import { shortcut2SpotlightAction } from '../utils'
 import { SpotlightActionsWrapper } from './SpotlightActionsWrapper'
 import { EditorView } from '@renderer/modules/editor/config'
 import { useReactFlow } from 'reactflow'
+import { zoomToNode } from '@renderer/modules/editor/utils'
 
 interface SpotlightProps {
   children: React.ReactNode
@@ -38,13 +39,7 @@ export const Spotlight: React.FC<SpotlightProps> = ({ children }) => {
     onTrigger: () => {
       const node = flow.getNode(name)
 
-      if (node) {
-        flow.setCenter(
-          node.position.x + (node.width || 0) / 2,
-          node.position.y + (node.height || 0) / 2,
-          { duration: 1000 }
-        )
-      }
+      if (node) zoomToNode(flow, node)
 
       toggleModelNodeSidebarEvent(true)
       selectNodeEvent(name)

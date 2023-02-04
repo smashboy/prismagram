@@ -1,16 +1,8 @@
 import { string2Color } from '@renderer/core/utils'
 import { NodeType, RelationType } from '@shared/common/configs/diagrams'
-import { ScalarType } from '@shared/common/configs/prisma'
-import {
-  Diagram,
-  Edge,
-  ModelField,
-  ModelNodeData,
-  Node,
-  Relation
-} from '@shared/common/models/Diagram'
+import { Diagram, Edge, ModelNodeData, Node, Relation } from '@shared/common/models/Diagram'
 import { Block, BlockType, Model } from 'prisma-state/blocks'
-import { RelationField, ScalarField } from 'prisma-state/fields'
+import { RelationField } from 'prisma-state/fields'
 import { PrismaSchemaState, PrismaSchemaStateData } from 'prisma-state/PrismaSchemaState'
 
 export const extractBlocksByType = <B extends Block>(
@@ -52,8 +44,6 @@ const models2NodeModels = (
     const { name, fields } = model
 
     const data: ModelNodeData = {
-      name,
-      fields: modelFields2NodeModelFields(fields),
       sourceHandlers: {},
       targetHandlers: {}
     }
@@ -93,21 +83,6 @@ const models2NodeModels = (
   }
 
   return nodes
-}
-
-const modelFields2NodeModelFields = (
-  modelFields: Map<string, ScalarField | RelationField>
-): Record<string, ModelField> => {
-  const fields: Record<string, ModelField> = {}
-
-  for (const { name, type, displayType } of [...modelFields.values()]) {
-    fields[name] = {
-      type: ScalarType[type] || type,
-      displayType
-    }
-  }
-
-  return fields
 }
 
 const relations2Edges = (relations: Map<string, Relation>): Edge[] => {

@@ -15,6 +15,7 @@ import {
   $edgesArray,
   $nodesArray,
   nodesChangeEvent,
+  selectNodeEvent,
   setCreateRelationModalData,
   toggleCreateRelationModal,
   viewportChangeEvent
@@ -27,6 +28,7 @@ import { CreateRelationModal } from './CreateRelationModal'
 import { NodesToolbar } from './NodesToolbar'
 import { NEW_MODEL_NODE_ID } from '../config'
 import { EditorToolbar } from './EditorToolbar'
+import { zoomToNode } from '../utils'
 
 const $store = combine({
   nodes: $nodesArray,
@@ -73,14 +75,18 @@ export const DiagramEditor = () => {
       y: event.clientY - reactFlowBounds.top
     })
 
+    const id = type === NodeType.NEW_MODEL ? NEW_MODEL_NODE_ID : 'kekw'
+
     const node: Node = {
-      id: type === NodeType.NEW_MODEL ? NEW_MODEL_NODE_ID : 'kekw',
+      id,
       type,
       position,
       data: {}
     }
 
     reactFlowInstance.setNodes((nodes) => nodes.concat(node))
+    selectNodeEvent(id)
+    zoomToNode(reactFlowInstance, node)
   }
 
   const onConnect: OnConnect = ({ source, target }) => {

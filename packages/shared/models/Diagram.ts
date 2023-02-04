@@ -6,8 +6,6 @@ export type Node = ReactNode<ModelNodeData>
 export type Edge = ReactEdge<EdgeData>
 
 export interface ModelNodeData {
-  name: string
-  fields: Record<string, ModelField>
   sourceHandlers: Record<string, Handler>
   targetHandlers: Record<string, Handler>
 }

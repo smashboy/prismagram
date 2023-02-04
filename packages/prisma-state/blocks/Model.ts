@@ -20,11 +20,38 @@ const attributesMap = {
   unique: UniqueBlockAttribute
 }
 
+type ModelReference = { model: Model; fields: RelationField[] }
+
 export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField> {
   readonly attributes = new Map<string, A>()
 
   constructor(name: string, state: PrismaSchemaState) {
     super(name, 'model', state)
+  }
+
+  getReferences() {
+    const references: Array<ModelReference> = []
+
+    for (const model of this.state.models.values()) {
+      const ref: ModelReference = { model, fields: [] }
+
+      for (const field of model.fields.values()) {
+        if (field.type === this.name) {
+          ref.fields.push(field as RelationField)
+        }
+      }
+
+      if (ref.fields.length > 0) references.push(ref)
+    }
+
+    return references
+  }
+
+  setName(name: string) {
+    for (const { fields } of this.getReferences()) {
+      fields.forEach((field) => field.setType(name))
+    }
+    super.setName(name)
   }
 
   _parse(model: AstModel) {
