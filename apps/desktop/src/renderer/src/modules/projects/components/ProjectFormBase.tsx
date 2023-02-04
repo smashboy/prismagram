@@ -1,8 +1,8 @@
-import { Alert, Stack, TextInput } from '@mantine/core'
+import { Alert, Stack, TextInput, ThemeIcon, Tooltip } from '@mantine/core'
 import { invoke } from '@renderer/core/electron'
 import { GET_PROJECT_DIRECTORY_ENDPOINT } from '@shared/common/configs/api'
 import { defaultSchemaPaths } from '@shared/common/configs/prisma'
-import { IconFile, IconFolder, IconInfoCircle } from '@tabler/icons'
+import { IconFile, IconFolder, IconHelp, IconInfoCircle } from '@tabler/icons'
 
 export interface ProjectFormBaseValues {
   name: string
@@ -55,13 +55,23 @@ export const ProjectFormBase: React.FC<ProjectFormBaseProps> = ({ values, onChan
         placeholder="Schema not found..."
         value={schemaPath}
         icon={<IconFile size={14} />}
-        readOnly
+        rightSection={
+          <Tooltip
+            label={
+              <>
+                By default editor will look for schema in <b>{defaultSchemaPaths.root}</b> and{' '}
+                <b>{defaultSchemaPaths.prismaRoot}</b> directory. <br /> If schema is not present
+                there, it will try to load the path from your <b>package.json.</b>
+              </>
+            }
+            withinPortal
+          >
+            <ThemeIcon variant="light" color="gray">
+              <IconHelp size={18} />
+            </ThemeIcon>
+          </Tooltip>
+        }
       />
-      <Alert icon={<IconInfoCircle />}>
-        By default editor will look for schema in <b>{defaultSchemaPaths.root}</b> and{' '}
-        <b>{defaultSchemaPaths.prismaRoot}</b> directory. If schema is not present there, it will
-        try to load the path from your <b>package.json.</b>
-      </Alert>
     </Stack>
   )
 }
