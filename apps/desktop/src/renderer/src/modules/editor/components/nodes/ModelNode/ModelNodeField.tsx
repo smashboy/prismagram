@@ -1,8 +1,8 @@
-import { Box } from '@mantine/core'
+import { Handle, Position } from 'reactflow'
+import { Box, Text } from '@mantine/core'
 import { Handler } from '@shared/common/models/Diagram'
 import { ModelField } from 'prisma-state/fields'
-import { Handle, Position } from 'reactflow'
-import { ScalarFieldColor } from '../../config'
+import { ScalarFieldColor } from '../../../config'
 
 interface ModelNodeFieldProps {
   fieldId: string
@@ -10,6 +10,7 @@ interface ModelNodeFieldProps {
   nodesColors: Record<string, string>
   sourceHandlers: Record<string, Handler>
   targetHandlers: Record<string, Handler>
+  maxAttribuesCount: number
 }
 
 export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
@@ -17,7 +18,8 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
   field,
   nodesColors,
   sourceHandlers,
-  targetHandlers
+  targetHandlers,
+  maxAttribuesCount
 }) => {
   const { type, displayType, attributes } = field
 
@@ -60,9 +62,15 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
       <td style={{ color: textColor, width: '100%', display: 'flex' }}>
         <span style={{ flex: 1 }}>{displayType}</span>
       </td>
-      {attributesList.map((attribute) => (
-        <td key={attribute.type}>{attribute.displayAttributeType}</td>
-      ))}
+      {Array.from({ length: maxAttribuesCount }).map((_, index) => {
+        const attribute = attributesList[index]
+        if (!attribute) return <td key={index} />
+        return (
+          <Text key={attribute.type} color="blue" component="td">
+            {attribute.displayAttributeType}
+          </Text>
+        )
+      })}
       {sourceHandler && (
         <Box
           key={sourceHandler.id}

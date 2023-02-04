@@ -1,5 +1,5 @@
 import { combine, createEvent, createStore } from 'effector'
-import { $selectedModelId } from './ui'
+import { $selectedNodeId } from './ui'
 import { extractBlocksByType } from './utils'
 import { PrismaSchemaState } from 'prisma-state'
 import { Datasource, Generator } from 'prisma-state/blocks'
@@ -19,7 +19,7 @@ export const $schemaState = $schema.map((schema) => {
 
 export const $schemaModels = $schemaState.map(({ models }) => models)
 
-export const $selectedSchemaModel = combine([$schemaModels, $selectedModelId]).map(([models, id]) =>
+export const $selectedSchemaModel = combine([$schemaModels, $selectedNodeId]).map(([models, id]) =>
   id ? models.get(id)! : null
 )
 

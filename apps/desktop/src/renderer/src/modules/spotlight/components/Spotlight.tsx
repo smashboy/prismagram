@@ -2,7 +2,7 @@ import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { SpotlightAction, SpotlightProvider } from '@mantine/spotlight'
 import { string2Color } from '@renderer/core/utils'
-import { $schemaModels, $selectedEditorView, selectModelEvent } from '@renderer/modules/editor'
+import { $schemaModels, $selectedEditorView, selectNodeEvent } from '@renderer/modules/editor'
 import { $projects, $selectedProjectId, selectProjectEvent } from '@renderer/modules/projects'
 import { toggleModelNodeSidebarEvent } from '@renderer/stores/ui/modals'
 import { IconBorderAll, IconBriefcase, IconSearch } from '@tabler/icons'
@@ -47,7 +47,7 @@ export const Spotlight: React.FC<SpotlightProps> = ({ children }) => {
       }
 
       toggleModelNodeSidebarEvent(true)
-      selectModelEvent(name)
+      selectNodeEvent(name)
     }
   }))
 

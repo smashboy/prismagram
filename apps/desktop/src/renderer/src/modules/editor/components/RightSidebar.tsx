@@ -3,13 +3,13 @@ import { useStore } from 'effector-react'
 import { $isOpenDetailsView, toggleModelNodeSidebarEvent } from '@renderer/stores/ui/modals'
 import { ActionIcon, Group, ScrollArea, Stack, Transition } from '@mantine/core'
 import { IconX } from '@tabler/icons'
-import { $selectedModelId, resetSelectedModelEvent } from '../stores'
+import { $selectedNodeId, resetSelectedNodeEvent } from '../stores'
 import { ModelSettings } from './forms/ModelSettings'
 import { PaperGlass } from '@renderer/core/components'
 
 const $store = combine({
   isOpenDetailsView: $isOpenDetailsView,
-  selectedModelNode: $selectedModelId
+  selectedModelNode: $selectedNodeId
 })
 
 export const RightSidebar = () => {
@@ -22,7 +22,7 @@ export const RightSidebar = () => {
 
   const handleCloseSidebar = () => {
     toggleModelNodeSidebarEvent(false)
-    resetSelectedModelEvent()
+    resetSelectedNodeEvent()
   }
 
   return (

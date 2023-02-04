@@ -18,3 +18,5 @@ export const ScalarFieldColor = {
   [ScalarType.JSON]: string2Color(ScalarType.JSON),
   [ScalarType.BYTES]: string2Color(ScalarType.BYTES)
 }
+
+export const NEW_MODEL_NODE_ID = 'new-model-node'

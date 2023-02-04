@@ -3,14 +3,14 @@ import { toggleModelNodeSidebarEvent } from '@renderer/stores/ui/modals'
 import { IconBorderAll } from '@tabler/icons'
 import { combine } from 'effector'
 import { useStore, useStoreMap } from 'effector-react'
-import { $nodesColors, $schemaModels, $selectedModelId, selectModelEvent } from '../../stores'
+import { $nodesColors, $schemaModels, $selectedNodeId, selectNodeEvent } from '../../stores'
 
 interface ModelNavItemProps {
   modelId: string
 }
 
 const $store = combine({
-  selectedNodeId: $selectedModelId,
+  selectedNodeId: $selectedNodeId,
   nodesColors: $nodesColors
 })
 
@@ -27,7 +27,7 @@ export const ModelNavItem: React.FC<ModelNavItemProps> = ({ modelId }) => {
 
   const handleSelectModel = () => {
     toggleModelNodeSidebarEvent(true)
-    selectModelEvent(modelId)
+    selectNodeEvent(modelId)
   }
 
   return (

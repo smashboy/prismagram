@@ -10,8 +10,8 @@ interface CreateRelationModalData {
 }
 
 export const changeEditorViewEvent = createEvent<EditorView>()
-export const selectModelEvent = createEvent<string>()
-export const resetSelectedModelEvent = createEvent()
+export const selectNodeEvent = createEvent<string>()
+export const resetSelectedNodeEvent = createEvent()
 export const setCreateRelationModalData = createEvent<CreateRelationModalData>()
 export const resetCreateRelationModalData = createEvent()
 
@@ -29,9 +29,9 @@ export const $createRelationModalData = createStore<CreateRelationModalData>({
 
 export const [$isOpenCreateRelationModal, toggleCreateRelationModal] = createBooleanStore()
 
-export const $selectedModelId = createStore<string | null>(null)
-  .on(selectModelEvent, (_, id) => id)
-  .reset(resetSelectedModelEvent)
+export const $selectedNodeId = createStore<string | null>(null)
+  .on(selectNodeEvent, (_, id) => id)
+  .reset(resetSelectedNodeEvent)
 
 export const $isEditorEnabled = $selectedProjectId.map((id) => !!id)
 

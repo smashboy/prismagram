@@ -22,13 +22,15 @@ import {
   IconRelationOneToMany,
   IconZoomInArea,
   IconZoomOut,
-  IconZoomIn
+  IconZoomIn,
+  IconBorderAll,
+  IconLayoutList
 } from '@tabler/icons'
 import { RelationType } from 'prisma-state/constants'
 import {
   changeEditorViewEvent,
   layoutDiagramEffect,
-  resetSelectedModelEvent,
+  resetSelectedNodeEvent,
   setSelectedRelationTypeEvent
 } from '../editor'
 import { EditorView } from '../editor/config'
@@ -42,7 +44,7 @@ export const generalShortcuts: Shortcut[] = [
     onExecute: () => openSpotlight()
   },
   {
-    keys: ['Shift', 'N'],
+    keys: ['Alt', 'N'],
     isCtrlOrCmd: true,
     name: 'New project',
     onExecute: () => toggleCreateProjectModalEvent(true),
@@ -127,6 +129,20 @@ export const editorShortcuts: Shortcut[] = [
 
 export const diagramEditorShortcuts: Shortcut[] = [
   {
+    keys: ['N'],
+    isCtrlOrCmd: true,
+    name: 'New Model',
+    onExecute: () => {},
+    icon: IconBorderAll
+  },
+  {
+    keys: ['N'],
+    isCtrlOrCmd: true,
+    name: 'New Enum',
+    onExecute: () => {},
+    icon: IconLayoutList
+  },
+  {
     keys: ['L'],
     isCtrlOrCmd: true,
     name: 'Auto layout diagram',
@@ -142,9 +158,8 @@ export const diagramEditorShortcuts: Shortcut[] = [
   },
   {
     keys: ['Escape'],
-
-    name: 'Deselct model',
-    onExecute: () => resetSelectedModelEvent()
+    name: 'Deselect model',
+    onExecute: () => resetSelectedNodeEvent()
   },
   {
     keys: ['O'],

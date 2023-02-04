@@ -2,12 +2,7 @@ import { useState } from 'react'
 import { useStore } from 'effector-react'
 import { Button, Group, Paper, Stack, TextInput, Transition } from '@mantine/core'
 import { IconPlus } from '@tabler/icons'
-import {
-  $isEditorEnabled,
-  $schemaState,
-  selectModelEvent,
-  setPrismaSchemaEvent
-} from '../../stores'
+import { $isEditorEnabled, $schemaState, selectNodeEvent, setPrismaSchemaEvent } from '../../stores'
 import { toggleModelNodeSidebarEvent } from '@renderer/stores/ui/modals'
 
 export const CreateModelForm = () => {
@@ -26,7 +21,7 @@ export const CreateModelForm = () => {
     schemaState.addModel(name)
     setPrismaSchemaEvent(schemaState.toString())
     toggleModelNodeSidebarEvent(true)
-    selectModelEvent(name)
+    selectNodeEvent(name)
   }
 
   return (

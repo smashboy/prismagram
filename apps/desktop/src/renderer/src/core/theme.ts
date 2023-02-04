@@ -88,6 +88,11 @@ export const theme: MantineThemeOverride = {
         dropdownPosition: 'flip'
       }
     },
+    Tooltip: {
+      defaultProps: {
+        offset: 15
+      }
+    },
     Alert: {
       defaultProps: {
         variant: 'light'

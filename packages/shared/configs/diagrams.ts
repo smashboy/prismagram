@@ -1,6 +1,8 @@
 export enum NodeType {
   MODEL = 'model',
-  ENUM = 'enum'
+  NEW_MODEL = 'new-model',
+  ENUM = 'enum',
+  NEW_ENUM = 'new-enum'
 }
 
 export enum RelationIOType {
