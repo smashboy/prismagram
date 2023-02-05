@@ -7,9 +7,9 @@ export const useDiagramEditorShortcuts = () => {
   const flow = useReactFlow()
 
   useHotkeys(
-    diagramEditorShortcuts.map((shortcut) => [
+    diagramEditorShortcuts(flow).map((shortcut) => [
       createShortcutString(shortcut),
-      shortcut.name === 'Fit into view' ? () => flow.fitView() : shortcut.onExecute
+      shortcut.onExecute
     ])
   )
 }

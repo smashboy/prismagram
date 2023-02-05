@@ -5,6 +5,7 @@ import {
   launchPrismaStudioEffect,
   layoutDiagramEffect,
   loadEditorDataEffect,
+  removeSelectedNodeEffect,
   saveSchemaEffect
 } from './effects'
 import { $schema, $schemaState, setPrismaSchemaEvent } from './schema'
@@ -28,8 +29,8 @@ sample({
 })
 
 sample({
-  source: saveSchemaEffect.doneData,
-  filter: (schema) => !!schema,
+  source: removeSelectedNodeEffect.doneData,
+  filter: (schema): schema is string => !!schema,
   target: setPrismaSchemaEvent
 })
 

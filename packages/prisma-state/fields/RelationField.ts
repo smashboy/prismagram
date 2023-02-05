@@ -27,4 +27,40 @@ export class RelationField extends ModelField {
 
     return relatedModelFields.find((field) => field.type === this.type && !field.relationName)
   }
+
+  remove() {
+    const attr = this.attributes.get('relation') as RelationAttribute
+
+    const relatedModel = this.model.state.model(this.type)
+
+    let attrName: string | null = null
+
+    if (attr) {
+      const { name } = attr
+
+      if (name) attrName = name
+
+      attr.fields.forEach((field) => this.model.removeField(field))
+    }
+
+    if (attrName) {
+      for (const field of relatedModel.fields.values()) {
+        if (field.type === this.name) {
+          if (
+            attrName &&
+            (field.attributes.get('relation') as RelationAttribute)?.name === attrName
+          )
+            relatedModel.removeField(field.name)
+        }
+      }
+
+      return
+    }
+
+    for (const field of relatedModel.fields.values()) {
+      if (field.type === this.name) {
+        relatedModel.removeField(field.name)
+      }
+    }
+  }
 }

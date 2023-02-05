@@ -53,7 +53,7 @@ export const Spotlight: React.FC<SpotlightProps> = ({ children }) => {
   const selectedEditorViewActions = !selectedProjectId
     ? []
     : selectedEditorView === EditorView.DIAGRAM
-    ? diagramEditorShortcuts.map((shortcut) => shortcut2SpotlightAction(shortcut, 'Diagram'))
+    ? diagramEditorShortcuts(flow).map((shortcut) => shortcut2SpotlightAction(shortcut, 'Diagram'))
     : []
 
   const projectActions: SpotlightAction[] = [...projects.values()].map(({ name, id }) => ({

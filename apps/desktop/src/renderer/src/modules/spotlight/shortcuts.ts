@@ -12,7 +12,6 @@ import {
   IconSettings,
   IconArrowBackUp,
   IconArrowForwardUp,
-  IconSearch,
   IconDatabase,
   IconCode,
   IconSchema,
@@ -27,9 +26,11 @@ import {
   IconLayoutList
 } from '@tabler/icons'
 import { RelationType } from 'prisma-state/constants'
+import { ReactFlowInstance } from 'reactflow'
 import {
   changeEditorViewEvent,
   layoutDiagramEffect,
+  removeSelectedNodeEffect,
   resetSelectedNodeEvent,
   setSelectedRelationTypeEvent
 } from '../editor'
@@ -96,14 +97,14 @@ export const editorShortcuts: Shortcut[] = [
     onExecute: () => {},
     icon: IconArrowForwardUp
   },
-  {
-    keys: ['F'],
-    isCtrlOrCmd: true,
-    name: 'Find',
-    description: 'Search for models and fields in your schema',
-    onExecute: () => {},
-    icon: IconSearch
-  },
+  // {
+  //   keys: ['F'],
+  //   isCtrlOrCmd: true,
+  //   name: 'Find',
+  //   description: 'Search for models and fields in your schema',
+  //   onExecute: () => {},
+  //   icon: IconSearch
+  // },
   {
     keys: ['D'],
     isCtrlOrCmd: true,
@@ -127,7 +128,7 @@ export const editorShortcuts: Shortcut[] = [
   }
 ]
 
-export const diagramEditorShortcuts: Shortcut[] = [
+export const diagramEditorShortcuts = (flow: ReactFlowInstance): Shortcut[] => [
   {
     keys: ['N'],
     isCtrlOrCmd: true,
@@ -153,13 +154,18 @@ export const diagramEditorShortcuts: Shortcut[] = [
     keys: ['V'],
     isCtrlOrCmd: true,
     name: 'Fit into view',
-    onExecute: () => {},
+    onExecute: () => flow.fitView(),
     icon: IconZoomInArea
   },
   {
     keys: ['Escape'],
     name: 'Deselect model',
     onExecute: () => resetSelectedNodeEvent()
+  },
+  {
+    keys: ['Delete'],
+    name: 'Delete selected node',
+    onExecute: () => removeSelectedNodeEffect()
   },
   {
     keys: ['O'],

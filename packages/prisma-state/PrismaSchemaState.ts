@@ -1,5 +1,6 @@
 import { getSchema } from '@mrleebo/prisma-ast/src/getSchema'
 import { Enum, Datasource, Generator, Model } from './blocks'
+import { RelationField } from './fields'
 import { RelationsManager } from './RelationsManager'
 import { testSchema } from './testSchema'
 import { extractBlockIdsByType, extractBlocksByType } from './utils/block'
@@ -40,6 +41,18 @@ export class PrismaSchemaState {
 
   model(id: string) {
     return this.models.get(id)!
+  }
+
+  removeModel(id: string) {
+    const model = this.model(id)
+
+    if (!model) return
+
+    const relationFields = [...model.fields.values()].filter(
+      (field) => field instanceof RelationField
+    ) as RelationField[]
+    relationFields.forEach((field) => field.remove())
+    this.state.delete(`model.${id}`)
   }
 
   enum(id: string) {

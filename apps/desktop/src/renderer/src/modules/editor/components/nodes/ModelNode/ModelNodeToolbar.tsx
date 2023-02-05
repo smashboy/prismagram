@@ -1,4 +1,5 @@
-import { ActionIcon, Group, Transition } from '@mantine/core'
+import { ActionIcon, Group, Tooltip, Transition } from '@mantine/core'
+import { removeSelectedNodeEffect } from '@renderer/modules/editor/stores'
 import { IconGripVertical, IconPlugConnected, IconRowInsertBottom, IconTrash } from '@tabler/icons'
 import { useEffect } from 'react'
 import { useReactFlow } from 'reactflow'
@@ -13,6 +14,8 @@ export const ModelNodeToolbar: React.FC<ModelNodeToolbarProps> = ({
   selectedNodeId
 }) => {
   const flow = useReactFlow()
+
+  const handleRemoveNode = () => removeSelectedNodeEffect()
 
   useEffect(() => {
     flow.setNodes((nodes) =>
@@ -34,7 +37,7 @@ export const ModelNodeToolbar: React.FC<ModelNodeToolbarProps> = ({
             </ActionIcon>
           </Group>
           <Group position="right">
-            <ActionIcon>
+            <ActionIcon onClick={handleRemoveNode}>
               <IconTrash />
             </ActionIcon>
             <ActionIcon>
