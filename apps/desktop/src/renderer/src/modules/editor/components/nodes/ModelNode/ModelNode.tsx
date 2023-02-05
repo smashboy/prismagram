@@ -47,16 +47,6 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
 
   const maxAttribuesCount = Math.max(...[...new Set(fields.map((field) => field.attributes.size))])
 
-  // useEffect(() => {
-  //   flow.setNodes((nodes) =>
-  //     nodes.map((node) =>
-  //       node.id === selectedModelNode
-  //         ? { ...node, dragHandle: '.custom-drag-handle' }
-  //         : { ...node, dragHandle: void 0 }
-  //     )
-  //   )
-  // }, [selectedModelNode])
-
   const handleSaveNewModelName = async (name: string) => {
     model.setName(name)
     const updatedState = await cloneSchemaState(state)
