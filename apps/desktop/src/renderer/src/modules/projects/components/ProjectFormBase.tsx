@@ -1,8 +1,8 @@
-import { Alert, Stack, TextInput, ThemeIcon, Tooltip } from '@mantine/core'
+import { Stack, TextInput, ThemeIcon, Tooltip } from '@mantine/core'
 import { invoke } from '@renderer/core/electron'
 import { GET_PROJECT_DIRECTORY_ENDPOINT } from '@shared/common/configs/api'
 import { defaultSchemaPaths } from '@shared/common/configs/prisma'
-import { IconFile, IconFolder, IconHelp, IconInfoCircle } from '@tabler/icons'
+import { IconFile, IconFolder, IconHelp } from '@tabler/icons'
 
 export interface ProjectFormBaseValues {
   name: string

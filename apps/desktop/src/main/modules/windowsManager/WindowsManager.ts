@@ -14,11 +14,7 @@ import {
   EDITOR_FORMAT_SCHEMA
 } from '@shared/common/configs/api'
 import { GlobalSettings, Project } from '@shared/common/models/Project'
-import {
-  formatPrismaSchema,
-  getPrismaDocument,
-  getPrismaPreviewFeaturesList
-} from '../../services/prisma'
+import { formatPrismaSchema, getPrismaPreviewFeaturesList } from '../../services/prisma'
 import { WindowManager } from './models'
 import WindowsManagerBase from './WindowsManagerBase'
 import { Diagram } from '@shared/common/models/Diagram'
