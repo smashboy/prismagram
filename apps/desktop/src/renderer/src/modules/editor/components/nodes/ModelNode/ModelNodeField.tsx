@@ -1,8 +1,11 @@
 import { Handle, Position } from 'reactflow'
-import { Box, Text } from '@mantine/core'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { ActionIcon, Box, Group, Text, Transition } from '@mantine/core'
 import { Handler } from '@shared/common/models/Diagram'
 import { ModelField } from 'prisma-state/fields'
 import { ScalarFieldColor } from '../../../config'
+import { IconGripVertical } from '@tabler/icons'
 
 interface ModelNodeFieldProps {
   fieldId: string
@@ -11,6 +14,7 @@ interface ModelNodeFieldProps {
   sourceHandlers: Record<string, Handler>
   targetHandlers: Record<string, Handler>
   maxAttribuesCount: number
+  isSelected: boolean
 }
 
 export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
@@ -19,8 +23,18 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
   nodesColors,
   sourceHandlers,
   targetHandlers,
-  maxAttribuesCount
+  maxAttribuesCount,
+  isSelected
 }) => {
+  const {
+    attributes: sortableAttributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    setActivatorNodeRef
+  } = useSortable({ id: fieldId, disabled: !isSelected })
+
   const { type, displayType, attributes } = field
 
   const textColor = ScalarFieldColor[type] || nodesColors[type]
@@ -30,8 +44,19 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
 
   const attributesList = [...attributes.values()]
 
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition
+  }
+
   return (
-    <tr style={{ width: '100%' }}>
+    <Box
+      ref={setNodeRef}
+      component="tr"
+      // sx={{ background: 'red' }}
+      style={style}
+      {...sortableAttributes}
+    >
       <td>
         {targetHandler && (
           <Box
@@ -56,7 +81,20 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
             />
           </Box>
         )}
-        {fieldId}
+      </td>
+      <td>
+        <Group>
+          <Transition mounted={isSelected} transition="fade">
+            {(style) => (
+              <span style={style}>
+                <ActionIcon ref={setActivatorNodeRef} {...listeners}>
+                  <IconGripVertical />
+                </ActionIcon>
+              </span>
+            )}
+          </Transition>
+          <span>{fieldId}</span>
+        </Group>
       </td>
 
       <td style={{ color: textColor, width: '100%', display: 'flex' }}>
@@ -94,6 +132,6 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
           />
         </Box>
       )}
-    </tr>
+    </Box>
   )
 }

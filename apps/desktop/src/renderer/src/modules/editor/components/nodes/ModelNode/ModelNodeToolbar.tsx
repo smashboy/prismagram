@@ -1,15 +1,38 @@
-import { ActionIcon, Box, Group, Transition } from '@mantine/core'
-import { IconPlugConnected, IconRowInsertBottom, IconTrash } from '@tabler/icons'
+import { ActionIcon, Group, Transition } from '@mantine/core'
+import { IconGripVertical, IconPlugConnected, IconRowInsertBottom, IconTrash } from '@tabler/icons'
+import { useEffect } from 'react'
+import { useReactFlow } from 'reactflow'
 
 interface ModelNodeToolbarProps {
   isSelected: boolean
+  selectedNodeId: string | null
 }
 
-export const ModelNodeToolbar: React.FC<ModelNodeToolbarProps> = ({ isSelected }) => {
+export const ModelNodeToolbar: React.FC<ModelNodeToolbarProps> = ({
+  isSelected,
+  selectedNodeId
+}) => {
+  const flow = useReactFlow()
+
+  useEffect(() => {
+    flow.setNodes((nodes) =>
+      nodes.map((node) =>
+        node.id === selectedNodeId
+          ? { ...node, dragHandle: '.custom-drag-handle' }
+          : { ...node, dragHandle: void 0 }
+      )
+    )
+  }, [selectedNodeId])
+
   return (
     <Transition mounted={isSelected} transition="slide-up">
       {(style) => (
-        <Box style={style} sx={{ position: 'relative', zIndex: 1, width: '100%' }}>
+        <Group spacing={0} style={style}>
+          <Group sx={{ flex: 1 }}>
+            <ActionIcon size="xl" className="custom-drag-handle" sx={{ cursor: 'grab' }}>
+              <IconGripVertical />
+            </ActionIcon>
+          </Group>
           <Group position="right">
             <ActionIcon>
               <IconTrash />
@@ -21,7 +44,7 @@ export const ModelNodeToolbar: React.FC<ModelNodeToolbarProps> = ({ isSelected }
               <IconRowInsertBottom />
             </ActionIcon>
           </Group>
-        </Box>
+        </Group>
       )}
     </Transition>
   )

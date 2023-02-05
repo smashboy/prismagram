@@ -65,6 +65,11 @@ export class Block<F extends Field = Field, K = string> {
     this.state.state.set(this.id, this)
   }
 
+  _setFromArray(fields: F[]) {
+    this.fields.clear()
+    fields.forEach((field) => this.fields.set(field.name as unknown as unknown as K, field))
+  }
+
   _parseAssignments(list: (AstGenerator | AstDatasource)['assignments']) {
     for (const assignment of list) {
       if (assignment.type !== 'assignment') continue

@@ -1,5 +1,4 @@
 import { Button, Card, Group, Stack, Text } from '@mantine/core'
-import alpha from 'color-alpha'
 import { string2Color } from '@renderer/core/utils'
 import { useStoreMap } from 'effector-react'
 import { $projects, selectProjectEvent } from '../stores/projects'
@@ -18,7 +17,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ projectId }) => {
   const handleSelectProject = () => selectProjectEvent(projectId)
 
   return (
-    <Card bg={alpha(string2Color(name), 0.15)}>
+    <Card sx={(theme) => ({ backgroundColor: theme.fn.rgba(string2Color(name), 0.15) })}>
       <Stack>
         <Text weight={500}>{name}</Text>
         <Group position="right">

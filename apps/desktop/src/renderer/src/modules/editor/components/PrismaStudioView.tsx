@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useGate, useStore } from 'effector-react'
 import { $selectedProject } from '@renderer/modules/projects'
 import { DEFAULT_PRISMA_STUDIO_PORT } from '@shared/common/configs/prisma'
 import { combine } from 'effector'
 import { $isLaunchingPrismaStudio, PrismaStudioGate } from '../stores'
 import { Box, LoadingOverlay } from '@mantine/core'
+import { useBoolean } from 'react-use'
 
 const $store = combine({
   project: $selectedProject,
@@ -12,7 +13,7 @@ const $store = combine({
 })
 
 export const PrismaStudioView = () => {
-  const [isLoadingWebview, setIsLoadingWebview] = useState(false)
+  const [isLoadingWebview, toggleIsLoadingWebview] = useBoolean(false)
 
   const webviewRef = useRef<HTMLWebViewElement>(null)
 
@@ -32,7 +33,7 @@ export const PrismaStudioView = () => {
     let hasFailed = false
     let refreshTimeout: number | null = null
 
-    const onStartLoading = () => setIsLoadingWebview(true)
+    const onStartLoading = () => toggleIsLoadingWebview(true)
     const onStopLoading = () => {
       if (hasFailed) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -45,7 +46,7 @@ export const PrismaStudioView = () => {
         }, 500)
         return
       }
-      setIsLoadingWebview(false)
+      toggleIsLoadingWebview(false)
     }
     const onLoadFail = () => {
       hasFailed = true
