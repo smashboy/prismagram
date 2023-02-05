@@ -12,27 +12,27 @@ export class RelationAttribute extends FieldAttribute<
   }
 
   get name() {
-    return (this.arguments.get('name') as string) || null
+    return (this.argumentsMap.get('name') as string) || null
   }
 
   get fields() {
-    return (this.arguments.get('fields') as string[]) || []
+    return (this.argumentsMap.get('fields') as string[]) || []
   }
 
   get references() {
-    return (this.arguments.get('references') as string[]) || []
+    return (this.argumentsMap.get('references') as string[]) || []
   }
 
   get map() {
-    return (this.arguments.get('map') as string) || null
+    return (this.argumentsMap.get('map') as string) || null
   }
 
   get onUpdate() {
-    return (this.arguments.get('onUpdate') as ReferentialActionOption) || null
+    return (this.argumentsMap.get('onUpdate') as ReferentialActionOption) || null
   }
 
   get onDelete() {
-    return (this.arguments.get('onDelete') as ReferentialActionOption) || null
+    return (this.argumentsMap.get('onDelete') as ReferentialActionOption) || null
   }
 
   setName(value: string) {

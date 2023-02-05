@@ -9,7 +9,7 @@ export class MapAttribute extends FieldAttribute<ScalarField | RelationField, 'n
   }
 
   get name() {
-    return (this.arguments.get('name') as string) || null
+    return (this.argumentsMap.get('name') as string) || null
   }
 
   setName(value: string) {

@@ -10,19 +10,19 @@ export class UniqueAttribute extends FieldAttribute<
   }
 
   get map() {
-    return (this.arguments.get('map') as string) || null
+    return (this.argumentsMap.get('map') as string) || null
   }
 
   get length() {
-    return (this.arguments.get('length') as number) || null
+    return (this.argumentsMap.get('length') as number) || null
   }
 
   get sort() {
-    return (this.arguments.get('sort') as 'Asc' | 'Desc') || null
+    return (this.argumentsMap.get('sort') as 'Asc' | 'Desc') || null
   }
 
   get clustered() {
-    return (this.arguments.get('clustered') as boolean) || null
+    return (this.argumentsMap.get('clustered') as boolean) || null
   }
 
   setMap(value: string) {

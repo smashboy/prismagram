@@ -14,8 +14,7 @@ export type ArgumentValue =
   | AttributeFunction
 
 export class Attribute<T extends string, AK = string> {
-  // TODO: protected
-  readonly arguments = new Map<AK, ArgumentValue>()
+  protected readonly argumentsMap = new Map<AK, ArgumentValue>()
   private readonly _prefix: AttributePrefix
   readonly type: T
 
@@ -28,12 +27,16 @@ export class Attribute<T extends string, AK = string> {
     return `${this._prefix}${this.type}`
   }
 
+  get arguments() {
+    return [...this.argumentsMap.values()]
+  }
+
   protected setArgument(key: AK, value: ArgumentValue) {
-    this.arguments.set(key, value)
+    this.argumentsMap.set(key, value)
   }
 
   removeArgument(key: AK) {
-    this.arguments.delete(key)
+    this.argumentsMap.delete(key)
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -93,14 +96,16 @@ export class Attribute<T extends string, AK = string> {
   _toString() {
     const args: Array<[string, string]> = []
 
-    for (const [name, arg] of [...this.arguments.entries()]) {
+    for (const [name, arg] of [...this.argumentsMap.entries()]) {
       const strArg = this._argument2String(arg)
 
       if (strArg) args.push([name as unknown as string, strArg])
     }
 
     return `${this._prefix}${this.type}${
-      this.arguments.size > 0 ? `(${args.map(([name, arg]) => `${name}: ${arg}`).join(', ')})` : ''
+      this.argumentsMap.size > 0
+        ? `(${args.map(([name, arg]) => `${name}: ${arg}`).join(', ')})`
+        : ''
     }`
   }
 }
