@@ -48,7 +48,7 @@ const models2NodeModels = (
       targetHandlers: {}
     }
 
-    for (const field of [...fields.values()]) {
+    for (const field of fields) {
       if (field instanceof RelationField) {
         const relation =
           relations.get(`${field.type}-${model.name}`) ||
@@ -114,12 +114,12 @@ const findRelatedFields = (models: Map<string, Model>) => {
   const relations: Map<string, Relation> = new Map()
 
   for (const model of [...models.values()]) {
-    for (const field of [...model.fields.values()]) {
+    for (const field of model.fields) {
       if (field instanceof RelationField) {
         const relationModel = models.get(field.type)
 
         if (relationModel) {
-          for (const relationModelField of [...relationModel.fields.values()]) {
+          for (const relationModelField of relationModel.fields) {
             if (relationModelField.type === model.name) {
               if (field.modifier === 'list' && relationModelField.modifier === 'list') {
                 const id = `${field.type}-${relationModelField.type}`

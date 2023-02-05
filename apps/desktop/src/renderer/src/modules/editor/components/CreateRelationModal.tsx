@@ -124,8 +124,8 @@ export const CreateRelationModal = () => {
       `
       )
 
-      const targetFields = [...targetModel.fields.values()]
-      const sourceFields = [...sourceModel.fields.values()]
+      const targetFields = targetModel.fields
+      const sourceFields = sourceModel.fields
 
       for (const index in targetFields) {
         const field = targetFields[index]

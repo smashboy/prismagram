@@ -14,7 +14,7 @@ const datasourceEnvFields = ['url', 'shadowDatabaseUrl']
 const generatorEnvFields = ['provider', 'output']
 
 export class Block<F extends Field = Field, K = string> {
-  readonly fields = new Map<K, F>()
+  protected readonly fieldsMap = new Map<K, F>()
   name: string
   readonly type: BlockType
   readonly state: PrismaSchemaState
@@ -30,7 +30,11 @@ export class Block<F extends Field = Field, K = string> {
   }
 
   get fieldNames() {
-    return [...this.fields.values()].map((field) => field.name)
+    return [...this.fieldsMap.values()].map((field) => field.name)
+  }
+
+  get fields() {
+    return [...this.fieldsMap.values()]
   }
 
   setName(name: string) {
@@ -50,24 +54,24 @@ export class Block<F extends Field = Field, K = string> {
   field<FF = F>(fieldId: K) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    return this.fields.get(fieldId)! as FF
+    return this.fieldsMap.get(fieldId)! as FF
   }
 
   addField(fieldId: K, field: F) {
-    this.fields.set(fieldId, field)
+    this.fieldsMap.set(fieldId, field)
     return this.field<F>(fieldId)!
   }
 
   removeField(fieldId: K) {
-    this.fields.delete(fieldId)
+    this.fieldsMap.delete(fieldId)
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     this.state.state.set(this.id, this)
   }
 
   _setFromArray(fields: F[]) {
-    this.fields.clear()
-    fields.forEach((field) => this.fields.set(field.name as unknown as unknown as K, field))
+    this.fieldsMap.clear()
+    fields.forEach((field) => this.fieldsMap.set(field.name as unknown as unknown as K, field))
   }
 
   _parseAssignments(list: (AstGenerator | AstDatasource)['assignments']) {
@@ -94,7 +98,7 @@ export class Block<F extends Field = Field, K = string> {
           envField.toggleIsEnv(false)
         }
 
-        this.fields.set(envField.name as unknown as K, envField as unknown as F)
+        this.fieldsMap.set(envField.name as unknown as K, envField as unknown as F)
         continue
       }
 
@@ -105,7 +109,7 @@ export class Block<F extends Field = Field, K = string> {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         optionsField._parse(value.args)
-        this.fields.set(optionsField.name as unknown as K, optionsField as unknown as F)
+        this.fieldsMap.set(optionsField.name as unknown as K, optionsField as unknown as F)
         continue
       }
 
@@ -113,14 +117,14 @@ export class Block<F extends Field = Field, K = string> {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       optionField._parse(value)
-      this.fields.set(optionField.name as unknown as K, optionField as unknown as F)
+      this.fieldsMap.set(optionField.name as unknown as K, optionField as unknown as F)
     }
   }
 
   _toString() {
     return `
     ${this.type} ${this.name} {
-      ${[...this.fields.values()].map((field) => `${field._toString()}`).join('\r\n')}
+      ${this.fields.map((field) => `${field._toString()}`).join('\r\n')}
     }
   `
   }

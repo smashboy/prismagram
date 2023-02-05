@@ -17,7 +17,7 @@ export class RelationField extends ModelField {
 
   get relatedField() {
     const relatedModelFields = (
-      this.relatedModel ? [...this.relatedModel.fields.values()] : []
+      this.relatedModel ? this.relatedModel.fields : []
     ) as RelationField[]
 
     if (this.relationName)
@@ -46,7 +46,7 @@ export class RelationField extends ModelField {
     console.log({ attr, attrName, relatedModel })
 
     if (attrName) {
-      for (const field of relatedModel.fields.values()) {
+      for (const field of relatedModel.fields) {
         const relatedAttr = field.attributes.get('relation') as RelationAttribute
         if (field.type === this.model.name) {
           if (attrName && relatedAttr?.name === attrName) {
@@ -59,7 +59,7 @@ export class RelationField extends ModelField {
       return
     }
 
-    for (const field of relatedModel.fields.values()) {
+    for (const field of relatedModel.fields) {
       console.log(field.type, this.type, field, this)
       if (field.type === this.model.name) {
         const relatedAttr = field.attributes.get('relation') as RelationAttribute

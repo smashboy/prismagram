@@ -24,7 +24,7 @@ export const ModelSettings = () => {
         </Group>
         <NewFieldForm model={model} />
         <Accordion defaultValue="customization">
-          {[...fields.values()].map((field) => (
+          {fields.map((field) => (
             <ModelFieldSettings key={field.name} field={field} />
           ))}
           {[...attributes.values()].map((attr, index) => (

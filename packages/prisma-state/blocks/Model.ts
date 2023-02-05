@@ -35,7 +35,7 @@ export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField
     for (const model of this.state.models.values()) {
       const ref: ModelReference = { model, fields: [] }
 
-      for (const field of model.fields.values()) {
+      for (const field of model.fields) {
         if (field.type === this.name) {
           ref.fields.push(field as RelationField)
         }
@@ -72,7 +72,7 @@ export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField
 
         if (field) {
           field._parse(prop)
-          this.fields.set(name, field)
+          this.fieldsMap.set(name, field)
         }
       }
 

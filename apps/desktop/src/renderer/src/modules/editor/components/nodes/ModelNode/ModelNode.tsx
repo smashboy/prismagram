@@ -34,7 +34,7 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
     fn: (models, [name]) => models.get(name)!
   })
 
-  const { fieldNames } = model
+  const { fieldNames, fields } = model
 
   const { selectedNodeId, nodesColors, state } = useStore($store)
 
@@ -42,8 +42,6 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
 
   const isSelected = selectedNodeId === name
   const isTarget = connectionNodeId && connectionNodeId !== name
-
-  const fields = [...model.fields.values()]
 
   const maxAttribuesCount = Math.max(...[...new Set(fields.map((field) => field.attributes.size))])
 
@@ -61,7 +59,7 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
     const oldIndex = fieldNames.indexOf(active.id as string)
     const newIndex = fieldNames.indexOf(over.id as string)
 
-    model._setFromArray(arrayMove([...fields.values()], oldIndex, newIndex))
+    model._setFromArray(arrayMove(fields, oldIndex, newIndex))
 
     const updatedState = await cloneSchemaState(state)
     setPrismaSchemaEvent(updatedState.toString())

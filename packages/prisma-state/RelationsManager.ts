@@ -49,7 +49,7 @@ export class RelationsManager {
         fields.push(...idBlockAttribute.fields.map((name) => model.field(name)))
     }
 
-    for (const field of [...model.fields.values()]) {
+    for (const field of model.fields) {
       if (field.attributes.has('id')) {
         fields.push(field)
         break
@@ -153,12 +153,8 @@ export class RelationsManager {
   }
 
   relationExists(source: Model, target: Model, name?: string) {
-    const sourceRelationField = [...source.fields.values()].find(
-      (field) => field.type === target.name
-    )
-    const targetRelationField = [...target.fields.values()].find(
-      (field) => field.type === source.name
-    )
+    const sourceRelationField = source.fields.find((field) => field.type === target.name)
+    const targetRelationField = target.fields.find((field) => field.type === source.name)
 
     if (!sourceRelationField || !targetRelationField) return false
 

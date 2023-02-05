@@ -48,7 +48,7 @@ export class PrismaSchemaState {
 
     if (!model) return
 
-    const relationFields = [...model.fields.values()].filter(
+    const relationFields = model.fields.filter(
       (field) => field instanceof RelationField
     ) as RelationField[]
     relationFields.forEach((field) => field.remove())
