@@ -43,14 +43,16 @@ export class RelationField extends ModelField {
       attr.fields.forEach((field) => this.model.removeField(field))
     }
 
+    console.log({ attr, attrName, relatedModel })
+
     if (attrName) {
       for (const field of relatedModel.fields.values()) {
-        if (field.type === this.name) {
-          if (
-            attrName &&
-            (field.attributes.get('relation') as RelationAttribute)?.name === attrName
-          )
+        const relatedAttr = field.attributes.get('relation') as RelationAttribute
+        if (field.type === this.model.name) {
+          if (attrName && relatedAttr?.name === attrName) {
             relatedModel.removeField(field.name)
+            relatedAttr.fields.forEach((field) => relatedModel.removeField(field))
+          }
         }
       }
 
@@ -58,8 +60,14 @@ export class RelationField extends ModelField {
     }
 
     for (const field of relatedModel.fields.values()) {
-      if (field.type === this.name) {
+      console.log(field.type, this.type, field, this)
+      if (field.type === this.model.name) {
+        const relatedAttr = field.attributes.get('relation') as RelationAttribute
+
+        console.log({ relatedModel, relatedAttr, field })
+
         relatedModel.removeField(field.name)
+        relatedAttr?.fields.forEach((field) => relatedModel.removeField(field))
       }
     }
   }

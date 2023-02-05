@@ -27,7 +27,7 @@ export const $createRelationModalData = createStore<CreateRelationModalData>({
   .on(setCreateRelationModalData, (_, data) => data)
   .reset(resetCreateRelationModalData)
 
-export const [$isOpenCreateRelationModal, toggleCreateRelationModal] = createBooleanStore()
+export const [$isOpenCreateRelationModal, toggleCreateRelationModalEvent] = createBooleanStore()
 
 export const $selectedNodeId = createStore<string | null>(null)
   .on(selectNodeEvent, (_, id) => id)

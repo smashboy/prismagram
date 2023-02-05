@@ -1,5 +1,9 @@
 import { ActionIcon, Group, Tooltip, Transition } from '@mantine/core'
-import { removeSelectedNodeEffect } from '@renderer/modules/editor/stores'
+import {
+  removeSelectedNodeEffect,
+  setCreateRelationModalData,
+  toggleCreateRelationModalEvent
+} from '@renderer/modules/editor/stores'
 import { IconGripVertical, IconPlugConnected, IconRowInsertBottom, IconTrash } from '@tabler/icons'
 import { useEffect } from 'react'
 import { useReactFlow } from 'reactflow'
@@ -16,6 +20,11 @@ export const ModelNodeToolbar: React.FC<ModelNodeToolbarProps> = ({
   const flow = useReactFlow()
 
   const handleRemoveNode = () => removeSelectedNodeEffect()
+
+  const openCreateRelationModal = () => {
+    toggleCreateRelationModalEvent(true)
+    setCreateRelationModalData({ source: selectedNodeId!, target: '' })
+  }
 
   useEffect(() => {
     flow.setNodes((nodes) =>
@@ -43,7 +52,7 @@ export const ModelNodeToolbar: React.FC<ModelNodeToolbarProps> = ({
               </ActionIcon>
             </Tooltip>
             <Tooltip label="New relation" withinPortal>
-              <ActionIcon>
+              <ActionIcon onClick={openCreateRelationModal}>
                 <IconPlugConnected />
               </ActionIcon>
             </Tooltip>

@@ -17,7 +17,7 @@ import {
   nodesChangeEvent,
   selectNodeEvent,
   setCreateRelationModalData,
-  toggleCreateRelationModal,
+  toggleCreateRelationModalEvent,
   viewportChangeEvent
 } from '../stores'
 import { ModelNode, NewModelNode } from './nodes/ModelNode'
@@ -84,7 +84,7 @@ export const DiagramEditor = () => {
       data: {}
     }
 
-    reactFlowInstance.setNodes((nodes) => nodes.concat(node))
+    reactFlowInstance.setNodes((nodes) => [...nodes, node])
     selectNodeEvent(id)
     zoomToNode(reactFlowInstance, node)
   }
@@ -92,7 +92,7 @@ export const DiagramEditor = () => {
   const onConnect: OnConnect = ({ source, target }) => {
     if (!source || !target) return
 
-    toggleCreateRelationModal(true)
+    toggleCreateRelationModalEvent(true)
     setCreateRelationModalData({
       source,
       target

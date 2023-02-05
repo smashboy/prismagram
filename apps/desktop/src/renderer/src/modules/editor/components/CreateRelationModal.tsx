@@ -13,7 +13,7 @@ import {
   setCreateRelationModalData,
   setPrismaSchemaEvent,
   setSelectedRelationTypeEvent,
-  toggleCreateRelationModal
+  toggleCreateRelationModalEvent
 } from '../stores'
 import { invoke } from '@renderer/core/electron'
 import { EDITOR_FORMAT_SCHEMA } from '@shared/common/configs/api'
@@ -160,7 +160,7 @@ export const CreateRelationModal = () => {
   }, [updatedState])
 
   const handleCloseDialog = () => {
-    toggleCreateRelationModal(false)
+    toggleCreateRelationModalEvent(false)
     resetCreateRelationModalData()
   }
 

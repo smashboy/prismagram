@@ -23,7 +23,8 @@ import {
   IconZoomOut,
   IconZoomIn,
   IconBorderAll,
-  IconLayoutList
+  IconLayoutList,
+  IconTrash
 } from '@tabler/icons'
 import { RelationType } from 'prisma-state/constants'
 import { ReactFlowInstance } from 'reactflow'
@@ -159,13 +160,14 @@ export const diagramEditorShortcuts = (flow: ReactFlowInstance): Shortcut[] => [
   },
   {
     keys: ['Escape'],
-    name: 'Deselect model',
+    name: 'Deselect node',
     onExecute: () => resetSelectedNodeEvent()
   },
   {
     keys: ['Delete'],
     name: 'Delete selected node',
-    onExecute: () => removeSelectedNodeEffect()
+    onExecute: () => removeSelectedNodeEffect(),
+    icon: IconTrash
   },
   {
     keys: ['O'],

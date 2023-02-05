@@ -36,10 +36,7 @@ export const NewModelNode = () => {
 
   return (
     <NodeCard nodeId={NEW_MODEL_NODE_ID} isSelected={isSelected} selectedNodeId={selectedNodeId}>
-      <ModelNameInput
-        onSave={handleCreateModel}
-        onCloseWithoutCreation={handleRemoveNewModelNode}
-      />
+      <ModelNameInput onSave={handleCreateModel} />
     </NodeCard>
   )
 }

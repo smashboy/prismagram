@@ -5,12 +5,10 @@ import { Model } from 'prisma-state/blocks'
 import { ActionIcon, Group, Text, TextInput } from '@mantine/core'
 import { IconCheck, IconX } from '@tabler/icons'
 import { $nodesColors, $selectedNodeId } from '../../stores'
-import { NEW_MODEL_NODE_ID } from '../../config'
 
 interface ModelNameInputProps {
   model?: Model
   onSave: (name: string) => void
-  onCloseWithoutCreation?: () => void
 }
 
 const $store = combine({
@@ -18,26 +16,21 @@ const $store = combine({
   selectedNodeId: $selectedNodeId
 })
 
-export const ModelNameInput: React.FC<ModelNameInputProps> = ({
-  model,
-  onSave,
-  onCloseWithoutCreation
-}) => {
+export const ModelNameInput: React.FC<ModelNameInputProps> = ({ model, onSave }) => {
   const { nodesColors, selectedNodeId } = useStore($store)
 
   const [isOpen, setIsOpen] = useState(!model?.name)
   const [name, setName] = useState(model?.name || '')
 
   useEffect(() => {
-    if (!model && selectedNodeId !== NEW_MODEL_NODE_ID) return onCloseWithoutCreation?.()
-    if (model && model.name !== selectedNodeId) handleCloseEdit(true)
+    if (model && model.name !== selectedNodeId) handleCloseEdit()
   }, [selectedNodeId])
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setName(event.target.value)
 
-  const handleCloseEdit = (forceReset?: boolean) => {
-    if ((!name && model) || (model && forceReset)) setName(model.name)
+  const handleCloseEdit = () => {
+    if (model) setName(model.name)
 
     setIsOpen(false)
   }
@@ -55,7 +48,7 @@ export const ModelNameInput: React.FC<ModelNameInputProps> = ({
           placeholder="Model name..."
           sx={{ flex: 1 }}
         />
-        <ActionIcon onClick={() => handleCloseEdit()} disabled={!model} color="red">
+        <ActionIcon onClick={handleCloseEdit} disabled={!model} color="red">
           <IconX />
         </ActionIcon>
         <ActionIcon onClick={handleSaveChanges} disabled={!name} color="green">
