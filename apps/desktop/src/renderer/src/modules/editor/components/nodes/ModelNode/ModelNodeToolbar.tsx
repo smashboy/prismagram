@@ -37,15 +37,21 @@ export const ModelNodeToolbar: React.FC<ModelNodeToolbarProps> = ({
             </ActionIcon>
           </Group>
           <Group position="right">
-            <ActionIcon onClick={handleRemoveNode}>
-              <IconTrash />
-            </ActionIcon>
-            <ActionIcon>
-              <IconPlugConnected />
-            </ActionIcon>
-            <ActionIcon>
-              <IconRowInsertBottom />
-            </ActionIcon>
+            <Tooltip label="Remove" withinPortal>
+              <ActionIcon onClick={handleRemoveNode}>
+                <IconTrash />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label="New relation" withinPortal>
+              <ActionIcon>
+                <IconPlugConnected />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label="New field" withinPortal>
+              <ActionIcon>
+                <IconRowInsertBottom />
+              </ActionIcon>
+            </Tooltip>
           </Group>
         </Group>
       )}
