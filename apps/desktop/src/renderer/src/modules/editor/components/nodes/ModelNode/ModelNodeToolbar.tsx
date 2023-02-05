@@ -4,9 +4,10 @@ import {
   setCreateRelationModalData,
   toggleCreateRelationModalEvent
 } from '@renderer/modules/editor/stores'
-import { IconGripVertical, IconPlugConnected, IconRowInsertBottom, IconTrash } from '@tabler/icons'
+import { IconPlugConnected, IconRowInsertBottom, IconTrash } from '@tabler/icons'
 import { useEffect } from 'react'
 import { useReactFlow } from 'reactflow'
+import { DragHandle } from '../../DragHandle'
 
 interface ModelNodeToolbarProps {
   isSelected: boolean
@@ -41,9 +42,7 @@ export const ModelNodeToolbar: React.FC<ModelNodeToolbarProps> = ({
       {(style) => (
         <Group spacing={0} style={style}>
           <Group sx={{ flex: 1 }}>
-            <ActionIcon size="xl" className="custom-drag-handle" sx={{ cursor: 'grab' }}>
-              <IconGripVertical />
-            </ActionIcon>
+            <DragHandle size="xl" className="custom-drag-handle" />
           </Group>
           <Group position="right">
             <Tooltip label="Remove" withinPortal>

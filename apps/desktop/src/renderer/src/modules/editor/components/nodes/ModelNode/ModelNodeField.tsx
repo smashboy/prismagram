@@ -1,11 +1,11 @@
 import { Handle, Position } from 'reactflow'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { ActionIcon, Box, Group, Text, Transition } from '@mantine/core'
+import { Box, Group, Text, Transition } from '@mantine/core'
 import { Handler } from '@shared/common/models/Diagram'
 import { ModelField } from 'prisma-state/fields'
 import { ScalarFieldColor } from '../../../config'
-import { IconGripVertical } from '@tabler/icons'
+import { DragHandle } from '../../DragHandle'
 
 interface ModelNodeFieldProps {
   fieldId: string
@@ -87,9 +87,7 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
           <Transition mounted={isSelected} transition="fade">
             {(style) => (
               <span style={style}>
-                <ActionIcon ref={setActivatorNodeRef} {...listeners}>
-                  <IconGripVertical />
-                </ActionIcon>
+                <DragHandle ref={setActivatorNodeRef} {...listeners} />
               </span>
             )}
           </Transition>
