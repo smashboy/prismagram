@@ -20,7 +20,10 @@ const attributesMap = {
   unique: UniqueBlockAttribute
 }
 
-type ModelReference = { model: Model; fields: RelationField[] }
+interface ModelReference {
+  model: Model
+  fields: RelationField[]
+}
 
 export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField> {
   readonly attributes = new Map<string, A>()
