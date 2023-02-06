@@ -45,7 +45,7 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
 
   const maxAttribuesCount = Math.max(...[...new Set(fields.map((field) => field.attributes.size))])
 
-  const handleSaveNewModelName = async (name: string) => {
+  const handleSaveName = async (name: string) => {
     model.setName(name)
     const updatedState = await cloneSchemaState(state)
     setPrismaSchemaEvent(updatedState.toString())
@@ -69,7 +69,7 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
     <Stack sx={{ minWidth: 150, cursor: isSelected ? 'default' : void 0 }}>
       <ModelNodeToolbar isSelected={isSelected} selectedNodeId={selectedNodeId} />
       <NodeCard nodeId={name} isSelected={isSelected} selectedNodeId={selectedNodeId}>
-        <BlockNameInput block={model} onSave={handleSaveNewModelName} />
+        <BlockNameInput block={model} onSave={handleSaveName} />
         <Table verticalSpacing="md" fontSize="xl">
           <tbody>
             <DndContext

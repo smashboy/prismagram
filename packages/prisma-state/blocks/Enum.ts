@@ -32,6 +32,13 @@ export class Enum extends Block<EnumField> {
     return references
   }
 
+  setName(name: string) {
+    for (const { fields } of this.getReferences()) {
+      fields.forEach((field) => field.setType(name))
+    }
+    super.setName(name)
+  }
+
   _parse(list: AstEnum['enumerators']) {
     for (const item of list) {
       if (item.type !== 'enumerator') continue
