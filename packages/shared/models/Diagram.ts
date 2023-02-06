@@ -36,6 +36,7 @@ export interface Diagram {
 
 export interface Relation {
   id: string
+  name?: string
   type: RelationType
   from: RelationTarget
   to: RelationTarget

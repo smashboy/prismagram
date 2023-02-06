@@ -9,6 +9,7 @@ import {
   Node,
   Relation
 } from '@shared/common/models/Diagram'
+import { RelationAttribute } from 'prisma-state/attributes'
 import { Block, BlockType, Model } from 'prisma-state/blocks'
 import { EnumModelField, RelationField } from 'prisma-state/fields'
 import { PrismaSchemaState, PrismaSchemaStateData } from 'prisma-state/PrismaSchemaState'
@@ -64,9 +65,11 @@ const models2NodeModels = (
 
     for (const field of fields) {
       if (field instanceof RelationField) {
+        const relationName = (field.attributes.get('relation') as RelationAttribute)?.name || void 0
+
         const relation =
-          relations.get(`${field.type}-${model.name}`) ||
-          relations.get(`${model.name}-${field.type}`)
+          relations.get(`${field.type}-${model.name}${relationName ? `_${relationName}` : ''}`) ||
+          relations.get(`${model.name}-${field.type}${relationName ? `_${relationName}` : ''}`)
 
         if (relation) {
           const { id, type, from, to } = relation
@@ -184,18 +187,28 @@ const findRelatedFields = (models: Map<string, Model>) => {
       if (field instanceof RelationField) {
         const relationModel = models.get(field.type)
 
+        const relationName = (field.attributes.get('relation') as RelationAttribute)?.name || void 0
+
+        if (model.name === 'User' && field.type === 'ProjectFeedback')
+          console.log({ model, field, relationName })
+
         if (relationModel) {
           for (const relationModelField of relationModel.fields) {
             if (relationModelField.type === model.name) {
               if (field.modifier === 'list' && relationModelField.modifier === 'list') {
-                const id = `${field.type}-${relationModelField.type}`
-                const secondPossibleId = `${relationModelField.type}-${field.type}`
+                const id = `${field.type}-${relationModelField.type}${
+                  relationName ? `_${relationName}` : ''
+                }`
+                const secondPossibleId = `${relationModelField.type}-${field.type}${
+                  relationName ? `_${relationName}` : ''
+                }`
 
                 if (relations.has(id) || relations.has(secondPossibleId)) continue
 
                 relations.set(id, {
                   id,
                   type: RelationType.MANY_TO_MANY,
+                  name: relationName,
                   from: {
                     model: model.name,
                     field: field.name
@@ -213,12 +226,15 @@ const findRelatedFields = (models: Map<string, Model>) => {
               // @ts-ignore
               const { from, to } = determineSourceTarget(field, relationModelField)
 
-              const id = `${from.model.name}-${to.model.name}`
+              const id = `${from.model.name}-${to.model.name}${
+                relationName ? `_${relationName}` : ''
+              }`
 
               if (field.modifier === 'list' || relationModelField.modifier === 'list') {
                 relations.set(id, {
                   id,
                   type: RelationType.ONE_TO_MANY,
+                  name: relationName,
                   from: {
                     model: from.model.name,
                     field: from.name
@@ -254,5 +270,10 @@ const findRelatedFields = (models: Map<string, Model>) => {
   return relations
 }
 
-const determineSourceTarget = (first: RelationField, second: RelationField) =>
-  first.attributes.has('relation') ? { from: first, to: second } : { from: second, to: first }
+const determineSourceTarget = (first: RelationField, second: RelationField) => {
+  const references = (first.attributes.get('relation') as RelationAttribute)?.references
+
+  return references && references.length > 0
+    ? { from: first, to: second }
+    : { from: second, to: first }
+}
