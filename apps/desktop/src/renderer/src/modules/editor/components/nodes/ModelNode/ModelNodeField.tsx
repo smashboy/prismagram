@@ -2,7 +2,7 @@ import { Handle, Position } from 'reactflow'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Box, Group, Text, Transition } from '@mantine/core'
-import { Handler } from '@shared/common/models/Diagram'
+import { ModelHandler, EnumHandler } from '@shared/common/models/Diagram'
 import { ModelField } from 'prisma-state/fields'
 import { ScalarFieldColor } from '../../../config'
 import { DragHandle } from '../../DragHandle'
@@ -11,8 +11,8 @@ interface ModelNodeFieldProps {
   fieldId: string
   field: ModelField
   nodesColors: Record<string, string>
-  sourceHandlers: Record<string, Handler>
-  targetHandlers: Record<string, Handler>
+  sourceHandlers: Record<string, ModelHandler | EnumHandler>
+  targetHandlers: Record<string, ModelHandler | EnumHandler>
   maxAttribuesCount: number
   isSelected: boolean
 }

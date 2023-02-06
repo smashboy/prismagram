@@ -1,8 +1,16 @@
 import { string2Color } from '@renderer/core/utils'
 import { NodeType, RelationType } from '@shared/common/configs/diagrams'
-import { Diagram, Edge, ModelNodeData, Node, Relation } from '@shared/common/models/Diagram'
+import {
+  Diagram,
+  Edge,
+  EnumNode,
+  ModelNode,
+  ModelNodeData,
+  Node,
+  Relation
+} from '@shared/common/models/Diagram'
 import { Block, BlockType, Model } from 'prisma-state/blocks'
-import { RelationField } from 'prisma-state/fields'
+import { EnumModelField, RelationField } from 'prisma-state/fields'
 import { PrismaSchemaState, PrismaSchemaStateData } from 'prisma-state/PrismaSchemaState'
 
 export const extractBlocksByType = <B extends Block>(
@@ -21,15 +29,21 @@ export const extractBlocksByType = <B extends Block>(
 }
 
 export const prismaSchemaState2Diagram = (state: PrismaSchemaState): Diagram => {
-  const { models } = state
+  const { models, enumIds } = state
 
   const relations = findRelatedFields(models)
 
-  const nodes = models2NodeModels(models, relations)
+  const modelNodes = models2NodeModels(models, relations)
+  const enumNodes = enums2NodeEnums(enumIds)
+
+  const nodes = { ...modelNodes, ...enumNodes }
+
+  const relationEdges = relations2Edges(relations)
+  const enumEdges = createEnumEdges(models)
 
   return {
     nodes,
-    edges: relations2Edges(relations),
+    edges: [...relationEdges, ...enumEdges],
     nodesColors: generateNodesColors(nodes)
   }
 }
@@ -37,10 +51,10 @@ export const prismaSchemaState2Diagram = (state: PrismaSchemaState): Diagram => 
 const models2NodeModels = (
   models: Map<string, Model>,
   relations: Map<string, Relation>
-): Record<string, Node> => {
-  const nodes: Record<string, Node> = {}
+): Record<string, ModelNode> => {
+  const nodes: Record<string, ModelNode> = {}
 
-  for (const model of [...models.values()]) {
+  for (const model of models.values()) {
     const { name, fields } = model
 
     const data: ModelNodeData = {
@@ -71,6 +85,14 @@ const models2NodeModels = (
             }
           }
         }
+
+        continue
+      }
+
+      if (field instanceof EnumModelField) {
+        data.targetHandlers[field.name] = {
+          id: `${field.model.name}.${field.name}.${field.type}`
+        }
       }
     }
 
@@ -85,10 +107,54 @@ const models2NodeModels = (
   return nodes
 }
 
+const enums2NodeEnums = (enumIds: string[]) => {
+  const nodes: Record<string, EnumNode> = {}
+
+  for (const id of enumIds) {
+    nodes[id] = {
+      id,
+      type: NodeType.ENUM,
+      position: { x: 0, y: 0 },
+      data: {}
+    }
+  }
+
+  return nodes
+}
+
+const createEnumEdges = (models: Map<string, Model>): Edge[] => {
+  const edges: Edge[] = []
+
+  for (const model of models.values()) {
+    const { name: modelName, fields } = model
+
+    for (const field of fields) {
+      if (field instanceof EnumModelField) {
+        const { type, name: fieldName } = field
+
+        const id = `${modelName}.${fieldName}.${type}`
+
+        edges.push({
+          id,
+          source: type,
+          target: modelName,
+          labelShowBg: false,
+          type: 'smoothstep',
+          sourceHandle: type,
+          targetHandle: id,
+          style: { stroke: string2Color(id), strokeWidth: 3, strokeDasharray: 5 }
+        })
+      }
+    }
+  }
+
+  return edges
+}
+
 const relations2Edges = (relations: Map<string, Relation>): Edge[] => {
   const edges: Edge[] = []
 
-  for (const relation of [...relations.values()]) {
+  for (const relation of relations.values()) {
     const { id, type, from, to } = relation
 
     edges.push({

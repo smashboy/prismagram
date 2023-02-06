@@ -1,4 +1,4 @@
-import { ActionIcon, Group, Tooltip, Transition } from '@mantine/core'
+import { ActionIcon, Tooltip } from '@mantine/core'
 import {
   removeSelectedNodeEffect,
   setCreateRelationModalData,
@@ -7,7 +7,7 @@ import {
 import { IconPlugConnected, IconRowInsertBottom, IconTrash } from '@tabler/icons'
 import { useEffect } from 'react'
 import { useReactFlow } from 'reactflow'
-import { DragHandle } from '../../DragHandle'
+import { NodeToolbar } from '../NodeToolbar'
 
 interface ModelNodeToolbarProps {
   isSelected: boolean
@@ -38,31 +38,22 @@ export const ModelNodeToolbar: React.FC<ModelNodeToolbarProps> = ({
   }, [selectedNodeId])
 
   return (
-    <Transition mounted={isSelected} transition="slide-up">
-      {(style) => (
-        <Group spacing={0} style={style}>
-          <Group sx={{ flex: 1 }}>
-            <DragHandle size="xl" className="custom-drag-handle" />
-          </Group>
-          <Group position="right">
-            <Tooltip label="Remove" withinPortal>
-              <ActionIcon onClick={handleRemoveNode}>
-                <IconTrash />
-              </ActionIcon>
-            </Tooltip>
-            <Tooltip label="New relation" withinPortal>
-              <ActionIcon onClick={openCreateRelationModal}>
-                <IconPlugConnected />
-              </ActionIcon>
-            </Tooltip>
-            <Tooltip label="New field" withinPortal>
-              <ActionIcon>
-                <IconRowInsertBottom />
-              </ActionIcon>
-            </Tooltip>
-          </Group>
-        </Group>
-      )}
-    </Transition>
+    <NodeToolbar isSelected={isSelected}>
+      <Tooltip label="Remove" withinPortal>
+        <ActionIcon onClick={handleRemoveNode}>
+          <IconTrash />
+        </ActionIcon>
+      </Tooltip>
+      <Tooltip label="New relation" withinPortal>
+        <ActionIcon onClick={openCreateRelationModal}>
+          <IconPlugConnected />
+        </ActionIcon>
+      </Tooltip>
+      <Tooltip label="New field" withinPortal>
+        <ActionIcon>
+          <IconRowInsertBottom />
+        </ActionIcon>
+      </Tooltip>
+    </NodeToolbar>
   )
 }

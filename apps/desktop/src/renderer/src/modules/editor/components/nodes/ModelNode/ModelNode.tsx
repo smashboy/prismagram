@@ -16,7 +16,7 @@ import {
 import { ModelNodeField } from './ModelNodeField'
 import { ModelNodeToolbar } from './ModelNodeToolbar'
 import { NodeCard } from '../NodeCard'
-import { ModelNameInput } from '../../inputs/ModelNameInput'
+import { BlockNameInput } from '../../inputs/BlockNameInput'
 import { cloneSchemaState } from '@renderer/core/utils'
 
 const $store = combine({
@@ -69,7 +69,7 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
     <Stack sx={{ minWidth: 150, cursor: isSelected ? 'default' : void 0 }}>
       <ModelNodeToolbar isSelected={isSelected} selectedNodeId={selectedNodeId} />
       <NodeCard nodeId={name} isSelected={isSelected} selectedNodeId={selectedNodeId}>
-        <ModelNameInput model={model} onSave={handleSaveNewModelName} />
+        <BlockNameInput block={model} onSave={handleSaveNewModelName} />
         <Table verticalSpacing="md" fontSize="xl">
           <tbody>
             <DndContext

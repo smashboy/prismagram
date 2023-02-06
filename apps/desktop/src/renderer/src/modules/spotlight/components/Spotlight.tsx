@@ -2,10 +2,14 @@ import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { SpotlightAction, SpotlightProvider } from '@mantine/spotlight'
 import { string2Color } from '@renderer/core/utils'
-import { $schemaModels, $selectedEditorView, selectNodeEvent } from '@renderer/modules/editor'
+import {
+  $schemaEnums,
+  $schemaModels,
+  $selectedEditorView,
+  selectNodeEvent
+} from '@renderer/modules/editor'
 import { $projects, $selectedProjectId, selectProjectEvent } from '@renderer/modules/projects'
-import { toggleModelNodeSidebarEvent } from '@renderer/stores/ui/modals'
-import { IconBorderAll, IconBriefcase, IconSearch } from '@tabler/icons'
+import { IconBorderAll, IconBriefcase, IconLayoutList, IconSearch } from '@tabler/icons'
 import { diagramEditorShortcuts, editorShortcuts, generalShortcuts } from '../shortcuts'
 import { shortcut2SpotlightAction } from '../utils'
 import { SpotlightActionsWrapper } from './SpotlightActionsWrapper'
@@ -20,13 +24,15 @@ interface SpotlightProps {
 const $store = combine({
   projects: $projects,
   schemaModels: $schemaModels,
+  schemaEnums: $schemaEnums,
   selectedProjectId: $selectedProjectId,
   selectedEditorView: $selectedEditorView
 })
 
 export const Spotlight: React.FC<SpotlightProps> = ({ children }) => {
   const flow = useReactFlow()
-  const { projects, schemaModels, selectedProjectId, selectedEditorView } = useStore($store)
+  const { projects, schemaModels, selectedProjectId, schemaEnums, selectedEditorView } =
+    useStore($store)
 
   const generalSpotlightAction = generalShortcuts
     .filter((shortcut) => shortcut.name !== 'Toggle spotlight')
@@ -41,7 +47,19 @@ export const Spotlight: React.FC<SpotlightProps> = ({ children }) => {
 
       if (node) zoomToNode(flow, node)
 
-      toggleModelNodeSidebarEvent(true)
+      selectNodeEvent(name)
+    }
+  }))
+
+  const enumActions: SpotlightAction[] = [...schemaEnums.values()].map(({ name }) => ({
+    title: name,
+    group: 'Enums',
+    icon: <IconLayoutList size={18} color={string2Color(name)} />,
+    onTrigger: () => {
+      const node = flow.getNode(name)
+
+      if (node) zoomToNode(flow, node)
+
       selectNodeEvent(name)
     }
   }))
@@ -68,6 +86,7 @@ export const Spotlight: React.FC<SpotlightProps> = ({ children }) => {
     ...selectedEditorViewActions,
     ...editorActions,
     ...modelActions,
+    ...enumActions,
     ...projectActions
   ]
 

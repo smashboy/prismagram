@@ -8,7 +8,7 @@ import {
 } from '@renderer/modules/editor/stores'
 import { NodeCard } from '../NodeCard'
 import { NEW_MODEL_NODE_ID } from '@renderer/modules/editor/config'
-import { ModelNameInput } from '../../inputs/ModelNameInput'
+import { BlockNameInput } from '../../inputs/BlockNameInput'
 import { cloneSchemaState } from '@renderer/core/utils'
 
 const $store = combine({
@@ -36,7 +36,7 @@ export const NewModelNode = () => {
 
   return (
     <NodeCard nodeId={NEW_MODEL_NODE_ID} isSelected={isSelected} selectedNodeId={selectedNodeId}>
-      <ModelNameInput onSave={handleCreateModel} />
+      <BlockNameInput onSave={handleCreateModel} />
     </NodeCard>
   )
 }

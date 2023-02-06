@@ -29,6 +29,7 @@ import { NodesToolbar } from './NodesToolbar'
 import { NEW_MODEL_NODE_ID } from '../config'
 import { EditorToolbar } from './EditorToolbar'
 import { zoomToNode } from '../utils'
+import { EnumNode } from './nodes/EnumNode'
 
 const $store = combine({
   nodes: $nodesArray,
@@ -38,7 +39,8 @@ const $store = combine({
 
 const nodeTypes = {
   [NodeType.MODEL]: ModelNode,
-  [NodeType.NEW_MODEL]: NewModelNode
+  [NodeType.NEW_MODEL]: NewModelNode,
+  [NodeType.ENUM]: EnumNode
 }
 
 export const DiagramEditor = () => {

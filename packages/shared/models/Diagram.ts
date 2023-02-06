@@ -1,16 +1,26 @@
 import { Edge as ReactEdge, Node as ReactNode } from 'reactflow'
 import { RelationType } from '../configs/diagrams'
 
-export type Node = ReactNode<ModelNodeData>
+export type Node = ModelNode | EnumNode
 export type Edge = ReactEdge<EdgeData>
 
+export type ModelNode = ReactNode<ModelNodeData>
+export type EnumNode = ReactNode<EnumNodeData>
+
 export interface ModelNodeData {
-  sourceHandlers: Record<string, Handler>
-  targetHandlers: Record<string, Handler>
+  sourceHandlers: Record<string, ModelHandler>
+  targetHandlers: Record<string, ModelHandler | EnumHandler>
 }
 
-export interface Handler {
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface EnumNodeData {}
+
+export interface ModelHandler {
   relationType: RelationType
+  id: string
+}
+
+export interface EnumHandler {
   id: string
 }
 

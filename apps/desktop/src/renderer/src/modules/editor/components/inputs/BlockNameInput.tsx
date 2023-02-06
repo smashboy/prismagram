@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
-import { Model } from 'prisma-state/blocks'
-import { ActionIcon, Group, Text, TextInput } from '@mantine/core'
-import { IconCheck, IconX } from '@tabler/icons'
+import { Enum, Model } from 'prisma-state/blocks'
+import { ActionIcon, Group, Text, TextInput, ThemeIcon } from '@mantine/core'
+import { IconBorderAll, IconCheck, IconLayoutList, IconX } from '@tabler/icons'
 import { $nodesColors, $selectedNodeId } from '../../stores'
 
-interface ModelNameInputProps {
-  model?: Model
+interface BlockNameInputProps {
+  block?: Model | Enum
   onSave: (name: string) => void
 }
 
@@ -16,21 +16,24 @@ const $store = combine({
   selectedNodeId: $selectedNodeId
 })
 
-export const ModelNameInput: React.FC<ModelNameInputProps> = ({ model, onSave }) => {
+export const BlockNameInput: React.FC<BlockNameInputProps> = ({ block, onSave }) => {
   const { nodesColors, selectedNodeId } = useStore($store)
 
-  const [isOpen, setIsOpen] = useState(!model?.name)
-  const [name, setName] = useState(model?.name || '')
+  const color = nodesColors[block?.name || '']
+  const Icon = block instanceof Model ? IconBorderAll : IconLayoutList
+
+  const [isOpen, setIsOpen] = useState(!block?.name)
+  const [name, setName] = useState(block?.name || '')
 
   useEffect(() => {
-    if (model && model.name !== selectedNodeId) handleCloseEdit()
+    if (block && block.name !== selectedNodeId) handleCloseEdit()
   }, [selectedNodeId])
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setName(event.target.value)
 
   const handleCloseEdit = () => {
-    if (model) setName(model.name)
+    if (block) setName(block.name)
 
     setIsOpen(false)
   }
@@ -48,7 +51,7 @@ export const ModelNameInput: React.FC<ModelNameInputProps> = ({ model, onSave })
           placeholder="Model name..."
           sx={{ flex: 1 }}
         />
-        <ActionIcon onClick={handleCloseEdit} disabled={!model} color="red">
+        <ActionIcon onClick={handleCloseEdit} disabled={!block} color="red">
           <IconX />
         </ActionIcon>
         <ActionIcon onClick={handleSaveChanges} disabled={!name} color="green">
@@ -58,13 +61,18 @@ export const ModelNameInput: React.FC<ModelNameInputProps> = ({ model, onSave })
     )
 
   return (
-    <Text
-      onClick={handleOpenEdit}
-      size="xl"
-      color={nodesColors[name]}
-      sx={{ cursor: 'pointer', pointerEvents: selectedNodeId !== model?.name ? 'none' : void 0 }}
-    >
-      {name}
-    </Text>
+    <Group>
+      <ThemeIcon variant="light" color="gray">
+        <Icon />
+      </ThemeIcon>
+      <Text
+        onClick={handleOpenEdit}
+        size="xl"
+        color={color}
+        sx={{ cursor: 'pointer', pointerEvents: selectedNodeId !== block?.name ? 'none' : void 0 }}
+      >
+        {name}
+      </Text>
+    </Group>
   )
 }
