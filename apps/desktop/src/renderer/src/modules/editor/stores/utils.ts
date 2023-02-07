@@ -44,7 +44,13 @@ export const prismaSchemaState2Diagram = (state: PrismaSchemaState, diagram: Dia
       {}
     )
   )
-  const enumNodes = enums2NodeEnums(enumIds)
+  const enumNodes = enums2NodeEnums(
+    enumIds,
+    Object.entries(prevNodes).reduce(
+      (acc, [id, node]) => (node.type === NodeType.ENUM ? { ...acc, [id]: node } : acc),
+      {}
+    )
+  )
 
   const nodes = { ...modelNodes, ...enumNodes }
 

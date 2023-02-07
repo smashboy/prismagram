@@ -5,7 +5,6 @@ import {
   IconBriefcase,
   IconCommand,
   IconDashboard,
-  IconHomeCog,
   IconInfoCircle,
   IconPalette,
   IconYoga
@@ -33,7 +32,7 @@ export enum ProjectSettingsRoute {
 }
 
 export const settingsRoutes = new Map<SettingsRoute, SettingsRouteOptions>([
-  [SettingsRoute.GENERAL, { label: 'General', icon: IconHomeCog, color: 'indigo' }],
+  // [SettingsRoute.GENERAL, { label: 'General', icon: IconHomeCog, color: 'indigo' }],
   [SettingsRoute.SHORTCUTS, { label: 'Shortcuts', icon: IconCommand, color: 'cyan' }],
   [SettingsRoute.PROJECT, { label: 'Project', icon: IconBriefcase, color: 'orange' }],
   [SettingsRoute.ABOUT, { label: 'About', icon: IconInfoCircle, color: 'pink' }]

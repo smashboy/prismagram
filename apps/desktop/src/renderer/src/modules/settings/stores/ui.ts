@@ -9,7 +9,7 @@ export const changeProjectSettingsSectionEvent = createEvent<ProjectSettingsRout
 
 export const [$isOpenCreateNewCommand, toggleOpenCreateNewCommandEvent] = createBooleanStore()
 
-export const $selectedSettingsSection = createStore(SettingsRoute.GENERAL)
+export const $selectedSettingsSection = createStore(SettingsRoute.SHORTCUTS)
   .on(changeSettingsSectionEvent, (_, section) => section)
   .reset(toggleSettingsModalEvent)
 
