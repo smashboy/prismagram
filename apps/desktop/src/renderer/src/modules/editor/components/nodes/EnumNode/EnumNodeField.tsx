@@ -5,7 +5,7 @@ interface EnumNodeFieldProps {
   isSelected: boolean
 }
 
-export const EnumNodeField: React.FC<EnumNodeFieldProps> = ({ field, isSelected }) => {
+export const EnumNodeField: React.FC<EnumNodeFieldProps> = ({ field }) => {
   const { name } = field
 
   return (

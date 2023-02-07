@@ -1,20 +1,27 @@
 import { cloneSchemaState } from '@renderer/core/utils'
+import { NodeType } from '@shared/common/configs/diagrams'
 import { attach, combine, createEffect } from 'effector'
 import { PrismaSchemaState } from 'prisma-state'
 import { $schemaState } from '../schema'
-import { $selectedNodeId } from '../ui'
+import { $selectedNodeId, SelectedNodeData } from '../ui'
 
 export const removeSelectedNodeEffect = attach({
-  effect: createEffect(async (props: { nodeId: string | null; state: PrismaSchemaState }) => {
-    const { nodeId, state } = props
+  effect: createEffect(
+    async (props: { node: SelectedNodeData | null; state: PrismaSchemaState }) => {
+      const { node, state } = props
 
-    if (!nodeId) return
+      if (!node) return
 
-    state.removeModel(nodeId)
+      if (node.type === NodeType.MODEL) {
+        state.removeModel(node.nodeId)
+      } else if (node.type === NodeType.ENUM) {
+        state.removeEnum(node.nodeId)
+      }
 
-    const updatedState = await cloneSchemaState(state)
+      const updatedState = await cloneSchemaState(state)
 
-    return updatedState.toString()
-  }),
-  source: combine({ nodeId: $selectedNodeId, state: $schemaState })
+      return updatedState.toString()
+    }
+  ),
+  source: combine({ node: $selectedNodeId, state: $schemaState })
 })

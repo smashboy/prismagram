@@ -55,7 +55,7 @@ export const generalShortcuts: Shortcut[] = [
   {
     keys: ['Shift', 'P'],
     isCtrlOrCmd: true,
-    name: 'Open project',
+    name: 'Select project',
     onExecute: () => toggleSelectProjectModalEvent(true),
     icon: IconList
   },

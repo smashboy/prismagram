@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
-import { Button, Group, LoadingOverlay, Stack, TextInput } from '@mantine/core'
+import { Button, Group, LoadingOverlay, Stack } from '@mantine/core'
 import {
   $isUpdatingProject,
   $selectedProject,
@@ -9,7 +9,6 @@ import {
   ProjectFormBaseValues,
   updateProjectEffect
 } from '@renderer/modules/projects'
-import { DEFAULT_PRISMA_STUDIO_PORT } from '@shared/common/configs/prisma'
 import { SettingsSectionPaper } from '../SettingsSectionPaper'
 import { $schemaPath } from '../../stores'
 
@@ -22,46 +21,46 @@ const $store = combine({
 export const ProjectGeneralSettings = () => {
   const { project, isLoading, schemaPath } = useStore($store)
 
-  const { name, projectDirectory, prismaStudioPort } = project!
+  const { name, projectDirectory } = project!
 
   const [settings, setSettings] = useState({
     name,
     schemaPath,
-    projectDirectory: projectDirectory ?? '',
-    prismaStudioPort: prismaStudioPort ?? DEFAULT_PRISMA_STUDIO_PORT
+    projectDirectory: projectDirectory ?? ''
+    // prismaStudioPort: prismaStudioPort ?? DEFAULT_PRISMA_STUDIO_PORT
   })
 
   const handleBaseFormChange = (values: ProjectFormBaseValues) =>
     setSettings({ ...settings, ...values })
 
-  const handlePortInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSettings({
-      ...settings,
-      prismaStudioPort: parseInt(event.target.value, 10)
-    })
-  }
+  // const handlePortInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSettings({
+  //     ...settings,
+  //     prismaStudioPort: parseInt(event.target.value, 10)
+  //   })
+  // }
 
-  const handlePortInputBlur = () => {
-    const { prismaStudioPort } = settings
+  // const handlePortInputBlur = () => {
+  //   const { prismaStudioPort } = settings
 
-    if (!prismaStudioPort)
-      setSettings({
-        ...settings,
-        prismaStudioPort: DEFAULT_PRISMA_STUDIO_PORT
-      })
-  }
+  //   if (!prismaStudioPort)
+  //     setSettings({
+  //       ...settings,
+  //       prismaStudioPort: DEFAULT_PRISMA_STUDIO_PORT
+  //     })
+  // }
 
   const handleSaveProject = () => {
-    const { name, projectDirectory, prismaStudioPort } = settings
+    const { name, projectDirectory } = settings
 
     return updateProjectEffect({
       ...project!,
       name,
-      projectDirectory: projectDirectory ?? void 0,
-      prismaStudioPort:
-        !prismaStudioPort || prismaStudioPort === DEFAULT_PRISMA_STUDIO_PORT
-          ? void 0
-          : prismaStudioPort
+      projectDirectory: projectDirectory ?? void 0
+      // prismaStudioPort:
+      //   !prismaStudioPort || prismaStudioPort === DEFAULT_PRISMA_STUDIO_PORT
+      //     ? void 0
+      //     : prismaStudioPort
     })
   }
 
@@ -72,7 +71,7 @@ export const ProjectGeneralSettings = () => {
       <Stack pos="relative">
         <LoadingOverlay visible={isLoading} />
         <ProjectFormBase values={settings} onChange={handleBaseFormChange} />
-        <TextInput
+        {/* <TextInput
           label="Prisma studio port"
           description="What port should prisma studio run on. The default port is 5555."
           type="number"
@@ -81,7 +80,7 @@ export const ProjectGeneralSettings = () => {
           onBlur={handlePortInputBlur}
           min={0}
           step={1}
-        />
+        /> */}
         <Group position="right">
           <Button variant="filled" onClick={handleSaveProject} disabled={disableSaveButton}>
             Save

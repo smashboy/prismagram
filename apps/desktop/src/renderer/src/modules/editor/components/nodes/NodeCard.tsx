@@ -1,10 +1,12 @@
 import { Card } from '@mantine/core'
+import { NodeType } from '@shared/common/configs/diagrams'
 import { selectNodeEvent } from '../../stores'
 
 interface NodeCardProps {
   nodeId: string
   isSelected: boolean
-  selectedNodeId: string | null
+  selectedNodeId?: string | null
+  type: NodeType
   children: React.ReactNode
 }
 
@@ -12,9 +14,10 @@ export const NodeCard: React.FC<NodeCardProps> = ({
   isSelected,
   selectedNodeId,
   nodeId,
+  type,
   children
 }) => {
-  const handleSelectModel = () => selectNodeEvent(nodeId)
+  const handleSelectModel = () => selectNodeEvent({ nodeId, type: type! })
 
   return (
     <Card

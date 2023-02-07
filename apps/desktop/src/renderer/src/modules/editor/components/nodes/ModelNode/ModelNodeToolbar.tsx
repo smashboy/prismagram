@@ -11,7 +11,7 @@ import { NodeToolbar } from '../NodeToolbar'
 
 interface ModelNodeToolbarProps {
   isSelected: boolean
-  selectedNodeId: string | null
+  selectedNodeId?: string | null
 }
 
 export const ModelNodeToolbar: React.FC<ModelNodeToolbarProps> = ({

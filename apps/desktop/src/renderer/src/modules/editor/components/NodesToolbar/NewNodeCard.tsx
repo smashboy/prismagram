@@ -32,7 +32,7 @@ export const NewNodeCard: React.FC<NewNodeCardProps> = ({ icon: Icon, title, nod
         <Icon size={24} />
         <Group>
           <Text color="dimmed" fz="lg">
-            {title}
+            {title} +
           </Text>
         </Group>
       </Stack>

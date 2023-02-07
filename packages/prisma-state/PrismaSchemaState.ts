@@ -55,6 +55,20 @@ export class PrismaSchemaState {
     this.state.delete(`model.${id}`)
   }
 
+  removeEnum(id: string) {
+    const enumItem = this.enum(id)
+
+    if (!enumItem) return
+
+    const refs = enumItem.getReferences()
+
+    for (const { model, fields } of refs) {
+      fields.forEach((field) => model.removeField(field.name))
+    }
+
+    this.state.delete(`enum.${id}`)
+  }
+
   enum(id: string) {
     return this.enums.get(id)!
   }

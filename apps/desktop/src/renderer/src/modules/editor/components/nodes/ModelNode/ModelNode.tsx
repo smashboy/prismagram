@@ -18,6 +18,7 @@ import { ModelNodeToolbar } from './ModelNodeToolbar'
 import { NodeCard } from '../NodeCard'
 import { BlockNameInput } from '../../inputs/BlockNameInput'
 import { cloneSchemaState } from '@renderer/core/utils'
+import { NodeType } from '@shared/common/configs/diagrams'
 
 const $store = combine({
   nodesColors: $nodesColors,
@@ -40,7 +41,7 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
 
   const connectionNodeId = useFlowStore((state) => state.connectionNodeId)
 
-  const isSelected = selectedNodeId === name
+  const isSelected = selectedNodeId?.nodeId === name
   const isTarget = connectionNodeId && connectionNodeId !== name
 
   const maxAttribuesCount = Math.max(...[...new Set(fields.map((field) => field.attributes.size))])
@@ -67,8 +68,13 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
 
   return (
     <Stack sx={{ minWidth: 150, cursor: isSelected ? 'default' : void 0 }}>
-      <ModelNodeToolbar isSelected={isSelected} selectedNodeId={selectedNodeId} />
-      <NodeCard nodeId={name} isSelected={isSelected} selectedNodeId={selectedNodeId}>
+      <ModelNodeToolbar isSelected={isSelected} selectedNodeId={selectedNodeId?.nodeId} />
+      <NodeCard
+        nodeId={name}
+        isSelected={isSelected}
+        selectedNodeId={selectedNodeId?.nodeId}
+        type={NodeType.MODEL}
+      >
         <BlockNameInput block={model} onSave={handleSaveName} />
         <Table verticalSpacing="md" fontSize="xl">
           <tbody>

@@ -16,6 +16,7 @@ import { SpotlightActionsWrapper } from './SpotlightActionsWrapper'
 import { EditorView } from '@renderer/modules/editor/config'
 import { useReactFlow } from 'reactflow'
 import { zoomToNode } from '@renderer/modules/editor/utils'
+import { NodeType } from '@shared/common/configs/diagrams'
 
 interface SpotlightProps {
   children: React.ReactNode
@@ -45,9 +46,10 @@ export const Spotlight: React.FC<SpotlightProps> = ({ children }) => {
     onTrigger: () => {
       const node = flow.getNode(name)
 
-      if (node) zoomToNode(flow, node)
-
-      selectNodeEvent(name)
+      if (node) {
+        zoomToNode(flow, node)
+        selectNodeEvent({ nodeId: node.id, type: node.type! as NodeType })
+      }
     }
   }))
 
@@ -58,9 +60,10 @@ export const Spotlight: React.FC<SpotlightProps> = ({ children }) => {
     onTrigger: () => {
       const node = flow.getNode(name)
 
-      if (node) zoomToNode(flow, node)
-
-      selectNodeEvent(name)
+      if (node) {
+        zoomToNode(flow, node)
+        selectNodeEvent({ nodeId: node.id, type: node.type! as NodeType })
+      }
     }
   }))
 
