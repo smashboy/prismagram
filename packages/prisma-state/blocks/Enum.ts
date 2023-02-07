@@ -40,6 +40,8 @@ export class Enum extends Block<EnumField> {
   }
 
   _parse(list: AstEnum['enumerators']) {
+    if (!list) return
+
     for (const item of list) {
       if (item.type !== 'enumerator') continue
 

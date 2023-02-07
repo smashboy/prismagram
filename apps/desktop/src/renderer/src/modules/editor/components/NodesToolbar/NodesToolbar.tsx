@@ -13,15 +13,10 @@ export const NodesToolbar = () => {
           <NewNodeCard
             title="Model"
             icon={IconBorderAll}
-            nodeType={NodeType.NEW_MODEL}
+            nodeType={NodeType.MODEL}
             color="indigo"
           />
-          <NewNodeCard
-            title="Enum"
-            icon={IconLayoutList}
-            nodeType={NodeType.NEW_ENUM}
-            color="lime"
-          />
+          <NewNodeCard title="Enum" icon={IconLayoutList} nodeType={NodeType.ENUM} color="lime" />
         </Stack>
       </PaperGlass>
     </Panel>

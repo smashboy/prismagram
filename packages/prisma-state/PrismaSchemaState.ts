@@ -80,6 +80,13 @@ export class PrismaSchemaState {
     return this.model(name)
   }
 
+  createEnum(name: string) {
+    const enumItem = new Enum(name, this)
+    this.state.set(enumItem.id, enumItem)
+
+    return this.enum(name)
+  }
+
   fromString(schema: string) {
     console.log('START')
     console.time()

@@ -14,9 +14,11 @@ import {
   $diagramViewport,
   $edgesArray,
   $nodesArray,
+  $schemaState,
   nodesChangeEvent,
   selectNodeEvent,
   setCreateRelationModalData,
+  setPrismaSchemaEvent,
   toggleCreateRelationModalEvent,
   viewportChangeEvent
 } from '../stores'
@@ -30,10 +32,13 @@ import { NEW_MODEL_NODE_ID } from '../config'
 import { EditorToolbar } from './EditorToolbar'
 import { zoomToNode } from '../utils'
 import { EnumNode } from './nodes/EnumNode'
+import { Enum, Model } from 'prisma-state/blocks'
+import { cloneSchemaState } from '@renderer/core/utils'
 
 const $store = combine({
   nodes: $nodesArray,
   edges: $edgesArray,
+  schemaState: $schemaState,
   viewport: $diagramViewport
 })
 
@@ -48,7 +53,7 @@ export const DiagramEditor = () => {
 
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const { nodes, edges, viewport } = useStore($store)
+  const { nodes, edges, viewport, schemaState } = useStore($store)
 
   useDiagramEditorShortcuts()
 
@@ -62,7 +67,7 @@ export const DiagramEditor = () => {
     event.dataTransfer.dropEffect = 'move'
   }
 
-  const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
+  const onDrop = async (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
 
     if (!reactFlowInstance) return
@@ -77,7 +82,7 @@ export const DiagramEditor = () => {
       y: event.clientY - reactFlowBounds.top
     })
 
-    const id = type === NodeType.NEW_MODEL ? NEW_MODEL_NODE_ID : 'kekw'
+    const id = `New${type}`
 
     const node: Node = {
       id,
@@ -86,8 +91,17 @@ export const DiagramEditor = () => {
       data: {}
     }
 
+    if (type === NodeType.MODEL) schemaState.createModel(id)
+    if (type === NodeType.ENUM) schemaState.createEnum(id)
+
+    const updatedState = await cloneSchemaState(schemaState)
+
+    setPrismaSchemaEvent(updatedState.toString())
+
     reactFlowInstance.setNodes((nodes) => [...nodes, node])
-    selectNodeEvent(id)
+
+    selectNodeEvent({ nodeId: id, type: type as NodeType })
+
     zoomToNode(reactFlowInstance, node)
   }
 
