@@ -26,7 +26,7 @@ export const BlockNameInput: React.FC<BlockNameInputProps> = ({ block, onSave })
   const [name, setName] = useState(block?.name || '')
 
   useEffect(() => {
-    if (block && block.name !== selectedNodeId) handleCloseEdit()
+    if (block && block.name !== selectedNodeId?.nodeId) handleCloseEdit()
   }, [selectedNodeId])
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -61,16 +61,17 @@ export const BlockNameInput: React.FC<BlockNameInputProps> = ({ block, onSave })
     )
 
   return (
-    <Group>
+    <Group
+      onClick={handleOpenEdit}
+      sx={{
+        cursor: 'pointer',
+        pointerEvents: selectedNodeId?.nodeId !== block?.name ? 'none' : void 0
+      }}
+    >
       <ThemeIcon variant="light" color="gray">
         <Icon />
       </ThemeIcon>
-      <Text
-        onClick={handleOpenEdit}
-        size="xl"
-        color={color}
-        sx={{ cursor: 'pointer', pointerEvents: selectedNodeId !== block?.name ? 'none' : void 0 }}
-      >
+      <Text size="xl" color={color}>
         {name}
       </Text>
     </Group>
