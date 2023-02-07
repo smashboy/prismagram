@@ -28,11 +28,9 @@ import '../css/editor.css'
 import { useDiagramEditorShortcuts } from '@renderer/modules/spotlight'
 import { CreateRelationModal } from './CreateRelationModal'
 import { NodesToolbar } from './NodesToolbar'
-import { NEW_MODEL_NODE_ID } from '../config'
 import { EditorToolbar } from './EditorToolbar'
 import { zoomToNode } from '../utils'
 import { EnumNode } from './nodes/EnumNode'
-import { Enum, Model } from 'prisma-state/blocks'
 import { cloneSchemaState } from '@renderer/core/utils'
 
 const $store = combine({
