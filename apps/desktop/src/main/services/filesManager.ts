@@ -43,10 +43,10 @@ export const readFile = async (window: BrowserWindow, options: OpenReadOptions) 
   return fs.readFile(filePath, { encoding: 'utf-8' })
 }
 
-export const createFile = (filePath: string, filename: string, content: string) => {
-  if (!fsSync.existsSync(filePath)) fsSync.mkdirSync(filePath, { recursive: true })
+export const createFile = (folderPath: string, filename: string, content: string) => {
+  if (!fsSync.existsSync(folderPath)) fsSync.mkdirSync(folderPath, { recursive: true })
 
-  return fs.writeFile(path.join(filePath, filename), content)
+  return fs.writeFile(path.join(folderPath, filename), content)
 }
 
 export const readDirectoryFiles = async (directoryPath: string) => {
@@ -61,4 +61,20 @@ export const readDirectoryFiles = async (directoryPath: string) => {
   }
 
   return Promise.all(files2read)
+}
+
+export const readDirectoryFolders = async (directoryPath: string) => {
+  const directories: string[] = []
+
+  console.log('READ', directoryPath)
+
+  const list = await fs.readdir(directoryPath, { withFileTypes: true })
+
+  console.log(list)
+
+  for (const dirent of list) {
+    if (dirent.isDirectory()) directories.push(dirent.name)
+  }
+
+  return directories
 }

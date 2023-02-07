@@ -9,6 +9,7 @@ export const EDITOR_LAUNCH_PRISMA_STUDIO_ENDPOINT = 'editor.launch-prisma-studio
 export const EDITOR_CLOSE_PRISMA_STUDIO_ENDPOINT = 'editor.close-prisma-studio'
 export const EDITOR_SAVE_SCHEMA = 'editor.save-schema'
 export const EDITOR_FORMAT_SCHEMA = 'editor.format-schema'
+export const EDITOR_SAVE_DIAGRAM = 'editor.save-diagram'
 
 export const CREATE_COMMAND_ENDPOINT = 'commands.create'
 

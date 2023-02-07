@@ -1,39 +1,53 @@
 import { BrowserWindow } from 'electron'
 import fs from 'fs'
+import fsPromise from 'fs/promises'
 import { randomUUID } from 'crypto'
 import * as path from 'path'
 import { Project } from '@shared/common/models/Project'
-import { createFile, readDirectoryFiles, readDirectoryPath } from '../../services/filesManager'
+import { createFile, readDirectoryFolders, readDirectoryPath } from '../../services/filesManager'
 import { PRISMA_SCHEMA_FILE_NAME, PROJECTS_FOLDER_PATH } from '../../constants'
 import { PrismaCommand } from '@shared/common/models/Prisma'
 import { defaultSchemaPaths } from '@shared/common/configs/prisma'
 import { formatPrismaSchema } from '../../services/prisma'
+import { Diagram } from '@shared/common/models/Diagram'
 
 export class ProjectsManager {
-  private createProjectFileName(id = randomUUID()) {
-    return [`${id}.json`, id] as const
+  private geProjecFolderPath(id = randomUUID()) {
+    return [path.join(PROJECTS_FOLDER_PATH, id), id]
+  }
+
+  private getProjectDiagramPath(id: string) {
+    return path.join(id, 'diagram.json')
   }
 
   async getProjectsList(): Promise<Project[]> {
-    const projects = await readDirectoryFiles(PROJECTS_FOLDER_PATH)
+    const projectFolders = await readDirectoryFolders(PROJECTS_FOLDER_PATH)
+
+    const projects = await Promise.all(
+      projectFolders.map((id) =>
+        fsPromise.readFile(path.join(PROJECTS_FOLDER_PATH, id, 'project.json'), {
+          encoding: 'utf-8'
+        })
+      )
+    )
 
     return projects.map((project) => JSON.parse(project))
   }
 
   async createProject(args: Omit<Project, 'id'>) {
-    const [fileName, id] = this.createProjectFileName()
+    const [folderPath, id] = this.geProjecFolderPath()
 
     const project: Project = { id, ...args }
 
-    await createFile(PROJECTS_FOLDER_PATH, fileName, JSON.stringify(project))
+    await createFile(folderPath, 'project.json', JSON.stringify(project))
 
     return project
   }
 
   async updateProject(project: Project) {
     await createFile(
-      PROJECTS_FOLDER_PATH,
-      this.createProjectFileName(project.id)[0],
+      this.geProjecFolderPath(project.id)[0],
+      'project.json',
       JSON.stringify(project)
     )
 
@@ -62,6 +76,14 @@ export class ProjectsManager {
     return void 0
   }
 
+  async saveDiagram(diagram: Diagram, project: Project) {
+    const diagramFilePath = this.getProjectDiagramPath(project.id)
+
+    await createFile(PROJECTS_FOLDER_PATH, diagramFilePath, JSON.stringify(diagram))
+
+    return diagram
+  }
+
   getProjectDirectory(browserWindow: BrowserWindow) {
     return readDirectoryPath(browserWindow, {
       title: 'Open project directory',
@@ -70,15 +92,16 @@ export class ProjectsManager {
   }
 
   async createCommand(command: PrismaCommand, project: Project) {
-    const [fileName] = this.createProjectFileName(project.id)
+    const [folderPath] = this.geProjecFolderPath(project.id)
 
     const id = randomUUID()
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const fragment = { [id]: command }
 
-    project.commands = project.commands ? { ...project.commands, ...fragment } : fragment
+    // project.commands = project.commands ? { ...project.commands, ...fragment } : fragment
 
-    await createFile(PROJECTS_FOLDER_PATH, fileName, JSON.stringify(project))
+    await createFile(folderPath, 'commands.json', JSON.stringify(project))
 
     return project
   }

@@ -4,3 +4,4 @@ export { launchPrismaStudioEffect, $isLaunchingPrismaStudio } from './launchPris
 export { closePrismaStudioEffect } from './closePrismaStudioEffect'
 export { saveSchemaEffect } from './saveSchemaEffect'
 export { removeSelectedNodeEffect } from './removeSelectedNodeEffect'
+export { saveDiagramEffect } from './saveDiagramEffect'

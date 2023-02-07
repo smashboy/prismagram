@@ -1,11 +1,12 @@
 import { sample } from 'effector'
 import { throttle } from 'patronum'
-import { layoutDiagramEvent, prismaState2DiagramEvent } from './diagram'
+import { setDiagramEvent, prismaState2DiagramEvent, $diagram } from './diagram'
 import {
   launchPrismaStudioEffect,
   layoutDiagramEffect,
   loadEditorDataEffect,
   removeSelectedNodeEffect,
+  saveDiagramEffect,
   saveSchemaEffect
 } from './effects'
 import { $schema, $schemaState, setPrismaSchemaEvent } from './schema'
@@ -13,7 +14,7 @@ import { PrismaStudioGate } from './ui'
 
 sample({
   source: layoutDiagramEffect.doneData,
-  target: layoutDiagramEvent
+  target: setDiagramEvent
 })
 
 sample({
@@ -45,4 +46,12 @@ throttle({
   source: $schema,
   timeout: 1000,
   target: saveSchemaEffect
+})
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+throttle({
+  source: $diagram,
+  timeout: 1000,
+  target: saveDiagramEffect
 })

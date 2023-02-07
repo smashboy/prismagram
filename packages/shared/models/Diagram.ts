@@ -1,4 +1,4 @@
-import { Edge as ReactEdge, Node as ReactNode } from 'reactflow'
+import { Edge as ReactEdge, Node as ReactNode, Viewport } from 'reactflow'
 import { RelationType } from '../configs/diagrams'
 
 export type Node = ModelNode | EnumNode
@@ -29,6 +29,7 @@ export interface EdgeData {
 }
 
 export interface Diagram {
+  viewport: Viewport
   nodes: Record<string, Node>
   edges: Edge[]
   nodesColors: Record<string, string>

@@ -122,7 +122,6 @@ export const DiagramEditor = () => {
         nodeTypes={nodeTypes}
         defaultViewport={viewport ?? void 0}
         onMove={onViewportChange}
-        // edgeTypes={edgeTypes}
         onDragOver={onDragOver}
         onDrop={onDrop}
         onNodesChange={onNodesChange}

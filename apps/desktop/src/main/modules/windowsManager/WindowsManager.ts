@@ -1,9 +1,7 @@
 import { BrowserWindow } from 'electron'
 import {
-  CREATE_COMMAND_ENDPOINT,
   CREATE_PROJECT_ENDPOINT,
   EDITOR_CLOSE_PRISMA_STUDIO_ENDPOINT,
-  EDITOR_LAUNCH_PRISMA_STUDIO_ENDPOINT,
   EDITOR_LAYOUT_NODES_ENDPOINT,
   GET_EDITOR_DATA_ENDPOINT,
   GET_PROJECT_DIRECTORY_ENDPOINT,
@@ -11,7 +9,8 @@ import {
   GET_PROJECTS_LIST_ENDPOINT,
   UPDATE_PROJECT_ENDPOINT,
   EDITOR_SAVE_SCHEMA,
-  EDITOR_FORMAT_SCHEMA
+  EDITOR_FORMAT_SCHEMA,
+  EDITOR_SAVE_DIAGRAM
 } from '@shared/common/configs/api'
 import { GlobalSettings, Project } from '@shared/common/models/Project'
 import { formatPrismaSchema, getPrismaPreviewFeaturesList } from '../../services/prisma'
@@ -20,7 +19,6 @@ import WindowsManagerBase from './WindowsManagerBase'
 import { Diagram } from '@shared/common/models/Diagram'
 import { DiagramLayout } from '@shared/common/configs/diagrams'
 import { layoutDiagramElements } from '../../services/diagrams'
-import { PrismaCommand } from '@shared/common/models/Prisma'
 import CommandsManager from '../commandsManager/CommandsManager'
 import { ProjectsManager } from '../projectsManager/ProjectsManager'
 import { PackageManager } from '@shared/common/configs/projects'
@@ -59,6 +57,12 @@ export default class WindowsManager extends WindowsManagerBase {
         this.projectsManager.saveSchema(args.schema, args.project)
     )
 
+    this.appWindow.createApiRoute(
+      EDITOR_SAVE_DIAGRAM,
+      (args: { diagram: Diagram; project: Project }) =>
+        this.projectsManager.saveDiagram(args.diagram, args.project)
+    )
+
     this.appWindow.createApiRoute(GET_PROJECT_DIRECTORY_ENDPOINT, async () => {
       const directory = await this.projectsManager.getProjectDirectory(browserWindow)
 
@@ -69,11 +73,11 @@ export default class WindowsManager extends WindowsManagerBase {
       return [directory, schemaPath]
     })
 
-    this.appWindow.createApiRoute(
-      CREATE_COMMAND_ENDPOINT,
-      (args: { project: Project; command: PrismaCommand }) =>
-        this.projectsManager.createCommand(args.command, args.project)
-    )
+    // this.appWindow.createApiRoute(
+    //   CREATE_COMMAND_ENDPOINT,
+    //   (args: { project: Project; command: PrismaCommand }) =>
+    //     this.projectsManager.createCommand(args.command, args.project)
+    // )
 
     this.appWindow.createApiRoute(GET_EDITOR_DATA_ENDPOINT, async (project: Project) => {
       const schemaPath = this.projectsManager.getProjectSchemaPath(project.projectDirectory)
@@ -108,13 +112,13 @@ export default class WindowsManager extends WindowsManagerBase {
       return settings
     })
 
-    this.appWindow.createApiRoute(
-      EDITOR_LAUNCH_PRISMA_STUDIO_ENDPOINT,
-      async (project: Project) => {
-        const { prismaStudioPort, projectDirectory } = project
-        this.commandsManager.launchPrismaStudio(prismaStudioPort, projectDirectory)
-      }
-    )
+    // this.appWindow.createApiRoute(
+    //   EDITOR_LAUNCH_PRISMA_STUDIO_ENDPOINT,
+    //   async (project: Project) => {
+    //     const { prismaStudioPort, projectDirectory } = project
+    //     this.commandsManager.launchPrismaStudio(prismaStudioPort, projectDirectory)
+    //   }
+    // )
 
     this.appWindow.createApiRoute(EDITOR_CLOSE_PRISMA_STUDIO_ENDPOINT, async () => {
       this.commandsManager.killPrismaStudio()
