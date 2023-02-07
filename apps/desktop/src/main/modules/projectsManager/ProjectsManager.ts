@@ -145,4 +145,14 @@ export class ProjectsManager {
 
     return schema
   }
+
+  getProjectDiagram(project: Project) {
+    const diagramFilePath = this.getProjectDiagramPath(project.id)
+
+    const diagram = JSON.parse(
+      fs.readFileSync(path.join(PROJECTS_FOLDER_PATH, diagramFilePath), { encoding: 'utf-8' })
+    )
+
+    return diagram
+  }
 }

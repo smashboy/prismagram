@@ -81,11 +81,12 @@ export default class WindowsManager extends WindowsManagerBase {
 
     this.appWindow.createApiRoute(GET_EDITOR_DATA_ENDPOINT, async (project: Project) => {
       const schemaPath = this.projectsManager.getProjectSchemaPath(project.projectDirectory)
+      const diagram = this.projectsManager.getProjectDiagram(project)
 
       if (schemaPath) {
         const schema = this.projectsManager.getProjectSchema(project)
 
-        return { schema, schemaPath }
+        return { schema, schemaPath, diagram }
       }
 
       return void 0

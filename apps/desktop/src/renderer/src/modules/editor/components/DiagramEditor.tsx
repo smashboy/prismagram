@@ -22,7 +22,7 @@ import {
   toggleCreateRelationModalEvent,
   viewportChangeEvent
 } from '../stores'
-import { ModelNode, NewModelNode } from './nodes/ModelNode'
+import { ModelNode } from './nodes/ModelNode'
 import { NodeType } from '@shared/common/configs/diagrams'
 import '../css/editor.css'
 import { useDiagramEditorShortcuts } from '@renderer/modules/spotlight'
@@ -42,7 +42,6 @@ const $store = combine({
 
 const nodeTypes = {
   [NodeType.MODEL]: ModelNode,
-  [NodeType.NEW_MODEL]: NewModelNode,
   [NodeType.ENUM]: EnumNode
 }
 

@@ -24,6 +24,12 @@ sample({
 })
 
 sample({
+  source: loadEditorDataEffect.doneData,
+  fn: (data) => data.diagram,
+  target: setDiagramEvent
+})
+
+sample({
   source: PrismaStudioGate.state,
   filter: (project) => !!project,
   target: launchPrismaStudioEffect

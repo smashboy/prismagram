@@ -29,12 +29,21 @@ export const extractBlocksByType = <B extends Block>(
   return blocks
 }
 
-export const prismaSchemaState2Diagram = (state: PrismaSchemaState): Diagram => {
+export const prismaSchemaState2Diagram = (state: PrismaSchemaState, diagram: Diagram): Diagram => {
   const { models, enumIds } = state
+
+  const { viewport, nodes: prevNodes } = diagram
 
   const relations = findRelatedFields(models)
 
-  const modelNodes = models2NodeModels(models, relations)
+  const modelNodes = models2NodeModels(
+    models,
+    relations,
+    Object.entries(prevNodes).reduce(
+      (acc, [id, node]) => (node.type === NodeType.MODEL ? { ...acc, [id]: node } : acc),
+      {}
+    )
+  )
   const enumNodes = enums2NodeEnums(enumIds)
 
   const nodes = { ...modelNodes, ...enumNodes }
@@ -43,6 +52,7 @@ export const prismaSchemaState2Diagram = (state: PrismaSchemaState): Diagram => 
   const enumEdges = createEnumEdges(models)
 
   return {
+    viewport,
     nodes,
     edges: [...relationEdges, ...enumEdges],
     nodesColors: generateNodesColors(nodes)
@@ -51,7 +61,8 @@ export const prismaSchemaState2Diagram = (state: PrismaSchemaState): Diagram => 
 
 const models2NodeModels = (
   models: Map<string, Model>,
-  relations: Map<string, Relation>
+  relations: Map<string, Relation>,
+  prevNodes: Record<string, ModelNode>
 ): Record<string, ModelNode> => {
   const nodes: Record<string, ModelNode> = {}
 
@@ -100,9 +111,16 @@ const models2NodeModels = (
     }
 
     nodes[name] = {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       id: name,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       type: NodeType.MODEL,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       position: { x: 0, y: 0 },
+      ...prevNodes[name],
       data
     }
   }
@@ -110,11 +128,11 @@ const models2NodeModels = (
   return nodes
 }
 
-const enums2NodeEnums = (enumIds: string[]) => {
+const enums2NodeEnums = (enumIds: string[], prevNodes: Record<string, EnumNode>) => {
   const nodes: Record<string, EnumNode> = {}
 
   for (const id of enumIds) {
-    nodes[id] = {
+    nodes[id] = prevNodes[id] || {
       id,
       type: NodeType.ENUM,
       position: { x: 0, y: 0 },

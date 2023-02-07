@@ -17,7 +17,7 @@ export const $diagram = createStore<Diagram>({
   edges: [],
   nodesColors: {}
 })
-  .on(prismaState2DiagramEvent, (_, state) => prismaSchemaState2Diagram(state))
+  .on(prismaState2DiagramEvent, (diagram, state) => prismaSchemaState2Diagram(state, diagram))
   .on(setDiagramEvent, (_, diagram) => diagram)
   .on(viewportChangeEvent, (diagram, viewport) => ({ ...diagram, viewport }))
   .on(nodesChangeEvent, (diagram, nodes) => ({
