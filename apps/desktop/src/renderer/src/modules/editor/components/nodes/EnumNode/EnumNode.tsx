@@ -2,6 +2,8 @@ import { combine } from 'effector'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { useStore, useStoreMap } from 'effector-react'
 import { Stack, Table } from '@mantine/core'
+import { arrayMove } from '@dnd-kit/sortable'
+import { DragEndEvent } from '@dnd-kit/core'
 import {
   $schemaEnums,
   $schemaState,
@@ -15,6 +17,7 @@ import { BlockNameInput } from '../../inputs/BlockNameInput'
 import { EnumNodeToolbar } from './EnumNodeToolbar'
 import { cloneSchemaState } from '@renderer/core/utils'
 import { NodeType } from '@shared/common/configs/diagrams'
+import { NodeDnDContext } from '../NodeDnDContext'
 
 const $store = combine({
   selectedNodeId: $selectedNodeId,
@@ -30,12 +33,26 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
     fn: (enums, [name]) => enums.get(name)!
   })
 
-  const { fields } = enumItem
+  const { fields, fieldNames } = enumItem
 
   const isSelected = selectedNodeId?.nodeId === name
 
   const handleSaveName = async (name: string) => {
     enumItem.setName(name)
+    const updatedState = await cloneSchemaState(state)
+    setPrismaSchemaEvent(updatedState.toString())
+  }
+
+  const onDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (!over || active.id === over.id) return
+
+    const oldIndex = fieldNames.indexOf(active.id as string)
+    const newIndex = fieldNames.indexOf(over.id as string)
+
+    enumItem._setFromArray(arrayMove(fields, oldIndex, newIndex))
+
     const updatedState = await cloneSchemaState(state)
     setPrismaSchemaEvent(updatedState.toString())
   }
@@ -52,9 +69,11 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
         <BlockNameInput block={enumItem} onSave={handleSaveName} />
         <Table verticalSpacing="md" fontSize="xl">
           <tbody>
-            {fields.map((field) => (
-              <EnumNodeField key={field.name} field={field} isSelected={isSelected} />
-            ))}
+            <NodeDnDContext fieldNames={fieldNames} onDragEnd={onDragEnd}>
+              {fields.map((field) => (
+                <EnumNodeField key={field.name} field={field} isSelected={isSelected} />
+              ))}
+            </NodeDnDContext>
           </tbody>
         </Table>
         <Handle

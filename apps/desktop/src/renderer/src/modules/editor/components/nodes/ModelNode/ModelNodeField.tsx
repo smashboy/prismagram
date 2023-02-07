@@ -6,6 +6,7 @@ import { ModelHandler, EnumHandler } from '@shared/common/models/Diagram'
 import { ModelField } from 'prisma-state/fields'
 import { ScalarFieldColor } from '../../../config'
 import { DragHandle } from '../../DragHandle'
+import { NodeDraggableField } from '../NodeDraggableField'
 
 interface ModelNodeFieldProps {
   fieldId: string
@@ -26,15 +27,6 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
   maxAttribuesCount,
   isSelected
 }) => {
-  const {
-    attributes: sortableAttributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    setActivatorNodeRef
-  } = useSortable({ id: fieldId, disabled: !isSelected })
-
   const { type, displayType, attributes } = field
 
   const textColor = ScalarFieldColor[type] || nodesColors[type]
@@ -44,21 +36,12 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
 
   const attributesList = [...attributes.values()]
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition
-  }
-
   return (
-    <Box
-      ref={setNodeRef}
-      component="tr"
-      // sx={{ background: 'red' }}
-      style={style}
-      {...sortableAttributes}
-    >
-      <td>
-        {targetHandler && (
+    <NodeDraggableField
+      fieldId={fieldId}
+      isNodeSelected={isSelected}
+      leftItem={
+        targetHandler && (
           <Box
             key={targetHandler.id}
             sx={{
@@ -80,21 +63,9 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
               }}
             />
           </Box>
-        )}
-      </td>
-      <td>
-        <Group>
-          <Transition mounted={isSelected} transition="fade">
-            {(style) => (
-              <span style={style}>
-                <DragHandle ref={setActivatorNodeRef} {...listeners} />
-              </span>
-            )}
-          </Transition>
-          <span>{fieldId}</span>
-        </Group>
-      </td>
-
+        )
+      }
+    >
       <td style={{ color: textColor, width: '100%', display: 'flex' }}>
         <span style={{ flex: 1 }}>{displayType}</span>
       </td>
@@ -130,6 +101,6 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
           />
         </Box>
       )}
-    </Box>
+    </NodeDraggableField>
   )
 }

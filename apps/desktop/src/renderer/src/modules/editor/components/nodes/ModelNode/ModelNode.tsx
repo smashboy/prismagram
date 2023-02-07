@@ -1,9 +1,8 @@
 import { combine } from 'effector'
 import { useStore, useStoreMap } from 'effector-react'
 import { Handle, NodeProps, Position, useStore as useFlowStore } from 'reactflow'
-import { closestCenter, DndContext, DragEndEvent } from '@dnd-kit/core'
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
-import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { DragEndEvent } from '@dnd-kit/core'
+import { arrayMove } from '@dnd-kit/sortable'
 import { Stack, Table } from '@mantine/core'
 import { ModelNodeData } from '@shared/common/models/Diagram'
 import {
@@ -19,6 +18,7 @@ import { NodeCard } from '../NodeCard'
 import { BlockNameInput } from '../../inputs/BlockNameInput'
 import { cloneSchemaState } from '@renderer/core/utils'
 import { NodeType } from '@shared/common/configs/diagrams'
+import { NodeDnDContext } from '../NodeDnDContext'
 
 const $store = combine({
   nodesColors: $nodesColors,
@@ -78,26 +78,20 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
         <BlockNameInput block={model} onSave={handleSaveName} />
         <Table verticalSpacing="md" fontSize="xl">
           <tbody>
-            <DndContext
-              collisionDetection={closestCenter}
-              modifiers={[restrictToVerticalAxis]}
-              onDragEnd={onDragEnd}
-            >
-              <SortableContext items={fieldNames} strategy={verticalListSortingStrategy}>
-                {fields.map((field) => (
-                  <ModelNodeField
-                    key={field.name}
-                    fieldId={field.name}
-                    field={field}
-                    isSelected={isSelected}
-                    nodesColors={nodesColors}
-                    sourceHandlers={sourceHandlers}
-                    targetHandlers={targetHandlers}
-                    maxAttribuesCount={maxAttribuesCount}
-                  />
-                ))}
-              </SortableContext>
-            </DndContext>
+            <NodeDnDContext fieldNames={fieldNames} onDragEnd={onDragEnd}>
+              {fields.map((field) => (
+                <ModelNodeField
+                  key={field.name}
+                  fieldId={field.name}
+                  field={field}
+                  isSelected={isSelected}
+                  nodesColors={nodesColors}
+                  sourceHandlers={sourceHandlers}
+                  targetHandlers={targetHandlers}
+                  maxAttribuesCount={maxAttribuesCount}
+                />
+              ))}
+            </NodeDnDContext>
           </tbody>
         </Table>
         <Handle
