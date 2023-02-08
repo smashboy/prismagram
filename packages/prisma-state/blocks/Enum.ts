@@ -39,6 +39,10 @@ export class Enum extends Block<EnumField> {
     super.setName(name)
   }
 
+  addOption(name: string) {
+    this.addField(name, new EnumField(name, this))
+  }
+
   _parse(list: AstEnum['enumerators']) {
     if (!list) return
 
@@ -47,7 +51,7 @@ export class Enum extends Block<EnumField> {
 
       const { name } = item
 
-      this.addField(name, new EnumField(name))
+      this.addField(name, new EnumField(name, this))
     }
   }
 }

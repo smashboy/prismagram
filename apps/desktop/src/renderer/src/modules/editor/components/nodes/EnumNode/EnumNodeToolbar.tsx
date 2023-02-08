@@ -1,14 +1,18 @@
 import { ActionIcon, Tooltip } from '@mantine/core'
 import { removeSelectedNodeEffect } from '@renderer/modules/editor/stores'
-import { IconTrash } from '@tabler/icons'
+import { IconPlus, IconTrash } from '@tabler/icons'
 import { NodeToolbar } from '../NodeToolbar'
 
 interface EnumNodeToolbarProps {
   isSelected: boolean
   selectedNodeId?: string | null
+  onOpenNewOptionInput: () => void
 }
 
-export const EnumNodeToolbar: React.FC<EnumNodeToolbarProps> = ({ isSelected }) => {
+export const EnumNodeToolbar: React.FC<EnumNodeToolbarProps> = ({
+  isSelected,
+  onOpenNewOptionInput
+}) => {
   const handleRemoveNode = () => removeSelectedNodeEffect()
 
   return (
@@ -16,6 +20,11 @@ export const EnumNodeToolbar: React.FC<EnumNodeToolbarProps> = ({ isSelected }) 
       <Tooltip label="Remove" withinPortal>
         <ActionIcon onClick={handleRemoveNode}>
           <IconTrash />
+        </ActionIcon>
+      </Tooltip>
+      <Tooltip label="New option" withinPortal>
+        <ActionIcon onClick={onOpenNewOptionInput}>
+          <IconPlus />
         </ActionIcon>
       </Tooltip>
     </NodeToolbar>

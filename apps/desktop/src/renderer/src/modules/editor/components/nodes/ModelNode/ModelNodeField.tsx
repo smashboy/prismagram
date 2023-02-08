@@ -1,12 +1,8 @@
 import { Handle, Position } from 'reactflow'
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import { Box, Group, Text, Transition } from '@mantine/core'
+import { Box, Text } from '@mantine/core'
 import { ModelHandler, EnumHandler } from '@shared/common/models/Diagram'
 import { ModelField } from 'prisma-state/fields'
 import { ScalarFieldColor } from '../../../config'
-import { DragHandle } from '../../DragHandle'
-import { NodeDraggableField } from '../NodeDraggableField'
 
 interface ModelNodeFieldProps {
   fieldId: string
@@ -24,8 +20,7 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
   nodesColors,
   sourceHandlers,
   targetHandlers,
-  maxAttribuesCount,
-  isSelected
+  maxAttribuesCount
 }) => {
   const { type, displayType, attributes } = field
 
@@ -37,11 +32,9 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
   const attributesList = [...attributes.values()]
 
   return (
-    <NodeDraggableField
-      fieldId={fieldId}
-      isNodeSelected={isSelected}
-      leftItem={
-        targetHandler && (
+    <tr>
+      <td>
+        {targetHandler && (
           <Box
             key={targetHandler.id}
             sx={{
@@ -63,9 +56,9 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
               }}
             />
           </Box>
-        )
-      }
-    >
+        )}
+      </td>
+      <td>{fieldId}</td>
       <td style={{ color: textColor, width: '100%', display: 'flex' }}>
         <span style={{ flex: 1 }}>{displayType}</span>
       </td>
@@ -101,6 +94,6 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
           />
         </Box>
       )}
-    </NodeDraggableField>
+    </tr>
   )
 }

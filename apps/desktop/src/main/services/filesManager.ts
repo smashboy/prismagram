@@ -66,11 +66,7 @@ export const readDirectoryFiles = async (directoryPath: string) => {
 export const readDirectoryFolders = async (directoryPath: string) => {
   const directories: string[] = []
 
-  console.log('READ', directoryPath)
-
   const list = await fs.readdir(directoryPath, { withFileTypes: true })
-
-  console.log(list)
 
   for (const dirent of list) {
     if (dirent.isDirectory()) directories.push(dirent.name)

@@ -11,8 +11,6 @@ export const $schemaState = $schema.map((schema) => {
   const state = new PrismaSchemaState()
   state.fromString(schema)
 
-  console.log(state)
-
   return state
 })
 

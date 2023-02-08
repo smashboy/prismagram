@@ -1,31 +1,28 @@
 import { combine } from 'effector'
+import { useBoolean } from 'react-use'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { useStore, useStoreMap } from 'effector-react'
 import { Stack, Table } from '@mantine/core'
-import { arrayMove } from '@dnd-kit/sortable'
-import { DragEndEvent } from '@dnd-kit/core'
 import {
   $schemaEnums,
-  $schemaState,
   $selectedNodeId,
-  setPrismaSchemaEvent
+  updatePrismaStateEffect
 } from '@renderer/modules/editor/stores'
 import { EnumNodeData } from '@shared/common/models/Diagram'
 import { NodeCard } from '../NodeCard'
-import { EnumNodeField } from './EnumNodeField'
 import { BlockNameInput } from '../../inputs/BlockNameInput'
 import { EnumNodeToolbar } from './EnumNodeToolbar'
-import { cloneSchemaState } from '@renderer/core/utils'
 import { NodeType } from '@shared/common/configs/diagrams'
-import { NodeDnDContext } from '../NodeDnDContext'
+import { EnumEditForm } from './EnumEditForm'
 
 const $store = combine({
-  selectedNodeId: $selectedNodeId,
-  state: $schemaState
+  selectedNodeId: $selectedNodeId
 })
 
 export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
-  const { selectedNodeId, state } = useStore($store)
+  const { selectedNodeId } = useStore($store)
+
+  const [isOpenNewOptionField, toggleIsOpenNewOptionField] = useBoolean(false)
 
   const enumItem = useStoreMap({
     store: $schemaEnums,
@@ -33,49 +30,48 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
     fn: (enums, [name]) => enums.get(name)!
   })
 
-  const { fields, fieldNames } = enumItem
+  const { fieldNames } = enumItem
 
   const isSelected = selectedNodeId?.nodeId === name
 
   const handleSaveName = async (name: string) => {
     enumItem.setName(name)
-    const updatedState = await cloneSchemaState(state)
-    setPrismaSchemaEvent(updatedState.toString())
-  }
-
-  const onDragEnd = async (event: DragEndEvent) => {
-    const { active, over } = event
-
-    if (!over || active.id === over.id) return
-
-    const oldIndex = fieldNames.indexOf(active.id as string)
-    const newIndex = fieldNames.indexOf(over.id as string)
-
-    enumItem._setFromArray(arrayMove(fields, oldIndex, newIndex))
-
-    const updatedState = await cloneSchemaState(state)
-    setPrismaSchemaEvent(updatedState.toString())
+    await updatePrismaStateEffect()
   }
 
   return (
-    <Stack sx={{ minWidth: 150, cursor: isSelected ? 'default' : void 0 }}>
-      <EnumNodeToolbar isSelected={isSelected} selectedNodeId={selectedNodeId?.nodeId} />
+    <Stack sx={{ minWidth: 300, cursor: isSelected ? 'default' : void 0 }}>
+      <EnumNodeToolbar
+        isSelected={isSelected}
+        selectedNodeId={selectedNodeId?.nodeId}
+        onOpenNewOptionInput={toggleIsOpenNewOptionField}
+      />
       <NodeCard
         nodeId={name}
         isSelected={isSelected}
         selectedNodeId={selectedNodeId?.nodeId}
         type={NodeType.ENUM}
       >
-        <BlockNameInput block={enumItem} onSave={handleSaveName} />
-        <Table verticalSpacing="md" fontSize="xl">
-          <tbody>
-            <NodeDnDContext fieldNames={fieldNames} onDragEnd={onDragEnd}>
-              {fields.map((field) => (
-                <EnumNodeField key={field.name} field={field} isSelected={isSelected} />
-              ))}
-            </NodeDnDContext>
-          </tbody>
-        </Table>
+        <Stack>
+          <BlockNameInput block={enumItem} onSave={handleSaveName} />
+          {isSelected ? (
+            <EnumEditForm
+              block={enumItem}
+              isOpenNewOptionField={isOpenNewOptionField}
+              onCloseNewOptionField={toggleIsOpenNewOptionField}
+            />
+          ) : (
+            <Table verticalSpacing="md" fontSize="xl">
+              <tbody>
+                {fieldNames.map((fieldName) => (
+                  <tr key={fieldName}>
+                    <td>{fieldName}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
+        </Stack>
         <Handle
           id={name}
           type="source"

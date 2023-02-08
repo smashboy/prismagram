@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { combine } from 'effector'
 import ReactFlow, {
   applyNodeChanges,
@@ -15,11 +15,12 @@ import {
   $edgesArray,
   $nodesArray,
   $schemaState,
+  addNodeEvent,
   nodesChangeEvent,
   selectNodeEvent,
   setCreateRelationModalData,
-  setPrismaSchemaEvent,
   toggleCreateRelationModalEvent,
+  updatePrismaStateEffect,
   viewportChangeEvent
 } from '../stores'
 import { ModelNode } from './nodes/ModelNode'
@@ -31,7 +32,6 @@ import { NodesToolbar } from './NodesToolbar'
 import { EditorToolbar } from './EditorToolbar'
 import { zoomToNode } from '../utils'
 import { EnumNode } from './nodes/EnumNode'
-import { cloneSchemaState } from '@renderer/core/utils'
 
 const $store = combine({
   nodes: $nodesArray,
@@ -91,14 +91,10 @@ export const DiagramEditor = () => {
     if (type === NodeType.MODEL) schemaState.createModel(id)
     if (type === NodeType.ENUM) schemaState.createEnum(id)
 
-    const updatedState = await cloneSchemaState(schemaState)
+    await updatePrismaStateEffect()
 
-    setPrismaSchemaEvent(updatedState.toString())
-
-    reactFlowInstance.setNodes((nodes) => [...nodes, node])
-
+    addNodeEvent(node)
     selectNodeEvent({ nodeId: id, type: type as NodeType })
-
     zoomToNode(reactFlowInstance, node)
   }
 

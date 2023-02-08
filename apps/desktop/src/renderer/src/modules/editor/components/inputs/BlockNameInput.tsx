@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { Enum, Model } from 'prisma-state/blocks'
-import { ActionIcon, Group, Text, TextInput, ThemeIcon } from '@mantine/core'
-import { IconBorderAll, IconCheck, IconLayoutList, IconX } from '@tabler/icons'
+import { Group, Text, ThemeIcon } from '@mantine/core'
+import { IconBorderAll, IconLayoutList } from '@tabler/icons'
 import { $nodesColors, $selectedNodeId } from '../../stores'
+import { ConfirmInput } from '@renderer/core/components'
 
 interface BlockNameInputProps {
   block?: Model | Enum
@@ -44,20 +45,16 @@ export const BlockNameInput: React.FC<BlockNameInputProps> = ({ block, onSave })
 
   if (isOpen)
     return (
-      <Group>
-        <TextInput
-          value={name}
-          onChange={handleInputChange}
-          placeholder="Model name..."
-          sx={{ flex: 1 }}
-        />
-        <ActionIcon onClick={handleCloseEdit} disabled={!block} color="red">
-          <IconX />
-        </ActionIcon>
-        <ActionIcon onClick={handleSaveChanges} disabled={!name} color="green">
-          <IconCheck />
-        </ActionIcon>
-      </Group>
+      <ConfirmInput
+        value={name}
+        onChange={handleInputChange}
+        onCancel={handleCloseEdit}
+        onConfirm={handleSaveChanges}
+        disableClose={!block}
+        disableConfirm={!name}
+        placeholder="Model name..."
+        sx={{ flex: 1 }}
+      />
     )
 
   return (

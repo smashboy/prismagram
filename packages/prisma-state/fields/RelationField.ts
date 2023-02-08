@@ -43,8 +43,6 @@ export class RelationField extends ModelField {
       attr.fields.forEach((field) => this.model.removeField(field))
     }
 
-    console.log({ attr, attrName, relatedModel })
-
     if (attrName) {
       for (const field of relatedModel.fields) {
         const relatedAttr = field.attributes.get('relation') as RelationAttribute
@@ -60,11 +58,8 @@ export class RelationField extends ModelField {
     }
 
     for (const field of relatedModel.fields) {
-      console.log(field.type, this.type, field, this)
       if (field.type === this.model.name) {
         const relatedAttr = field.attributes.get('relation') as RelationAttribute
-
-        console.log({ relatedModel, relatedAttr, field })
 
         relatedModel.removeField(field.name)
         relatedAttr?.fields.forEach((field) => relatedModel.removeField(field))

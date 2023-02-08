@@ -149,8 +149,3 @@ schema.fromString(testSchema)
 // userModel.field('email')!.setName('emailUpdate')
 // userModel.setName('UserUpdate')
 // userModel.setName('UserUpdate2')
-
-console.log({
-  state: schema.state,
-  str: schema.toString()
-})

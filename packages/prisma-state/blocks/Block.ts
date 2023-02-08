@@ -47,10 +47,6 @@ export class Block<F extends Field = Field, K = string> {
     this.state.state.set(this.id, this)
   }
 
-  remove() {
-    this.state.state.delete(this.id)
-  }
-
   field<FF = F>(fieldId: K) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

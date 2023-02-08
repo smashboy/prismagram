@@ -10,7 +10,8 @@ import {
   $schemaModels,
   $schemaState,
   $selectedNodeId,
-  setPrismaSchemaEvent
+  setPrismaSchemaEvent,
+  updatePrismaStateEffect
 } from '../../../stores'
 import { ModelNodeField } from './ModelNodeField'
 import { ModelNodeToolbar } from './ModelNodeToolbar'
@@ -48,8 +49,7 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
 
   const handleSaveName = async (name: string) => {
     model.setName(name)
-    const updatedState = await cloneSchemaState(state)
-    setPrismaSchemaEvent(updatedState.toString())
+    await updatePrismaStateEffect()
   }
 
   const onDragEnd = async (event: DragEndEvent) => {

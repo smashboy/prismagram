@@ -8,6 +8,7 @@ import { prismaSchemaState2Diagram } from './utils'
 export const setDiagramEvent = createEvent<Diagram>()
 export const prismaState2DiagramEvent = createEvent<PrismaSchemaState>()
 export const nodesChangeEvent = createEvent<Node[]>()
+export const addNodeEvent = createEvent<Node>()
 export const setSelectedRelationTypeEvent = createEvent<RelationTypeOption>()
 export const viewportChangeEvent = createEvent<Viewport>()
 
@@ -17,12 +18,29 @@ export const $diagram = createStore<Diagram>({
   edges: [],
   nodesColors: {}
 })
-  .on(prismaState2DiagramEvent, (diagram, state) => prismaSchemaState2Diagram(state, diagram))
-  .on(setDiagramEvent, (_, diagram) => diagram)
+  .on(prismaState2DiagramEvent, (diagram, state) => {
+    const d = prismaSchemaState2Diagram(state, diagram)
+    console.log('STATE2DIAGRAM', d)
+    return d
+  })
+  .on(addNodeEvent, (diagram, node) => {
+    const add = {
+      ...diagram,
+      nodes: { ...diagram.nodes, [node.id]: node }
+    }
+
+    console.log('ADD', add)
+
+    return add
+  })
+  .on(setDiagramEvent, (_, diagram) => {
+    console.log('SET', diagram)
+    return diagram
+  })
   .on(viewportChangeEvent, (diagram, viewport) => ({ ...diagram, viewport }))
   .on(nodesChangeEvent, (diagram, nodes) => ({
     ...diagram!,
-    nodes: nodes.reduce((acc, node) => ({ ...acc, [node.id]: node }), {})
+    nodes: { ...diagram.nodes, ...nodes.reduce((acc, node) => ({ ...acc, [node.id]: node }), {}) }
   }))
 
 export const $diagramViewport = $diagram.map((diagram) => diagram.viewport)
