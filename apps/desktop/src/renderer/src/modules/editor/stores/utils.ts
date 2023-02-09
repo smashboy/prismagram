@@ -214,51 +214,65 @@ const findRelatedFields = (models: Map<string, Model>) => {
         const relationName = (field.attributes.get('relation') as RelationAttribute)?.name || void 0
 
         if (model.name === 'User' && field.type === 'ProjectFeedback')
-          console.log({ model, field, relationName })
+          if (relationModel) {
+            for (const relationModelField of relationModel.fields) {
+              if (relationModelField.type === model.name) {
+                if (field.modifier === 'list' && relationModelField.modifier === 'list') {
+                  const id = `${field.type}-${relationModelField.type}${
+                    relationName ? `_${relationName}` : ''
+                  }`
+                  const secondPossibleId = `${relationModelField.type}-${field.type}${
+                    relationName ? `_${relationName}` : ''
+                  }`
 
-        if (relationModel) {
-          for (const relationModelField of relationModel.fields) {
-            if (relationModelField.type === model.name) {
-              if (field.modifier === 'list' && relationModelField.modifier === 'list') {
-                const id = `${field.type}-${relationModelField.type}${
+                  if (relations.has(id) || relations.has(secondPossibleId)) continue
+
+                  relations.set(id, {
+                    id,
+                    type: RelationType.MANY_TO_MANY,
+                    name: relationName,
+                    from: {
+                      model: model.name,
+                      field: field.name
+                    },
+                    to: {
+                      model: relationModel.name,
+                      field: relationModelField.name
+                    }
+                  })
+
+                  continue
+                }
+
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                const { from, to } = determineSourceTarget(field, relationModelField)
+
+                const id = `${from.model.name}-${to.model.name}${
                   relationName ? `_${relationName}` : ''
                 }`
-                const secondPossibleId = `${relationModelField.type}-${field.type}${
-                  relationName ? `_${relationName}` : ''
-                }`
 
-                if (relations.has(id) || relations.has(secondPossibleId)) continue
+                if (field.modifier === 'list' || relationModelField.modifier === 'list') {
+                  relations.set(id, {
+                    id,
+                    type: RelationType.ONE_TO_MANY,
+                    name: relationName,
+                    from: {
+                      model: from.model.name,
+                      field: from.name
+                    },
+                    to: {
+                      model: to.model.name,
+                      field: to.name
+                    }
+                  })
+
+                  continue
+                }
 
                 relations.set(id, {
                   id,
-                  type: RelationType.MANY_TO_MANY,
-                  name: relationName,
-                  from: {
-                    model: model.name,
-                    field: field.name
-                  },
-                  to: {
-                    model: relationModel.name,
-                    field: relationModelField.name
-                  }
-                })
-
-                continue
-              }
-
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              const { from, to } = determineSourceTarget(field, relationModelField)
-
-              const id = `${from.model.name}-${to.model.name}${
-                relationName ? `_${relationName}` : ''
-              }`
-
-              if (field.modifier === 'list' || relationModelField.modifier === 'list') {
-                relations.set(id, {
-                  id,
-                  type: RelationType.ONE_TO_MANY,
-                  name: relationName,
+                  type: RelationType.ONE_TO_ONE,
                   from: {
                     model: from.model.name,
                     field: from.name
@@ -268,25 +282,9 @@ const findRelatedFields = (models: Map<string, Model>) => {
                     field: to.name
                   }
                 })
-
-                continue
               }
-
-              relations.set(id, {
-                id,
-                type: RelationType.ONE_TO_ONE,
-                from: {
-                  model: from.model.name,
-                  field: from.name
-                },
-                to: {
-                  model: to.model.name,
-                  field: to.name
-                }
-              })
             }
           }
-        }
       }
     }
   }
