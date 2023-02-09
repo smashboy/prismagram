@@ -48,9 +48,7 @@ export abstract class Block<F extends Field = Field, K = string> {
   }
 
   field<FF = F>(fieldId: K) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return this.fieldsMap.get(fieldId)! as FF
+    return this.fieldsMap.get(fieldId)! as unknown as FF
   }
 
   addField(fieldId: K, field: F) {
@@ -60,9 +58,6 @@ export abstract class Block<F extends Field = Field, K = string> {
 
   removeField(fieldId: K) {
     this.fieldsMap.delete(fieldId)
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    this.state.state.set(this.id, this)
   }
 
   _setFromArray(fields: F[]) {

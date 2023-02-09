@@ -5,7 +5,5 @@ export abstract class Field {
     this.name = name
   }
 
-  _toString(): string {
-    return ''
-  }
+  abstract _toString(): string
 }

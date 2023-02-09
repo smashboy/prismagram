@@ -81,15 +81,16 @@ export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField
 
       if (prop.type === 'attribute') {
         const { name, args } = prop
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const Attribute = attributesMap[name]
+
+        const Attribute = attributesMap[name as keyof typeof attributesMap]
 
         if (Attribute) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           const attribute = new Attribute(this)
           attribute._parseArgs(args)
 
-          this.attributes.set(name, attribute)
+          this.attributes.set(name, attribute as unknown as A)
         }
       }
     }

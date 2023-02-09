@@ -28,7 +28,7 @@ export const fieldAttributeMap = {
   map: MapAttribute
 }
 
-export abstract class ModelField<A = FieldAttribute> extends Field {
+export abstract class ModelField<A extends FieldAttribute = FieldAttribute> extends Field {
   type: ModelFieldType
   modifier: FieldModifier = null
   readonly attributes = new Map<string, A>()
@@ -48,13 +48,9 @@ export abstract class ModelField<A = FieldAttribute> extends Field {
 
   setType(type: ModelFieldType) {
     this.type = type
+    this.modifier = null
+    // this.attributes.clear()
   }
-
-  // setType(type: ModelFieldType) {
-  //   this.type = type
-  //   this.modifier = null
-  //   // this.attributes.clear()
-  // }
 
   setModifier(modifier: FieldModifier | null) {
     this.modifier = modifier
@@ -78,15 +74,15 @@ export abstract class ModelField<A = FieldAttribute> extends Field {
     if (optional) this.modifier = 'optional'
 
     for (const { name, args = [] } of attributes) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const Attribute = fieldAttributeMap[name]
+      const Attribute = fieldAttributeMap[name as keyof typeof fieldAttributeMap]
 
       if (Attribute) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const attribute = new Attribute(this)
         attribute._parseArgs(args)
 
-        this.attributes.set(name, attribute)
+        this.attributes.set(name, attribute as A)
       }
     }
   }
@@ -97,8 +93,6 @@ export abstract class ModelField<A = FieldAttribute> extends Field {
 
   _toString() {
     return `${this.name} ${this.displayType} ${[...this.attributes.values()]
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       .map((attr) => attr._toString())
       .join(' ')}`
   }
