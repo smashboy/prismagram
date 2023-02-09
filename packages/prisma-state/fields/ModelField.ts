@@ -33,12 +33,13 @@ export abstract class ModelField<A extends FieldAttribute = FieldAttribute> exte
   modifier: FieldModifier = null
   readonly attributes = new Map<string, A>()
 
-  readonly model: Model
-
   constructor(name: string, type: ModelFieldType, model: Model) {
-    super(name)
+    super(name, model)
     this.type = type
-    this.model = model
+  }
+
+  get model() {
+    return this.block
   }
 
   setName(name: string) {
@@ -85,10 +86,6 @@ export abstract class ModelField<A extends FieldAttribute = FieldAttribute> exte
         this.attributes.set(name, attribute as A)
       }
     }
-  }
-
-  _clone() {
-    return Object.assign(Object.create(Object.getPrototypeOf(this)), this)
   }
 
   _toString() {

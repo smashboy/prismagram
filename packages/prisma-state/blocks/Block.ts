@@ -5,6 +5,8 @@ import {
 import { EnvField, OptionField, OptionsListField } from '../fields'
 import { Field } from '../fields/Field'
 import { PrismaSchemaState } from '../PrismaSchemaState'
+import { Datasource } from './Datasource'
+import { Generator } from './Generator'
 
 export type BlockType = 'generator' | 'datasource' | 'model' | 'enum'
 
@@ -78,7 +80,7 @@ export abstract class Block<F extends Field = Field, K = string> {
         (this.type === 'datasource' && datasourceEnvFields.includes(key)) ||
         (this.type === 'generator' && generatorEnvFields.includes(key))
       ) {
-        const envField = new EnvField(key)
+        const envField = new EnvField(key, this as unknown as Datasource | Generator)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         envField._parse(value?.params ?? [value])
@@ -96,7 +98,7 @@ export abstract class Block<F extends Field = Field, K = string> {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (value?.type === 'array') {
-        const optionsField = new OptionsListField(key)
+        const optionsField = new OptionsListField(key, this as unknown as Datasource | Generator)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         optionsField._parse(value.args)
@@ -104,7 +106,7 @@ export abstract class Block<F extends Field = Field, K = string> {
         continue
       }
 
-      const optionField = new OptionField(key)
+      const optionField = new OptionField(key, this as unknown as Datasource | Generator)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       optionField._parse(value)
@@ -119,4 +121,6 @@ export abstract class Block<F extends Field = Field, K = string> {
     }
   `
   }
+
+  // abstract _clone(): Block
 }

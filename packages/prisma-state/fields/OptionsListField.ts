@@ -1,11 +1,12 @@
+import { Datasource, Generator } from '../blocks'
 import { cleanupStr } from '../utils/string'
 import { Field } from './Field'
 
 export class OptionsListField extends Field {
   private readonly _options = new Set<string>()
 
-  constructor(name: string) {
-    super(name)
+  constructor(name: string, block: Datasource | Generator) {
+    super(name, block)
   }
 
   get values() {
