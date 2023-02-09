@@ -133,6 +133,7 @@ export class PrismaSchemaState {
     }
 
     console.timeEnd()
+    console.log(this.state)
   }
 
   toString() {
