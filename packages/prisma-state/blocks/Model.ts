@@ -93,6 +93,10 @@ export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField
         }
       }
     }
+
+    if (this.name === 'ProjectRoadmap') {
+      console.log(model, this.attributes)
+    }
   }
 
   _toString() {
@@ -108,6 +112,11 @@ export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField
       .join('\r\n')}
     }
   `
+
+    if (this.name === 'ProjectRoadmap') {
+      console.log({ blockstr })
+    }
+
     return blockstr
   }
 }

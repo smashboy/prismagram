@@ -2,7 +2,6 @@ import { getSchema } from '@mrleebo/prisma-ast/src/getSchema'
 import { Enum, Datasource, Generator, Model } from './blocks'
 import { RelationField } from './fields'
 import { RelationsManager } from './RelationsManager'
-import { testSchema } from './testSchema'
 import { extractBlockIdsByType, extractBlocksByType } from './utils/block'
 
 export type PrismaSchemaStateItem = Datasource | Generator | Enum | Model
@@ -133,7 +132,7 @@ export class PrismaSchemaState {
     }
 
     console.timeEnd()
-    console.log(this.state)
+    // console.log(this.state)
   }
 
   toString() {
@@ -141,9 +140,9 @@ export class PrismaSchemaState {
   }
 }
 
-const schema = new PrismaSchemaState()
+// const schema = new PrismaSchemaState()
 
-schema.fromString(testSchema)
+// schema.fromString(testSchema)
 
 // const userModel = schema.model('User')
 

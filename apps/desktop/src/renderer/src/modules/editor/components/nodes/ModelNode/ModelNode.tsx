@@ -1,8 +1,7 @@
 import { combine } from 'effector'
 import { useStore, useStoreMap } from 'effector-react'
 import { Handle, NodeProps, Position, useStore as useFlowStore } from 'reactflow'
-import { DragEndEvent } from '@dnd-kit/core'
-import { arrayMove } from '@dnd-kit/sortable'
+
 import { Stack, Table } from '@mantine/core'
 import { ModelNodeData } from '@shared/common/models/Diagram'
 import {
@@ -10,14 +9,12 @@ import {
   $schemaModels,
   $schemaState,
   $selectedNodeId,
-  setPrismaSchemaEvent,
   updatePrismaStateEffect
 } from '../../../stores'
 import { ModelNodeField } from './ModelNodeField'
 import { ModelNodeToolbar } from './ModelNodeToolbar'
 import { NodeCard } from '../NodeCard'
 import { BlockNameInput } from '../../inputs/BlockNameInput'
-import { cloneSchemaState } from '@renderer/core/utils'
 import { NodeType } from '@shared/common/configs/diagrams'
 import { NodeDnDContext } from '../NodeDnDContext'
 
@@ -38,7 +35,7 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
 
   const { fieldNames, fields } = model
 
-  const { selectedNodeId, nodesColors, state } = useStore($store)
+  const { selectedNodeId, nodesColors } = useStore($store)
 
   const connectionNodeId = useFlowStore((state) => state.connectionNodeId)
 
@@ -52,18 +49,14 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
     await updatePrismaStateEffect()
   }
 
-  const onDragEnd = async (event: DragEndEvent) => {
-    const { active, over } = event
-
-    if (!over || active.id === over.id) return
-
-    const oldIndex = fieldNames.indexOf(active.id as string)
-    const newIndex = fieldNames.indexOf(over.id as string)
-
-    model._setFromArray(arrayMove(fields, oldIndex, newIndex))
-
-    const updatedState = await cloneSchemaState(state)
-    setPrismaSchemaEvent(updatedState.toString())
+  const onDragEnd = async () => {
+    // const { active, over } = event
+    // if (!over || active.id === over.id) return
+    // const oldIndex = fieldNames.indexOf(active.id as string)
+    // const newIndex = fieldNames.indexOf(over.id as string)
+    // model._setFromArray(arrayMove(fields, oldIndex, newIndex))
+    // const updatedState = await cloneSchemaState(state)
+    // setPrismaSchemaEvent(updatedState.toString())
   }
 
   return (
