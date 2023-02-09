@@ -10,7 +10,10 @@ export type FieldAttributeType =
   | 'ignore'
 
 // TODO: fix circular field type
-export class FieldAttribute<F = unknown, AK = string> extends Attribute<FieldAttributeType, AK> {
+export abstract class FieldAttribute<F = unknown, AK = string> extends Attribute<
+  FieldAttributeType,
+  AK
+> {
   protected readonly field: F
 
   constructor(type: FieldAttributeType, field: F) {

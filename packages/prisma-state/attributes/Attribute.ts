@@ -13,7 +13,7 @@ export type ArgumentValue =
   | Array<string | number | boolean>
   | AttributeFunction
 
-export class Attribute<T extends string, AK = string> {
+export abstract class Attribute<T extends string, AK = string> {
   protected readonly argumentsMap = new Map<AK, ArgumentValue>()
   private readonly _prefix: AttributePrefix
   readonly type: T

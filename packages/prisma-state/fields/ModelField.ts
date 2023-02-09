@@ -28,7 +28,7 @@ export const fieldAttributeMap = {
   map: MapAttribute
 }
 
-export class ModelField<A = FieldAttribute> extends Field {
+export abstract class ModelField<A = FieldAttribute> extends Field {
   type: ModelFieldType
   modifier: FieldModifier = null
   readonly attributes = new Map<string, A>()

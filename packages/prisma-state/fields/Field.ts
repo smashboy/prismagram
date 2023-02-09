@@ -1,4 +1,4 @@
-export class Field {
+export abstract class Field {
   name: string
 
   constructor(name: string) {

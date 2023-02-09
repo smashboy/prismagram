@@ -13,7 +13,7 @@ export const blockOptions: BlockType[] = ['datasource', 'enum', 'generator', 'mo
 const datasourceEnvFields = ['url', 'shadowDatabaseUrl']
 const generatorEnvFields = ['provider', 'output']
 
-export class Block<F extends Field = Field, K = string> {
+export abstract class Block<F extends Field = Field, K = string> {
   protected readonly fieldsMap = new Map<K, F>()
   name: string
   readonly type: BlockType
