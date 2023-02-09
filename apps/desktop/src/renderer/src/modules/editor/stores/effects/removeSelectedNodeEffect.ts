@@ -20,7 +20,7 @@ export const removeSelectedNodeEffect = attach({
 
       const updatedState = await cloneSchemaState(state)
 
-      return updatedState.toString()
+      return updatedState
     }
   ),
   source: combine({ node: $selectedNodeId, state: $schemaState })

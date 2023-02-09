@@ -1,5 +1,6 @@
 import { sample } from 'effector'
 import { throttle } from 'patronum'
+import { PrismaSchemaState } from 'prisma-state'
 import { setDiagramEvent, prismaState2DiagramEvent, $diagram } from './diagram'
 import {
   launchPrismaStudioEffect,
@@ -10,7 +11,7 @@ import {
   saveSchemaEffect,
   updatePrismaStateEffect
 } from './effects'
-import { $schema, $schemaState, setPrismaSchemaEvent } from './schema'
+import { $schemaState, setPrismaSchemaEvent } from './schema'
 import { PrismaStudioGate } from './ui'
 
 sample({
@@ -20,7 +21,11 @@ sample({
 
 sample({
   source: loadEditorDataEffect.doneData,
-  fn: (data) => data.schema,
+  fn: (data) => {
+    const state = new PrismaSchemaState()
+    state.fromString(data.schema)
+    return state
+  },
   target: setPrismaSchemaEvent
 })
 
@@ -38,7 +43,7 @@ sample({
 
 sample({
   source: removeSelectedNodeEffect.doneData,
-  filter: (schema): schema is string => !!schema,
+  filter: (schema): schema is PrismaSchemaState => !!schema,
   target: setPrismaSchemaEvent
 })
 
@@ -55,7 +60,7 @@ sample({
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 throttle({
-  source: $schema,
+  source: $schemaState,
   timeout: 1000,
   target: saveSchemaEffect
 })

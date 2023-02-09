@@ -1,8 +1,8 @@
 import { Box } from '@mantine/core'
 // import Editor from '@monaco-editor/react'
 import { Editor } from '@prisma/text-editors'
-import { useStore } from 'effector-react'
-import { $schema } from '../stores'
+// import { useStore } from 'effector-react'
+// import { $schema } from '../stores'
 // import '../monacoImports'
 
 // const path = window.api.path
@@ -22,12 +22,12 @@ import { $schema } from '../stores'
 // })
 
 export const SchemaEditor = () => {
-  const schema = useStore($schema)
+  // const schema = useStore($schema)
 
   return (
     <Box p="xs" w="100%" h="100%">
       {/* <Editor defaultValue={schema} height="100%" options={{ minimap: { enabled: false } }} /> */}
-      <Editor value={schema} lang="prisma" />
+      <Editor value={''} lang="prisma" />
     </Box>
   )
 }

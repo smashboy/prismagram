@@ -3,16 +3,12 @@ import { extractBlocksByType } from './utils'
 import { PrismaSchemaState } from 'prisma-state'
 import { Datasource, Generator } from 'prisma-state/blocks'
 
-export const setPrismaSchemaEvent = createEvent<string>()
+export const setPrismaSchemaEvent = createEvent<PrismaSchemaState>()
 
-export const $schema = createStore<string>('').on(setPrismaSchemaEvent, (_, schema) => schema)
-
-export const $schemaState = $schema.map((schema) => {
-  const state = new PrismaSchemaState()
-  state.fromString(schema)
-
-  return state
-})
+export const $schemaState = createStore(new PrismaSchemaState()).on(
+  setPrismaSchemaEvent,
+  (_, state) => state
+)
 
 export const $schemaModels = $schemaState.map(({ models }) => models)
 
