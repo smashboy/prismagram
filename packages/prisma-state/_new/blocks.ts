@@ -13,7 +13,8 @@ import {
   addOptionField,
   addOptionsListField,
   createFieldFromType,
-  parseAssignments
+  parseAssignments,
+  parseModelBlockAttribute
 } from './utils'
 
 export const datasource = (
@@ -104,8 +105,8 @@ export const enumBlock = (
 
 export const model = (
   name: string,
-  block: Model = { name, type: 'model', fields: new Map(), attributes: new Map() },
-  state: PrismaSchemaState
+  state: PrismaSchemaState,
+  block: Model = { name, type: 'model', fields: new Map(), attributes: new Map() }
 ) => {
   const _parse = (model: AstModel) => {
     const props = model?.properties || []
@@ -114,21 +115,21 @@ export const model = (
       if (prop.type === 'field') {
         const { fieldType, name } = prop
 
-        const { field } = createFieldFromType(
+        const modelField = createFieldFromType(
           name,
           fieldType as string,
           state.enumIds,
           state.modelIds
         )
 
-        block.fields.set(field.name, field)
+        modelField._parse(prop)
+
+        block.fields.set(modelField.field.name, modelField.field)
 
         continue
       }
 
-      if (prop.type === 'attribute') {
-        const { name, args } = prop
-      }
+      if (prop.type === 'attribute') parseModelBlockAttribute(block, prop)
     }
   }
 

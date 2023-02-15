@@ -1,7 +1,10 @@
 import { getSchema } from '@mrleebo/prisma-ast/src/getSchema'
-import { datasource, enumBlock } from './blocks'
+import { testSchema } from '../testSchema'
+import { datasource, enumBlock, model } from './blocks'
 import { Enum, Generator, Model, PrismaSchemaStateData } from './types'
 import { extractBlockIdsByType, extractBlocksByType } from './utils'
+
+const EOL = '\r\n'
 
 export class PrismaSchemaState {
   private readonly state: PrismaSchemaStateData
@@ -60,6 +63,8 @@ export class PrismaSchemaState {
       }
 
       if (block.type === 'model') {
+        const mdl = model(block.name, this, this.model(block.name))
+        this.state.set(mdl.block.name, mdl.block)
         continue
       }
 
@@ -72,13 +77,41 @@ export class PrismaSchemaState {
 
     for (const block of list) {
       if (block.type === 'model') {
-        const mdl = this.model(block.name)
+        const mdl = model(block.name, this, this.model(block.name))
+        mdl._parse(block)
+        this.state.set(mdl.block.name, mdl.block)
       }
     }
 
     console.timeEnd()
   }
+
+  toString() {
+    return `${[...this.state.values()]
+      .map((block) => {
+        return `${block.type} ${block.name} {
+          ${[...block.fields.values()].map((field) => {}).join(EOL)}
+
+          ${
+            block.type === 'model' && block.attributes.size > 0
+              ? [...block.attributes.values()].map((attr) => {})
+              : ''
+          }
+        }`
+      })
+      .join(EOL)}`
+  }
+
+  _clone() {
+    return new PrismaSchemaState(structuredClone(this.state))
+  }
 }
 
 export const createPrismaSchemaState = (state?: PrismaSchemaStateData) =>
   new PrismaSchemaState(state)
+
+const state = createPrismaSchemaState()
+
+state.fromString(testSchema)
+
+console.log(state)

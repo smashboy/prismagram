@@ -1,9 +1,27 @@
 import {
   Datasource as AstDatasource,
   Generator as AstGenerator,
-  Field as AstField
+  Field as AstField,
+  AttributeArgument as AstAttributeArgument,
+  ModelAttribute as AstModelAttribute,
+  GroupedModelAttribute as AstGroupedModelAttribute,
+  KeyValue
 } from '@mrleebo/prisma-ast/src/getSchema'
 import { ScalarTypeOption } from '../constants'
+import {
+  defaultAttribute,
+  idAttribute,
+  idBlockAttribute,
+  ignoreAttribute,
+  ignoreBlockAttribute,
+  indexBlockAttribute,
+  mapAttribute,
+  mapBlockAttribute,
+  relationAttribute,
+  uniqueAttribute,
+  uniqueBlockAttribute,
+  updatedAtAttribute
+} from './attributes'
 import {
   enumModelField,
   envField,
@@ -13,9 +31,13 @@ import {
   scalarField
 } from './fields'
 import {
+  AttributeFunction,
+  AttributeFunctionType,
+  BlockAttribute,
   BlockType,
   Datasource,
   Enum,
+  FieldAttribute,
   Generator,
   Model,
   ModelField,
@@ -85,14 +107,36 @@ export const parseAssignments = (
   }
 }
 
+const fieldAttributeMap = {
+  id: idAttribute,
+  default: defaultAttribute,
+  updatedAt: updatedAtAttribute,
+  ignore: ignoreAttribute,
+  relation: relationAttribute,
+  unique: uniqueAttribute,
+  map: mapAttribute
+}
+
 export const parseModelField = (field: ModelField, data: AstField) => {
   const { array = false, optional = false, attributes = [] } = data
 
   if (array) field.modifier = 'list'
   if (optional) field.modifier = 'optional'
 
-  // for (const { name, args = [] } of attributes) {
-  // }
+  for (const { name, args = [] } of attributes) {
+    const attrFunc = fieldAttributeMap[name as keyof typeof fieldAttributeMap]
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (attrFunc) {
+      const attribute = attrFunc()
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      attribute._parseArgs?.(args)
+
+      field.attributes.set(name, attribute.attr)
+    }
+  }
 }
 
 export const addOptionField = (key: string, value: string, block: Generator | Datasource) => {
@@ -173,4 +217,82 @@ export const createFieldFromType = (
   if (modelIds.indexOf(type) > -1) return relationField(name, type)
 
   return scalarField(name, type as ScalarTypeOption)
+}
+
+export const parseAttributeArgs = (
+  args: AstAttributeArgument[],
+  attr: BlockAttribute | FieldAttribute,
+  firstArgName?: string
+) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const _parseSingleArg = (arg: AstAttributeArgument['value']) => {
+    if (typeof arg === 'boolean' || typeof arg === 'number' || typeof arg === 'string') return arg
+
+    if (arg instanceof Array) return arg.map(_parseSingleArg)
+
+    if (arg.type === 'function') {
+      const func: AttributeFunction = {
+        type: arg.name as AttributeFunctionType
+      }
+
+      return func
+    }
+
+    if (arg.type === 'array') return arg.args.map(_parseSingleArg)
+  }
+
+  const _parseKeyValueArg = (arg: KeyValue) => {
+    if (arg?.type === 'keyValue') {
+      const { key, value } = arg
+      const parsedArg = _parseSingleArg(value)
+
+      if (parsedArg) return [key, parsedArg] as const
+    }
+  }
+
+  for (const index in args) {
+    const arg = args[index]
+
+    if (index === '0' && firstArgName && !(arg.value as KeyValue)?.key) {
+      const parsedArg = _parseSingleArg(arg.value)
+      if (parsedArg) attr.arguments.set(firstArgName, parsedArg)
+      continue
+    }
+
+    const parsedArg = _parseKeyValueArg(arg.value as KeyValue)
+
+    if (parsedArg) {
+      const [name, value] = parsedArg
+      attr.arguments.set(name, value)
+    }
+  }
+}
+
+const blockAttributesMap = {
+  id: idBlockAttribute,
+  ignore: ignoreBlockAttribute,
+  unique: uniqueBlockAttribute,
+  map: mapBlockAttribute,
+  index: indexBlockAttribute
+}
+
+export const parseModelBlockAttribute = (
+  model: Model,
+  attribute: AstModelAttribute | AstGroupedModelAttribute
+) => {
+  const { name, args } = attribute
+
+  const attrFunc = blockAttributesMap[name as keyof typeof blockAttributesMap]
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  if (attrFunc) {
+    const attribute = attrFunc()
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    attribute._parseArgs?.(args)
+
+    model.attributes.set(name, attribute.attr)
+  }
 }

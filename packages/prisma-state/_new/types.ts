@@ -10,9 +10,21 @@ export type FieldAttributeType =
   | 'relation'
   | 'updatedAt'
   | 'ignore'
+export type AttributeFunctionType =
+  | 'auto'
+  | 'autoincrement'
+  | 'sequence'
+  | 'cuid'
+  | 'uuid'
+  | 'now'
+  | 'dbgenerated'
 export type FieldModifier = 'optional' | 'list' | null
 
 export type PrismaSchemaStateData = Map<string, Datasource | Generator | Enum | Model>
+
+export interface AttributeFunction {
+  type: AttributeFunctionType
+}
 
 export interface Block<T extends string, F extends Field, K = string> {
   readonly name: string
@@ -25,8 +37,9 @@ export interface Field {
 }
 
 export interface Attribute<T extends string> {
-  type: T
-  readonly arguments: unknown[]
+  readonly type: T
+  readonly _prefix: '@' | '@@'
+  readonly arguments: Map<string, unknown>
 }
 
 export type BlockAttribute = Attribute<BlockAttributeType>
