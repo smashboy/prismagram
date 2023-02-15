@@ -1,6 +1,7 @@
 import { ScalarTypeOption } from '../constants'
 
 export type BlockType = 'generator' | 'datasource' | 'model' | 'enum'
+export type SettingsFieldType = 'env' | 'option' | 'list'
 export type BlockAttributeType = 'id' | 'index' | 'unique' | 'map' | 'ignore'
 export type FieldAttributeType =
   | 'id'
@@ -24,6 +25,7 @@ export type PrismaSchemaStateData = Map<string, Datasource | Generator | Enum | 
 
 export interface AttributeFunction {
   type: AttributeFunctionType
+  isAttributeFunction: true
 }
 
 export interface Block<T extends string, F extends Field, K = string> {
@@ -34,6 +36,7 @@ export interface Block<T extends string, F extends Field, K = string> {
 
 export interface Field {
   readonly name: string
+  readonly type: string
 }
 
 export interface Attribute<T extends string> {
@@ -61,28 +64,52 @@ export type Generator = Block<
 export interface EnvField extends Field {
   value: string
   isEnv: boolean
+  readonly type: 'env'
 }
 
 export interface OptionField extends Field {
   value: string
+  readonly type: 'option'
 }
 
 export interface OptionsListField extends Field {
   readonly options: Set<string>
+  readonly type: 'list'
 }
 
 export type Enum = Block<'enum', Field>
 
-export interface Model extends Block<'model', ModelField> {
+export interface Model extends Block<'model', RelationField | ScalarField | EnumModelField> {
   readonly attributes: Map<string, BlockAttribute>
 }
 
 export interface ModelField extends Field {
-  readonly type: string
   modifier: FieldModifier
   readonly attributes: Map<string, FieldAttribute>
 }
 
+export interface RelationField extends ModelField {
+  readonly isRelationField: true
+}
+
+export interface EnumModelField extends ModelField {
+  readonly isEnumField: true
+}
+
 export interface ScalarField extends ModelField {
   readonly type: ScalarTypeOption
+}
+
+export interface PrismaSchemaStateInstance {
+  readonly datasource: Datasource
+  readonly generators: Map<string, Generator>
+  readonly models: Map<string, Model>
+  readonly enums: Map<string, Enum>
+  readonly modelIds: string[]
+  readonly enumIds: string[]
+  model(id: string): Model
+  enum(id: string): Enum
+  toString(): string
+  fromString(schema: string): void
+  _clone(): PrismaSchemaStateInstance
 }

@@ -1,14 +1,24 @@
 import { Field as AstField } from '@mrleebo/prisma-ast/src/getSchema'
 import { ScalarTypeOption } from '../constants'
-import { Field, EnvField, OptionField, OptionsListField, ScalarField, ModelField } from './types'
-import { cleanupStr, parseModelField } from './utils'
+import {
+  Field,
+  EnvField,
+  OptionField,
+  OptionsListField,
+  ScalarField,
+  RelationField,
+  EnumModelField
+} from './types'
+import { cleanupStr } from './utils/common'
+import { modelFieldToString, parseModelField } from './utils/parser'
 
 export const envField = (
   name: string,
   field: EnvField = {
     name,
     value: '',
-    isEnv: true
+    isEnv: true,
+    type: 'env'
   }
 ) => {
   const toggleIsEnv = (isEnv?: boolean) => {
@@ -31,7 +41,8 @@ export const optionField = (
   name: string,
   field: OptionField = {
     name,
-    value: ''
+    value: '',
+    type: 'option'
   }
 ) => {
   const _parse = (value = '') => {
@@ -49,11 +60,12 @@ export const optionsListField = (
   name: string,
   field: OptionsListField = {
     name,
-    options: new Set()
+    options: new Set(),
+    type: 'list'
   }
 ) => {
   const _parse = (args: string[] = []) => {
-    args.forEach((arg) => field.options.add(arg))
+    args.forEach((arg) => field.options.add(cleanupStr(arg)))
   }
 
   const _toString = () => {
@@ -68,7 +80,8 @@ export const optionsListField = (
 export const enumField = (
   option: string,
   field: Field = {
-    name: option
+    name: option,
+    type: 'enumOption'
   }
 ) => {
   const _toString = () => {
@@ -81,16 +94,19 @@ export const enumField = (
 export const enumModelField = (
   name: string,
   type: string,
-  field: ModelField = {
+  field: EnumModelField = {
     name,
     type,
     modifier: null,
-    attributes: new Map()
+    attributes: new Map(),
+    isEnumField: true
   }
 ) => {
   const _parse = (data: AstField) => parseModelField(field, data)
 
-  return { field, _parse }
+  const _toString = () => modelFieldToString(field)
+
+  return { field, _toString, _parse }
 }
 
 export const scalarField = (
@@ -105,20 +121,25 @@ export const scalarField = (
 ) => {
   const _parse = (data: AstField) => parseModelField(field, data)
 
-  return { field, _parse }
+  const _toString = () => modelFieldToString(field)
+
+  return { field, _toString, _parse }
 }
 
 export const relationField = (
   name: string,
   type: string,
-  field: ModelField = {
+  field: RelationField = {
     name,
     type,
     modifier: null,
-    attributes: new Map()
+    attributes: new Map(),
+    isRelationField: true
   }
 ) => {
   const _parse = (data: AstField) => parseModelField(field, data)
 
-  return { field, _parse }
+  const _toString = () => modelFieldToString(field)
+
+  return { field, _toString, _parse }
 }

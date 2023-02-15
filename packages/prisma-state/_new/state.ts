@@ -1,12 +1,25 @@
 import { getSchema } from '@mrleebo/prisma-ast/src/getSchema'
-import { testSchema } from '../testSchema'
-import { datasource, enumBlock, model } from './blocks'
-import { Enum, Generator, Model, PrismaSchemaStateData } from './types'
-import { extractBlockIdsByType, extractBlocksByType } from './utils'
+import { datasource, enumBlock, model, generator } from './blocks'
+import {
+  Enum,
+  Generator,
+  Model,
+  PrismaSchemaStateData,
+  ModelField,
+  Field,
+  Datasource,
+  ScalarField,
+  EnvField,
+  OptionsListField,
+  OptionField,
+  PrismaSchemaStateInstance
+} from './types'
+import { EOL } from './utils/constants'
+import { extractBlockIdsByType, extractBlocksByType } from './utils/block'
+import { getFieldFunc } from './utils/_fuck'
+import { attributeToString } from './utils/parser'
 
-const EOL = '\r\n'
-
-export class PrismaSchemaState {
+export class PrismaSchemaState implements PrismaSchemaStateInstance {
   private readonly state: PrismaSchemaStateData
 
   constructor(state: PrismaSchemaStateData = new Map()) {
@@ -14,7 +27,7 @@ export class PrismaSchemaState {
   }
 
   get datasource() {
-    return [...this.state.values()].find((block) => block.type === 'datasource')!
+    return [...this.state.values()].find((block) => block.type === 'datasource') as Datasource
   }
 
   get generators() {
@@ -41,6 +54,10 @@ export class PrismaSchemaState {
     return this.models.get(id)!
   }
 
+  enum(id: string) {
+    return this.enums.get(id)!
+  }
+
   fromString(schema: string) {
     console.log('START')
     console.time()
@@ -56,7 +73,7 @@ export class PrismaSchemaState {
       }
 
       if (block.type === 'generator') {
-        const asgm = datasource(block.name)
+        const asgm = generator(block.name)
         asgm._parse(block.assignments)
         this.state.set(asgm.block.name, asgm.block)
         continue
@@ -87,19 +104,24 @@ export class PrismaSchemaState {
   }
 
   toString() {
-    return `${[...this.state.values()]
-      .map((block) => {
-        return `${block.type} ${block.name} {
-          ${[...block.fields.values()].map((field) => {}).join(EOL)}
+    const _blockFieldToString = (
+      block: Datasource | Generator | Enum | Model,
+      field: ModelField | ScalarField | OptionField | EnvField | OptionsListField | Field
+    ) => getFieldFunc(block, field, this.enumIds, this.modelIds)._toString()
 
-          ${
-            block.type === 'model' && block.attributes.size > 0
-              ? [...block.attributes.values()].map((attr) => {})
-              : ''
-          }
-        }`
-      })
-      .join(EOL)}`
+    const _blockToString = (block: Datasource | Generator | Model | Enum) => `${block.type} ${
+      block.name
+    } {
+      ${[...block.fields.values()].map((field) => _blockFieldToString(block, field)).join(EOL)}
+
+      ${
+        block.type === 'model' && block.attributes.size > 0
+          ? [...block.attributes.values()].map((attr) => attributeToString(attr)).join(EOL)
+          : ''
+      }
+    }`
+
+    return `${[...this.state.values()].map(_blockToString).join(EOL)}`
   }
 
   _clone() {
@@ -109,9 +131,3 @@ export class PrismaSchemaState {
 
 export const createPrismaSchemaState = (state?: PrismaSchemaStateData) =>
   new PrismaSchemaState(state)
-
-const state = createPrismaSchemaState()
-
-state.fromString(testSchema)
-
-console.log(state)

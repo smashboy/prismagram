@@ -1,6 +1,6 @@
 import { AttributeArgument as AstAttributeArgument } from '@mrleebo/prisma-ast/src/getSchema'
 import { BlockAttribute } from '../types'
-import { parseAttributeArgs } from '../utils'
+import { parseAttributeArgs } from '../utils/parser'
 
 type AttrProps = Omit<BlockAttribute, '_prefix'>
 
@@ -106,7 +106,7 @@ export const uniqueBlockAttribute = (
   const clustered = () => (attr.arguments.get('clustered') as boolean) || null
   const fields = () => (attr.arguments.get('fields') as string[]) || []
 
-  const _parseArgs = (args: AstAttributeArgument[]) => parseAttributeArgs(args, attr)
+  const _parseArgs = (args: AstAttributeArgument[]) => parseAttributeArgs(args, attr, 'fields')
 
   return {
     attr,

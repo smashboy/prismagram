@@ -6,16 +6,15 @@ import type {
 } from '@mrleebo/prisma-ast/src/getSchema'
 import { PrismaDatasourceProviderType, PrismaDatasourceRelationModeType } from '../constants'
 import { enumField } from './fields'
-import { PrismaSchemaState } from './state'
-import { Datasource, Enum, Generator, Model } from './types'
+import { Datasource, Enum, Generator, Model, PrismaSchemaStateInstance } from './types'
 import {
   addEnvField,
   addOptionField,
   addOptionsListField,
-  createFieldFromType,
-  parseAssignments,
-  parseModelBlockAttribute
-} from './utils'
+  createFieldFromType
+} from './utils/field'
+import { parseModelBlockAttribute } from './utils/parser'
+import { parseAssignments } from './utils/_fuck'
 
 export const datasource = (
   name: string,
@@ -105,7 +104,7 @@ export const enumBlock = (
 
 export const model = (
   name: string,
-  state: PrismaSchemaState,
+  state: PrismaSchemaStateInstance,
   block: Model = { name, type: 'model', fields: new Map(), attributes: new Map() }
 ) => {
   const _parse = (model: AstModel) => {
