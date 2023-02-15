@@ -12,7 +12,7 @@ export class Datasource extends Block<
   }
 
   addProvider(provider: PrismaDatasourceProviderType) {
-    this.addField('provider', new OptionField('provider'))
+    this.addField('provider', new OptionField('provider', this))
 
     const field = this.field<OptionField>('provider')
     field.setValue(provider)
@@ -21,7 +21,7 @@ export class Datasource extends Block<
   }
 
   addUrl(url: string, isEnv = true) {
-    this.addField('url', new EnvField('url'))
+    this.addField('url', new EnvField('url', this))
 
     const field = this.field<EnvField>('url')
     field.setValue(url)
@@ -31,7 +31,7 @@ export class Datasource extends Block<
   }
 
   addShadowDatabaseUrl(url: string, isEnv = true) {
-    this.addField('shadowDatabaseUrl', new EnvField('shadowDatabaseUrl'))
+    this.addField('shadowDatabaseUrl', new EnvField('shadowDatabaseUrl', this))
 
     const field = this.field<EnvField>('shadowDatabaseUrl')
     field.setValue(url)
@@ -41,11 +41,19 @@ export class Datasource extends Block<
   }
 
   addRelationMode(mode: PrismaDatasourceRelationModeType) {
-    this.addField('relationMode', new OptionField('relationMode'))
+    this.addField('relationMode', new OptionField('relationMode', this))
 
     const field = this.field<OptionField>('relationMode')
     field.setValue(mode)
 
     return field
+  }
+
+  _clone(state: PrismaSchemaState) {
+    const cloned = new Datasource(this.name, state)
+
+    this.fieldsMap.forEach((field) => cloned.addField(field.name, field._clone(cloned)))
+
+    return cloned
   }
 }

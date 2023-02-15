@@ -8,8 +8,7 @@ import {
   loadEditorDataEffect,
   removeSelectedNodeEffect,
   saveDiagramEffect,
-  saveSchemaEffect,
-  updatePrismaStateEffect
+  saveSchemaEffect
 } from './effects'
 import { $schemaState, setPrismaSchemaEvent } from './schema'
 import { PrismaStudioGate } from './ui'
@@ -44,11 +43,6 @@ sample({
 sample({
   source: removeSelectedNodeEffect.doneData,
   filter: (schema): schema is PrismaSchemaState => !!schema,
-  target: setPrismaSchemaEvent
-})
-
-sample({
-  source: updatePrismaStateEffect.doneData,
   target: setPrismaSchemaEvent
 })
 

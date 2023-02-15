@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { ActionIcon, Group, TextInput } from '@mantine/core'
-import { updatePrismaStateEffect } from '@renderer/modules/editor/stores'
+import { updatePrismaSchemaEvent } from '@renderer/modules/editor/stores'
 import { IconTrash } from '@tabler/icons'
 import { Enum } from 'prisma-state/blocks'
 import { EnumField } from 'prisma-state/fields'
@@ -20,16 +20,16 @@ export const EnumNodeEditField: React.FC<EnumNodeEditFieldProps> = ({ block, fie
     if (value.length < 2) inputRef.current?.select()
   }, [value])
 
-  const handleInput = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value
     if (!newValue) return
     field.setValue(newValue)
-    await updatePrismaStateEffect()
+    updatePrismaSchemaEvent()
   }
 
-  const handleDeleteOption = async () => {
+  const handleDeleteOption = () => {
     block.removeField(name)
-    await updatePrismaStateEffect()
+    updatePrismaSchemaEvent()
   }
 
   return (

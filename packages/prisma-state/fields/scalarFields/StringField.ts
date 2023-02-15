@@ -8,4 +8,12 @@ export class StringField extends ModelField<DefaultAttribute | IdAttribute> {
   constructor(name: string, model: Model) {
     super(name, ScalarType.STRING, model)
   }
+
+  _clone(block: Model) {
+    const cloned = new StringField(this.name, block)
+
+    ModelField._cloneModelFieldProps(this, cloned)
+
+    return cloned
+  }
 }

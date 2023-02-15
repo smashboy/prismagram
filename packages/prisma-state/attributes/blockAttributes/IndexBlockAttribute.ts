@@ -7,8 +7,8 @@ export class IndexBlockAttribute extends BlockAttribute<
   Model,
   'fields' | 'name' | 'map' | 'length' | 'sort' | 'clustered' | 'type' | 'ops'
 > {
-  constructor(model: Model) {
-    super('index', model)
+  constructor(model: Model, inialValues?: Map<string, unknown>) {
+    super('index', model, inialValues)
   }
 
   get name() {
@@ -37,5 +37,9 @@ export class IndexBlockAttribute extends BlockAttribute<
 
   _parseArgs(args: AstAttributeArgument[]): void {
     super._parseArgs(args, 'fields')
+  }
+
+  _clone(block: Model) {
+    return new IndexBlockAttribute(block, IndexBlockAttribute.cloneArguments(this.argumentsMap))
   }
 }

@@ -6,8 +6,8 @@ export class IdBlockAttribute extends BlockAttribute<
   Model,
   'fields' | 'name' | 'map' | 'length' | 'sort' | 'clustered'
 > {
-  constructor(model: Model) {
-    super('id', model)
+  constructor(model: Model, inialValues?: Map<string, unknown>) {
+    super('id', model, inialValues)
   }
 
   get name() {
@@ -36,5 +36,9 @@ export class IdBlockAttribute extends BlockAttribute<
 
   _parseArgs(args: AstAttributeArgument[]) {
     super._parseArgs(args, 'fields')
+  }
+
+  _clone(block: Model) {
+    return new IdBlockAttribute(block, IdBlockAttribute.cloneArguments(this.argumentsMap))
   }
 }

@@ -9,7 +9,7 @@ import {
   $schemaModels,
   $schemaState,
   $selectedNodeId,
-  updatePrismaStateEffect
+  updatePrismaSchemaEvent
 } from '../../../stores'
 import { ModelNodeField } from './ModelNodeField'
 import { ModelNodeToolbar } from './ModelNodeToolbar'
@@ -44,9 +44,9 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
 
   const maxAttribuesCount = Math.max(...[...new Set(fields.map((field) => field.attributes.size))])
 
-  const handleSaveName = async (name: string) => {
+  const handleSaveName = (name: string) => {
     model.setName(name)
-    await updatePrismaStateEffect()
+    updatePrismaSchemaEvent()
   }
 
   const onDragEnd = async () => {

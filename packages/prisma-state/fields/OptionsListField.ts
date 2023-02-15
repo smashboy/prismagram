@@ -3,10 +3,12 @@ import { cleanupStr } from '../utils/string'
 import { Field } from './Field'
 
 export class OptionsListField extends Field {
-  private readonly _options = new Set<string>()
+  private readonly _options: Set<string>
 
-  constructor(name: string, block: Datasource | Generator) {
+  constructor(name: string, block: Datasource | Generator, initialValues = new Set<string>()) {
     super(name, block)
+
+    this._options = initialValues
   }
 
   get values() {
@@ -39,5 +41,9 @@ export class OptionsListField extends Field {
     return `${this.name} = [${[...this._options.values()]
       .map((option) => `"${option}"`)
       .join(', ')}]`
+  }
+
+  _clone(block: Datasource | Generator) {
+    return new OptionsListField(this.name, block, new Set([...this._options]))
   }
 }

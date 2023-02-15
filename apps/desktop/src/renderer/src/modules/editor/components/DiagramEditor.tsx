@@ -20,7 +20,7 @@ import {
   selectNodeEvent,
   setCreateRelationModalData,
   toggleCreateRelationModalEvent,
-  updatePrismaStateEffect,
+  updatePrismaSchemaEvent,
   viewportChangeEvent
 } from '../stores'
 import { ModelNode } from './nodes/ModelNode'
@@ -91,11 +91,11 @@ export const DiagramEditor = () => {
     if (type === NodeType.MODEL) schemaState.createModel(id)
     if (type === NodeType.ENUM) schemaState.createEnum(id)
 
-    await updatePrismaStateEffect()
+    updatePrismaSchemaEvent()
 
-    addNodeEvent(node)
-    selectNodeEvent({ nodeId: id, type: type as NodeType })
-    zoomToNode(reactFlowInstance, node)
+    // addNodeEvent(node)
+    // selectNodeEvent({ nodeId: id, type: type as NodeType })
+    // zoomToNode(reactFlowInstance, node)
   }
 
   const onConnect: OnConnect = ({ source, target }) => {

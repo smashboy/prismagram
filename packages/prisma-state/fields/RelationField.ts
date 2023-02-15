@@ -66,4 +66,12 @@ export class RelationField extends ModelField {
       }
     }
   }
+
+  _clone(block: Model) {
+    const cloned = new RelationField(this.name, this.type, block)
+
+    ModelField._cloneModelFieldProps(this, cloned)
+
+    return cloned
+  }
 }

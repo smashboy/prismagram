@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Stack } from '@mantine/core'
 import { ConfirmInput } from '@renderer/core/components'
-import { updatePrismaStateEffect } from '@renderer/modules/editor/stores'
+import { updatePrismaSchemaEvent } from '@renderer/modules/editor/stores'
 import { NodeDnDContext } from '../NodeDnDContext'
 import { EnumNodeEditField } from './EnumNodeEditField'
 import { Enum } from 'prisma-state/blocks'
@@ -31,7 +31,7 @@ export const EnumEditForm: React.FC<EnumEditFormProps> = ({
   const handleAddNewOption = async () => {
     block.addOption(newOption)
     onCloseNewOptionField()
-    await updatePrismaStateEffect()
+    updatePrismaSchemaEvent()
   }
 
   const onDragEnd = async (event: DragEndEvent) => {
@@ -44,7 +44,7 @@ export const EnumEditForm: React.FC<EnumEditFormProps> = ({
 
     block._setFromArray(arrayMove(fields, oldIndex, newIndex))
 
-    await updatePrismaStateEffect()
+    updatePrismaSchemaEvent()
   }
 
   return (

@@ -6,8 +6,8 @@ export class UniqueBlockAttribute extends BlockAttribute<
   Model,
   'fields' | 'name' | 'map' | 'length' | 'sort' | 'clustered'
 > {
-  constructor(model: Model) {
-    super('unique', model)
+  constructor(model: Model, inialValues?: Map<string, unknown>) {
+    super('unique', model, inialValues)
   }
 
   get fields() {
@@ -52,5 +52,9 @@ export class UniqueBlockAttribute extends BlockAttribute<
 
   _parseArgs(args: AstAttributeArgument[]) {
     super._parseArgs(args, 'fields')
+  }
+
+  _clone(block: Model) {
+    return new UniqueBlockAttribute(block, UniqueBlockAttribute.cloneArguments(this.argumentsMap))
   }
 }

@@ -6,7 +6,7 @@ import { Stack, Table } from '@mantine/core'
 import {
   $schemaEnums,
   $selectedNodeId,
-  updatePrismaStateEffect
+  updatePrismaSchemaEvent
 } from '@renderer/modules/editor/stores'
 import { EnumNodeData } from '@shared/common/models/Diagram'
 import { NodeCard } from '../NodeCard'
@@ -34,9 +34,9 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
 
   const isSelected = selectedNodeId?.nodeId === name
 
-  const handleSaveName = async (name: string) => {
+  const handleSaveName = (name: string) => {
     enumItem.setName(name)
-    await updatePrismaStateEffect()
+    updatePrismaSchemaEvent()
   }
 
   return (

@@ -138,6 +138,14 @@ export class PrismaSchemaState {
   toString() {
     return `${[...this.state.values()].map((block) => block._toString()).join('\r\n')}`
   }
+
+  _clone() {
+    const cloned = new PrismaSchemaState()
+
+    this.state.forEach((block, key) => cloned.state.set(key, block._clone(cloned)))
+
+    return cloned
+  }
 }
 
 // const schema = new PrismaSchemaState()

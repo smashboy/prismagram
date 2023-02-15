@@ -21,4 +21,8 @@ export class AttributeFunction {
   _toString() {
     return `${this.type}()`
   }
+
+  _clone() {
+    return new AttributeFunction(this.type)
+  }
 }

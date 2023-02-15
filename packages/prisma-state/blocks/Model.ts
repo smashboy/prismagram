@@ -1,6 +1,5 @@
 import type { Model as AstModel } from '@mrleebo/prisma-ast/src/getSchema'
 import {
-  BlockAttribute,
   IdBlockAttribute,
   IgnoreBlockAttribute,
   IndexBlockAttribute,
@@ -25,8 +24,15 @@ interface ModelReference {
   fields: RelationField[]
 }
 
-export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField> {
-  readonly attributes = new Map<string, A>()
+export class Model extends Block<ScalarField | RelationField> {
+  readonly attributes = new Map<
+    string,
+    | IdBlockAttribute
+    | IgnoreBlockAttribute
+    | IndexBlockAttribute
+    | UniqueBlockAttribute
+    | MapBlockAttribute
+  >()
 
   constructor(name: string, state: PrismaSchemaState) {
     super(name, 'model', state)
@@ -90,13 +96,9 @@ export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField
           const attribute = new Attribute(this)
           attribute._parseArgs(args)
 
-          this.attributes.set(name, attribute as unknown as A)
+          this.attributes.set(name, attribute)
         }
       }
-    }
-
-    if (this.name === 'ProjectRoadmap') {
-      console.log(model, this.attributes)
     }
   }
 
@@ -114,10 +116,15 @@ export class Model<A = BlockAttribute> extends Block<ScalarField | RelationField
     }
   `
 
-    if (this.name === 'ProjectRoadmap') {
-      console.log({ blockstr })
-    }
-
     return blockstr
+  }
+
+  _clone(state: PrismaSchemaState) {
+    const cloned = new Model(this.name, state)
+
+    this.fieldsMap.forEach((field) => cloned.addField(field.name, field._clone(cloned)))
+    this.attributes.forEach((attr) => cloned.attributes.set(attr.type, attr._clone(cloned)))
+
+    return cloned
   }
 }

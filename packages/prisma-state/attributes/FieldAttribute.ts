@@ -16,8 +16,10 @@ export abstract class FieldAttribute<F = unknown, AK = string> extends Attribute
 > {
   protected readonly field: F
 
-  constructor(type: FieldAttributeType, field: F) {
-    super(type, '@')
+  constructor(type: FieldAttributeType, field: F, inialValues?: Map<string, unknown>) {
+    super(type, '@', inialValues)
     this.field = field
   }
+
+  abstract _clone(field: F): FieldAttribute
 }

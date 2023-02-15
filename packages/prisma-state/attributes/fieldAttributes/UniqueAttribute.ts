@@ -5,8 +5,8 @@ export class UniqueAttribute extends FieldAttribute<
   ScalarField,
   'map' | 'length' | 'sort' | 'clustered'
 > {
-  constructor(field: ScalarField) {
-    super('unique', field)
+  constructor(field: ScalarField, inialValues?: Map<string, unknown>) {
+    super('unique', field, inialValues)
   }
 
   get map() {
@@ -39,5 +39,9 @@ export class UniqueAttribute extends FieldAttribute<
 
   setClustered(value: boolean) {
     this.setArgument('clustered', value)
+  }
+
+  _clone(field: ScalarField) {
+    return new UniqueAttribute(field, UniqueAttribute.cloneArguments(this.argumentsMap))
   }
 }

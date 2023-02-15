@@ -10,8 +10,8 @@ interface EnumReference {
 }
 
 export class Enum extends Block<EnumField> {
-  constructor(id: string, state: PrismaSchemaState) {
-    super(id, 'enum', state)
+  constructor(name: string, state: PrismaSchemaState) {
+    super(name, 'enum', state)
   }
 
   getReferences() {
@@ -53,5 +53,13 @@ export class Enum extends Block<EnumField> {
 
       this.addField(name, new EnumField(name, this))
     }
+  }
+
+  _clone(state: PrismaSchemaState) {
+    const cloned = new Enum(this.name, state)
+
+    this.fieldsMap.forEach((field) => cloned.addField(field.name, field._clone(cloned)))
+
+    return cloned
   }
 }

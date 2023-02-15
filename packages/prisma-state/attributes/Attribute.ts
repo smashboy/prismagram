@@ -14,13 +14,15 @@ export type ArgumentValue =
   | AttributeFunction
 
 export abstract class Attribute<T extends string, AK = string> {
-  protected readonly argumentsMap = new Map<AK, ArgumentValue>()
+  protected readonly argumentsMap: Map<AK, ArgumentValue>
   private readonly _prefix: AttributePrefix
   readonly type: T
 
-  constructor(type: T, prefix: AttributePrefix) {
+  constructor(type: T, prefix: AttributePrefix, initialValues = new Map()) {
     this.type = type
     this._prefix = prefix
+
+    this.argumentsMap = initialValues
   }
 
   get displayAttributeType() {
@@ -107,5 +109,22 @@ export abstract class Attribute<T extends string, AK = string> {
         ? `(${args.map(([name, arg]) => `${name}: ${arg}`).join(', ')})`
         : ''
     }`
+  }
+
+  static cloneArguments(args: Map<string, ArgumentValue>) {
+    const clonable: Array<[string, ArgumentValue]> = []
+    const attrFunctions: Array<[string, AttributeFunction]> = []
+
+    for (const [key, arg] of args.entries()) {
+      if (arg instanceof AttributeFunction) {
+        attrFunctions.push([key, arg._clone()])
+
+        continue
+      }
+
+      clonable.push([key, arg])
+    }
+
+    return new Map([...structuredClone(clonable), ...attrFunctions])
   }
 }

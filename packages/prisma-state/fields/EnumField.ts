@@ -17,4 +17,8 @@ export class EnumField extends Field {
   _toString() {
     return this.value
   }
+
+  _clone(block: Enum) {
+    return new EnumField(this.name, block)
+  }
 }

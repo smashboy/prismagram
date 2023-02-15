@@ -7,8 +7,8 @@ export class RelationAttribute extends FieldAttribute<
   RelationField,
   'name' | 'fields' | 'references' | 'map' | 'onUpdate' | 'onDelete'
 > {
-  constructor(field: RelationField) {
-    super('relation', field)
+  constructor(field: RelationField, inialValues?: Map<string, unknown>) {
+    super('relation', field, inialValues)
   }
 
   get name() {
@@ -61,5 +61,9 @@ export class RelationAttribute extends FieldAttribute<
 
   _parseArgs(args: AstAttributeArgument[]) {
     super._parseArgs(args, 'name')
+  }
+
+  _clone(field: RelationField) {
+    return new RelationAttribute(field, RelationAttribute.cloneArguments(this.argumentsMap))
   }
 }

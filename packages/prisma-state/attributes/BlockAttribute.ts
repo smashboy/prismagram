@@ -9,12 +9,14 @@ export abstract class BlockAttribute<B extends Block = Block, AK = string> exten
 > {
   protected readonly model: B
 
-  constructor(type: BlockAttributeType, model: B) {
-    super(type, '@@')
+  constructor(type: BlockAttributeType, model: B, inialValues?: Map<string, unknown>) {
+    super(type, '@@', inialValues)
     this.model = model
   }
 
   _toString() {
     return super._toString()
   }
+
+  abstract _clone(block: B): BlockAttribute
 }

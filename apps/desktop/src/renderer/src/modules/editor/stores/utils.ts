@@ -10,24 +10,9 @@ import {
   Relation
 } from '@shared/common/models/Diagram'
 import { RelationAttribute } from 'prisma-state/attributes'
-import { Block, BlockType, Model } from 'prisma-state/blocks'
+import { Model } from 'prisma-state/blocks'
 import { EnumModelField, RelationField } from 'prisma-state/fields'
-import { PrismaSchemaState, PrismaSchemaStateData } from 'prisma-state/PrismaSchemaState'
-
-export const extractBlocksByType = <B extends Block>(
-  type: BlockType,
-  list: PrismaSchemaStateData
-): Map<string, B> => {
-  const blocks = new Map<string, B>()
-
-  for (const block of [...list.values()]) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (block.type === type) blocks.set(block.name, block)
-  }
-
-  return blocks
-}
+import { PrismaSchemaState } from 'prisma-state/PrismaSchemaState'
 
 export const prismaSchemaState2Diagram = (state: PrismaSchemaState, diagram: Diagram): Diagram => {
   const { models, enumIds } = state

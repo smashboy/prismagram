@@ -4,8 +4,8 @@ import { ScalarField } from '../../fields/types'
 import { FieldAttribute } from '../FieldAttribute'
 
 export class MapAttribute extends FieldAttribute<ScalarField | RelationField, 'name'> {
-  constructor(field: ScalarField | RelationField) {
-    super('map', field)
+  constructor(field: ScalarField | RelationField, inialValues?: Map<string, unknown>) {
+    super('map', field, inialValues)
   }
 
   get name() {
@@ -18,5 +18,9 @@ export class MapAttribute extends FieldAttribute<ScalarField | RelationField, 'n
 
   _parseArgs(args: AstAttributeArgument[]) {
     super._parseArgs(args, 'name')
+  }
+
+  _clone(field: ScalarField | RelationField) {
+    return new MapAttribute(field, MapAttribute.cloneArguments(this.argumentsMap))
   }
 }

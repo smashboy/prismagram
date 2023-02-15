@@ -5,8 +5,8 @@ export class IdAttribute extends FieldAttribute<
   ScalarField,
   'map' | 'length' | 'sort' | 'clustered'
 > {
-  constructor(field: ScalarField) {
-    super('id', field)
+  constructor(field: ScalarField, inialValues?: Map<string, unknown>) {
+    super('id', field, inialValues)
   }
 
   get map() {
@@ -39,5 +39,9 @@ export class IdAttribute extends FieldAttribute<
 
   setClustered(value: boolean) {
     this.setArgument('clustered', value)
+  }
+
+  _clone(field: ScalarField) {
+    return new IdAttribute(field, IdAttribute.cloneArguments(this.argumentsMap))
   }
 }

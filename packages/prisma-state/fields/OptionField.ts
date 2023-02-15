@@ -3,10 +3,12 @@ import { cleanupStr } from '../utils/string'
 import { Field } from './Field'
 
 export class OptionField extends Field {
-  value = ''
+  value: string
 
-  constructor(name: string, block: Datasource | Generator) {
+  constructor(name: string, block: Datasource | Generator, value = '') {
     super(name, block)
+
+    this.value = value
   }
 
   setValue(value: string) {
@@ -19,5 +21,9 @@ export class OptionField extends Field {
 
   _toString() {
     return `${this.name} = "${this.value}"`
+  }
+
+  _clone(block: Datasource | Generator) {
+    return new OptionField(this.name, block, this.value)
   }
 }

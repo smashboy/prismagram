@@ -10,4 +10,5 @@ export abstract class Field {
   }
 
   abstract _toString(): string
+  abstract _clone(block: Block): Field
 }

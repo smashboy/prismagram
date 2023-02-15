@@ -122,5 +122,5 @@ export abstract class Block<F extends Field = Field, K = string> {
   `
   }
 
-  // abstract _clone(): Block
+  abstract _clone(state: PrismaSchemaState): Block
 }

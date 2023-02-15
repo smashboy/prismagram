@@ -1,7 +1,7 @@
 import { Block } from 'prisma-state/blocks'
 import { OptionField } from 'prisma-state/fields'
 import { Select, SelectProps } from '@mantine/core'
-import { updatePrismaStateEffect } from '@renderer/modules/editor'
+import { updatePrismaSchemaEvent } from '@renderer/modules/editor'
 
 interface SelectOptionInputProps extends SelectProps {
   name: string
@@ -11,7 +11,7 @@ interface SelectOptionInputProps extends SelectProps {
 export const SelectOptionInput: React.FC<SelectOptionInputProps> = ({ name, block, ...props }) => {
   const field = block.field<OptionField>(name)
 
-  const handleChange = async (value: string | null) => {
+  const handleChange = (value: string | null) => {
     if (!value) {
       block.removeField(name)
     } else if (!field) {
@@ -21,7 +21,7 @@ export const SelectOptionInput: React.FC<SelectOptionInputProps> = ({ name, bloc
       field.setValue(value)
     }
 
-    await updatePrismaStateEffect()
+    updatePrismaSchemaEvent()
   }
 
   return <Select value={field?.value || ''} onChange={handleChange} {...props} />

@@ -3,11 +3,15 @@ import { ScalarField } from '../../fields'
 import { FieldAttribute } from '../FieldAttribute'
 
 export class DefaultAttribute extends FieldAttribute<ScalarField, 'value' | 'map'> {
-  constructor(field: ScalarField) {
-    super('default', field)
+  constructor(field: ScalarField, inialValues?: Map<string, unknown>) {
+    super('default', field, inialValues)
   }
 
   _parseArgs(args: AstAttributeArgument[]) {
     super._parseArgs(args, 'value')
+  }
+
+  _clone(field: ScalarField) {
+    return new DefaultAttribute(field, DefaultAttribute.cloneArguments(this.argumentsMap))
   }
 }
