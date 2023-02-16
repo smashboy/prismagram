@@ -44,18 +44,19 @@ export abstract class ModelField<A extends FieldAttribute = FieldAttribute> exte
 
   setName(name: string) {
     // TODO: handle auto renaming in references
+    this.block.removeField(name)
+
     this.name = name
+
+    this.block.addField(this.name, this)
   }
 
   setType(type: ModelFieldType) {
     this.type = type
-    this.modifier = null
-    // this.attributes.clear()
   }
 
   setModifier(modifier: FieldModifier | null) {
     this.modifier = modifier
-    // this.attributes.clear()
   }
 
   protected _isScalarType() {

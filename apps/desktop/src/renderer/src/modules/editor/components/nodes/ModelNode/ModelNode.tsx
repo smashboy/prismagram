@@ -16,7 +16,7 @@ import { ModelNodeToolbar } from './ModelNodeToolbar'
 import { NodeCard } from '../NodeCard'
 import { BlockNameInput } from '../../inputs/BlockNameInput'
 import { NodeType } from '@shared/common/configs/diagrams'
-import { NodeDnDContext } from '../NodeDnDContext'
+import { ModelNodeEditForm } from './ModelNodeEditForm'
 
 const $store = combine({
   nodesColors: $nodesColors,
@@ -33,7 +33,7 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
     fn: (models, [name]) => models.get(name)!
   })
 
-  const { fieldNames, fields } = model
+  const { fields } = model
 
   const { selectedNodeId, nodesColors } = useStore($store)
 
@@ -49,16 +49,6 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
     updatePrismaSchemaEvent()
   }
 
-  const onDragEnd = async () => {
-    // const { active, over } = event
-    // if (!over || active.id === over.id) return
-    // const oldIndex = fieldNames.indexOf(active.id as string)
-    // const newIndex = fieldNames.indexOf(over.id as string)
-    // model._setFromArray(arrayMove(fields, oldIndex, newIndex))
-    // const updatedState = await cloneSchemaState(state)
-    // setPrismaSchemaEvent(updatedState.toString())
-  }
-
   return (
     <Stack sx={{ minWidth: 150, cursor: isSelected ? 'default' : void 0 }}>
       <ModelNodeToolbar isSelected={isSelected} selectedNodeId={selectedNodeId?.nodeId} />
@@ -69,9 +59,11 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
         type={NodeType.MODEL}
       >
         <BlockNameInput block={model} onSave={handleSaveName} />
-        <Table verticalSpacing="md" fontSize="xl">
-          <tbody>
-            <NodeDnDContext fieldNames={fieldNames} onDragEnd={onDragEnd}>
+        {isSelected ? (
+          <ModelNodeEditForm block={model} />
+        ) : (
+          <Table verticalSpacing="md" fontSize="xl">
+            <tbody>
               {fields.map((field) => (
                 <ModelNodeField
                   key={field.name}
@@ -84,9 +76,10 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
                   maxAttribuesCount={maxAttribuesCount}
                 />
               ))}
-            </NodeDnDContext>
-          </tbody>
-        </Table>
+            </tbody>
+          </Table>
+        )}
+
         <Handle
           id={name}
           type="source"

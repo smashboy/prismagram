@@ -28,13 +28,13 @@ export const EnumEditForm: React.FC<EnumEditFormProps> = ({
   const handleNewOptionInput = (event: React.ChangeEvent<HTMLInputElement>) =>
     setNewOption(event.target.value)
 
-  const handleAddNewOption = async () => {
+  const handleAddNewOption = () => {
     block.addOption(newOption)
     onCloseNewOptionField()
     updatePrismaSchemaEvent()
   }
 
-  const onDragEnd = async (event: DragEndEvent) => {
+  const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
 
     if (!over || active.id === over.id) return
