@@ -58,7 +58,7 @@ export class Enum extends Block<EnumField> {
   _clone(state: PrismaSchemaState) {
     const cloned = new Enum(this.name, state)
 
-    this.fieldsMap.forEach((field) => cloned.addField(field.name, field._clone(cloned)))
+    this.fieldsMap.forEach((field) => cloned.addField(field.value, field._clone(cloned)))
 
     return cloned
   }

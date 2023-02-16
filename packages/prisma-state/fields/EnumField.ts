@@ -19,6 +19,6 @@ export class EnumField extends Field {
   }
 
   _clone(block: Enum) {
-    return new EnumField(this.name, block)
+    return new EnumField(this.value, block)
   }
 }
