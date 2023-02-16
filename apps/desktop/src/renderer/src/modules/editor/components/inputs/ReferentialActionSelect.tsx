@@ -4,7 +4,6 @@ import { PrismaSchemaState } from 'prisma-state'
 import { RelationAttribute } from 'prisma-state/attributes'
 import { Model } from 'prisma-state/blocks'
 import { ReferentialAction, ReferentialActionOption } from 'prisma-state/constants'
-import { cloneSchemaState } from '@renderer/core/utils'
 
 interface ReferentialActionSelectProps {
   name: string
@@ -108,7 +107,7 @@ export const ReferentialActionSelect: React.FC<ReferentialActionSelectProps> = (
   const label = variant === 'onDelete' ? 'On delete' : 'On update'
   const value = variant === 'onDelete' ? attr?.onDelete : attr?.onUpdate
 
-  const handleSelect = async (value: ReferentialActionOption | null) => {
+  const handleSelect = (value: ReferentialActionOption | null) => {
     if (!attr) return
 
     if (!value) {
@@ -119,8 +118,7 @@ export const ReferentialActionSelect: React.FC<ReferentialActionSelectProps> = (
       attr.setOnUpdate(value)
     }
 
-    const updatedState = await cloneSchemaState(state)
-    onChange(updatedState)
+    onChange(state._clone())
   }
 
   return (

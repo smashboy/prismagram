@@ -166,8 +166,7 @@ export const CreateRelationModal = () => {
 
   const handleConfirmCreateRelation = async () => {
     handleCloseDialog()
-    const formatted = await invoke(EDITOR_FORMAT_SCHEMA, updatedState.toString())
-    setPrismaSchemaEvent(formatted)
+    setPrismaSchemaEvent(updatedState._clone())
   }
 
   const handleSelectChange = (field: 'source' | 'target') => (value: string | null) => {

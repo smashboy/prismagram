@@ -1,8 +1,7 @@
-import { cloneSchemaState } from '@renderer/core/utils'
 import { NodeType } from '@shared/common/configs/diagrams'
 import { attach, combine, createEffect } from 'effector'
 import { PrismaSchemaState } from 'prisma-state'
-import { $schemaState } from '../schema'
+import { $schemaState, updatePrismaSchemaEvent } from '../schema'
 import { $selectedNodeId, SelectedNodeData } from '../ui'
 
 export const removeSelectedNodeEffect = attach({
@@ -18,9 +17,7 @@ export const removeSelectedNodeEffect = attach({
         state.removeEnum(node.nodeId)
       }
 
-      const updatedState = await cloneSchemaState(state)
-
-      return updatedState
+      updatePrismaSchemaEvent()
     }
   ),
   source: combine({ node: $selectedNodeId, state: $schemaState })

@@ -10,7 +10,7 @@ import {
   BigIntField,
   RelationField,
   EnumModelField,
-  ModelField
+  ScalarField
 } from '../fields'
 import { Model } from '../blocks'
 import { ScalarType, ScalarTypeOption } from '../constants'
@@ -31,7 +31,7 @@ export const createScalarFieldFromType = (
   name: string,
   type: string,
   model: Model
-): ModelField | undefined => {
+): ScalarField | undefined => {
   const ScalarField = ScalarFieldMap[type as ScalarTypeOption]
 
   if (ScalarField) return new ScalarField(name, model)

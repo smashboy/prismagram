@@ -1,5 +1,4 @@
 import { Switch } from '@mantine/core'
-import { cloneSchemaState } from '@renderer/core/utils'
 import { PrismaSchemaState } from 'prisma-state'
 import { RelationAttribute } from 'prisma-state/attributes'
 import { Model } from 'prisma-state/blocks'
@@ -20,7 +19,7 @@ export const ModelRelationFieldOptionalSwitch: React.FC<ModelRelationFieldOption
   const field = model?.field(name)
   const attr = (field?.attributes.get('relation') as RelationAttribute) || undefined
 
-  const handleSwitchChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!field) return
 
     const modifier = event.currentTarget.checked ? 'optional' : null
@@ -29,8 +28,7 @@ export const ModelRelationFieldOptionalSwitch: React.FC<ModelRelationFieldOption
 
     if (attr) attr.fields.map((field) => model.field(field)?.setModifier(modifier))
 
-    const updatedState = await cloneSchemaState(state)
-    onChange(updatedState)
+    onChange(state._clone())
   }
 
   return (

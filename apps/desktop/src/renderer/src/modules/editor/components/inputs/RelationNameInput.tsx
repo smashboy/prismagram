@@ -1,5 +1,4 @@
 import { TextInput } from '@mantine/core'
-import { cloneSchemaState } from '@renderer/core/utils'
 import { PrismaSchemaState } from 'prisma-state'
 import { RelationAttribute } from 'prisma-state/attributes'
 import { Model } from 'prisma-state/blocks'
@@ -22,7 +21,7 @@ export const RelationNameInput: React.FC<RelationNameInputProps> = ({
 
   const attr = (field?.attributes.get('relation') as RelationAttribute) || undefined
 
-  const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const relatedFieldAttr = field!.relatedField?.attributes.get('relation') as
       | RelationAttribute
       | undefined
@@ -39,9 +38,7 @@ export const RelationNameInput: React.FC<RelationNameInputProps> = ({
       relatedFieldAttr.setName(value)
     }
 
-    const updatedState = await cloneSchemaState(state)
-
-    onChange(updatedState)
+    onChange(state._clone())
   }
 
   return (
