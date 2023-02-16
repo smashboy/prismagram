@@ -6,7 +6,6 @@ import {
   launchPrismaStudioEffect,
   layoutDiagramEffect,
   loadEditorDataEffect,
-  removeSelectedNodeEffect,
   saveDiagramEffect,
   saveSchemaEffect
 } from './effects'
@@ -38,12 +37,6 @@ sample({
   source: PrismaStudioGate.state,
   filter: (project) => !!project,
   target: launchPrismaStudioEffect
-})
-
-sample({
-  source: removeSelectedNodeEffect.doneData,
-  filter: (schema): schema is PrismaSchemaState => !!schema,
-  target: setPrismaSchemaEvent
 })
 
 sample({

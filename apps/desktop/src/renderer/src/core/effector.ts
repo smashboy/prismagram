@@ -1,4 +1,4 @@
-import { createApi, createEvent, createStore } from 'effector'
+import { createApi, createEvent, createStore, sample, Store } from 'effector'
 
 export const createBooleanStore = (defaultValue = false) => {
   const toggleEvent = createEvent<boolean | void>()
@@ -32,4 +32,37 @@ export const createMapStore = <T = unknown>() => {
   })
 
   return [$store, api] as const
+}
+
+export const createHistoryStore = <T = unknown>($store: Store<T>) => {
+  const initialState = $store.getState()
+
+  const $history = createStore({
+    states: [initialState],
+    index: 0
+  })
+
+  const $current = $history.map((history) => history.states[history.index])
+
+  const internalAPi = createApi($history, {
+    add: ({ states, index }, store: T) => ({ states: [...states, store], index: index + 1 })
+  })
+
+  const api = createApi($history, {
+    undo: ({ states, index }) => ({
+      states,
+      index: Math.max(index - 1, 0)
+    }),
+    redo: ({ states, index }) => ({ states, index: Math.min(index + 1, states.length - 1) }),
+    clear: ({ states, index }) => ({ states: [states[index]], index: 0 })
+  })
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  sample({
+    source: $store,
+    target: internalAPi.add
+  })
+
+  return [$current, api, $history] as const
 }

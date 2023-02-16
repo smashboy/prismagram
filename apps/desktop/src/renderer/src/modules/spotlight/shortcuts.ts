@@ -75,7 +75,12 @@ export const generalShortcuts: Shortcut[] = [
   }
 ]
 
-export const editorShortcuts: Shortcut[] = [
+interface EditorShortcutsProps {
+  undo: () => void
+  redo: () => void
+}
+
+export const editorShortcuts = ({ undo, redo }: EditorShortcutsProps): Shortcut[] => [
   // {
   //   keys: ['S'],
   //   isCtrlOrCmd: true,
@@ -88,14 +93,14 @@ export const editorShortcuts: Shortcut[] = [
     keys: ['Z'],
     isCtrlOrCmd: true,
     name: 'Undo',
-    onExecute: () => {},
+    onExecute: undo,
     icon: IconArrowBackUp
   },
   {
     keys: ['Y'],
     isCtrlOrCmd: true,
     name: 'Redo',
-    onExecute: () => {},
+    onExecute: redo,
     icon: IconArrowForwardUp
   },
   // {
