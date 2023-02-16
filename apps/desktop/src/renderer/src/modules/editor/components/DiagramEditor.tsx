@@ -93,9 +93,9 @@ export const DiagramEditor = () => {
 
     updatePrismaSchemaEvent()
 
-    // addNodeEvent(node)
-    // selectNodeEvent({ nodeId: id, type: type as NodeType })
-    // zoomToNode(reactFlowInstance, node)
+    addNodeEvent(node)
+    selectNodeEvent({ nodeId: id, type: type as NodeType })
+    zoomToNode(reactFlowInstance, node)
   }
 
   const onConnect: OnConnect = ({ source, target }) => {
