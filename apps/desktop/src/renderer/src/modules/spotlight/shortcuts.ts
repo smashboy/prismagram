@@ -76,14 +76,14 @@ export const generalShortcuts: Shortcut[] = [
 ]
 
 export const editorShortcuts: Shortcut[] = [
-  {
-    keys: ['S'],
-    isCtrlOrCmd: true,
-    name: 'Save changes',
-    description: 'Works only when auto saving is disabled',
-    onExecute: () => {},
-    icon: IconDeviceFloppy
-  },
+  // {
+  //   keys: ['S'],
+  //   isCtrlOrCmd: true,
+  //   name: 'Save changes',
+  //   description: 'Works only when auto saving is disabled',
+  //   onExecute: () => {},
+  //   icon: IconDeviceFloppy
+  // },
   {
     keys: ['Z'],
     isCtrlOrCmd: true,
