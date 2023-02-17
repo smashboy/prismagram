@@ -1,3 +1,5 @@
+export const EOL = '\r\n'
+
 export const ScalarType = {
   STRING: 'String',
   BOOLEAN: 'Boolean',

@@ -1,23 +1,16 @@
 import { getSchema } from '@mrleebo/prisma-ast/src/getSchema'
-import { datasource, enumBlock, model, generator } from './blocks'
 import {
-  Enum,
-  Generator,
-  Model,
+  EnumData,
+  GeneratorData,
+  ModelData,
   PrismaSchemaStateData,
-  ModelField,
-  Field,
-  Datasource,
-  ScalarField,
-  EnvField,
-  OptionsListField,
-  OptionField,
+  DatasourceData,
   PrismaSchemaStateInstance
 } from './types'
-import { EOL } from './utils/constants'
 import { extractBlockIdsByType, extractBlocksByType } from './utils/block'
-import { getFieldFunc } from './utils/_fuck'
-import { attributeToString } from './utils/parser'
+import { testSchema } from '../testSchema'
+import { EOL } from '../constants'
+import { BlockBase, Datasource, Enum, Generator, Model } from './blocks'
 
 export class PrismaSchemaState implements PrismaSchemaStateInstance {
   private readonly state: PrismaSchemaStateData
@@ -27,19 +20,19 @@ export class PrismaSchemaState implements PrismaSchemaStateInstance {
   }
 
   get datasource() {
-    return [...this.state.values()].find((block) => block.type === 'datasource') as Datasource
+    return [...this.state.values()].find((block) => block.type === 'datasource') as DatasourceData
   }
 
   get generators() {
-    return extractBlocksByType<Generator>('generator', this.state)
+    return extractBlocksByType<GeneratorData>('generator', this.state)
   }
 
   get models() {
-    return extractBlocksByType<Model>('model', this.state)
+    return extractBlocksByType<ModelData>('model', this.state)
   }
 
   get enums() {
-    return extractBlocksByType<Enum>('enum', this.state)
+    return extractBlocksByType<EnumData>('enum', this.state)
   }
 
   get modelIds() {
@@ -59,44 +52,44 @@ export class PrismaSchemaState implements PrismaSchemaStateInstance {
   }
 
   fromString(schema: string) {
-    console.log('START')
+    console.log('START NEW')
     console.time()
 
     const { list } = getSchema(schema)
 
     for (const block of list) {
       if (block.type === 'datasource') {
-        const dtsrc = datasource(block.name)
-        dtsrc._parse(block.assignments)
-        this.state.set(dtsrc.block.name, dtsrc.block)
+        const datasource = new Datasource(block.name, this)
+        datasource._parse(block.assignments)
+        this.state.set(datasource.name, datasource._data())
         continue
       }
 
       if (block.type === 'generator') {
-        const asgm = generator(block.name)
-        asgm._parse(block.assignments)
-        this.state.set(asgm.block.name, asgm.block)
+        const generator = new Generator(block.name, this)
+        generator._parse(block.assignments)
+        this.state.set(generator.name, generator._data())
         continue
       }
 
       if (block.type === 'model') {
-        const mdl = model(block.name, this, this.model(block.name))
-        this.state.set(mdl.block.name, mdl.block)
+        const model = new Model(block.name, this)
+        this.state.set(model.name, model._data())
         continue
       }
 
       if (block.type === 'enum') {
-        const enm = enumBlock(block.name)
-        enm._parse(block.enumerators)
-        this.state.set(enm.block.name, enm.block)
+        const enumItem = new Enum(block.name, this)
+        enumItem._parse(block.enumerators)
+        this.state.set(enumItem.name, enumItem._data())
       }
     }
 
     for (const block of list) {
       if (block.type === 'model') {
-        const mdl = model(block.name, this, this.model(block.name))
-        mdl._parse(block)
-        this.state.set(mdl.block.name, mdl.block)
+        const model = new Model(block.name, this)
+        model._parse(block)
+        this.state.set(model.name, model._data())
       }
     }
 
@@ -104,24 +97,7 @@ export class PrismaSchemaState implements PrismaSchemaStateInstance {
   }
 
   toString() {
-    const _blockFieldToString = (
-      block: Datasource | Generator | Enum | Model,
-      field: ModelField | ScalarField | OptionField | EnvField | OptionsListField | Field
-    ) => getFieldFunc(block, field, this.enumIds, this.modelIds)._toString()
-
-    const _blockToString = (block: Datasource | Generator | Model | Enum) => `${block.type} ${
-      block.name
-    } {
-      ${[...block.fields.values()].map((field) => _blockFieldToString(block, field)).join(EOL)}
-
-      ${
-        block.type === 'model' && block.attributes.size > 0
-          ? [...block.attributes.values()].map((attr) => attributeToString(attr)).join(EOL)
-          : ''
-      }
-    }`
-
-    return `${[...this.state.values()].map(_blockToString).join(EOL)}`
+    return `${[...this.state.values()].map((block) => BlockBase._toString(block, this)).join(EOL)}`
   }
 
   _clone() {
@@ -131,3 +107,9 @@ export class PrismaSchemaState implements PrismaSchemaStateInstance {
 
 export const createPrismaSchemaState = (state?: PrismaSchemaStateData) =>
   new PrismaSchemaState(state)
+
+// const state = createPrismaSchemaState()
+
+// state.fromString(testSchema)
+
+// console.log({ state, str: state.toString() })

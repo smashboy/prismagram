@@ -1,64 +1,82 @@
 import { ScalarTypeOption } from '../../constants'
 import {
-  enumModelField,
-  envField,
-  optionField,
-  optionsListField,
-  relationField,
-  scalarField
+  EnumField,
+  EnumModelField,
+  EnvField,
+  ModelFieldBase,
+  OptionField,
+  OptionsListField,
+  RelationField,
+  ScalarField
 } from '../fields'
-import { Datasource, Generator, ModelField, ScalarField } from '../types'
+import {
+  DatasourceData,
+  EnumData,
+  EnvFieldData,
+  GeneratorData,
+  ModelData,
+  OptionFieldData,
+  OptionsListFieldData,
+  ScalarFieldData,
+  RelationFieldData,
+  EnumFieldData,
+  EnumModelFieldData
+} from '../types'
+
+const settingsFieldMap = {
+  env: EnvField,
+  option: OptionField,
+  list: OptionsListField
+}
+
+export const fieldToString = (
+  block: DatasourceData | GeneratorData | EnumData | ModelData,
+  field:
+    | RelationFieldData
+    | ScalarFieldData
+    | OptionFieldData
+    | EnvFieldData
+    | OptionsListFieldData
+    | EnumFieldData
+    | EnumModelFieldData,
+  enumIds: string[],
+  modelIds: string[]
+) => {
+  if (block.type === 'datasource' || block.type === 'generator') {
+    const Field = settingsFieldMap[field.type as keyof typeof settingsFieldMap]
+
+    return Field._toString(field)
+  }
+
+  if (block.type === 'enum') {
+    return EnumField._toString(field as EnumFieldData)
+  }
+
+  const fieldHelper = createFieldFromType(
+    field.name,
+    field.type,
+    block.name,
+    enumIds,
+    modelIds,
+    field as RelationFieldData | ScalarFieldData | EnumModelFieldData
+  )
+
+  return ModelFieldBase._toString(fieldHelper._data(), fieldHelper.displayType)
+}
 
 export const createFieldFromType = (
   name: string,
   type: string,
+  blockId: string,
   enumIds: string[],
   modelIds: string[],
-  field?: ModelField | ScalarField
+  field?: RelationFieldData | ScalarFieldData | EnumModelFieldData
 ) => {
-  if (enumIds.indexOf(type) > -1) return enumModelField(name, type, field)
+  if (enumIds.indexOf(type) > -1)
+    return new EnumModelField(name, type, blockId, field as EnumModelFieldData)
 
-  if (modelIds.indexOf(type) > -1) return relationField(name, type, field)
+  if (modelIds.indexOf(type) > -1)
+    return new RelationField(name, type, blockId, field as RelationFieldData)
 
-  return scalarField(name, type as ScalarTypeOption, field as ScalarField)
+  return new ScalarField(name, type as ScalarTypeOption, blockId, field as ScalarFieldData)
 }
-
-export const addOptionField = (key: string, value: string, block: Generator | Datasource) => {
-  const { field } = optionField(key)
-  field.value = value
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  block.fields.set(key, field)
-}
-
-export const addEnvField = (
-  key: string,
-  url: string,
-  isEnv = true,
-  block: Generator | Datasource
-) => {
-  const { field } = envField(key)
-  field.value = url
-  field.isEnv = isEnv
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  block.fields.set(key, field)
-}
-
-export const addOptionsListField = (
-  key: string,
-  values: string[],
-  block: Generator | Datasource
-) => {
-  const { field } = optionsListField(key)
-  values.forEach((value) => field.options.add(value))
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  block.fields.set(key, field)
-}
-
-export const createModelFieldDisplayType = (field: ScalarField | ModelField) =>
-  `${field.type}${field.modifier === 'list' ? '[]' : field.modifier === 'optional' ? '?' : ''}`

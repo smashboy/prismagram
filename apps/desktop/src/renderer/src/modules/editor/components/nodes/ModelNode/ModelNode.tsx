@@ -17,6 +17,7 @@ import { NodeCard } from '../NodeCard'
 import { BlockNameInput } from '../../inputs/BlockNameInput'
 import { NodeType } from '@shared/common/configs/diagrams'
 import { ModelNodeEditForm } from './ModelNodeEditForm'
+import { Model } from 'prisma-state/_new/blocks'
 
 const $store = combine({
   nodesColors: $nodesColors,
@@ -27,25 +28,29 @@ const $store = combine({
 export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }) => {
   const { sourceHandlers, targetHandlers } = data
 
-  const model = useStoreMap({
+  const { selectedNodeId, nodesColors, state } = useStore($store)
+
+  const modelData = useStoreMap({
     store: $schemaModels,
     keys: [name],
     fn: (models, [name]) => models.get(name)!
   })
 
-  const { fields } = model
+  const model = new Model(modelData.name, state, modelData)
 
-  const { selectedNodeId, nodesColors } = useStore($store)
+  const { fields } = model
 
   const connectionNodeId = useFlowStore((state) => state.connectionNodeId)
 
   const isSelected = selectedNodeId?.nodeId === name
   const isTarget = connectionNodeId && connectionNodeId !== name
 
-  const maxAttribuesCount = Math.max(...[...new Set(fields.map((field) => field.attributes.size))])
+  const maxAttribuesCount = Math.max(
+    ...[...new Set([...fields.values()].map((field) => field.attributes.size))]
+  )
 
   const handleSaveName = (name: string) => {
-    model.setName(name)
+    // model.setName(name)
     updatePrismaSchemaEvent()
   }
 
@@ -59,12 +64,12 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
         type={NodeType.MODEL}
       >
         <BlockNameInput block={model} onSave={handleSaveName} />
-        {isSelected ? (
+        {/* {isSelected ? (
           <ModelNodeEditForm block={model} />
         ) : (
           <Table verticalSpacing="md" fontSize="xl">
             <tbody>
-              {fields.map((field) => (
+              {[...fields.values()].map((field) => (
                 <ModelNodeField
                   key={field.name}
                   fieldId={field.name}
@@ -78,8 +83,23 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
               ))}
             </tbody>
           </Table>
-        )}
-
+        )} */}
+        <Table verticalSpacing="md" fontSize="xl">
+          <tbody>
+            {[...fields.values()].map((field) => (
+              <ModelNodeField
+                key={field.name}
+                fieldId={field.name}
+                field={field}
+                isSelected={isSelected}
+                nodesColors={nodesColors}
+                sourceHandlers={sourceHandlers}
+                targetHandlers={targetHandlers}
+                maxAttribuesCount={maxAttribuesCount}
+              />
+            ))}
+          </tbody>
+        </Table>
         <Handle
           id={name}
           type="source"

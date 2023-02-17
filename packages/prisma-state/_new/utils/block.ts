@@ -1,4 +1,11 @@
-import { BlockType, Datasource, Enum, Generator, Model, PrismaSchemaStateData } from '../types'
+import {
+  BlockType,
+  DatasourceData,
+  EnumData,
+  GeneratorData,
+  ModelData,
+  PrismaSchemaStateData
+} from '../types'
 
 export const extractBlockIdsByType = (type: BlockType, state: PrismaSchemaStateData) => {
   const ids: string[] = []
@@ -10,7 +17,9 @@ export const extractBlockIdsByType = (type: BlockType, state: PrismaSchemaStateD
   return ids
 }
 
-export const extractBlocksByType = <B extends Datasource | Enum | Generator | Model>(
+export const extractBlocksByType = <
+  B extends DatasourceData | EnumData | GeneratorData | ModelData
+>(
   type: BlockType,
   list: PrismaSchemaStateData
 ): Map<string, B> => {

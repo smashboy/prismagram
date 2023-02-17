@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
-import { Enum, Model } from 'prisma-state/blocks'
 import { Group, Text, ThemeIcon } from '@mantine/core'
 import { IconBorderAll, IconLayoutList } from '@tabler/icons'
 import { $nodesColors, $selectedNodeId } from '../../stores'
 import { ConfirmInput } from '@renderer/core/components'
+import { Enum, Model } from 'prisma-state/_new/blocks'
 
 interface BlockNameInputProps {
   block?: Model | Enum

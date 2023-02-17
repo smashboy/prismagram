@@ -1,12 +1,12 @@
-import { PrismaSchemaState } from 'prisma-state'
 import { Viewport } from 'reactflow'
 import { createEvent, createStore } from 'effector'
 import { Diagram, Node } from '@shared/common/models/Diagram'
 import { RelationType, RelationTypeOption } from 'prisma-state/constants'
 import { prismaSchemaState2Diagram } from './utils'
+import { PrismaSchemaStateInstance } from 'prisma-state/_new/types'
 
 export const setDiagramEvent = createEvent<Diagram>()
-export const prismaState2DiagramEvent = createEvent<PrismaSchemaState>()
+export const prismaState2DiagramEvent = createEvent<PrismaSchemaStateInstance>()
 export const nodesChangeEvent = createEvent<Node[]>()
 export const addNodeEvent = createEvent<Node>()
 export const setSelectedRelationTypeEvent = createEvent<RelationTypeOption>()

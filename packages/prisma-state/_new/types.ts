@@ -21,94 +21,102 @@ export type AttributeFunctionType =
   | 'dbgenerated'
 export type FieldModifier = 'optional' | 'list' | null
 
-export type PrismaSchemaStateData = Map<string, Datasource | Generator | Enum | Model>
+export type PrismaSchemaStateData = Map<
+  string,
+  DatasourceData | GeneratorData | EnumData | ModelData
+>
 
 export interface AttributeFunction {
   type: AttributeFunctionType
   isAttributeFunction: true
 }
 
-export interface Block<T extends string, F extends Field, K = string> {
+export interface BlockData<T extends string, F extends FieldData, K = string> {
   readonly name: string
   readonly type: T
   readonly fields: Map<K, F>
 }
 
-export interface Field {
+export interface FieldData {
   readonly name: string
   readonly type: string
+  readonly blockId: string
 }
 
-export interface Attribute<T extends string> {
+export interface AttributeData<T extends string> {
   readonly type: T
-  readonly _prefix: '@' | '@@'
   readonly arguments: Map<string, unknown>
 }
 
-export type BlockAttribute = Attribute<BlockAttributeType>
+export type BlockAttributeData = AttributeData<BlockAttributeType>
 
-export type FieldAttribute = Attribute<FieldAttributeType>
+export type FieldAttributeData = AttributeData<FieldAttributeType>
 
-export type Datasource = Block<
+export type DatasourceData = BlockData<
   'datasource',
-  EnvField | OptionField,
+  EnvFieldData | OptionFieldData,
   'provider' | 'url' | 'shadowDatabaseUrl' | 'relationMode'
 >
 
-export type Generator = Block<
+export type GeneratorData = BlockData<
   'generator',
-  EnvField | OptionField,
+  EnvFieldData | OptionFieldData,
   'provider' | 'output' | 'previewFeatures' | 'binaryTargets' | 'engineType'
 >
 
-export interface EnvField extends Field {
+export interface EnvFieldData extends FieldData {
   value: string
   isEnv: boolean
   readonly type: 'env'
 }
 
-export interface OptionField extends Field {
+export interface OptionFieldData extends FieldData {
   value: string
   readonly type: 'option'
 }
 
-export interface OptionsListField extends Field {
+export interface OptionsListFieldData extends FieldData {
   readonly options: Set<string>
   readonly type: 'list'
 }
 
-export type Enum = Block<'enum', Field>
+export type EnumData = BlockData<'enum', FieldData>
 
-export interface Model extends Block<'model', RelationField | ScalarField | EnumModelField> {
-  readonly attributes: Map<string, BlockAttribute>
+export interface EnumFieldData extends FieldData {
+  readonly type: 'enumOption'
 }
 
-export interface ModelField extends Field {
+export interface ModelData
+  extends BlockData<'model', RelationFieldData | ScalarFieldData | EnumModelFieldData> {
+  readonly attributes: Map<string, BlockAttributeData>
+}
+
+export interface ModelFieldData extends FieldData {
   modifier: FieldModifier
-  readonly attributes: Map<string, FieldAttribute>
+  readonly attributes: Map<string, FieldAttributeData>
 }
 
-export interface RelationField extends ModelField {
+export interface RelationFieldData extends ModelFieldData {
   readonly isRelationField: true
 }
 
-export interface EnumModelField extends ModelField {
+export interface EnumModelFieldData extends ModelFieldData {
   readonly isEnumField: true
 }
 
-export interface ScalarField extends ModelField {
+export interface ScalarFieldData extends ModelFieldData {
   readonly type: ScalarTypeOption
 }
 
 export interface PrismaSchemaStateInstance {
-  readonly datasource: Datasource
-  readonly generators: Map<string, Generator>
-  readonly models: Map<string, Model>
-  readonly enums: Map<string, Enum>
+  readonly datasource: DatasourceData
+  readonly generators: Map<string, GeneratorData>
+  readonly models: Map<string, ModelData>
+  readonly enums: Map<string, EnumData>
   readonly modelIds: string[]
   readonly enumIds: string[]
-  model(id: string): Model
-  enum(id: string): Enum
+  model(id: string): ModelData
+  enum(id: string): EnumData
   toString(): string
   fromString(schema: string): void
   _clone(): PrismaSchemaStateInstance
