@@ -34,6 +34,10 @@ export abstract class BlockBase<B extends DatasourceData | GeneratorData | EnumD
     return [...this.data.fields.keys()]
   }
 
+  removeField(fieldId: string) {
+    this.data.fields.delete(fieldId)
+  }
+
   _data() {
     return this.data
   }
