@@ -3,9 +3,12 @@ import { AttributeBase } from '../attributes'
 import {
   DatasourceData,
   EnumData,
+  EnumModelFieldData,
   GeneratorData,
   ModelData,
-  PrismaSchemaStateInstance
+  PrismaSchemaStateInstance,
+  RelationFieldData,
+  ScalarFieldData
 } from '../types'
 import { fieldToString } from '../utils/field'
 
@@ -36,6 +39,11 @@ export abstract class BlockBase<B extends DatasourceData | GeneratorData | EnumD
 
   removeField(fieldId: string) {
     this.data.fields.delete(fieldId)
+  }
+
+  _setFromArray(fields: Array<RelationFieldData | ScalarFieldData | EnumModelFieldData>) {
+    this.data.fields.clear()
+    fields.forEach((field) => this.data.fields.set(field.name as unknown as unknown as K, field))
   }
 
   _data() {
