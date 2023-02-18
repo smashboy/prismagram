@@ -35,8 +35,6 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
 
   const enumItem = new Enum(enumData.name, state, enumData)
 
-  const { fieldNames } = enumItem
-
   const isSelected = selectedNodeId?.nodeId === name
 
   const handleSaveName = (name: string) => {
@@ -59,7 +57,7 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
       >
         <Stack>
           <BlockNameInput block={enumData} onSave={handleSaveName} />
-          {/* {isSelected ? (
+          {isSelected ? (
             <EnumEditForm
               block={enumItem}
               isOpenNewOptionField={isOpenNewOptionField}
@@ -68,23 +66,14 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
           ) : (
             <Table verticalSpacing="md" fontSize="xl">
               <tbody>
-                {fieldNames.map((fieldName) => (
+                {enumItem.fieldNames.map((fieldName) => (
                   <tr key={fieldName}>
                     <td>{fieldName}</td>
                   </tr>
                 ))}
               </tbody>
             </Table>
-          )} */}
-          <Table verticalSpacing="md" fontSize="xl">
-            <tbody>
-              {fieldNames.map((fieldName) => (
-                <tr key={fieldName}>
-                  <td>{fieldName}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+          )}
         </Stack>
         <Handle
           id={name}

@@ -5,16 +5,12 @@ import {
   toggleSettingsModalEvent
 } from '@renderer/stores/ui/modals'
 import {
-  IconDeviceFloppy,
   IconList,
   IconPlus,
   IconPower,
   IconSettings,
   IconArrowBackUp,
   IconArrowForwardUp,
-  IconDatabase,
-  IconCode,
-  IconSchema,
   IconBoxMargin,
   IconRelationOneToOne,
   IconRelationManyToMany,
@@ -29,13 +25,11 @@ import {
 import { RelationType } from 'prisma-state/constants'
 import { ReactFlowInstance } from 'reactflow'
 import {
-  changeEditorViewEvent,
   layoutDiagramEffect,
   removeSelectedNodeEffect,
   resetSelectedNodeEvent,
   setSelectedRelationTypeEvent
 } from '../editor'
-import { EditorView } from '../editor/config'
 import { Shortcut } from './types'
 
 export const generalShortcuts: Shortcut[] = [
@@ -43,7 +37,7 @@ export const generalShortcuts: Shortcut[] = [
     keys: ['K'],
     isCtrlOrCmd: true,
     name: 'Toggle spotlight',
-    onExecute: () => openSpotlight()
+    onExecute: openSpotlight
   },
   {
     keys: ['Alt', 'N'],
@@ -102,7 +96,7 @@ export const editorShortcuts = ({ undo, redo }: EditorShortcutsProps): Shortcut[
     name: 'Redo',
     onExecute: redo,
     icon: IconArrowForwardUp
-  },
+  }
   // {
   //   keys: ['F'],
   //   isCtrlOrCmd: true,
@@ -111,27 +105,27 @@ export const editorShortcuts = ({ undo, redo }: EditorShortcutsProps): Shortcut[
   //   onExecute: () => {},
   //   icon: IconSearch
   // },
-  {
-    keys: ['D'],
-    isCtrlOrCmd: true,
-    name: 'Open diagram editor',
-    onExecute: () => changeEditorViewEvent(EditorView.DIAGRAM),
-    icon: IconSchema
-  },
-  {
-    keys: ['T'],
-    isCtrlOrCmd: true,
-    name: 'Open schema editor',
-    onExecute: () => changeEditorViewEvent(EditorView.SCHEMA),
-    icon: IconCode
-  },
-  {
-    keys: ['P'],
-    isCtrlOrCmd: true,
-    name: 'Open prisma studio',
-    onExecute: () => changeEditorViewEvent(EditorView.PRISMA_STUDIO),
-    icon: IconDatabase
-  }
+  // {
+  //   keys: ['D'],
+  //   isCtrlOrCmd: true,
+  //   name: 'Open diagram editor',
+  //   onExecute: () => changeEditorViewEvent(EditorView.DIAGRAM),
+  //   icon: IconSchema
+  // },
+  // {
+  //   keys: ['T'],
+  //   isCtrlOrCmd: true,
+  //   name: 'Open schema editor',
+  //   onExecute: () => changeEditorViewEvent(EditorView.SCHEMA),
+  //   icon: IconCode
+  // },
+  // {
+  //   keys: ['P'],
+  //   isCtrlOrCmd: true,
+  //   name: 'Open prisma studio',
+  //   onExecute: () => changeEditorViewEvent(EditorView.PRISMA_STUDIO),
+  //   icon: IconDatabase
+  // }
 ]
 
 export const diagramEditorShortcuts = (flow: ReactFlowInstance): Shortcut[] => [

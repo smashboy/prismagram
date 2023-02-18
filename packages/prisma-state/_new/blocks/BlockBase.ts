@@ -34,6 +34,10 @@ export abstract class BlockBase<
     return this.data.fields
   }
 
+  get fieldsArray() {
+    return [...this.data.fields.values()]
+  }
+
   get fieldNames() {
     return [...this.data.fields.keys()]
   }

@@ -49,6 +49,10 @@ export class Enum extends BlockBase<EnumData, EnumFieldData> {
     super.setName(name)
   }
 
+  addOption(name: string) {
+    this.data.fields.set(name, new EnumField(name, this.name)._data())
+  }
+
   _parse(list: AstEnum['enumerators'] = []) {
     for (const item of list) {
       if (item.type !== 'enumerator') continue

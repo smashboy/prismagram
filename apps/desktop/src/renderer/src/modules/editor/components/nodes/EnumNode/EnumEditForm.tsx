@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Stack } from '@mantine/core'
 import { ConfirmInput } from '@renderer/core/components'
-import { updatePrismaSchemaEvent } from '@renderer/modules/editor/stores'
+import { $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor/stores'
 import { NodeDnDContext } from '../NodeDnDContext'
 import { EnumNodeEditField } from './EnumNodeEditField'
-import { Enum } from 'prisma-state/blocks'
 import { DragEndEvent } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
+import { Enum } from 'prisma-state/_new/blocks'
+import { EnumFieldData } from 'prisma-state/_new/types'
+import { useStore } from 'effector-react'
 
 interface EnumEditFormProps {
   block: Enum
@@ -19,7 +21,7 @@ export const EnumEditForm: React.FC<EnumEditFormProps> = ({
   isOpenNewOptionField,
   onCloseNewOptionField
 }) => {
-  const { fieldNames, fields } = block
+  const state = useStore($schemaState)
 
   const [newOption, setNewOption] = useState('')
 
@@ -31,7 +33,7 @@ export const EnumEditForm: React.FC<EnumEditFormProps> = ({
   const handleAddNewOption = () => {
     block.addOption(newOption)
     onCloseNewOptionField()
-    updatePrismaSchemaEvent()
+    setPrismaSchemaEvent(state._clone())
   }
 
   const onDragEnd = (event: DragEndEvent) => {
@@ -39,19 +41,19 @@ export const EnumEditForm: React.FC<EnumEditFormProps> = ({
 
     if (!over || active.id === over.id) return
 
-    const oldIndex = fieldNames.indexOf(active.id as string)
-    const newIndex = fieldNames.indexOf(over.id as string)
+    const oldIndex = block.fieldNames.indexOf(active.id as string)
+    const newIndex = block.fieldNames.indexOf(over.id as string)
 
-    block._setFromArray(arrayMove(fields, oldIndex, newIndex))
+    block._setFromArray(arrayMove(block.fieldsArray as EnumFieldData[], oldIndex, newIndex))
 
-    updatePrismaSchemaEvent()
+    setPrismaSchemaEvent(state._clone())
   }
 
   return (
     <Stack>
-      <NodeDnDContext fieldNames={fieldNames} onDragEnd={onDragEnd}>
-        {fields.map((field) => (
-          <EnumNodeEditField key={field.name} block={block} field={field} />
+      <NodeDnDContext fieldNames={block.fieldNames} onDragEnd={onDragEnd}>
+        {block.fieldsArray.map((field) => (
+          <EnumNodeEditField key={field.name} block={block} field={field as EnumFieldData} />
         ))}
         {isOpenNewOptionField && (
           <ConfirmInput

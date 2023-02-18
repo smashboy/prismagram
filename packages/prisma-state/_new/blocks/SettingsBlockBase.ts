@@ -42,7 +42,7 @@ export abstract class SettingsBlockBase<B extends DatasourceData | GeneratorData
         // @ts-ignore
         if (!value?.params) field.toggleIsEnv(false)
 
-        this.fields.set(field.name, field._data())
+        this.data.fields.set(field.name, field._data())
         continue
       }
 
@@ -53,14 +53,14 @@ export abstract class SettingsBlockBase<B extends DatasourceData | GeneratorData
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         optionsField._parse(value.args)
-        this.fields.set(optionsField.name, optionsField._data())
+        this.data.fields.set(optionsField.name, optionsField._data())
         continue
       }
 
       const optionField = new OptionField(key)
 
       optionField._parse(value as string)
-      this.fields.set(optionField.name, optionField._data())
+      this.data.fields.set(optionField.name, optionField._data())
     }
   }
 }

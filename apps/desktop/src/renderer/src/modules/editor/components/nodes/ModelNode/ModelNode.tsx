@@ -1,7 +1,6 @@
 import { combine } from 'effector'
 import { useStore, useStoreMap } from 'effector-react'
 import { Handle, NodeProps, Position, useStore as useFlowStore } from 'reactflow'
-
 import { Stack, Table } from '@mantine/core'
 import { ModelNodeData } from '@shared/common/models/Diagram'
 import {
@@ -38,15 +37,13 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
 
   const model = new Model(modelData.name, state, modelData)
 
-  const { fields } = model
-
   const connectionNodeId = useFlowStore((state) => state.connectionNodeId)
 
   const isSelected = selectedNodeId?.nodeId === name
   const isTarget = connectionNodeId && connectionNodeId !== name
 
   const maxAttribuesCount = Math.max(
-    ...[...new Set([...fields.values()].map((field) => field.attributes.size))]
+    ...[...new Set(model.fieldsArray.map((field) => field.attributes.size))]
   )
 
   const handleSaveName = (name: string) => {
@@ -86,7 +83,7 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
         )} */}
         <Table verticalSpacing="md" fontSize="xl">
           <tbody>
-            {[...fields.values()].map((field) => (
+            {model.fieldsArray.map((field) => (
               <ModelNodeField
                 key={field.name}
                 fieldId={field.name}
