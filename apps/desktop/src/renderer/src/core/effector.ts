@@ -42,7 +42,7 @@ export const createHistoryStore = <T = unknown>($store: Store<T>) => {
     index: 0
   })
 
-  const $current = $history.map((history) => history.states[history.index])
+  const $current = $history.map(({ states, index }) => states[index])
 
   const internalAPi = createApi($history, {
     add: ({ states, index }, store: T) => {
