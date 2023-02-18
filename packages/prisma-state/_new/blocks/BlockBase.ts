@@ -1,19 +1,9 @@
 import { EOL } from '../../constants'
 import { AttributeBase } from '../attributes'
-import {
-  DatasourceData,
-  EnumData,
-  EnumModelFieldData,
-  GeneratorData,
-  ModelData,
-  PrismaSchemaStateInstance,
-  RelationFieldData,
-  ScalarFieldData,
-  TopLevelFieldData
-} from '../types'
+import { PrismaSchemaStateInstance, TopLevelBlockData, TopLevelFieldData } from '../types'
 import { fieldToString } from '../utils/field'
 
-export abstract class BlockBase<B extends DatasourceData | GeneratorData | EnumData | ModelData> {
+export abstract class BlockBase<B extends TopLevelBlockData, F extends TopLevelFieldData> {
   protected data: B
   protected state: PrismaSchemaStateInstance
 
@@ -38,22 +28,22 @@ export abstract class BlockBase<B extends DatasourceData | GeneratorData | EnumD
     return [...this.data.fields.keys()]
   }
 
-  addField(fieldId: string, data: TopLevelFieldData) {
+  addField(fieldId: string, data: F) {
     this.data.fields.set(fieldId, data)
     return data
   }
 
-  field<F extends TopLevelFieldData>(fieldId: string) {
-    return this.data.fields.get(fieldId) as F
+  field<FF extends F>(fieldId: string) {
+    return this.data.fields.get(fieldId) as FF
   }
 
   removeField(fieldId: string) {
     this.data.fields.delete(fieldId)
   }
 
-  _setFromArray(fields: Array<RelationFieldData | ScalarFieldData | EnumModelFieldData>) {
+  _setFromArray(fields: Array<F>) {
     this.data.fields.clear()
-    fields.forEach((field) => this.data.fields.set(field.name as unknown as unknown as K, field))
+    fields.forEach((field) => this.data.fields.set(field.name, field))
   }
 
   _data() {
@@ -62,10 +52,7 @@ export abstract class BlockBase<B extends DatasourceData | GeneratorData | EnumD
 
   abstract _parse(data: unknown): void
 
-  static _toString(
-    data: DatasourceData | GeneratorData | EnumData | ModelData,
-    state: PrismaSchemaStateInstance
-  ) {
+  static _toString(data: TopLevelBlockData, state: PrismaSchemaStateInstance) {
     const { type, name, fields } = data
 
     const { enumIds, modelIds } = state

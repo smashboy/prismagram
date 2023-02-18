@@ -12,15 +12,13 @@ import {
 import {
   DatasourceData,
   EnumData,
-  EnvFieldData,
   GeneratorData,
   ModelData,
-  OptionFieldData,
-  OptionsListFieldData,
   ScalarFieldData,
   RelationFieldData,
   EnumFieldData,
-  EnumModelFieldData
+  EnumModelFieldData,
+  TopLevelFieldData
 } from '../types'
 
 const settingsFieldMap = {
@@ -31,14 +29,7 @@ const settingsFieldMap = {
 
 export const fieldToString = (
   block: DatasourceData | GeneratorData | EnumData | ModelData,
-  field:
-    | RelationFieldData
-    | ScalarFieldData
-    | OptionFieldData
-    | EnvFieldData
-    | OptionsListFieldData
-    | EnumFieldData
-    | EnumModelFieldData,
+  field: TopLevelFieldData,
   enumIds: string[],
   modelIds: string[]
 ) => {

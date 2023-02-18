@@ -3,12 +3,19 @@ import {
   Generator as AstGenerator
 } from '@mrleebo/prisma-ast/src/getSchema'
 import { EnvField, OptionField, OptionsListField } from '../fields'
-import { DatasourceData, GeneratorData } from '../types'
+import {
+  DatasourceData,
+  EnvFieldData,
+  GeneratorData,
+  OptionFieldData,
+  OptionsListFieldData
+} from '../types'
 import { BlockBase } from './BlockBase'
 
-export abstract class SettingsBlockBase<
-  B extends DatasourceData | GeneratorData
-> extends BlockBase<B> {
+export abstract class SettingsBlockBase<B extends DatasourceData | GeneratorData> extends BlockBase<
+  B,
+  OptionFieldData | EnvFieldData | OptionsListFieldData
+> {
   static generatorEnvFields = ['provider', 'output']
   static datasourceEnvFields = ['url', 'shadowDatabaseUrl']
 

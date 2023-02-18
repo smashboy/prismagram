@@ -1,9 +1,9 @@
 import { Enum as AstEnum } from '@mrleebo/prisma-ast/src/getSchema'
 import { BlockBase } from './BlockBase'
-import { EnumData, PrismaSchemaStateInstance } from '../types'
+import { EnumData, EnumFieldData, PrismaSchemaStateInstance } from '../types'
 import { EnumField } from '../fields'
 
-export class Enum extends BlockBase<EnumData> {
+export class Enum extends BlockBase<EnumData, EnumFieldData> {
   constructor(
     name: string,
     state: PrismaSchemaStateInstance,

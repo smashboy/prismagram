@@ -122,6 +122,8 @@ export interface PrismaSchemaStateInstance {
   _clone(): PrismaSchemaStateInstance
 }
 
+export type TopLevelBlockData = ModelData | EnumData | DatasourceData | GeneratorData
+
 export type TopLevelFieldData =
   | RelationFieldData
   | ScalarFieldData

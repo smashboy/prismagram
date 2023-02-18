@@ -1,6 +1,12 @@
 import type { Model as AstModel } from '@mrleebo/prisma-ast/src/getSchema'
 import { BlockBase } from './BlockBase'
-import { ModelData, PrismaSchemaStateInstance, RelationFieldData } from '../types'
+import {
+  EnumModelFieldData,
+  ModelData,
+  PrismaSchemaStateInstance,
+  RelationFieldData,
+  ScalarFieldData
+} from '../types'
 import {
   IdBlockAttribute,
   IgnoreBlockAttribute,
@@ -15,7 +21,10 @@ interface ModelReference {
   fields: RelationFieldData[]
 }
 
-export class Model extends BlockBase<ModelData> {
+export class Model extends BlockBase<
+  ModelData,
+  ScalarFieldData | RelationFieldData | EnumModelFieldData
+> {
   static attributesMap = {
     id: IdBlockAttribute,
     ignore: IgnoreBlockAttribute,

@@ -1,23 +1,6 @@
-import {
-  EnumFieldData,
-  EnumModelFieldData,
-  EnvFieldData,
-  OptionFieldData,
-  RelationFieldData,
-  ScalarFieldData,
-  OptionsListFieldData
-} from '../types'
+import { TopLevelFieldData } from '../types'
 
-export abstract class FieldBase<
-  T extends
-    | EnvFieldData
-    | OptionFieldData
-    | OptionsListFieldData
-    | RelationFieldData
-    | ScalarFieldData
-    | EnumModelFieldData
-    | EnumFieldData
-> {
+export abstract class FieldBase<T extends TopLevelFieldData> {
   protected data: T
 
   constructor(data: T) {
