@@ -1,7 +1,7 @@
 import { createHistoryStore } from '@renderer/core/effector'
 import { createEvent, createStore } from 'effector'
 import { createPrismaSchemaState } from 'prisma-state/_new/state'
-import { DatasourceData, PrismaSchemaStateData } from 'prisma-state/_new/types'
+import { DatasourceData } from 'prisma-state/_new/types'
 
 export const setPrismaSchemaEvent = createEvent<ReturnType<typeof createPrismaSchemaState>>()
 export const updatePrismaSchemaEvent = createEvent()
