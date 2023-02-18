@@ -8,6 +8,9 @@ import { Spotlight, useGeneralShortcuts } from './modules/spotlight'
 import 'reactflow/dist/style.css'
 import './transports'
 
+import 'prisma-state/_new/state'
+import 'prisma-state/PrismaSchemaState'
+
 function App() {
   useGeneralShortcuts()
 

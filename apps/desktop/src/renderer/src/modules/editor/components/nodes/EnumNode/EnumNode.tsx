@@ -5,6 +5,7 @@ import { useStore, useStoreMap } from 'effector-react'
 import { Stack, Table } from '@mantine/core'
 import {
   $schemaEnums,
+  $schemaState,
   $selectedNodeId,
   updatePrismaSchemaEvent
 } from '@renderer/modules/editor/stores'
@@ -14,28 +15,32 @@ import { BlockNameInput } from '../../inputs/BlockNameInput'
 import { EnumNodeToolbar } from './EnumNodeToolbar'
 import { NodeType } from '@shared/common/configs/diagrams'
 import { EnumEditForm } from './EnumEditForm'
+import { Enum } from 'prisma-state/_new/blocks'
 
 const $store = combine({
-  selectedNodeId: $selectedNodeId
+  selectedNodeId: $selectedNodeId,
+  state: $schemaState
 })
 
 export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
-  const { selectedNodeId } = useStore($store)
+  const { selectedNodeId, state } = useStore($store)
 
   const [isOpenNewOptionField, toggleIsOpenNewOptionField] = useBoolean(false)
 
-  const enumItem = useStoreMap({
+  const enumData = useStoreMap({
     store: $schemaEnums,
     keys: [name],
     fn: (enums, [name]) => enums.get(name)!
   })
+
+  const enumItem = new Enum(enumData.name, state, enumData)
 
   const { fieldNames } = enumItem
 
   const isSelected = selectedNodeId?.nodeId === name
 
   const handleSaveName = (name: string) => {
-    enumItem.setName(name)
+    // enumItem.setName(name)
     updatePrismaSchemaEvent()
   }
 
@@ -54,7 +59,7 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
       >
         <Stack>
           <BlockNameInput block={enumItem} onSave={handleSaveName} />
-          {isSelected ? (
+          {/* {isSelected ? (
             <EnumEditForm
               block={enumItem}
               isOpenNewOptionField={isOpenNewOptionField}
@@ -70,7 +75,16 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
                 ))}
               </tbody>
             </Table>
-          )}
+          )} */}
+          <Table verticalSpacing="md" fontSize="xl">
+            <tbody>
+              {fieldNames.map((fieldName) => (
+                <tr key={fieldName}>
+                  <td>{fieldName}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
         </Stack>
         <Handle
           id={name}

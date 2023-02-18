@@ -1,24 +1,25 @@
-import { Block } from 'prisma-state/blocks'
-import { OptionField } from 'prisma-state/fields'
 import { Select, SelectProps } from '@mantine/core'
 import { updatePrismaSchemaEvent } from '@renderer/modules/editor'
+import { Datasource, Generator } from 'prisma-state/_new/blocks'
+import { OptionField } from 'prisma-state/_new/fields'
+import { OptionFieldData } from 'prisma-state/_new/types'
 
 interface SelectOptionInputProps extends SelectProps {
   name: string
-  block: Block
+  block: Datasource | Generator
 }
 
 export const SelectOptionInput: React.FC<SelectOptionInputProps> = ({ name, block, ...props }) => {
-  const field = block.field<OptionField>(name)
+  const fieldData = block.field<OptionFieldData>(name)
+
+  const field = new OptionField(name, block.name, fieldData)
 
   const handleChange = (value: string | null) => {
     if (!value) {
       block.removeField(name)
-    } else if (!field) {
-      const newField = block.addField(name, new OptionField(name)) as OptionField
-      newField.setValue(value)
     } else {
       field.setValue(value)
+      block.addField(name, field._data())
     }
 
     updatePrismaSchemaEvent()

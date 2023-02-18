@@ -27,7 +27,6 @@ import { ModelNode } from './nodes/ModelNode'
 import { NodeType } from '@shared/common/configs/diagrams'
 import '../css/editor.css'
 import { useDiagramEditorShortcuts } from '@renderer/modules/spotlight'
-import { CreateRelationModal } from './CreateRelationModal'
 import { NodesToolbar } from './NodesToolbar'
 import { EditorToolbar } from './EditorToolbar'
 import { zoomToNode } from '../utils'
@@ -88,14 +87,14 @@ export const DiagramEditor = () => {
       data: {}
     }
 
-    if (type === NodeType.MODEL) schemaState.createModel(id)
-    if (type === NodeType.ENUM) schemaState.createEnum(id)
+    // if (type === NodeType.MODEL) schemaState.createModel(id)
+    // if (type === NodeType.ENUM) schemaState.createEnum(id)
 
-    updatePrismaSchemaEvent()
+    // updatePrismaSchemaEvent()
 
-    addNodeEvent(node)
-    selectNodeEvent({ nodeId: id, type: type as NodeType })
-    zoomToNode(reactFlowInstance, node)
+    // addNodeEvent(node)
+    // selectNodeEvent({ nodeId: id, type: type as NodeType })
+    // zoomToNode(reactFlowInstance, node)
   }
 
   const onConnect: OnConnect = ({ source, target }) => {
@@ -130,7 +129,7 @@ export const DiagramEditor = () => {
         <EditorToolbar />
         <NodesToolbar />
       </ReactFlow>
-      <CreateRelationModal />
+      {/* <CreateRelationModal /> */}
     </>
   )
 }

@@ -1,12 +1,14 @@
 import { useStore, useStoreMap } from 'effector-react'
+import { combine } from 'effector'
 import { Stack } from '@mantine/core'
 import { SettingsSectionPaper } from '../../SettingsSectionPaper'
 import { EnvInput } from '../../EnvInput'
-import { $schemaGenerators } from '@renderer/modules/editor'
+import { $schemaGenerators, $schemaState } from '@renderer/modules/editor'
 import { $prismaSettings } from '@renderer/modules/settings/stores'
 import { SelectOptionInput } from '../../SelectOptionInput'
 import { MultipleOptionsSelect } from '../../MultipleOptionsSelect'
 import { prismaBinaryTargetsList, prismaEngineTypesList } from 'prisma-state/constants'
+import { Generator } from 'prisma-state/_new/blocks'
 
 interface PrismaDatasourceSettingsProps {
   settingsId: string
@@ -15,16 +17,26 @@ interface PrismaDatasourceSettingsProps {
 const engineTypeOptions = prismaEngineTypesList
 const binaryTargetsOptions = prismaBinaryTargetsList
 
+const $store = combine({
+  settings: $prismaSettings,
+  state: $schemaState
+})
+
 export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = ({
   settingsId
 }) => {
-  const { previewFeaturesList } = useStore($prismaSettings)
+  const {
+    settings: { previewFeaturesList },
+    state
+  } = useStore($store)
 
-  const generator = useStoreMap({
+  const generatorData = useStoreMap({
     store: $schemaGenerators,
     keys: [settingsId],
     fn: (settings, [id]) => settings.get(id)!
   })
+
+  const generator = new Generator(generatorData.name, state, generatorData)
 
   return (
     <SettingsSectionPaper title="Generator">

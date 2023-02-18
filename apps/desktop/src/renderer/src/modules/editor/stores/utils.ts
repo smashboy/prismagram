@@ -9,12 +9,18 @@ import {
   Node,
   Relation
 } from '@shared/common/models/Diagram'
-import { RelationAttribute } from 'prisma-state/attributes'
-import { Model } from 'prisma-state/blocks'
-import { EnumModelField, RelationField } from 'prisma-state/fields'
-import { PrismaSchemaState } from 'prisma-state/PrismaSchemaState'
+import {
+  EnumModelFieldData,
+  FieldAttributeData,
+  ModelData,
+  PrismaSchemaStateInstance,
+  RelationFieldData
+} from 'prisma-state/_new/types'
 
-export const prismaSchemaState2Diagram = (state: PrismaSchemaState, diagram: Diagram): Diagram => {
+export const prismaSchemaState2Diagram = (
+  state: PrismaSchemaStateInstance,
+  diagram: Diagram
+): Diagram => {
   const { models, enumIds } = state
 
   const { viewport, nodes: prevNodes } = diagram
@@ -51,7 +57,7 @@ export const prismaSchemaState2Diagram = (state: PrismaSchemaState, diagram: Dia
 }
 
 const models2NodeModels = (
-  models: Map<string, Model>,
+  models: Map<string, ModelData>,
   relations: Map<string, Relation>,
   prevNodes: Record<string, ModelNode>
 ): Record<string, ModelNode> => {
@@ -65,9 +71,9 @@ const models2NodeModels = (
       targetHandlers: {}
     }
 
-    for (const field of fields) {
-      if (field instanceof RelationField) {
-        const relationName = (field.attributes.get('relation') as RelationAttribute)?.name || void 0
+    for (const field of fields.values()) {
+      if ((field as RelationFieldData)?.isRelationField) {
+        const relationName = field.attributes.get('relation')?.arguments.get('name') || null
 
         const relation =
           relations.get(`${field.type}-${model.name}${relationName ? `_${relationName}` : ''}`) ||
@@ -94,9 +100,9 @@ const models2NodeModels = (
         continue
       }
 
-      if (field instanceof EnumModelField) {
+      if ((field as EnumModelFieldData)?.isEnumField) {
         data.targetHandlers[field.name] = {
-          id: `${field.model.name}.${field.name}.${field.type}`
+          id: `${field.blockId}.${field.name}.${field.type}`
         }
       }
     }
@@ -134,16 +140,16 @@ const enums2NodeEnums = (enumIds: string[], prevNodes: Record<string, EnumNode>)
   return nodes
 }
 
-const createEnumEdges = (models: Map<string, Model>): Edge[] => {
+const createEnumEdges = (models: Map<string, ModelData>): Edge[] => {
   const edges: Edge[] = []
 
   for (const model of models.values()) {
     const { name: modelName, fields } = model
 
-    for (const field of fields) {
-      if (field instanceof EnumModelField) {
-        const { type, name: fieldName } = field
+    for (const field of fields.values()) {
+      const { type, name: fieldName } = field
 
+      if ((field as EnumModelFieldData)?.isEnumField) {
         const id = `${modelName}.${fieldName}.${type}`
 
         edges.push({
@@ -188,19 +194,21 @@ const relations2Edges = (relations: Map<string, Relation>): Edge[] => {
 const generateNodesColors = (nodes: Record<string, Node>): Record<string, string> =>
   Object.keys(nodes).reduce((acc, id) => ({ ...acc, [id]: string2Color(id) }), {})
 
-const findRelatedFields = (models: Map<string, Model>) => {
+const findRelatedFields = (models: Map<string, ModelData>) => {
   const relations: Map<string, Relation> = new Map()
 
-  for (const model of [...models.values()]) {
-    for (const field of model.fields) {
-      if (field instanceof RelationField) {
+  for (const model of models.values()) {
+    for (const field of model.fields.values()) {
+      if ((field as RelationFieldData)?.isRelationField) {
         const relationModel = models.get(field.type)
 
-        const relationName = (field.attributes.get('relation') as RelationAttribute)?.name || void 0
-
         if (relationModel) {
-          for (const relationModelField of relationModel.fields) {
+          const relationName =
+            (field.attributes.get('relation')?.arguments.get('name') as string) || void 0
+
+          for (const relationModelField of relationModel.fields.values()) {
             if (relationModelField.type === model.name) {
+              // N-M relation
               if (field.modifier === 'list' && relationModelField.modifier === 'list') {
                 const id = `${field.type}-${relationModelField.type}${
                   relationName ? `_${relationName}` : ''
@@ -228,25 +236,25 @@ const findRelatedFields = (models: Map<string, Model>) => {
                 continue
               }
 
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              const { from, to } = determineSourceTarget(field, relationModelField)
+              const { from, to } = determineSourceTarget(
+                field as RelationFieldData,
+                relationModelField as RelationFieldData
+              )
 
-              const id = `${from.model.name}-${to.model.name}${
-                relationName ? `_${relationName}` : ''
-              }`
+              const id = `${from.blockId}-${to.blockId}${relationName ? `_${relationName}` : ''}`
 
+              // 1-N relation
               if (field.modifier === 'list' || relationModelField.modifier === 'list') {
                 relations.set(id, {
                   id,
                   type: RelationType.ONE_TO_MANY,
                   name: relationName,
                   from: {
-                    model: from.model.name,
+                    model: from.blockId,
                     field: from.name
                   },
                   to: {
-                    model: to.model.name,
+                    model: to.blockId,
                     field: to.name
                   }
                 })
@@ -258,11 +266,11 @@ const findRelatedFields = (models: Map<string, Model>) => {
                 id,
                 type: RelationType.ONE_TO_ONE,
                 from: {
-                  model: from.model.name,
+                  model: from.blockId,
                   field: from.name
                 },
                 to: {
-                  model: to.model.name,
+                  model: to.blockId,
                   field: to.name
                 }
               })
@@ -276,8 +284,11 @@ const findRelatedFields = (models: Map<string, Model>) => {
   return relations
 }
 
-const determineSourceTarget = (first: RelationField, second: RelationField) => {
-  const references = (first.attributes.get('relation') as RelationAttribute)?.references
+const determineSourceTarget = (first: RelationFieldData, second: RelationFieldData) => {
+  const references =
+    ((first.attributes.get('relation') as FieldAttributeData)?.arguments.get(
+      'references'
+    ) as string[]) || []
 
   return references && references.length > 0
     ? { from: first, to: second }

@@ -1,12 +1,17 @@
+import { combine } from 'effector'
 import { Handle, Position } from 'reactflow'
+import { useStore } from 'effector-react'
 import { Box, Text } from '@mantine/core'
 import { ModelHandler, EnumHandler } from '@shared/common/models/Diagram'
-import { ModelField } from 'prisma-state/fields'
 import { ScalarFieldColor } from '../../../config'
+import { EnumModelFieldData, RelationFieldData, ScalarFieldData } from 'prisma-state/_new/types'
+import { createFieldFromType } from 'prisma-state/_new/utils/field'
+import { $modelIds, $schemaEnumIds } from '@renderer/modules/editor/stores'
+import { ModelFieldBase } from 'prisma-state/_new/fields'
 
 interface ModelNodeFieldProps {
   fieldId: string
-  field: ModelField
+  field: ScalarFieldData | RelationFieldData | EnumModelFieldData
   nodesColors: Record<string, string>
   sourceHandlers: Record<string, ModelHandler | EnumHandler>
   targetHandlers: Record<string, ModelHandler | EnumHandler>
@@ -14,15 +19,31 @@ interface ModelNodeFieldProps {
   isSelected: boolean
 }
 
+const $store = combine({
+  enumIds: $schemaEnumIds,
+  modelIds: $modelIds
+})
+
 export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
   fieldId,
-  field,
+  field: fieldData,
   nodesColors,
   sourceHandlers,
   targetHandlers,
   maxAttribuesCount
 }) => {
-  const { type, displayType, attributes } = field
+  const { enumIds, modelIds } = useStore($store)
+
+  const field = createFieldFromType(
+    fieldData.name,
+    fieldData.type,
+    fieldData.blockId,
+    enumIds,
+    modelIds,
+    fieldData
+  )
+
+  const { type, attributes, displayType } = field
 
   const textColor = ScalarFieldColor[type] || nodesColors[type]
 
@@ -63,11 +84,16 @@ export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({
         <span style={{ flex: 1 }}>{displayType}</span>
       </td>
       {Array.from({ length: maxAttribuesCount }).map((_, index) => {
-        const attribute = attributesList[index]
-        if (!attribute) return <td key={index} />
+        const attributeData = attributesList[index]
+        if (!attributeData) return <td key={index} />
+
+        const Attr = ModelFieldBase.fieldAttributeMap[attributeData.type]
+
+        const attr = new Attr(attributeData)
+
         return (
-          <Text key={attribute.type} color="blue" component="td">
-            {attribute.displayAttributeType}
+          <Text key={attr.type} color="blue" component="td">
+            {attr.displayType}
           </Text>
         )
       })}

@@ -1,6 +1,6 @@
 import { sample } from 'effector'
 import { throttle } from 'patronum'
-import { PrismaSchemaState } from 'prisma-state'
+import { createPrismaSchemaState } from 'prisma-state/_new/state'
 import { setDiagramEvent, prismaState2DiagramEvent, $diagram } from './diagram'
 import {
   launchPrismaStudioEffect,
@@ -20,7 +20,7 @@ sample({
 sample({
   source: loadEditorDataEffect.doneData,
   fn: (data) => {
-    const state = new PrismaSchemaState()
+    const state = createPrismaSchemaState()
     state.fromString(data.schema)
     return state
   },

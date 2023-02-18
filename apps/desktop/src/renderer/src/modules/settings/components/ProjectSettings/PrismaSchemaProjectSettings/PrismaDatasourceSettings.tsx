@@ -1,11 +1,11 @@
-import { useStoreMap } from 'effector-react'
+import { useStore, useStoreMap } from 'effector-react'
 import { Stack } from '@mantine/core'
-
 import { SettingsSectionPaper } from '../../SettingsSectionPaper'
 import { EnvInput } from '../../EnvInput'
-import { $schemaDatasources } from '@renderer/modules/editor'
+import { $schemaDatasources, $schemaState } from '@renderer/modules/editor'
 import { SelectOptionInput } from '../../SelectOptionInput'
 import { prismaDatasourceProvidersArray, prismaRelationModesList } from 'prisma-state/constants'
+import { Datasource } from 'prisma-state/_new/blocks'
 
 interface PrismaDatasourceSettingsProps {
   settingsId: string
@@ -14,11 +14,15 @@ interface PrismaDatasourceSettingsProps {
 export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> = ({
   settingsId
 }) => {
-  const datasource = useStoreMap({
+  const state = useStore($schemaState)
+
+  const datasourceData = useStoreMap({
     store: $schemaDatasources,
     keys: [settingsId],
     fn: (datasources, [id]) => datasources.get(id)!
   })
+
+  const datasource = new Datasource(datasourceData.name, state, datasourceData)
 
   return (
     <SettingsSectionPaper title="Datasource">
