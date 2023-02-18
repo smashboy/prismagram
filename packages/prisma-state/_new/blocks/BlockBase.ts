@@ -1,13 +1,23 @@
 import { EOL } from '../../constants'
 import { AttributeBase } from '../attributes'
-import { PrismaSchemaStateInstance, TopLevelBlockData, TopLevelFieldData } from '../types'
+import {
+  PrismaSchemaStateInstance,
+  TopLevelBlockData,
+  TopLevelFieldData,
+  Writeable
+} from '../types'
 import { fieldToString } from '../utils/field'
 
-export abstract class BlockBase<B extends TopLevelBlockData, F extends TopLevelFieldData> {
-  protected data: B
+export abstract class BlockBase<
+  B extends TopLevelBlockData,
+  F extends TopLevelFieldData,
+  BW extends Writeable<B> = Writeable<B>,
+  FW extends Writeable<F> = Writeable<F>
+> {
+  protected data: BW
   protected state: PrismaSchemaStateInstance
 
-  constructor(data: B, state: PrismaSchemaStateInstance) {
+  constructor(data: BW, state: PrismaSchemaStateInstance) {
     this.data = data
     this.state = state
   }
@@ -26,6 +36,18 @@ export abstract class BlockBase<B extends TopLevelBlockData, F extends TopLevelF
 
   get fieldNames() {
     return [...this.data.fields.keys()]
+  }
+
+  setName(name: string) {
+    this.state.models.delete(this.name)
+
+    const oldFields = structuredClone(this.fields)
+    this.fields.clear()
+
+    this.data.name = name
+    oldFields.forEach((field) => this.addField(field.name, { ...field, blockId: name } as FW))
+
+    this.state.models.set(this.name, this._data() as BW)
   }
 
   addField(fieldId: string, data: F) {
@@ -47,7 +69,7 @@ export abstract class BlockBase<B extends TopLevelBlockData, F extends TopLevelF
   }
 
   _data() {
-    return structuredClone(this.data)
+    return structuredClone(this.data) as B
   }
 
   abstract _parse(data: unknown): void

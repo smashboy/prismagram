@@ -1,5 +1,4 @@
 import { Field as AstField } from '@mrleebo/prisma-ast/src/getSchema'
-import { ScalarTypeOption } from '../../constants'
 import {
   AttributeBase,
   DefaultAttribute,
@@ -10,14 +9,14 @@ import {
   UniqueAttribute,
   UpdatedAtAttribute
 } from '../attributes'
-import { EnumModelFieldData, RelationFieldData, ScalarFieldData } from '../types'
+import { EnumModelFieldData, RelationFieldData, ScalarFieldData, Writeable } from '../types'
 import { EnumModelField } from './EnumModelField'
 import { FieldBase } from './FieldBase'
 import { RelationField } from './RelationField'
 import { ScalarField } from './ScalarField'
 
 export abstract class ModelFieldBase<
-  F extends RelationFieldData | ScalarFieldData | EnumModelFieldData
+  F extends Writeable<RelationFieldData | ScalarFieldData | EnumModelFieldData>
 > extends FieldBase<F> {
   static fieldAttributeMap = {
     id: IdAttribute,
@@ -41,6 +40,10 @@ export abstract class ModelFieldBase<
     const { type, modifier } = this.data
 
     return `${type}${modifier === 'list' ? '[]' : modifier === 'optional' ? '?' : ''}`
+  }
+
+  setType(type: string) {
+    this.data.type = type
   }
 
   _parse(data: AstField) {

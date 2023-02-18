@@ -8,13 +8,14 @@ import {
   EnvFieldData,
   GeneratorData,
   OptionFieldData,
-  OptionsListFieldData
+  OptionsListFieldData,
+  Writeable
 } from '../types'
 import { BlockBase } from './BlockBase'
 
 export abstract class SettingsBlockBase<B extends DatasourceData | GeneratorData> extends BlockBase<
   B,
-  OptionFieldData | EnvFieldData | OptionsListFieldData
+  Writeable<OptionFieldData | EnvFieldData | OptionsListFieldData>
 > {
   static generatorEnvFields = ['provider', 'output']
   static datasourceEnvFields = ['url', 'shadowDatabaseUrl']

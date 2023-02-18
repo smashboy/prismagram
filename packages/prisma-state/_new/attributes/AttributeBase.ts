@@ -8,7 +8,8 @@ import {
   BlockAttributeData,
   BlockAttributeType,
   FieldAttributeData,
-  FieldAttributeType
+  FieldAttributeType,
+  Writeable
 } from '../types'
 
 export type BlockAttrProps = Omit<BlockAttributeData, 'type'>
@@ -17,11 +18,12 @@ type AttributePrefix = '@' | '@@'
 
 export abstract class AttributeBase<
   T extends BlockAttributeType | FieldAttributeType,
-  DT extends BlockAttributeData | FieldAttributeData
+  DT extends BlockAttributeData | FieldAttributeData,
+  DTW extends Writeable<DT> = Writeable<DT>
 > {
   type: T
   private prefix: AttributePrefix
-  protected data: DT
+  protected data: DTW
 
   constructor(
     type: T,
@@ -122,7 +124,7 @@ export abstract class AttributeBase<
   }
 
   _data() {
-    return structuredClone(this.data)
+    return structuredClone(this.data) as DT
   }
 
   static _toString(prefix: AttributePrefix, attr: BlockAttributeData | FieldAttributeData) {

@@ -1,9 +1,12 @@
-import { TopLevelFieldData } from '../types'
+import { TopLevelFieldData, Writeable } from '../types'
 
-export abstract class FieldBase<T extends TopLevelFieldData> {
-  protected data: T
+export abstract class FieldBase<
+  T extends TopLevelFieldData,
+  TW extends Writeable<T> = Writeable<T>
+> {
+  protected data: TW
 
-  constructor(data: T) {
+  constructor(data: TW) {
     this.data = data
   }
 
@@ -16,6 +19,6 @@ export abstract class FieldBase<T extends TopLevelFieldData> {
   }
 
   _data() {
-    return structuredClone(this.data)
+    return structuredClone(this.data) as T
   }
 }
