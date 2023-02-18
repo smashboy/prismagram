@@ -262,6 +262,7 @@ const findRelatedFields = (models: Map<string, ModelData>) => {
                 continue
               }
 
+              // 1-1 relation
               relations.set(id, {
                 id,
                 type: RelationType.ONE_TO_ONE,
