@@ -93,32 +93,6 @@ export abstract class AttributeBase<
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  private _argument2String(arg: unknown) {
-    if (typeof arg === 'string' || typeof arg === 'boolean' || typeof arg === 'number') return arg
-    if (arg instanceof Array) return `[${arg.map(this._argument2String).join(', ')}]`
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (arg?.isAttributeFunction) return `${arg.type}()`
-  }
-
-  _toString() {
-    const args: Array<[string, string]> = []
-
-    const attr = this.data
-
-    for (const [name, arg] of attr.arguments.entries()) {
-      const strArg = this._argument2String(arg)
-
-      if (strArg) args.push([name as unknown as string, strArg])
-    }
-
-    return `${this.prefix}${attr.type}${
-      args.length > 0 ? `(${args.map(([name, arg]) => `${name}: ${arg}`).join(', ')})` : ''
-    }`
-  }
-
   _data() {
     return structuredClone(this.data) as DT
   }

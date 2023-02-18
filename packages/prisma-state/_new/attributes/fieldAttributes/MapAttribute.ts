@@ -12,7 +12,7 @@ export class MapAttribute extends FieldAttributeBase {
   }
 
   setName(value: string) {
-    this.arguments.set('name', value)
+    this.data.arguments.set('name', value)
   }
 
   _parse(args?: AstAttributeArgument[]) {

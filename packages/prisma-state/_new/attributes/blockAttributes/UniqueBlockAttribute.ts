@@ -28,23 +28,23 @@ export class UniqueBlockAttribute extends BlockAttributeBase {
   }
 
   setMap(value: string) {
-    this.arguments.set('map', value)
+    this.data.arguments.set('map', value)
   }
 
   setLength(value: number) {
-    this.arguments.set('length', value)
+    this.data.arguments.set('length', value)
   }
 
   setSort(value: 'Asc' | 'Desc') {
-    this.arguments.set('sort', value)
+    this.data.arguments.set('sort', value)
   }
 
   setClustered(value: boolean) {
-    this.arguments.set('clustered', value)
+    this.data.arguments.set('clustered', value)
   }
 
   setFields(fields: string[]) {
-    this.arguments.set('fields', fields)
+    this.data.arguments.set('fields', fields)
   }
 
   _parse(args?: AstAttributeArgument[]) {

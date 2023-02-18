@@ -33,27 +33,27 @@ export class RelationAttribute extends FieldAttributeBase {
   }
 
   setName(value: string) {
-    this.arguments.set('name', value)
+    this.data.arguments.set('name', value)
   }
 
   setFields(value: string[]) {
-    this.arguments.set('fields', value)
+    this.data.arguments.set('fields', value)
   }
 
   setReferences(value: string[]) {
-    this.arguments.set('references', value)
+    this.data.arguments.set('references', value)
   }
 
   setMap(value: string) {
-    this.arguments.set('map', value)
+    this.data.arguments.set('map', value)
   }
 
   setOnUpdate(value: ReferentialActionOption) {
-    this.arguments.set('onUpdate', value)
+    this.data.arguments.set('onUpdate', value)
   }
 
   setOnDelete(value: ReferentialActionOption) {
-    this.arguments.set('onDelete', value)
+    this.data.arguments.set('onDelete', value)
   }
 
   _parse(args?: AstAttributeArgument[]) {
