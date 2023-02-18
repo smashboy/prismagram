@@ -6,7 +6,7 @@ import {
   $schemaEnums,
   $schemaModels,
   $selectedEditorView,
-  schemaStateHistoryApi,
+  schemaStateHistoryApiEvents,
   selectNodeEvent
 } from '@renderer/modules/editor'
 import { $projects, $selectedProjectId, selectProjectEvent } from '@renderer/modules/projects'
@@ -69,9 +69,10 @@ export const Spotlight: React.FC<SpotlightProps> = ({ children }) => {
   }))
 
   const editorActions = selectedProjectId
-    ? editorShortcuts({ undo: schemaStateHistoryApi.undo, redo: schemaStateHistoryApi.redo }).map(
-        (shortcut) => shortcut2SpotlightAction(shortcut, 'Editor')
-      )
+    ? editorShortcuts({
+        undo: schemaStateHistoryApiEvents.undo,
+        redo: schemaStateHistoryApiEvents.redo
+      }).map((shortcut) => shortcut2SpotlightAction(shortcut, 'Editor'))
     : []
 
   const selectedEditorViewActions = !selectedProjectId

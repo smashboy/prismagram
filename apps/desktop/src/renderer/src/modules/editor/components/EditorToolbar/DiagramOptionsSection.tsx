@@ -18,6 +18,7 @@ import {
   $isEditorEnabled,
   $selectedRelationType,
   layoutDiagramEffect,
+  schemaStateHistoryApiEvents,
   setSelectedRelationTypeEvent
 } from '../../stores'
 import { ICON_SIZE } from './constants'
@@ -46,6 +47,9 @@ export const DiagramOptionsSection = () => {
 
   const RelationIcon = relationIconsMap[selectedRelationType]
 
+  const handleUndoChanges = () => schemaStateHistoryApiEvents.undo()
+  const handleRedoChanges = () => schemaStateHistoryApiEvents.redo()
+
   return (
     <Group>
       <Tooltip label="Zoom out">
@@ -59,12 +63,12 @@ export const DiagramOptionsSection = () => {
         </ActionIcon>
       </Tooltip>
       <Tooltip label="Undo">
-        <ActionIcon disabled={!isEditorEnabled}>
+        <ActionIcon onClick={handleUndoChanges} disabled={!isEditorEnabled}>
           <IconArrowBackUp size={ICON_SIZE} />
         </ActionIcon>
       </Tooltip>
       <Tooltip label="Redo">
-        <ActionIcon disabled={!isEditorEnabled}>
+        <ActionIcon onClick={handleRedoChanges} disabled={!isEditorEnabled}>
           <IconArrowForwardUp size={ICON_SIZE} />
         </ActionIcon>
       </Tooltip>

@@ -13,7 +13,7 @@ const $schemaStateWritable = createStore(createPrismaSchemaState()).on(
 
 const $schemaStateWritableData = $schemaStateWritable.map((state) => state._data())
 
-export const [$currentSchemaHistory, schemaStateHistoryApi, $schemaHistory] =
+export const [$currentSchemaHistory, schemaStateHistoryApiEvents, $schemaHistory] =
   createHistoryStore($schemaStateWritableData)
 
 export const $schemaState = $currentSchemaHistory.map((data) => createPrismaSchemaState(data))
