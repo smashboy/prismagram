@@ -8,7 +8,8 @@ import {
   ModelData,
   PrismaSchemaStateInstance,
   RelationFieldData,
-  ScalarFieldData
+  ScalarFieldData,
+  TopLevelFieldData
 } from '../types'
 import { fieldToString } from '../utils/field'
 
@@ -37,6 +38,15 @@ export abstract class BlockBase<B extends DatasourceData | GeneratorData | EnumD
     return [...this.data.fields.keys()]
   }
 
+  addField(fieldId: string, data: TopLevelFieldData) {
+    this.data.fields.set(fieldId, data)
+    return data
+  }
+
+  field<F extends TopLevelFieldData>(fieldId: string) {
+    return this.data.fields.get(fieldId) as F
+  }
+
   removeField(fieldId: string) {
     this.data.fields.delete(fieldId)
   }
@@ -47,7 +57,7 @@ export abstract class BlockBase<B extends DatasourceData | GeneratorData | EnumD
   }
 
   _data() {
-    return this.data
+    return structuredClone(this.data)
   }
 
   abstract _parse(data: unknown): void

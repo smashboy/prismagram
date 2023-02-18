@@ -8,7 +8,6 @@ import {
   PrismaSchemaStateInstance
 } from './types'
 import { extractBlockIdsByType, extractBlocksByType } from './utils/block'
-import { testSchema } from '../testSchema'
 import { EOL } from '../constants'
 import { BlockBase, Datasource, Enum, Generator, Model } from './blocks'
 

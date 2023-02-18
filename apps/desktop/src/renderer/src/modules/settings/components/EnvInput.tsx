@@ -1,34 +1,36 @@
-import { Block } from 'prisma-state/blocks'
-import { EnvField } from 'prisma-state/fields'
 import { Stack, Switch, TextInput, TextInputProps } from '@mantine/core'
 import { updatePrismaSchemaEvent } from '@renderer/modules/editor'
+import { EnvFieldData } from 'prisma-state/_new/types'
+import { Datasource, Generator } from 'prisma-state/_new/blocks'
+import { EnvField } from 'prisma-state/_new/fields'
 
 interface EnvInputProps extends TextInputProps {
   name: string
-  block: Block
+  block: Datasource | Generator
 }
 
 export const EnvInput: React.FC<EnvInputProps> = ({ block, name, ...props }) => {
-  const field = block.field<EnvField>(name)
+  const fieldData = block.field<EnvFieldData>(name)
+
+  const field = new EnvField(name, block.name, fieldData)
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
 
     if (!value) {
       block.removeField(name)
-    } else if (!field) {
-      const newField = block.addField(name, new EnvField(name)) as EnvField
-      newField.setValue(value)
     } else {
       field.setValue(value)
+      block.addField(name, field._data())
     }
 
     updatePrismaSchemaEvent()
   }
 
   const handleEnvSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (field) {
+    if (fieldData) {
       field.toggleIsEnv(event.currentTarget.checked)
+      block.addField(name, field._data())
       updatePrismaSchemaEvent()
     }
   }
@@ -40,7 +42,7 @@ export const EnvInput: React.FC<EnvInputProps> = ({ block, name, ...props }) => 
         label="Is environment variable"
         description="If the field is marked as an environment variable, you must specify its name instead of the actual value."
         onChange={handleEnvSwitch}
-        disabled={!field}
+        disabled={!fieldData}
         checked={field?.isEnv || false}
       />
     </Stack>

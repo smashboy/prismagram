@@ -33,6 +33,6 @@ export abstract class FieldBase<
   }
 
   _data() {
-    return this.data
+    return structuredClone(this.data)
   }
 }

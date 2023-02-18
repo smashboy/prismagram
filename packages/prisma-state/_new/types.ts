@@ -121,3 +121,12 @@ export interface PrismaSchemaStateInstance {
   fromString(schema: string): void
   _clone(): PrismaSchemaStateInstance
 }
+
+export type TopLevelFieldData =
+  | RelationFieldData
+  | ScalarFieldData
+  | EnumModelFieldData
+  | EnumFieldData
+  | OptionFieldData
+  | EnvFieldData
+  | OptionsListFieldData

@@ -122,7 +122,7 @@ export abstract class AttributeBase<
   }
 
   _data() {
-    return this.data
+    return structuredClone(this.data)
   }
 
   static _toString(prefix: AttributePrefix, attr: BlockAttributeData | FieldAttributeData) {
