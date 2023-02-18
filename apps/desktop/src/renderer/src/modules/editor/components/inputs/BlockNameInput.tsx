@@ -5,11 +5,10 @@ import { Group, Text, ThemeIcon } from '@mantine/core'
 import { IconBorderAll, IconLayoutList } from '@tabler/icons'
 import { $nodesColors, $selectedNodeId } from '../../stores'
 import { ConfirmInput } from '@renderer/core/components'
-import { Enum, Model } from 'prisma-state/_new/blocks'
 import { EnumData, ModelData } from 'prisma-state/_new/types'
 
 interface BlockNameInputProps {
-  block?: ModelData | EnumData
+  block: ModelData | EnumData
   onSave: (name: string) => void
 }
 
@@ -22,7 +21,7 @@ export const BlockNameInput: React.FC<BlockNameInputProps> = ({ block, onSave })
   const { nodesColors, selectedNodeId } = useStore($store)
 
   const color = nodesColors[block?.name || '']
-  const Icon = block instanceof Model ? IconBorderAll : IconLayoutList
+  const Icon = block.type === 'model' ? IconBorderAll : IconLayoutList
 
   const [isOpen, setIsOpen] = useState(!block?.name)
   const [name, setName] = useState(block?.name || '')
