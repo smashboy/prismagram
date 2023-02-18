@@ -32,11 +32,7 @@ export abstract class AttributeBase<
   ) {
     this.type = type
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    this.data = data
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    this.data = data as DTW
     this.data.type = type
 
     this.prefix = prefix

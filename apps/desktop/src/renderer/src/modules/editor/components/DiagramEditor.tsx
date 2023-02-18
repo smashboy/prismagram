@@ -87,8 +87,8 @@ export const DiagramEditor = () => {
       data: {}
     }
 
-    // if (type === NodeType.MODEL) schemaState.createModel(id)
-    // if (type === NodeType.ENUM) schemaState.createEnum(id)
+    if (type === NodeType.MODEL) schemaState.createModel(id)
+    if (type === NodeType.ENUM) schemaState.createEnum(id)
 
     setPrismaSchemaEvent(schemaState._clone())
 

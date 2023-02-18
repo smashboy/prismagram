@@ -50,6 +50,30 @@ export class PrismaSchemaState implements PrismaSchemaStateInstance {
     return this.enums.get(id)!
   }
 
+  createModel(name: string) {
+    const model = new Model(name, this)
+    this.state.set(model.name, model._data())
+    return this.models.get(name)
+  }
+
+  createEnum(name: string) {
+    const enumBlock = new Enum(name, this)
+    this.state.set(enumBlock.name, enumBlock._data())
+    return this.enums.get(name)
+  }
+
+  removeModel(id: string) {
+    const data = this.model(id)
+
+    if (!data) return
+  }
+
+  removeEnum(id: string) {
+    const data = this.enum(id)
+
+    if (!data) return
+  }
+
   fromString(schema: string) {
     console.log('START NEW')
     console.time()

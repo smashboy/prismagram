@@ -3,7 +3,7 @@ import { BlockType, PrismaSchemaStateData, TopLevelBlockData } from '../types'
 export const extractBlockIdsByType = (type: BlockType, state: PrismaSchemaStateData) => {
   const ids: string[] = []
 
-  for (const block of [...state.values()]) {
+  for (const block of state.values()) {
     if (block.type === type) ids.push(block.name)
   }
 
@@ -16,10 +16,8 @@ export const extractBlocksByType = <B extends TopLevelBlockData>(
 ): Map<string, B> => {
   const blocks = new Map<string, B>()
 
-  for (const block of [...list.values()]) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (block.type === type) blocks.set(block.name, block)
+  for (const block of list.values()) {
+    if (block.type === type) blocks.set(block.name, block as B)
   }
 
   return blocks

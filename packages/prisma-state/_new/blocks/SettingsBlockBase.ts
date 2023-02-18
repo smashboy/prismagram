@@ -42,8 +42,6 @@ export abstract class SettingsBlockBase<B extends DatasourceData | GeneratorData
         // @ts-ignore
         if (!value?.params) field.toggleIsEnv(false)
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         this.fields.set(field.name, field._data())
         continue
       }
@@ -60,9 +58,8 @@ export abstract class SettingsBlockBase<B extends DatasourceData | GeneratorData
       }
 
       const optionField = new OptionField(key)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      optionField._parse(value)
+
+      optionField._parse(value as string)
       this.fields.set(optionField.name, optionField._data())
     }
   }
