@@ -6,9 +6,10 @@ import { IconBorderAll, IconLayoutList } from '@tabler/icons'
 import { $nodesColors, $selectedNodeId } from '../../stores'
 import { ConfirmInput } from '@renderer/core/components'
 import { Enum, Model } from 'prisma-state/_new/blocks'
+import { EnumData, ModelData } from 'prisma-state/_new/types'
 
 interface BlockNameInputProps {
-  block?: Model | Enum
+  block?: ModelData | EnumData
   onSave: (name: string) => void
 }
 

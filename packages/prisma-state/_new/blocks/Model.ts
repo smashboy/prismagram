@@ -5,7 +5,8 @@ import {
   ModelData,
   PrismaSchemaStateInstance,
   RelationFieldData,
-  ScalarFieldData
+  ScalarFieldData,
+  Writeable
 } from '../types'
 import {
   IdBlockAttribute,
@@ -17,8 +18,8 @@ import {
 import { createFieldFromType } from '../utils/field'
 
 interface ModelReference {
-  model: ModelData
-  fields: RelationFieldData[]
+  model: Writeable<ModelData>
+  fields: Writeable<RelationFieldData>[]
 }
 
 export class Model extends BlockBase<
@@ -65,9 +66,9 @@ export class Model extends BlockBase<
 
   setName(name: string) {
     for (const { fields } of this.getReferences()) {
-      // fields.forEach((field) => field.setType(name))
+      fields.forEach((field) => (field.type = name))
     }
-    // super.setName(name)
+    super.setName(name)
   }
 
   _parse(model: AstModel) {

@@ -1,8 +1,9 @@
 import { Stack, Switch, TextInput, TextInputProps } from '@mantine/core'
-import { updatePrismaSchemaEvent } from '@renderer/modules/editor'
+import { $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor'
 import { EnvFieldData } from 'prisma-state/_new/types'
 import { Datasource, Generator } from 'prisma-state/_new/blocks'
 import { EnvField } from 'prisma-state/_new/fields'
+import { useStore } from 'effector-react'
 
 interface EnvInputProps extends TextInputProps {
   name: string
@@ -10,6 +11,8 @@ interface EnvInputProps extends TextInputProps {
 }
 
 export const EnvInput: React.FC<EnvInputProps> = ({ block, name, ...props }) => {
+  const state = useStore($schemaState)
+
   const fieldData = block.field<EnvFieldData>(name)
 
   const field = new EnvField(name, block.name, fieldData)
@@ -24,14 +27,14 @@ export const EnvInput: React.FC<EnvInputProps> = ({ block, name, ...props }) => 
       block.addField(name, field._data())
     }
 
-    updatePrismaSchemaEvent()
+    setPrismaSchemaEvent(state._clone())
   }
 
   const handleEnvSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (fieldData) {
       field.toggleIsEnv(event.currentTarget.checked)
       block.addField(name, field._data())
-      updatePrismaSchemaEvent()
+      setPrismaSchemaEvent(state._clone())
     }
   }
 

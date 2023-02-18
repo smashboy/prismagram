@@ -42,19 +42,32 @@ export const createHistoryStore = <T = unknown>($store: Store<T>) => {
     index: 0
   })
 
-  const $current = $history.map((history) => history.states[history.index])
+  const $current = $history.map((history) => structuredClone(history.states[history.index]))
 
   const internalAPi = createApi($history, {
-    add: ({ states, index }, store: T) => ({ states: [...states, store], index: index + 1 })
+    add: ({ states, index }, store: T) => {
+      const newStates = structuredClone(states) as T[]
+
+      const newIndex = index + 1
+
+      if (newIndex < newStates.length) newStates.splice(newIndex)
+
+      newStates.push(store)
+
+      return { states: newStates, index: newIndex }
+    }
   })
 
   const api = createApi($history, {
     undo: ({ states, index }) => ({
-      states,
-      index: Math.max(index - 1, 0)
+      states: structuredClone(states),
+      index: Math.max(index - 1, 1)
     }),
-    redo: ({ states, index }) => ({ states, index: Math.min(index + 1, states.length - 1) }),
-    clear: ({ states, index }) => ({ states: [states[index]], index: 0 })
+    redo: ({ states, index }) => ({
+      states: structuredClone(states),
+      index: Math.min(index + 1, states.length - 1)
+    }),
+    clear: ({ states, index }) => ({ states: [structuredClone(states[index])], index: 0 })
   })
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

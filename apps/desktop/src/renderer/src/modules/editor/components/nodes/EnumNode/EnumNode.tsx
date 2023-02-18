@@ -7,7 +7,7 @@ import {
   $schemaEnums,
   $schemaState,
   $selectedNodeId,
-  updatePrismaSchemaEvent
+  setPrismaSchemaEvent
 } from '@renderer/modules/editor/stores'
 import { EnumNodeData } from '@shared/common/models/Diagram'
 import { NodeCard } from '../NodeCard'
@@ -40,8 +40,8 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
   const isSelected = selectedNodeId?.nodeId === name
 
   const handleSaveName = (name: string) => {
-    // enumItem.setName(name)
-    updatePrismaSchemaEvent()
+    enumItem.setName(name)
+    setPrismaSchemaEvent(state._clone())
   }
 
   return (
@@ -58,7 +58,7 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
         type={NodeType.ENUM}
       >
         <Stack>
-          <BlockNameInput block={enumItem} onSave={handleSaveName} />
+          <BlockNameInput block={enumData} onSave={handleSaveName} />
           {/* {isSelected ? (
             <EnumEditForm
               block={enumItem}

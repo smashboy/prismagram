@@ -1,16 +1,22 @@
 import { createHistoryStore } from '@renderer/core/effector'
 import { createEvent, createStore } from 'effector'
 import { createPrismaSchemaState } from 'prisma-state/_new/state'
-import { DatasourceData } from 'prisma-state/_new/types'
+import { DatasourceData, PrismaSchemaStateData } from 'prisma-state/_new/types'
 
 export const setPrismaSchemaEvent = createEvent<ReturnType<typeof createPrismaSchemaState>>()
 export const updatePrismaSchemaEvent = createEvent()
 
-export const $schemaState = createStore(createPrismaSchemaState())
-  .on(setPrismaSchemaEvent, (_, state) => state)
-  .on(updatePrismaSchemaEvent, (state) => state._clone())
+const $schemaStateWritable = createStore(createPrismaSchemaState()).on(
+  setPrismaSchemaEvent,
+  (_, state) => state
+)
 
-export const [_, schemaStateHistoryApi] = createHistoryStore($schemaState)
+const $schemaStateWritableData = $schemaStateWritable.map((state) => state._data())
+
+export const [$currentSchemaHistory, schemaStateHistoryApi, $schemaHistory] =
+  createHistoryStore($schemaStateWritableData)
+
+export const $schemaState = $currentSchemaHistory.map((data) => createPrismaSchemaState(data))
 
 export const $schemaModels = $schemaState.map(({ models }) => models)
 

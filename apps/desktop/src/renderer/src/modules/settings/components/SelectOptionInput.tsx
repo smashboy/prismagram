@@ -1,5 +1,6 @@
 import { Select, SelectProps } from '@mantine/core'
-import { updatePrismaSchemaEvent } from '@renderer/modules/editor'
+import { $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor'
+import { useStore } from 'effector-react'
 import { Datasource, Generator } from 'prisma-state/_new/blocks'
 import { OptionField } from 'prisma-state/_new/fields'
 import { OptionFieldData } from 'prisma-state/_new/types'
@@ -10,6 +11,8 @@ interface SelectOptionInputProps extends SelectProps {
 }
 
 export const SelectOptionInput: React.FC<SelectOptionInputProps> = ({ name, block, ...props }) => {
+  const state = useStore($schemaState)
+
   const fieldData = block.field<OptionFieldData>(name)
 
   const field = new OptionField(name, block.name, fieldData)
@@ -22,7 +25,7 @@ export const SelectOptionInput: React.FC<SelectOptionInputProps> = ({ name, bloc
       block.addField(name, field._data())
     }
 
-    updatePrismaSchemaEvent()
+    setPrismaSchemaEvent(state._clone())
   }
 
   return <Select value={field?.value || ''} onChange={handleChange} {...props} />

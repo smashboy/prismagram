@@ -9,7 +9,7 @@ import {
   $schemaModels,
   $schemaState,
   $selectedNodeId,
-  updatePrismaSchemaEvent
+  setPrismaSchemaEvent
 } from '../../../stores'
 import { ModelNodeField } from './ModelNodeField'
 import { ModelNodeToolbar } from './ModelNodeToolbar'
@@ -50,8 +50,8 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
   )
 
   const handleSaveName = (name: string) => {
-    // model.setName(name)
-    updatePrismaSchemaEvent()
+    model.setName(name)
+    setPrismaSchemaEvent(state._clone())
   }
 
   return (
@@ -63,7 +63,7 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
         selectedNodeId={selectedNodeId?.nodeId}
         type={NodeType.MODEL}
       >
-        <BlockNameInput block={model} onSave={handleSaveName} />
+        <BlockNameInput block={modelData} onSave={handleSaveName} />
         {/* {isSelected ? (
           <ModelNodeEditForm block={model} />
         ) : (

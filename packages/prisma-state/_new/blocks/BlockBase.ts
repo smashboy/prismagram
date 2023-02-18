@@ -39,14 +39,13 @@ export abstract class BlockBase<
   }
 
   setName(name: string) {
-    this.state.models.delete(this.name)
-
     const oldFields = structuredClone(this.fields)
     this.fields.clear()
 
     this.data.name = name
     oldFields.forEach((field) => this.addField(field.name, { ...field, blockId: name } as FW))
 
+    this.state.models.delete(this.name)
     this.state.models.set(this.name, this._data() as BW)
   }
 

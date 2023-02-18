@@ -5,13 +5,14 @@ import {
   EnumFieldData,
   EnumModelFieldData,
   ModelData,
-  PrismaSchemaStateInstance
+  PrismaSchemaStateInstance,
+  Writeable
 } from '../types'
-import { EnumField, EnumModelField } from '../fields'
+import { EnumField } from '../fields'
 
 interface EnumReference {
-  model: ModelData
-  fields: EnumModelFieldData[]
+  model: Writeable<ModelData>
+  fields: Writeable<EnumModelFieldData>[]
 }
 
 export class Enum extends BlockBase<EnumData, EnumFieldData> {
@@ -43,10 +44,7 @@ export class Enum extends BlockBase<EnumData, EnumFieldData> {
 
   setName(name: string) {
     for (const { fields } of this.getReferences()) {
-      fields.forEach((data) => {
-        const field = new EnumModelField(data.name, data.type, data.blockId, data)
-        field
-      })
+      fields.forEach((data) => (data.type = name))
     }
     super.setName(name)
   }

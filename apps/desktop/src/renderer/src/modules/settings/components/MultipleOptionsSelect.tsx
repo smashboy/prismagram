@@ -1,5 +1,6 @@
 import { MultiSelect, MultiSelectProps } from '@mantine/core'
-import { updatePrismaSchemaEvent } from '@renderer/modules/editor'
+import { $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor'
+import { useStore } from 'effector-react'
 import { Datasource, Generator } from 'prisma-state/_new/blocks'
 import { OptionsListField } from 'prisma-state/_new/fields'
 import { OptionsListFieldData } from 'prisma-state/_new/types'
@@ -14,6 +15,8 @@ export const MultipleOptionsSelect: React.FC<MultipleOptionsSelectProps> = ({
   block,
   ...props
 }) => {
+  const state = useStore($schemaState)
+
   const fieldData = block.field<OptionsListFieldData>(name)
 
   const field = new OptionsListField(name, block.name, fieldData)
@@ -27,7 +30,7 @@ export const MultipleOptionsSelect: React.FC<MultipleOptionsSelectProps> = ({
       block.addField(name, field._data())
     }
 
-    updatePrismaSchemaEvent()
+    setPrismaSchemaEvent(state._clone())
   }
 
   return <MultiSelect value={field?.values || []} onChange={handleChange} {...props} />

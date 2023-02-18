@@ -99,8 +99,12 @@ export class PrismaSchemaState implements PrismaSchemaStateInstance {
     return `${[...this.state.values()].map((block) => BlockBase._toString(block, this)).join(EOL)}`
   }
 
+  _data() {
+    return structuredClone(this.state)
+  }
+
   _clone() {
-    return new PrismaSchemaState(structuredClone(this.state))
+    return new PrismaSchemaState(this._data())
   }
 }
 
