@@ -193,14 +193,14 @@ export const diagramEditorShortcuts = (flow: ReactFlowInstance): Shortcut[] => [
     keys: ['='],
     isCtrlOrCmd: true,
     name: 'Zoom in',
-    onExecute: () => {},
+    onExecute: () => flow.zoomIn(),
     icon: IconZoomIn
   },
   {
     keys: ['-'],
     isCtrlOrCmd: true,
     name: 'Zoom out',
-    onExecute: () => {},
+    onExecute: () => flow.zoomOut(),
     icon: IconZoomOut
   }
 ]

@@ -50,15 +50,18 @@ export const DiagramOptionsSection = () => {
   const handleUndoChanges = () => schemaStateHistoryApiEvents.undo()
   const handleRedoChanges = () => schemaStateHistoryApiEvents.redo()
 
+  const handleZoomOut = () => flow.zoomOut()
+  const handleZoomIn = () => flow.zoomIn()
+
   return (
     <Group>
       <Tooltip label="Zoom out">
-        <ActionIcon disabled={!isEditorEnabled}>
+        <ActionIcon onClick={handleZoomOut} disabled={!isEditorEnabled}>
           <IconZoomOut size={ICON_SIZE} />
         </ActionIcon>
       </Tooltip>
       <Tooltip label="Zoom in">
-        <ActionIcon disabled={!isEditorEnabled}>
+        <ActionIcon onClick={handleZoomIn} disabled={!isEditorEnabled}>
           <IconZoomIn size={ICON_SIZE} />
         </ActionIcon>
       </Tooltip>
