@@ -72,6 +72,16 @@ export class PrismaSchemaState implements PrismaSchemaStateInstance {
     const data = this.enum(id)
 
     if (!data) return
+
+    const enumBlock = new Enum(data.name, this, data)
+
+    const refs = enumBlock.getReferences()
+
+    for (const { model, fields } of refs) {
+      fields.forEach((field) => model.fields.delete(field.name))
+    }
+
+    this.state.delete(id)
   }
 
   fromString(schema: string) {
