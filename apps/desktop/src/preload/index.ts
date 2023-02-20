@@ -5,7 +5,8 @@ import { electronAPI } from '@electron-toolkit/preload'
 // Custom APIs for renderer
 const api = {
   path,
-  __dirname
+  __dirname,
+  ctrlOrCmdKey: process.platform === 'darwin' ? 'Mod' : 'Ctrl'
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

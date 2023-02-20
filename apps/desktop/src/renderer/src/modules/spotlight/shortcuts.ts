@@ -1,4 +1,5 @@
 import { openSpotlight } from '@mantine/spotlight'
+import { ctrlOrCmdKey } from '@renderer/core/electron'
 import {
   toggleCreateProjectModalEvent,
   toggleSelectProjectModalEvent,
@@ -34,35 +35,30 @@ import { Shortcut } from './types'
 
 export const generalShortcuts: Shortcut[] = [
   {
-    keys: ['K'],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, 'K'],
     name: 'Toggle spotlight',
     onExecute: openSpotlight
   },
   {
-    keys: ['Alt', 'N'],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, 'Alt', 'N'],
     name: 'New project',
     onExecute: () => toggleCreateProjectModalEvent(true),
     icon: IconPlus
   },
   {
-    keys: ['Shift', 'P'],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, 'Alt', 'P'],
     name: 'Select project',
     onExecute: () => toggleSelectProjectModalEvent(true),
     icon: IconList
   },
   {
-    keys: [','],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, ','],
     name: 'Open settings',
     onExecute: () => toggleSettingsModalEvent(true),
     icon: IconSettings
   },
   {
-    keys: ['Shift', 'X'],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, 'Shift', 'X'],
     name: 'Close application',
     onExecute: () => {},
     icon: IconPower
@@ -84,15 +80,13 @@ export const editorShortcuts = ({ undo, redo }: EditorShortcutsProps): Shortcut[
   //   icon: IconDeviceFloppy
   // },
   {
-    keys: ['Z'],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, 'Z'],
     name: 'Undo',
     onExecute: undo,
     icon: IconArrowBackUp
   },
   {
-    keys: ['Y'],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, 'Y'],
     name: 'Redo',
     onExecute: redo,
     icon: IconArrowForwardUp
@@ -130,29 +124,25 @@ export const editorShortcuts = ({ undo, redo }: EditorShortcutsProps): Shortcut[
 
 export const diagramEditorShortcuts = (flow: ReactFlowInstance): Shortcut[] => [
   {
-    keys: ['N'],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, 'N'],
     name: 'New Model',
     onExecute: () => {},
     icon: IconBorderAll
   },
   {
-    keys: ['N'],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, 'N'],
     name: 'New Enum',
     onExecute: () => {},
     icon: IconLayoutList
   },
   {
-    keys: ['L'],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, 'L'],
     name: 'Auto layout diagram',
     onExecute: () => layoutDiagramEffect(),
     icon: IconBoxMargin
   },
   {
-    keys: ['V'],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, 'V'],
     name: 'Fit into view',
     onExecute: () => flow.fitView(),
     icon: IconZoomInArea
@@ -169,36 +159,31 @@ export const diagramEditorShortcuts = (flow: ReactFlowInstance): Shortcut[] => [
     icon: IconTrash
   },
   {
-    keys: ['O'],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, 'O'],
     name: 'One-to-one relation',
     onExecute: () => setSelectedRelationTypeEvent(RelationType.ONE_TO_ONE),
     icon: IconRelationOneToOne
   },
   {
-    keys: ['N'],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, 'N'],
     name: 'One-to-many relation',
     onExecute: () => setSelectedRelationTypeEvent(RelationType.ONE_TO_MANY),
     icon: IconRelationOneToMany
   },
   {
-    keys: ['M'],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, 'M'],
     name: 'Many-to-many relation',
     onExecute: () => setSelectedRelationTypeEvent(RelationType.MANY_TO_MANY),
     icon: IconRelationManyToMany
   },
   {
-    keys: ['='],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, '='],
     name: 'Zoom in',
     onExecute: () => flow.zoomIn(),
     icon: IconZoomIn
   },
   {
-    keys: ['-'],
-    isCtrlOrCmd: true,
+    keys: [ctrlOrCmdKey, '-'],
     name: 'Zoom out',
     onExecute: () => flow.zoomOut(),
     icon: IconZoomOut
