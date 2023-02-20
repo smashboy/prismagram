@@ -5,14 +5,19 @@ import {
   ModelData,
   PrismaSchemaStateData,
   DatasourceData,
-  PrismaSchemaStateInstance
+  PrismaSchemaStateInstance,
+  RelationsManagerInstance,
+  RelationFieldData
 } from './types'
 import { extractBlockIdsByType, extractBlocksByType } from './utils/block'
 import { EOL } from '../constants'
 import { BlockBase, Datasource, Enum, Generator, Model } from './blocks'
+import { RelationsManager } from './relations'
+import { RelationAttribute } from './attributes'
 
 export class PrismaSchemaState implements PrismaSchemaStateInstance {
   private readonly state: PrismaSchemaStateData
+  readonly relations: RelationsManagerInstance = new RelationsManager(this)
 
   constructor(state: PrismaSchemaStateData = new Map()) {
     this.state = state
@@ -63,9 +68,26 @@ export class PrismaSchemaState implements PrismaSchemaStateInstance {
   }
 
   removeModel(id: string) {
-    const data = this.model(id)
+    const modelData = this.model(id)
 
-    if (!data) return
+    if (!modelData) return
+
+    const relationFieldsData: RelationFieldData[] = []
+
+    for (const field of modelData.fields.values()) {
+      if ((field as RelationFieldData)?.isRelationField) {
+        relationFieldsData.push(field as RelationFieldData)
+      }
+    }
+
+    relationFieldsData.forEach((field) =>
+      this.relations.remove(
+        modelData.name,
+        field.type,
+        new RelationAttribute(field.attributes.get('relation')).name || void 0
+      )
+    )
+    this.state.delete(id)
   }
 
   removeEnum(id: string) {

@@ -109,6 +109,7 @@ export interface ScalarFieldData extends ModelFieldData {
 }
 
 export interface PrismaSchemaStateInstance {
+  readonly relations: RelationsManagerInstance
   readonly datasource: DatasourceData
   readonly generators: Map<string, GeneratorData>
   readonly models: Map<string, ModelData>
@@ -124,6 +125,11 @@ export interface PrismaSchemaStateInstance {
   toString(): string
   fromString(schema: string): void
   _clone(): PrismaSchemaStateInstance
+}
+
+export interface RelationsManagerInstance {
+  remove(modelId: string, relatedModelId: string, relationName?: string): void
+  removeRelationFields(modelId: string, relatedModelId: string, relationName?: string): void
 }
 
 export type TopLevelBlockData = ModelData | EnumData | DatasourceData | GeneratorData
