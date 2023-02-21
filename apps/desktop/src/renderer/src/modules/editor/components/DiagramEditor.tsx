@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { combine } from 'effector'
 import ReactFlow, {
   applyNodeChanges,
@@ -31,6 +31,9 @@ import { NodesToolbar } from './NodesToolbar'
 import { EditorToolbar } from './EditorToolbar'
 import { zoomToNode } from '../utils'
 import { EnumNode } from './nodes/EnumNode'
+import { ipcRenderer } from '@renderer/core/electron'
+import { EDITOR_REMOTE_SCHEMA_CHANGES } from '@shared/common/configs/api'
+import { createPrismaSchemaState } from 'prisma-state/_new/state'
 
 const $store = combine({
   nodes: $nodesArray,
@@ -52,6 +55,20 @@ export const DiagramEditor = () => {
   const { nodes, edges, viewport, schemaState } = useStore($store)
 
   useDiagramEditorShortcuts()
+
+  useEffect(() => {
+    const handleSetSchemaState = (_: unknown, schema: string) => {
+      const state = createPrismaSchemaState()
+      state.fromString(schema)
+      setPrismaSchemaEvent(state)
+    }
+
+    ipcRenderer.on(EDITOR_REMOTE_SCHEMA_CHANGES, handleSetSchemaState)
+
+    return () => {
+      ipcRenderer.removeListener(EDITOR_REMOTE_SCHEMA_CHANGES, handleSetSchemaState)
+    }
+  }, [])
 
   const onNodesChange: OnNodesChange = (changes) =>
     nodesChangeEvent(applyNodeChanges(changes, nodes))

@@ -61,6 +61,9 @@ export const ModelNodeEditField: React.FC<ModelNodeEditFieldProps> = ({
         <FieldNameInput block={block} field={field} />
         <FieldTypeSelect field={field} />
         <FieldModifierSelect field={field} />
+        {/* <ActionIcon mb={5}>
+          <IconAt size={16} />
+        </ActionIcon> */}
         <ActionIcon mb={5} onClick={handleDeleteField}>
           <IconTrash size={16} />
         </ActionIcon>

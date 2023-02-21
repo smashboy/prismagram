@@ -27,7 +27,6 @@ export default class WindowsManager extends WindowsManagerBase {
   protected appWindow: WindowManager | undefined
 
   private readonly commandsManager = new CommandsManager()
-  private readonly projectsManager = new ProjectsManager()
 
   protected createAppWindow() {
     this.appWindow = this.createWindow({
@@ -38,37 +37,38 @@ export default class WindowsManager extends WindowsManagerBase {
     })
 
     const browserWindow = this.appWindow!.getWindow()
+    const projectsManager = new ProjectsManager(browserWindow)
 
     this.appWindow.createApiRoute(GET_PROJECTS_LIST_ENDPOINT, () =>
-      this.projectsManager.getProjectsList()
+      projectsManager.getProjectsList()
     )
 
     this.appWindow.createApiRoute(CREATE_PROJECT_ENDPOINT, (args: Omit<Project, 'id'>) =>
-      this.projectsManager.createProject(args)
+      projectsManager.createProject(args)
     )
 
     this.appWindow.createApiRoute(UPDATE_PROJECT_ENDPOINT, (project: Project) =>
-      this.projectsManager.updateProject(project)
+      projectsManager.updateProject(project)
     )
 
     this.appWindow.createApiRoute(
       EDITOR_SAVE_SCHEMA,
       (args: { project: Project; schema: string }) =>
-        this.projectsManager.saveSchema(args.schema, args.project)
+        projectsManager.saveSchema(args.schema, args.project)
     )
 
     this.appWindow.createApiRoute(
       EDITOR_SAVE_DIAGRAM,
       (args: { diagram: Diagram; project: Project }) =>
-        this.projectsManager.saveDiagram(args.diagram, args.project)
+        projectsManager.saveDiagram(args.diagram, args.project)
     )
 
     this.appWindow.createApiRoute(GET_PROJECT_DIRECTORY_ENDPOINT, async () => {
-      const directory = await this.projectsManager.getProjectDirectory(browserWindow)
+      const directory = await projectsManager.getProjectDirectory(browserWindow)
 
       if (!directory) return
 
-      const schemaPath = this.projectsManager.getProjectSchemaPath(directory)
+      const schemaPath = projectsManager.getProjectSchemaPath(directory)
 
       return [directory, schemaPath]
     })
@@ -76,15 +76,17 @@ export default class WindowsManager extends WindowsManagerBase {
     // this.appWindow.createApiRoute(
     //   CREATE_COMMAND_ENDPOINT,
     //   (args: { project: Project; command: PrismaCommand }) =>
-    //     this.projectsManager.createCommand(args.command, args.project)
+    //     projectsManager.createCommand(args.command, args.project)
     // )
 
     this.appWindow.createApiRoute(GET_EDITOR_DATA_ENDPOINT, async (project: Project) => {
-      const schemaPath = this.projectsManager.getProjectSchemaPath(project.projectDirectory)
-      const diagram = this.projectsManager.getProjectDiagram(project)
+      const schemaPath = projectsManager.getProjectSchemaPath(project.projectDirectory)
+      const diagram = projectsManager.getProjectDiagram(project)
 
       if (schemaPath) {
-        const schema = this.projectsManager.getProjectSchema(project)
+        const schema = projectsManager.getProjectSchema(project)
+
+        projectsManager.watchSchemaChanges(schemaPath)
 
         return { schema, schemaPath, diagram }
       }

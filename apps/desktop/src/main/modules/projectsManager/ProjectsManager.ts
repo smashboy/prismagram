@@ -10,8 +10,16 @@ import { PrismaCommand } from '@shared/common/models/Prisma'
 import { defaultSchemaPaths } from '@shared/common/configs/prisma'
 import { formatPrismaSchema } from '../../services/prisma'
 import { Diagram } from '@shared/common/models/Diagram'
+import { EDITOR_REMOTE_SCHEMA_CHANGES } from '@shared/common/configs/api'
 
 export class ProjectsManager {
+  private readonly appWindow: BrowserWindow
+  private watchedSchema: string | null = null
+
+  constructor(appWindow: BrowserWindow) {
+    this.appWindow = appWindow
+  }
+
   private geProjecFolderPath(id = randomUUID()) {
     return [path.join(PROJECTS_FOLDER_PATH, id), id]
   }
@@ -141,6 +149,8 @@ export class ProjectsManager {
 
     if (!schemaPath) return
 
+    this.watchSchemaChanges(schemaPath)
+
     const schema = fs.readFileSync(schemaPath, { encoding: 'utf-8' })
 
     return schema
@@ -154,5 +164,19 @@ export class ProjectsManager {
     )
 
     return diagram
+  }
+
+  watchSchemaChanges(schemaPath: string) {
+    if (this.watchedSchema) fs.unwatchFile(this.watchedSchema)
+
+    fs.watchFile(schemaPath, (curr, prev) => {
+      if (curr.size !== prev.size && fs.existsSync(schemaPath)) {
+        this.appWindow.webContents.send(
+          EDITOR_REMOTE_SCHEMA_CHANGES,
+          fs.readFileSync(schemaPath, { encoding: 'utf-8' })
+        )
+      }
+    })
+    this.watchedSchema = schemaPath
   }
 }

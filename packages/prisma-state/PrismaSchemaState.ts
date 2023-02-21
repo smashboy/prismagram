@@ -88,7 +88,6 @@ export class PrismaSchemaState {
   }
 
   fromString(schema: string) {
-    console.log('START OLD')
     console.time()
 
     const { list } = getSchema(schema)

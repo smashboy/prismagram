@@ -107,7 +107,6 @@ export class PrismaSchemaState implements PrismaSchemaStateInstance {
   }
 
   fromString(schema: string) {
-    console.log('START NEW')
     console.time()
 
     const { list } = getSchema(schema)

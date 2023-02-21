@@ -1,7 +1,7 @@
 import { combine } from 'effector'
 import { useStore, useStoreMap } from 'effector-react'
 import { Handle, NodeProps, Position, useStore as useFlowStore } from 'reactflow'
-import { Paper, Stack, Table } from '@mantine/core'
+import { Stack, Table } from '@mantine/core'
 import { ModelNodeData } from '@shared/common/models/Diagram'
 import { $nodesColors, $schemaModels, $schemaState, $selectedNodeId } from '../../../stores'
 import { ModelNodeField } from './ModelNodeField'
@@ -11,7 +11,6 @@ import { BlockNameInput } from '../../inputs/BlockNameInput'
 import { NodeType } from '@shared/common/configs/diagrams'
 import { ModelNodeEditForm } from './ModelNodeEditForm'
 import { Model } from 'prisma-state/_new/blocks'
-import { ModelNodeAttributeField } from './ModelNodeAttributeField'
 import { useBoolean } from 'react-use'
 
 const $store = combine({
@@ -82,7 +81,7 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
                 ))}
               </tbody>
             </Table>
-            {model.attributesArray.length > 0 && (
+            {/* {model.attributesArray.length > 0 && (
               <Paper bg="gray.1" p="xs" withBorder>
                 <Stack>
                   {model.attributesArray.map((attr) => (
@@ -90,7 +89,7 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
                   ))}
                 </Stack>
               </Paper>
-            )}
+            )} */}
           </Stack>
         )}
 

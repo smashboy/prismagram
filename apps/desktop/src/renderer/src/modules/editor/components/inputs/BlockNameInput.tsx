@@ -56,7 +56,7 @@ export const BlockNameInput: React.FC<BlockNameInputProps> = ({ block }) => {
         disableClose={!block}
         disableConfirm={!name}
         placeholder="Model name..."
-        sx={{ flex: 1 }}
+        sx={{ flexGrow: 1 }}
       />
     )
 
