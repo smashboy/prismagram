@@ -3,22 +3,22 @@ import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { Group, Text, ThemeIcon } from '@mantine/core'
 import { IconBorderAll, IconLayoutList } from '@tabler/icons'
-import { $nodesColors, $selectedNodeId } from '../../stores'
+import { $nodesColors, $schemaState, $selectedNodeId, setPrismaSchemaEvent } from '../../stores'
 import { ConfirmInput } from '@renderer/core/components'
-import { EnumData, ModelData } from 'prisma-state/_new/types'
+import { Enum, Model } from 'prisma-state/_new/blocks'
 
 interface BlockNameInputProps {
-  block: ModelData | EnumData
-  onSave: (name: string) => void
+  block: Model | Enum
 }
 
 const $store = combine({
   nodesColors: $nodesColors,
-  selectedNodeId: $selectedNodeId
+  selectedNodeId: $selectedNodeId,
+  state: $schemaState
 })
 
-export const BlockNameInput: React.FC<BlockNameInputProps> = ({ block, onSave }) => {
-  const { nodesColors, selectedNodeId } = useStore($store)
+export const BlockNameInput: React.FC<BlockNameInputProps> = ({ block }) => {
+  const { nodesColors, selectedNodeId, state } = useStore($store)
 
   const color = nodesColors[block?.name || '']
   const Icon = block.type === 'model' ? IconBorderAll : IconLayoutList
@@ -41,7 +41,10 @@ export const BlockNameInput: React.FC<BlockNameInputProps> = ({ block, onSave })
 
   const handleOpenEdit = () => setIsOpen(true)
 
-  const handleSaveChanges = () => onSave(name)
+  const handleSaveChanges = () => {
+    block.setName(name)
+    setPrismaSchemaEvent(state._clone())
+  }
 
   if (isOpen)
     return (

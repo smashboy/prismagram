@@ -3,12 +3,7 @@ import { useBoolean } from 'react-use'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { useStore, useStoreMap } from 'effector-react'
 import { Stack, Table } from '@mantine/core'
-import {
-  $schemaEnums,
-  $schemaState,
-  $selectedNodeId,
-  setPrismaSchemaEvent
-} from '@renderer/modules/editor/stores'
+import { $schemaEnums, $schemaState, $selectedNodeId } from '@renderer/modules/editor/stores'
 import { EnumNodeData } from '@shared/common/models/Diagram'
 import { NodeCard } from '../NodeCard'
 import { BlockNameInput } from '../../inputs/BlockNameInput'
@@ -37,11 +32,6 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
 
   const isSelected = selectedNodeId?.nodeId === name
 
-  const handleSaveName = (name: string) => {
-    enumItem.setName(name)
-    setPrismaSchemaEvent(state._clone())
-  }
-
   return (
     <Stack sx={{ minWidth: 300, cursor: isSelected ? 'default' : void 0 }}>
       <EnumNodeToolbar
@@ -56,7 +46,7 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
         type={NodeType.ENUM}
       >
         <Stack>
-          <BlockNameInput block={enumData} onSave={handleSaveName} />
+          <BlockNameInput block={enumItem} />
           {isSelected ? (
             <EnumEditForm
               block={enumItem}

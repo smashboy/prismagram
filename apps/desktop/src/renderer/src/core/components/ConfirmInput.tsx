@@ -6,6 +6,7 @@ interface ConfirmInputProps extends TextInputProps {
   onCancel?: () => void
   disableConfirm?: boolean
   disableClose?: boolean
+  children?: React.ReactNode
 }
 
 export const ConfirmInput: React.FC<ConfirmInputProps> = ({
@@ -13,17 +14,21 @@ export const ConfirmInput: React.FC<ConfirmInputProps> = ({
   onCancel,
   disableClose = false,
   disableConfirm = false,
+  children,
   ...props
 }) => {
   return (
-    <Group>
+    <Group align="flex-end">
       <TextInput {...props} />
-      <ActionIcon onClick={onCancel} disabled={disableClose} color="red">
-        <IconX />
-      </ActionIcon>
-      <ActionIcon onClick={onConfirm} disabled={disableConfirm} color="green">
-        <IconCheck />
-      </ActionIcon>
+      {children}
+      <Group mb={5}>
+        <ActionIcon onClick={onCancel} disabled={disableClose} color="red">
+          <IconX />
+        </ActionIcon>
+        <ActionIcon onClick={onConfirm} disabled={disableConfirm} color="green">
+          <IconCheck />
+        </ActionIcon>
+      </Group>
     </Group>
   )
 }

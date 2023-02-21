@@ -17,9 +17,11 @@ export const ShortcutsSettings = () => {
         <ShortcutsList category="General" shortcuts={generalShortcuts} />
         <ShortcutsList
           category="Editor"
-          shortcuts={editorShortcuts({ undo: () => {}, redo: () => {} })}
+          shortcuts={[
+            ...editorShortcuts({ undo: () => {}, redo: () => {} }),
+            ...diagramEditorShortcuts(flow)
+          ]}
         />
-        <ShortcutsList category="Diagram editor" shortcuts={diagramEditorShortcuts(flow)} />
       </Stack>
     </SettingsSection>
   )

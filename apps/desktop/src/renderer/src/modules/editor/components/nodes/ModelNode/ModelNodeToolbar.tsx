@@ -12,11 +12,13 @@ import { NodeToolbar } from '../NodeToolbar'
 interface ModelNodeToolbarProps {
   isSelected: boolean
   selectedNodeId?: string | null
+  onOpenNewFieldInput: () => void
 }
 
 export const ModelNodeToolbar: React.FC<ModelNodeToolbarProps> = ({
   isSelected,
-  selectedNodeId
+  selectedNodeId,
+  onOpenNewFieldInput
 }) => {
   const flow = useReactFlow()
 
@@ -49,7 +51,7 @@ export const ModelNodeToolbar: React.FC<ModelNodeToolbarProps> = ({
           <IconPlugConnected />
         </ActionIcon>
       </Tooltip>
-      <Tooltip label="New field" withinPortal>
+      <Tooltip onClick={onOpenNewFieldInput} label="New field" withinPortal>
         <ActionIcon>
           <IconRowInsertBottom />
         </ActionIcon>

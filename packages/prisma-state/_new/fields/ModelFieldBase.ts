@@ -9,7 +9,13 @@ import {
   UniqueAttribute,
   UpdatedAtAttribute
 } from '../attributes'
-import { EnumModelFieldData, RelationFieldData, ScalarFieldData, Writeable } from '../types'
+import {
+  EnumModelFieldData,
+  FieldModifier,
+  RelationFieldData,
+  ScalarFieldData,
+  Writeable
+} from '../types'
 import { EnumModelField } from './EnumModelField'
 import { FieldBase } from './FieldBase'
 import { RelationField } from './RelationField'
@@ -42,8 +48,28 @@ export abstract class ModelFieldBase<
     return `${type}${modifier === 'list' ? '[]' : modifier === 'optional' ? '?' : ''}`
   }
 
+  get isRelation() {
+    return (this.data as Writeable<RelationFieldData>)?.isRelationField || false
+  }
+
+  get isEnum() {
+    return (this.data as Writeable<EnumModelFieldData>)?.isEnumField || false
+  }
+
+  get modifier() {
+    return this.data.modifier
+  }
+
+  setName(name: string) {
+    this.data.name = name
+  }
+
   setType(type: string) {
     this.data.type = type
+  }
+
+  setModifier(modifier: FieldModifier | null) {
+    this.data.modifier = modifier
   }
 
   _parse(data: AstField) {

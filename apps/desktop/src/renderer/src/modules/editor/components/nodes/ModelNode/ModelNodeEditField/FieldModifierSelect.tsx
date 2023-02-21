@@ -1,9 +1,11 @@
 import { Select } from '@mantine/core'
-import { updatePrismaSchemaEvent } from '@renderer/modules/editor/stores'
-import { ModelField } from 'prisma-state/fields'
+import { $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor/stores'
+import { useStore } from 'effector-react'
+import { EnumModelField, RelationField, ScalarField } from 'prisma-state/_new/fields'
+import { FieldModifier } from 'prisma-state/_new/types'
 
 interface FieldModifierSelectProps {
-  field: ModelField
+  field: ScalarField | RelationField | EnumModelField
 }
 
 const options = [
@@ -22,19 +24,21 @@ const options = [
 ]
 
 export const FieldModifierSelect: React.FC<FieldModifierSelectProps> = ({ field }) => {
-  const { modifier } = field
+  const state = useStore($schemaState)
 
-  const handleSelect = (value: string | null) => {
-    field.setModifier(value as 'optional' | 'list')
-    updatePrismaSchemaEvent()
+  const handleSelect = (value: FieldModifier | null) => {
+    field.setModifier(value)
+    setPrismaSchemaEvent(state._clone())
   }
 
   return (
     <Select
       label="Modifier"
-      value={modifier}
+      value={field.modifier}
       onChange={handleSelect}
+      sx={{ flex: 1 }}
       data={options as unknown as string[]}
+      readOnly={field.isRelation}
     />
   )
 }

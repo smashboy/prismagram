@@ -46,6 +46,10 @@ export class Model extends BlockBase<
     return this.data.attributes
   }
 
+  get attributesArray() {
+    return [...this.attributes.values()]
+  }
+
   getReferences() {
     const references: Array<ModelReference> = []
 

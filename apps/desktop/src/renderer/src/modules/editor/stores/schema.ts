@@ -4,7 +4,6 @@ import { createPrismaSchemaState } from 'prisma-state/_new/state'
 import { DatasourceData } from 'prisma-state/_new/types'
 
 export const setPrismaSchemaEvent = createEvent<ReturnType<typeof createPrismaSchemaState>>()
-export const updatePrismaSchemaEvent = createEvent()
 
 const $schemaStateWritable = createStore(createPrismaSchemaState()).on(
   setPrismaSchemaEvent,

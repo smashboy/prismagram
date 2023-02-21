@@ -123,18 +123,18 @@ export const editorShortcuts = ({ undo, redo }: EditorShortcutsProps): Shortcut[
 ]
 
 export const diagramEditorShortcuts = (flow: ReactFlowInstance): Shortcut[] => [
-  {
-    keys: [ctrlOrCmdKey, 'N'],
-    name: 'New Model',
-    onExecute: () => {},
-    icon: IconBorderAll
-  },
-  {
-    keys: [ctrlOrCmdKey, 'N'],
-    name: 'New Enum',
-    onExecute: () => {},
-    icon: IconLayoutList
-  },
+  // {
+  //   keys: [ctrlOrCmdKey, 'N'],
+  //   name: 'New Model',
+  //   onExecute: () => {},
+  //   icon: IconBorderAll
+  // },
+  // {
+  //   keys: [ctrlOrCmdKey, 'N'],
+  //   name: 'New Enum',
+  //   onExecute: () => {},
+  //   icon: IconLayoutList
+  // },
   {
     keys: [ctrlOrCmdKey, 'L'],
     name: 'Auto layout diagram',

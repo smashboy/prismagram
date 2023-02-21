@@ -1,37 +1,44 @@
+import { useStore } from 'effector-react'
 import { DragEndEvent } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { Stack } from '@mantine/core'
-import { updatePrismaSchemaEvent } from '@renderer/modules/editor/stores'
-import { Model } from 'prisma-state/blocks'
+import { $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor/stores'
+import { Model } from 'prisma-state/_new/blocks'
 import { NodeDnDContext } from '../NodeDnDContext'
 import { ModelNodeEditField } from './ModelNodeEditField'
+import { NewModelFieldInput } from './NewModelFieldInput'
 
 interface ModelNodeEditFormProps {
   block: Model
-  // isOpenNewField: boolean
-  // onCloseNewField: () => void
+  isOpenNewField: boolean
+  onCloseNewField: () => void
 }
 
-export const ModelNodeEditForm: React.FC<ModelNodeEditFormProps> = ({ block }) => {
-  const { fieldNames, fields } = block
+export const ModelNodeEditForm: React.FC<ModelNodeEditFormProps> = ({
+  block,
+  isOpenNewField,
+  onCloseNewField
+}) => {
+  const state = useStore($schemaState)
 
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
 
     if (!over || active.id === over.id) return
 
-    const oldIndex = fieldNames.indexOf(active.id as string)
-    const newIndex = fieldNames.indexOf(over.id as string)
+    const oldIndex = block.fieldNames.indexOf(active.id as string)
+    const newIndex = block.fieldNames.indexOf(over.id as string)
 
-    block._setFromArray(arrayMove(fields, oldIndex, newIndex))
+    block._setFromArray(arrayMove(block.fieldsArray, oldIndex, newIndex))
 
-    updatePrismaSchemaEvent()
+    setPrismaSchemaEvent(state._clone())
   }
 
   return (
     <Stack>
-      <NodeDnDContext fieldNames={fieldNames} onDragEnd={onDragEnd}>
-        {fields.map((field) => (
+      <NodeDnDContext fieldNames={block.fieldNames} onDragEnd={onDragEnd}>
+        {isOpenNewField && <NewModelFieldInput onClose={onCloseNewField} />}
+        {block.fieldsArray.map((field) => (
           <ModelNodeEditField key={field.name} block={block} field={field} />
         ))}
       </NodeDnDContext>

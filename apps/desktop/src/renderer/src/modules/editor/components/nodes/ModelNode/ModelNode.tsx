@@ -1,15 +1,9 @@
 import { combine } from 'effector'
 import { useStore, useStoreMap } from 'effector-react'
 import { Handle, NodeProps, Position, useStore as useFlowStore } from 'reactflow'
-import { Stack, Table } from '@mantine/core'
+import { Paper, Stack, Table } from '@mantine/core'
 import { ModelNodeData } from '@shared/common/models/Diagram'
-import {
-  $nodesColors,
-  $schemaModels,
-  $schemaState,
-  $selectedNodeId,
-  setPrismaSchemaEvent
-} from '../../../stores'
+import { $nodesColors, $schemaModels, $schemaState, $selectedNodeId } from '../../../stores'
 import { ModelNodeField } from './ModelNodeField'
 import { ModelNodeToolbar } from './ModelNodeToolbar'
 import { NodeCard } from '../NodeCard'
@@ -17,6 +11,8 @@ import { BlockNameInput } from '../../inputs/BlockNameInput'
 import { NodeType } from '@shared/common/configs/diagrams'
 import { ModelNodeEditForm } from './ModelNodeEditForm'
 import { Model } from 'prisma-state/_new/blocks'
+import { ModelNodeAttributeField } from './ModelNodeAttributeField'
+import { useBoolean } from 'react-use'
 
 const $store = combine({
   nodesColors: $nodesColors,
@@ -28,6 +24,8 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
   const { sourceHandlers, targetHandlers } = data
 
   const { selectedNodeId, nodesColors, state } = useStore($store)
+
+  const [isOpenNewField, toggleIsOpenNewField] = useBoolean(false)
 
   const modelData = useStoreMap({
     store: $schemaModels,
@@ -46,57 +44,56 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
     ...[...new Set(model.fieldsArray.map((field) => field.attributes.size))]
   )
 
-  const handleSaveName = (name: string) => {
-    model.setName(name)
-    setPrismaSchemaEvent(state._clone())
-  }
-
   return (
     <Stack sx={{ minWidth: 150, cursor: isSelected ? 'default' : void 0 }}>
-      <ModelNodeToolbar isSelected={isSelected} selectedNodeId={selectedNodeId?.nodeId} />
+      <ModelNodeToolbar
+        isSelected={isSelected}
+        selectedNodeId={selectedNodeId?.nodeId}
+        onOpenNewFieldInput={toggleIsOpenNewField}
+      />
       <NodeCard
         nodeId={name}
         isSelected={isSelected}
         selectedNodeId={selectedNodeId?.nodeId}
         type={NodeType.MODEL}
       >
-        <BlockNameInput block={modelData} onSave={handleSaveName} />
-        {/* {isSelected ? (
-          <ModelNodeEditForm block={model} />
+        <BlockNameInput block={model} />
+        {isSelected ? (
+          <ModelNodeEditForm
+            isOpenNewField={isOpenNewField}
+            onCloseNewField={toggleIsOpenNewField}
+            block={model}
+          />
         ) : (
-          <Table verticalSpacing="md" fontSize="xl">
-            <tbody>
-              {[...fields.values()].map((field) => (
-                <ModelNodeField
-                  key={field.name}
-                  fieldId={field.name}
-                  field={field}
-                  isSelected={isSelected}
-                  nodesColors={nodesColors}
-                  sourceHandlers={sourceHandlers}
-                  targetHandlers={targetHandlers}
-                  maxAttribuesCount={maxAttribuesCount}
-                />
-              ))}
-            </tbody>
-          </Table>
-        )} */}
-        <Table verticalSpacing="md" fontSize="xl">
-          <tbody>
-            {model.fieldsArray.map((field) => (
-              <ModelNodeField
-                key={field.name}
-                fieldId={field.name}
-                field={field}
-                isSelected={isSelected}
-                nodesColors={nodesColors}
-                sourceHandlers={sourceHandlers}
-                targetHandlers={targetHandlers}
-                maxAttribuesCount={maxAttribuesCount}
-              />
-            ))}
-          </tbody>
-        </Table>
+          <Stack sx={{ alignItems: 'center' }}>
+            <Table verticalSpacing="md" fontSize="xl">
+              <tbody>
+                {model.fieldsArray.map((field) => (
+                  <ModelNodeField
+                    key={field.name}
+                    fieldId={field.name}
+                    field={field}
+                    isSelected={isSelected}
+                    nodesColors={nodesColors}
+                    sourceHandlers={sourceHandlers}
+                    targetHandlers={targetHandlers}
+                    maxAttribuesCount={maxAttribuesCount}
+                  />
+                ))}
+              </tbody>
+            </Table>
+            {model.attributesArray.length > 0 && (
+              <Paper bg="gray.1" p="xs" withBorder>
+                <Stack>
+                  {model.attributesArray.map((attr) => (
+                    <ModelNodeAttributeField key={attr.type} attr={attr} />
+                  ))}
+                </Stack>
+              </Paper>
+            )}
+          </Stack>
+        )}
+
         <Handle
           id={name}
           type="source"
