@@ -15,6 +15,7 @@ import { EDITOR_REMOTE_SCHEMA_CHANGES } from '@shared/common/configs/api'
 export class ProjectsManager {
   private readonly appWindow: BrowserWindow
   private watchedSchema: string | null = null
+  private isSavingDiagram = false
 
   constructor(appWindow: BrowserWindow) {
     this.appWindow = appWindow
@@ -67,6 +68,7 @@ export class ProjectsManager {
   }
 
   async saveSchema(schema: string, project: Project) {
+    this.isSavingDiagram = true
     const schemaPath = this.getProjectSchemaPath(project.projectDirectory)
 
     if (schemaPath) {
@@ -170,6 +172,11 @@ export class ProjectsManager {
     if (this.watchedSchema) fs.unwatchFile(this.watchedSchema)
 
     fs.watchFile(schemaPath, (curr, prev) => {
+      if (this.isSavingDiagram) {
+        this.isSavingDiagram = false
+        return
+      }
+
       if (curr.size !== prev.size && fs.existsSync(schemaPath)) {
         this.appWindow.webContents.send(
           EDITOR_REMOTE_SCHEMA_CHANGES,
