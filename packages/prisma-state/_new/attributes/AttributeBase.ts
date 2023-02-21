@@ -62,7 +62,7 @@ export abstract class AttributeBase<
       return func
     }
 
-    if (arg.type === 'array') return arg.args.map(this._parseSingleArg)
+    if (arg.type === 'array') return arg.args?.map(this._parseSingleArg) || []
   }
 
   private _parseKeyValueArg(arg: KeyValue) {

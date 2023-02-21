@@ -38,11 +38,11 @@ export const createHistoryStore = <T = unknown>($store: Store<T>) => {
   const initialState = $store.getState()
 
   const $history = createStore({
-    states: [initialState],
+    states: [structuredClone(initialState)],
     index: 0
   })
 
-  const $current = $history.map(({ states, index }) => structuredClone(states[index]))
+  const $current = $history.map(({ states, index }) => states[index])
 
   const internalAPi = createApi($history, {
     add: ({ states, index }, store: T) => {

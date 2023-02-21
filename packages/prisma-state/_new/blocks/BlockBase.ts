@@ -43,14 +43,24 @@ export abstract class BlockBase<
   }
 
   setName(name: string) {
-    const oldFields = structuredClone(this.fields)
-    this.fields.clear()
+    const updatedBlock = this._data()
+    updatedBlock.fields.clear()
 
-    this.data.name = name
-    oldFields.forEach((field) => this.addField(field.name, { ...field, blockId: name } as FW))
+    updatedBlock.name = name
+    this.fields.forEach((field) =>
+      updatedBlock.fields.set(field.name, { ...field, blockId: name } as FW)
+    )
 
-    this.state.models.delete(this.name)
-    this.state.models.set(this.name, this._data() as BW)
+    if (this.type === 'model') {
+      this.state.removeModel(this.name)
+      this.state.createModel(name, updatedBlock)
+      return
+    }
+
+    if (this.type === 'enum') {
+      this.state.removeEnum(this.name)
+      this.state.createEnum(name, updatedBlock)
+    }
   }
 
   addField(fieldId: string, data: F) {

@@ -20,7 +20,7 @@ export class PrismaSchemaState implements PrismaSchemaStateInstance {
   readonly relations: RelationsManagerInstance = new RelationsManager(this)
 
   constructor(state: PrismaSchemaStateData = new Map()) {
-    this.state = state
+    this.state = structuredClone(state)
   }
 
   get datasource() {
@@ -55,14 +55,14 @@ export class PrismaSchemaState implements PrismaSchemaStateInstance {
     return this.enums.get(id)!
   }
 
-  createModel(name: string) {
-    const model = new Model(name, this)
+  createModel(name: string, data?: ModelData) {
+    const model = new Model(name, this, data)
     this.state.set(model.name, model._data())
     return this.models.get(name)
   }
 
-  createEnum(name: string) {
-    const enumBlock = new Enum(name, this)
+  createEnum(name: string, data?: EnumData) {
+    const enumBlock = new Enum(name, this, data)
     this.state.set(enumBlock.name, enumBlock._data())
     return this.enums.get(name)
   }

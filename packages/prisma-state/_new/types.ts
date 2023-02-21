@@ -118,8 +118,8 @@ export interface PrismaSchemaStateInstance {
   readonly enumIds: string[]
   model(id: string): ModelData
   enum(id: string): EnumData
-  createModel(name: string): void
-  createEnum(name: string): void
+  createModel(name: string, data?: ModelData): void
+  createEnum(name: string, data?: EnumData): void
   removeModel(id: string): void
   removeEnum(id: string): void
   toString(): string
