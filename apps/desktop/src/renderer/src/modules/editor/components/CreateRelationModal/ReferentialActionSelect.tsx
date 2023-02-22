@@ -1,16 +1,12 @@
 import { forwardRef } from 'react'
 import { Badge, Select, SelectItem, Stack, Group, Text } from '@mantine/core'
-import { PrismaSchemaState } from 'prisma-state'
-import { RelationAttribute } from 'prisma-state/attributes'
-import { Model } from 'prisma-state/blocks'
 import { ReferentialAction, ReferentialActionOption } from 'prisma-state/constants'
 
 interface ReferentialActionSelectProps {
-  name: string
-  model: Model
-  variant?: 'onUpdate' | 'onDelete'
-  state: PrismaSchemaState
-  onChange: (state: PrismaSchemaState) => void
+  label: string
+  value: ReferentialActionOption | null
+  onChange: (state: ReferentialActionOption | null) => void
+  disabled?: boolean
 }
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
@@ -94,32 +90,12 @@ const options: SelectItem[] = [
 ]
 
 export const ReferentialActionSelect: React.FC<ReferentialActionSelectProps> = ({
-  name,
-  model,
-  variant = 'onDelete',
-  state,
+  label,
+  value,
+  disabled = false,
   onChange
 }) => {
-  const field = model?.field(name)
-
-  const attr = (field?.attributes.get('relation') as RelationAttribute) || undefined
-
-  const label = variant === 'onDelete' ? 'On delete' : 'On update'
-  const value = variant === 'onDelete' ? attr?.onDelete : attr?.onUpdate
-
-  const handleSelect = (value: ReferentialActionOption | null) => {
-    if (!attr) return
-
-    if (!value) {
-      attr.removeArgument(variant)
-    } else if (variant === 'onDelete') {
-      attr.setOnDelete(value)
-    } else {
-      attr.setOnUpdate(value)
-    }
-
-    onChange(state._clone())
-  }
+  const handleSelect = (value: ReferentialActionOption | null) => onChange(value)
 
   return (
     <Select
@@ -128,7 +104,7 @@ export const ReferentialActionSelect: React.FC<ReferentialActionSelectProps> = (
       onChange={handleSelect}
       data={options}
       itemComponent={SelectItemWithDescription}
-      disabled={!attr}
+      disabled={disabled}
       clearable
     />
   )

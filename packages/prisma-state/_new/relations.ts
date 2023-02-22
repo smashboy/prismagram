@@ -1,5 +1,21 @@
-import { RelationAttribute } from './attributes'
-import { PrismaSchemaStateInstance, RelationsManagerInstance } from './types'
+import { ScalarTypeOption } from '../constants'
+import { capitalize, cleanupStr, uncapitalize } from '../utils/string'
+import {
+  IdBlockAttribute,
+  RelationAttribute,
+  UniqueAttribute,
+  UniqueBlockAttribute
+} from './attributes'
+import { Model } from './blocks'
+import { RelationField, ScalarField } from './fields'
+import {
+  CreateCommonRelationOptions,
+  CreateManyToManyRelationOptions,
+  ModelData,
+  ModelFieldData,
+  PrismaSchemaStateInstance,
+  RelationsManagerInstance
+} from './types'
 
 export class RelationsManager implements RelationsManagerInstance {
   private readonly state: PrismaSchemaStateInstance
@@ -32,5 +48,176 @@ export class RelationsManager implements RelationsManagerInstance {
   remove(firstModelId: string, secondModelId: string, relationName?: string) {
     this.removeRelationFields(firstModelId, secondModelId, relationName)
     this.removeRelationFields(secondModelId, firstModelId, relationName)
+  }
+
+  private getModelIdFields(model: ModelData) {
+    const fields: ModelFieldData[] = []
+
+    if (model.attributes.has('id')) {
+      const idBlockAttr = new IdBlockAttribute(model.attributes.get('id'))
+
+      if (idBlockAttr.fields.length > 0)
+        fields.push(...idBlockAttr.fields.map((fieldName) => model.fields.get(fieldName)!))
+    }
+
+    for (const field of model.fields.values()) {
+      if (field.attributes.has('id')) {
+        fields.push(field)
+        break
+      }
+    }
+
+    return fields
+  }
+
+  private createFieldName(modelName: string, fieldName: string) {
+    return `${uncapitalize(modelName)}${capitalize(fieldName)}`
+  }
+
+  private createCommonRelation(
+    sourceId: string,
+    targetId: string,
+    options?: CreateCommonRelationOptions,
+    oneToMany?: boolean
+  ) {
+    const sourceModel = new Model(sourceId, this.state, this.state.model(sourceId))
+    const targetModel = new Model(targetId, this.state, this.state.model(targetId))
+
+    const targetIdFields = this.getModelIdFields(targetModel)
+
+    if (targetIdFields.length === 0) return
+
+    const relationName = options?.name ? `"${options.name}"` : void 0
+
+    let sourceName = uncapitalize(sourceId)
+    let targetName = uncapitalize(targetId)
+
+    if (relationName) {
+      sourceName = `${sourceName}_${cleanupStr(relationName)}`
+      targetName = `${targetName}_${cleanupStr(relationName)}`
+    }
+
+    const targetRelationField = new RelationField(sourceName, sourceId, targetId)
+    targetRelationField.setModifier(oneToMany ? 'list' : 'optional')
+
+    const sourceRelationField = new RelationField(targetName, targetId, sourceId)
+    const sourceRelationAttr = new RelationAttribute()
+
+    if (options?.onDelete) sourceRelationAttr.setOnDelete(options.onDelete)
+    if (options?.onUpdate) sourceRelationAttr.setOnUpdate(options.onUpdate)
+
+    if (relationName) {
+      sourceRelationAttr.setName(relationName)
+
+      const targetRelationAttr = new RelationAttribute()
+      targetRelationAttr.setName(relationName)
+      targetRelationField.addAttribute('relation', targetRelationAttr._data())
+    }
+
+    if (targetIdFields.length === 1) {
+      const targetIdField = targetIdFields[0]
+      const sourceTypeField = new ScalarField(
+        this.createFieldName(targetName, targetIdField.name),
+        targetIdField.type as ScalarTypeOption,
+        sourceId
+      )
+
+      sourceRelationAttr.setFields([sourceTypeField.name])
+      sourceRelationAttr.setReferences([targetIdField.name])
+
+      sourceRelationField.addAttribute('relation', sourceRelationAttr._data())
+
+      if (!oneToMany) sourceTypeField.attributes.set('unique', new UniqueAttribute()._data())
+
+      sourceModel.addField(sourceRelationField.name, sourceRelationField._data())
+      sourceModel.addField(sourceTypeField.name, sourceTypeField._data())
+      targetModel.addField(targetRelationField.name, targetRelationField._data())
+
+      return [sourceRelationField._data(), targetRelationField._data()] as const
+    }
+
+    const sourceTypeFields = targetIdFields
+      .map(
+        (field) =>
+          new ScalarField(
+            this.createFieldName(targetName, field.name),
+            field.type as ScalarTypeOption,
+            sourceId
+          )
+      )
+      .filter((field) => !!field)
+
+    const sourceTypeFieldNames = sourceTypeFields.map((field) => field.name)
+
+    sourceRelationAttr.setFields(sourceTypeFieldNames)
+    sourceRelationAttr.setReferences(targetIdFields.map((field) => field.name))
+
+    if (!oneToMany) {
+      const uniqueBlockAttr = new UniqueBlockAttribute()
+      uniqueBlockAttr.setFields(sourceTypeFieldNames)
+      sourceModel.addAttribute('unique', uniqueBlockAttr._data())
+    }
+
+    sourceRelationField.addAttribute('relation', sourceRelationAttr._data())
+    sourceTypeFields.forEach((field) => sourceModel.addField(field.name, field._data()))
+
+    sourceModel.addField(sourceRelationField.name, sourceRelationField._data())
+    targetModel.addField(targetRelationField.name, targetRelationField._data())
+
+    return [sourceRelationField._data(), targetRelationField._data()] as const
+  }
+
+  createOneToOneRelation(
+    sourceId: string,
+    targetId: string,
+    options?: CreateCommonRelationOptions
+  ) {
+    return this.createCommonRelation(sourceId, targetId, options)
+  }
+
+  createOneToManyRelation(
+    sourceId: string,
+    targetId: string,
+    options?: CreateCommonRelationOptions
+  ) {
+    return this.createCommonRelation(sourceId, targetId, options, true)
+  }
+
+  createManyToManyRelation(
+    sourceId: string,
+    targetId: string,
+    options?: CreateManyToManyRelationOptions
+  ) {
+    const relationName = options?.name ? `"${options.name}"` : void 0
+
+    const sourceModel = new Model(sourceId, this.state, this.state.model(sourceId))
+    const targetModel = new Model(targetId, this.state, this.state.model(targetId))
+
+    let sourceName = uncapitalize(sourceId)
+    let targetName = uncapitalize(targetId)
+
+    if (relationName) {
+      sourceName = `${sourceName}_${cleanupStr(relationName)}`
+      targetName = `${targetName}_${cleanupStr(relationName)}`
+    }
+
+    const sourceRelationField = new RelationField(targetName, targetId, sourceId)
+    sourceRelationField.setModifier('list')
+
+    const targetRelationField = new RelationField(sourceName, sourceId, targetId)
+    targetRelationField.setModifier('list')
+
+    if (relationName) {
+      const relationAttr = new RelationAttribute()
+      relationAttr.setName(relationName)
+
+      sourceRelationField.addAttribute('relation', relationAttr._data())
+      targetRelationField.addAttribute('relation', relationAttr._data())
+    }
+
+    sourceModel.addField(targetRelationField.name, targetRelationField._data())
+    targetModel.addField(sourceRelationField.name, sourceRelationField._data())
+
+    return [sourceRelationField._data(), targetRelationField._data()] as const
   }
 }

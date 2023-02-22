@@ -6,7 +6,7 @@ import { ModelHandler, EnumHandler } from '@shared/common/models/Diagram'
 import { ScalarFieldColor } from '../../../config'
 import { EnumModelFieldData, RelationFieldData, ScalarFieldData } from 'prisma-state/_new/types'
 import { createFieldFromType } from 'prisma-state/_new/utils/field'
-import { $modelIds, $schemaEnumIds } from '@renderer/modules/editor/stores'
+import { $schemaModelIds, $schemaEnumIds } from '@renderer/modules/editor/stores'
 import { ModelFieldBase } from 'prisma-state/_new/fields'
 
 interface ModelNodeFieldProps {
@@ -21,7 +21,7 @@ interface ModelNodeFieldProps {
 
 const $store = combine({
   enumIds: $schemaEnumIds,
-  modelIds: $modelIds
+  modelIds: $schemaModelIds
 })
 
 export const ModelNodeField: React.FC<ModelNodeFieldProps> = ({

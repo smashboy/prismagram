@@ -11,6 +11,7 @@ import {
 } from '../attributes'
 import {
   EnumModelFieldData,
+  FieldAttributeData,
   FieldModifier,
   RelationFieldData,
   ScalarFieldData,
@@ -70,6 +71,10 @@ export abstract class ModelFieldBase<
 
   setModifier(modifier: FieldModifier | null) {
     this.data.modifier = modifier
+  }
+
+  addAttribute(name: string, data: FieldAttributeData) {
+    this.data.attributes.set(name, data)
   }
 
   _parse(data: AstField) {

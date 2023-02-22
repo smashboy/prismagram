@@ -175,13 +175,15 @@ export class RelationsManager {
     target: Model,
     options?: CreateManyToManyRelationOptions
   ) {
+    const relationName = options?.name ? `"${options.name}"` : void 0
+
     let [sourceName, targetName] = this.plurifyModalsNames(
       ...this.uncapitalizeModalsNames(source, target)
     )
 
-    if (options?.name) {
-      sourceName = `${sourceName}_${options.name}`
-      targetName = `${targetName}_${options.name}`
+    if (relationName) {
+      sourceName = `${sourceName}_${relationName}`
+      targetName = `${targetName}_${relationName}`
     }
 
     const targetRelationField = new RelationField(sourceName, source.name, target)
@@ -190,13 +192,13 @@ export class RelationsManager {
     const sourceRelationField = new RelationField(targetName, target.name, source)
     sourceRelationField.setModifier('list')
 
-    if (options?.name) {
+    if (relationName) {
       const sourceRelationAttr = new RelationAttribute(sourceRelationField)
-      sourceRelationAttr.setName(options.name)
+      sourceRelationAttr.setName(relationName)
       sourceRelationField.attributes.set('relation', sourceRelationAttr)
 
       const targetRelationAttr = new RelationAttribute(targetRelationField)
-      targetRelationAttr.setName(options.name)
+      targetRelationAttr.setName(relationName)
       targetRelationField.attributes.set('relation', targetRelationAttr)
     }
 

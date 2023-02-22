@@ -1,4 +1,4 @@
-import { ScalarTypeOption } from '../constants'
+import { ReferentialActionOption, ScalarTypeOption } from '../constants'
 
 export type BlockType = 'generator' | 'datasource' | 'model' | 'enum'
 export type SettingsFieldType = 'env' | 'option' | 'list'
@@ -127,9 +127,37 @@ export interface PrismaSchemaStateInstance {
   _clone(): PrismaSchemaStateInstance
 }
 
+export interface CreateRelationOptions {
+  name?: string
+}
+
+export interface CreateCommonRelationOptions extends CreateRelationOptions {
+  onUpdate?: ReferentialActionOption | null
+  onDelete?: ReferentialActionOption | null
+}
+
+export interface CreateManyToManyRelationOptions extends CreateRelationOptions {
+  explicit?: boolean
+}
+
 export interface RelationsManagerInstance {
   remove(modelId: string, relatedModelId: string, relationName?: string): void
   removeRelationFields(modelId: string, relatedModelId: string, relationName?: string): void
+  createOneToOneRelation: (
+    sourceId: string,
+    targetId: string,
+    options?: CreateCommonRelationOptions
+  ) => readonly [RelationFieldData, RelationFieldData] | undefined
+  createOneToManyRelation: (
+    sourceId: string,
+    targetId: string,
+    options?: CreateCommonRelationOptions
+  ) => readonly [RelationFieldData, RelationFieldData] | undefined
+  createManyToManyRelation: (
+    sourceId: string,
+    targetId: string,
+    options?: CreateManyToManyRelationOptions
+  ) => readonly [RelationFieldData, RelationFieldData]
 }
 
 export type TopLevelBlockData = ModelData | EnumData | DatasourceData | GeneratorData

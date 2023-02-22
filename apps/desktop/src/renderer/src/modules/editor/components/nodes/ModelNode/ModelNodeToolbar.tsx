@@ -1,7 +1,7 @@
 import { ActionIcon, Tooltip } from '@mantine/core'
 import {
   removeSelectedNodeEffect,
-  setCreateRelationModalData,
+  setCreateRelationModalDataEvent,
   toggleCreateRelationModalEvent
 } from '@renderer/modules/editor/stores'
 import { IconPlugConnected, IconRowInsertBottom, IconTrash } from '@tabler/icons'
@@ -26,7 +26,13 @@ export const ModelNodeToolbar: React.FC<ModelNodeToolbarProps> = ({
 
   const openCreateRelationModal = () => {
     toggleCreateRelationModalEvent(true)
-    setCreateRelationModalData({ source: selectedNodeId!, target: '' })
+    setCreateRelationModalDataEvent({
+      source: selectedNodeId!,
+      target: '',
+      name: '',
+      onDelete: null,
+      onUpdate: null
+    })
   }
 
   useEffect(() => {

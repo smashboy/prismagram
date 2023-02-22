@@ -42,8 +42,12 @@ export abstract class AttributeBase<
     return `${this.prefix}${this.type}`
   }
 
-  protected get arguments() {
+  get arguments() {
     return this.data.arguments
+  }
+
+  removeArgument(name: string) {
+    this.data.arguments.delete(name)
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

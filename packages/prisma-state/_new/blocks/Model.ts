@@ -1,6 +1,7 @@
 import type { Model as AstModel } from '@mrleebo/prisma-ast/src/getSchema'
 import { BlockBase } from './BlockBase'
 import {
+  BlockAttributeData,
   EnumModelFieldData,
   ModelData,
   PrismaSchemaStateInstance,
@@ -73,6 +74,10 @@ export class Model extends BlockBase<
       fields.forEach((field) => (field.type = name))
     }
     super.setName(name)
+  }
+
+  addAttribute(name: string, data: BlockAttributeData) {
+    this.data.attributes.set(name, data)
   }
 
   _parse(model: AstModel) {

@@ -31,7 +31,7 @@ export const $schemaDatasources = $schemaState.map(({ datasource }) =>
 
 export const $schemaGenerators = $schemaState.map(({ generators }) => generators)
 
-export const $modelIds = $schemaModels.map((models) => [...models.keys()])
+export const $schemaModelIds = $schemaModels.map((models) => [...models.keys()])
 export const $schemaEnumIds = $schemaEnums.map((enums) => [...enums.keys()])
 
 export const $schemaDatasourceIds = $schemaDatasources.map((datasources) => [...datasources.keys()])

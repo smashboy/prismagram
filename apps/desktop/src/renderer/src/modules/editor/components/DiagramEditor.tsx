@@ -18,7 +18,7 @@ import {
   addNodeEvent,
   nodesChangeEvent,
   selectNodeEvent,
-  setCreateRelationModalData,
+  setCreateRelationModalDataEvent,
   toggleCreateRelationModalEvent,
   setPrismaSchemaEvent,
   viewportChangeEvent
@@ -34,6 +34,7 @@ import { EnumNode } from './nodes/EnumNode'
 import { ipcRenderer } from '@renderer/core/electron'
 import { EDITOR_REMOTE_SCHEMA_CHANGES } from '@shared/common/configs/api'
 import { createPrismaSchemaState } from 'prisma-state/_new/state'
+import { CreateRelationModal } from './CreateRelationModal'
 
 const $store = combine({
   nodes: $nodesArray,
@@ -118,9 +119,12 @@ export const DiagramEditor = () => {
     if (!source || !target) return
 
     toggleCreateRelationModalEvent(true)
-    setCreateRelationModalData({
+    setCreateRelationModalDataEvent({
       source,
-      target
+      target,
+      name: '',
+      onDelete: null,
+      onUpdate: null
     })
   }
 
@@ -146,7 +150,7 @@ export const DiagramEditor = () => {
         <EditorToolbar />
         <NodesToolbar />
       </ReactFlow>
-      {/* <CreateRelationModal /> */}
+      <CreateRelationModal />
     </>
   )
 }

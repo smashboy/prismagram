@@ -3,11 +3,15 @@ import { $selectedProjectId } from '@renderer/modules/projects'
 import { NodeType } from '@shared/common/configs/diagrams'
 import { createEvent, createStore } from 'effector'
 import { createGate } from 'effector-react'
+import { ReferentialActionOption } from 'prisma-state/constants'
 import { EditorView } from '../config'
 
 interface CreateRelationModalData {
   target: string
   source: string
+  name: string
+  onUpdate: ReferentialActionOption | null
+  onDelete: ReferentialActionOption | null
 }
 
 export interface SelectedNodeData {
@@ -18,8 +22,8 @@ export interface SelectedNodeData {
 export const changeEditorViewEvent = createEvent<EditorView>()
 export const selectNodeEvent = createEvent<SelectedNodeData>()
 export const resetSelectedNodeEvent = createEvent()
-export const setCreateRelationModalData = createEvent<CreateRelationModalData>()
-export const resetCreateRelationModalData = createEvent()
+export const setCreateRelationModalDataEvent = createEvent<CreateRelationModalData>()
+export const resetCreateRelationModalDataEvent = createEvent()
 
 export const $selectedEditorView = createStore(EditorView.DIAGRAM).on(
   changeEditorViewEvent,
@@ -28,10 +32,13 @@ export const $selectedEditorView = createStore(EditorView.DIAGRAM).on(
 
 export const $createRelationModalData = createStore<CreateRelationModalData>({
   target: '',
-  source: ''
+  source: '',
+  name: '',
+  onDelete: null,
+  onUpdate: null
 })
-  .on(setCreateRelationModalData, (_, data) => data)
-  .reset(resetCreateRelationModalData)
+  .on(setCreateRelationModalDataEvent, (_, data) => data)
+  .reset(resetCreateRelationModalDataEvent)
 
 export const [$isOpenCreateRelationModal, toggleCreateRelationModalEvent] = createBooleanStore()
 
