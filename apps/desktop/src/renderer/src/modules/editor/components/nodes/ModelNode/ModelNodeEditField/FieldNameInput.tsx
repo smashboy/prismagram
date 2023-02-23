@@ -4,6 +4,8 @@ import { $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor/sto
 import { EnumModelField, RelationField, ScalarField } from 'prisma-state/_new/fields'
 import { useStore } from 'effector-react'
 import { Model } from 'prisma-state/_new/blocks'
+import { RelationFieldData } from 'prisma-state/_new/types'
+import { RelationAttribute } from 'prisma-state/_new/attributes'
 
 interface FieldNameInputProps {
   block: Model
@@ -28,6 +30,20 @@ export const FieldNameInput: React.FC<FieldNameInputProps> = ({ block, field }) 
     field.setName(newValue)
 
     const updatedField = field._data()
+
+    // TODO: move to relation field
+    for (const field of block.fields.values()) {
+      if ((field as RelationFieldData)?.isRelationField && field.attributes.has('relation')) {
+        const relationAttr = new RelationAttribute(field.attributes.get('relation'))
+
+        if (relationAttr.fields.includes(prevName)) {
+          relationAttr.setFields([
+            ...relationAttr.fields.filter((fieldName) => fieldName !== prevName),
+            newValue
+          ])
+        }
+      }
+    }
 
     block.removeField(prevName)
     block.addField(newValue, updatedField)
