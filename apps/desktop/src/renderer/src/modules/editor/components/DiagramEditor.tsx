@@ -124,7 +124,8 @@ export const DiagramEditor = () => {
       target,
       name: '',
       onDelete: null,
-      onUpdate: null
+      onUpdate: null,
+      isOptional: false
     })
   }
 

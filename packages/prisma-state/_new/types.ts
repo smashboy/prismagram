@@ -134,6 +134,7 @@ export interface CreateRelationOptions {
 export interface CreateCommonRelationOptions extends CreateRelationOptions {
   onUpdate?: ReferentialActionOption | null
   onDelete?: ReferentialActionOption | null
+  isOptional?: boolean
 }
 
 export interface CreateManyToManyRelationOptions extends CreateRelationOptions {

@@ -106,6 +106,8 @@ export class RelationsManager implements RelationsManagerInstance {
     if (options?.onDelete) sourceRelationAttr.setOnDelete(options.onDelete)
     if (options?.onUpdate) sourceRelationAttr.setOnUpdate(options.onUpdate)
 
+    if (options?.isOptional) sourceRelationField.setModifier('optional')
+
     if (relationName) {
       sourceRelationAttr.setName(relationName)
 
@@ -128,6 +130,7 @@ export class RelationsManager implements RelationsManagerInstance {
       sourceRelationField.addAttribute('relation', sourceRelationAttr._data())
 
       if (!oneToMany) sourceTypeField.attributes.set('unique', new UniqueAttribute()._data())
+      if (options?.isOptional) sourceTypeField.setModifier('optional')
 
       sourceModel.addField(sourceRelationField.name, sourceRelationField._data())
       sourceModel.addField(sourceTypeField.name, sourceTypeField._data())
@@ -136,16 +139,19 @@ export class RelationsManager implements RelationsManagerInstance {
       return [sourceRelationField._data(), targetRelationField._data()] as const
     }
 
-    const sourceTypeFields = targetIdFields
-      .map(
-        (field) =>
-          new ScalarField(
-            this.createFieldName(targetName, field.name),
-            field.type as ScalarTypeOption,
-            sourceId
-          )
+    const sourceTypeFields: ScalarField[] = []
+
+    for (const field of targetIdFields) {
+      const typeField = new ScalarField(
+        this.createFieldName(targetName, field.name),
+        field.type as ScalarTypeOption,
+        sourceId
       )
-      .filter((field) => !!field)
+
+      if (options?.isOptional) typeField.setModifier('optional')
+
+      sourceTypeFields.push(typeField)
+    }
 
     const sourceTypeFieldNames = sourceTypeFields.map((field) => field.name)
 
@@ -207,6 +213,8 @@ export class RelationsManager implements RelationsManagerInstance {
     const targetRelationField = new RelationField(sourceName, sourceId, targetId)
     targetRelationField.setModifier('list')
 
+    console.log({ sourceId, targetId, sourceRelationField, targetRelationField })
+
     if (relationName) {
       const relationAttr = new RelationAttribute()
       relationAttr.setName(relationName)
@@ -215,8 +223,8 @@ export class RelationsManager implements RelationsManagerInstance {
       targetRelationField.addAttribute('relation', relationAttr._data())
     }
 
-    sourceModel.addField(targetRelationField.name, targetRelationField._data())
-    targetModel.addField(sourceRelationField.name, sourceRelationField._data())
+    sourceModel.addField(sourceRelationField.name, sourceRelationField._data())
+    targetModel.addField(targetRelationField.name, targetRelationField._data())
 
     return [sourceRelationField._data(), targetRelationField._data()] as const
   }

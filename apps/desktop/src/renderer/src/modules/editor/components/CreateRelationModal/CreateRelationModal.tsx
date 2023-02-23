@@ -29,16 +29,26 @@ export const CreateRelationModal = () => {
   const [updatedState, setUpdatedState] = useState(createPrismaSchemaState())
 
   useEffect(() => {
-    const { source, target, name, onDelete, onUpdate } = data
+    const { source, target, name, onDelete, onUpdate, isOptional } = data
 
     const clonedState = schemaState._clone()
 
     if (selectedRelationType === 'n-m') {
       clonedState.relations.createManyToManyRelation(source, target, { name })
     } else if (selectedRelationType === '1-1') {
-      clonedState.relations.createOneToOneRelation(source, target, { name, onDelete, onUpdate })
+      clonedState.relations.createOneToOneRelation(source, target, {
+        name,
+        onDelete,
+        onUpdate,
+        isOptional
+      })
     } else {
-      clonedState.relations.createOneToManyRelation(source, target, { name, onDelete, onUpdate })
+      clonedState.relations.createOneToManyRelation(source, target, {
+        name,
+        onDelete,
+        onUpdate,
+        isOptional
+      })
     }
 
     setUpdatedState(clonedState)

@@ -12,6 +12,7 @@ interface CreateRelationModalData {
   name: string
   onUpdate: ReferentialActionOption | null
   onDelete: ReferentialActionOption | null
+  isOptional: boolean
 }
 
 export interface SelectedNodeData {
@@ -35,7 +36,8 @@ export const $createRelationModalData = createStore<CreateRelationModalData>({
   source: '',
   name: '',
   onDelete: null,
-  onUpdate: null
+  onUpdate: null,
+  isOptional: false
 })
   .on(setCreateRelationModalDataEvent, (_, data) => data)
   .reset(resetCreateRelationModalDataEvent)

@@ -1,26 +1,20 @@
 import { useEffect, useState } from 'react'
-import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { Stack, Text } from '@mantine/core'
 import { Prism } from '@mantine/prism'
 import { PrismaSchemaStateInstance } from 'prisma-state/_new/types'
-import { $createRelationModalData, $selectedRelationType } from '../../stores'
+import { $createRelationModalData } from '../../stores'
 import { formatSchema } from '@renderer/core/utils'
 import { BlockBase } from 'prisma-state/_new/blocks'
 
 // const added = { color: 'blue' }
-
-const $store = combine({
-  data: $createRelationModalData,
-  selectedRelationType: $selectedRelationType
-})
 
 interface PreviewSchemaChangesProps {
   state: PrismaSchemaStateInstance
 }
 
 export const PreviewSchemaChanges: React.FC<PreviewSchemaChangesProps> = ({ state }) => {
-  const { data, selectedRelationType } = useStore($store)
+  const data = useStore($createRelationModalData)
 
   const { source: sourceModelId, target: targetModelId } = data
 
@@ -40,7 +34,7 @@ export const PreviewSchemaChanges: React.FC<PreviewSchemaChangesProps> = ({ stat
     }
 
     handleCreatePreview()
-  }, [state, selectedRelationType, data])
+  }, [state])
 
   return (
     <Stack sx={{ flex: 1 }}>

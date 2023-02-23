@@ -27,7 +27,9 @@ const relationTypeOptions = [
 export const NewRelationForm = () => {
   const { data, modelIds, selectedRelationType } = useStore($store)
 
-  const { source, target, name: relationName, onDelete, onUpdate } = data
+  const { source, target, name: relationName, onDelete, onUpdate, isOptional } = data
+
+  const disableNonNMActions = !target || selectedRelationType === 'n-m'
 
   const handeRelationChange = (value: RelationTypeOption | null) => {
     if (!value) return
@@ -45,6 +47,9 @@ export const NewRelationForm = () => {
 
   const handleRelationNameInput = (event: React.ChangeEvent<HTMLInputElement>) =>
     setCreateRelationModalDataEvent({ ...data, name: event.target.value })
+
+  const handleOptionalRelationSwitch = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setCreateRelationModalDataEvent({ ...data, isOptional: event.currentTarget.checked })
 
   return (
     <Stack w="40%">
@@ -79,25 +84,29 @@ export const NewRelationForm = () => {
         onChange={handleRelationNameInput}
         disabled={!target}
       />
-      <Transition mounted={selectedRelationType !== 'n-m'} transition="fade">
-        {(style) => (
-          <Stack style={style}>
-            <Group grow>
-              <ReferentialActionSelect
-                label="On update"
-                value={onUpdate}
-                onChange={handleReferentialActionSelect('onUpdate')}
-              />
-              <ReferentialActionSelect
-                label="On delete"
-                value={onDelete}
-                onChange={handleReferentialActionSelect('onDelete')}
-              />
-            </Group>
-            <Switch label="Optional" />
-          </Stack>
-        )}
-      </Transition>
+
+      <Stack>
+        <Group grow>
+          <ReferentialActionSelect
+            label="On update"
+            value={onUpdate}
+            onChange={handleReferentialActionSelect('onUpdate')}
+            disabled={disableNonNMActions}
+          />
+          <ReferentialActionSelect
+            label="On delete"
+            value={onDelete}
+            onChange={handleReferentialActionSelect('onDelete')}
+            disabled={disableNonNMActions}
+          />
+        </Group>
+        <Switch
+          label="Optional"
+          checked={isOptional}
+          onChange={handleOptionalRelationSwitch}
+          disabled={disableNonNMActions}
+        />
+      </Stack>
     </Stack>
   )
 }

@@ -31,7 +31,8 @@ export const ModelNodeToolbar: React.FC<ModelNodeToolbarProps> = ({
       target: '',
       name: '',
       onDelete: null,
-      onUpdate: null
+      onUpdate: null,
+      isOptional: false
     })
   }
 
