@@ -19,8 +19,6 @@ import {
   IconZoomInArea,
   IconZoomOut,
   IconZoomIn,
-  IconBorderAll,
-  IconLayoutList,
   IconTrash
 } from '@tabler/icons'
 import { RelationType } from 'prisma-state/constants'

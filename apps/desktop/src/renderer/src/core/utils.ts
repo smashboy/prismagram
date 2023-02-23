@@ -1,6 +1,5 @@
 import { EDITOR_FORMAT_SCHEMA } from '@shared/common/configs/api'
 import { PrismaSchemaState } from 'prisma-state'
-import { PrismaSchemaStateInstance } from 'prisma-state/_new/types'
 import { invoke } from './electron'
 
 export const string2Color = (string: string) => {

@@ -1,6 +1,6 @@
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
-import { Group, Select, Stack, Switch, TextInput, Transition } from '@mantine/core'
+import { Group, Select, Stack, Switch, TextInput } from '@mantine/core'
 import { IconArrowRight } from '@tabler/icons'
 import { ReferentialActionOption, RelationType, RelationTypeOption } from 'prisma-state/constants'
 import {

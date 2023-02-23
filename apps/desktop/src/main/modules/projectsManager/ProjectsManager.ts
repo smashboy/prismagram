@@ -101,13 +101,13 @@ export class ProjectsManager {
     })
   }
 
-  async createCommand(command: PrismaCommand, project: Project) {
+  async createCommand(_: PrismaCommand, project: Project) {
     const [folderPath] = this.geProjecFolderPath(project.id)
 
-    const id = randomUUID()
+    // const id = randomUUID()
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const fragment = { [id]: command }
+    // const fragment = { [id]: command }
 
     // project.commands = project.commands ? { ...project.commands, ...fragment } : fragment
 

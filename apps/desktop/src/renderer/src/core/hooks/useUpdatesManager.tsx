@@ -86,11 +86,13 @@ export const useUpdatesManager = () => {
     ipcRenderer.on(APP_UPDATE_ERROR, handleShowUpdateErrorNotification)
     ipcRenderer.on(APP_UPDATE_NOT_AVAILABLE, handleShowUpdateNotAvailable)
     ipcRenderer.on(APP_UPDATE_DOWNLOADED, handleShowUpdateNotAvailable)
+    ipcRenderer.on(APP_UPDATE_DOWNLOADED, handleShowUpdateDownloaded)
 
     return () => {
       ipcRenderer.removeListener(APP_UPDATE_AVAILABLE, handleShowUpdateNotification)
       ipcRenderer.removeListener(APP_UPDATE_ERROR, handleShowUpdateErrorNotification)
       ipcRenderer.removeListener(APP_UPDATE_NOT_AVAILABLE, handleShowUpdateNotAvailable)
+      ipcRenderer.removeListener(APP_UPDATE_DOWNLOADED, handleShowUpdateDownloaded)
     }
   }, [])
 }
