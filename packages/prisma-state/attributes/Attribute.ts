@@ -110,21 +110,4 @@ export abstract class Attribute<T extends string, AK = string> {
         : ''
     }`
   }
-
-  static cloneArguments(args: Map<string, ArgumentValue>) {
-    const clonable: Array<[string, ArgumentValue]> = []
-    const attrFunctions: Array<[string, AttributeFunction]> = []
-
-    for (const [key, arg] of args.entries()) {
-      if (arg instanceof AttributeFunction) {
-        attrFunctions.push([key, arg._clone()])
-
-        continue
-      }
-
-      clonable.push([key, arg])
-    }
-
-    return new Map([...structuredClone(clonable), ...attrFunctions])
-  }
 }

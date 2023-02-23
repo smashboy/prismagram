@@ -53,8 +53,4 @@ export class UniqueBlockAttribute extends BlockAttribute<
   _parseArgs(args: AstAttributeArgument[]) {
     super._parseArgs(args, 'fields')
   }
-
-  _clone(block: Model) {
-    return new UniqueBlockAttribute(block, UniqueBlockAttribute.cloneArguments(this.argumentsMap))
-  }
 }

@@ -15,6 +15,8 @@ export class Generator extends Block<
   _clone(state: PrismaSchemaState) {
     const cloned = new Generator(this.name, state)
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.fieldsMap.forEach((field) => cloned.addField(field.name, field._clone(cloned)))
 
     return cloned

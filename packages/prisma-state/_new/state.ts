@@ -122,14 +122,14 @@ export class PrismaSchemaState implements PrismaSchemaStateInstance {
     for (const block of list) {
       if (block.type === 'datasource') {
         const datasource = new Datasource(block.name, this)
-        datasource._parse(block.assignments)
+        datasource._parse(datasource.name, block.assignments)
         this.state.set(datasource.name, datasource._data())
         continue
       }
 
       if (block.type === 'generator') {
         const generator = new Generator(block.name, this)
-        generator._parse(block.assignments)
+        generator._parse(generator.name, block.assignments)
         this.state.set(generator.name, generator._data())
         continue
       }

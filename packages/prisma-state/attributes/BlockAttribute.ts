@@ -17,6 +17,4 @@ export abstract class BlockAttribute<B extends Block = Block, AK = string> exten
   _toString() {
     return super._toString()
   }
-
-  abstract _clone(block: B): BlockAttribute
 }

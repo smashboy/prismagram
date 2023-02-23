@@ -40,8 +40,4 @@ export class IdAttribute extends FieldAttribute<
   setClustered(value: boolean) {
     this.setArgument('clustered', value)
   }
-
-  _clone(field: ScalarField) {
-    return new IdAttribute(field, IdAttribute.cloneArguments(this.argumentsMap))
-  }
 }

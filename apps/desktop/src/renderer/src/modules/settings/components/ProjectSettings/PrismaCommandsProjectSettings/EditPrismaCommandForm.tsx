@@ -30,21 +30,22 @@ export const EditPrismaCommandForm: React.FC<EditPrismaCommandFormProps> = ({ co
 
   const { name } = command
 
-  const handleSaveChanges = (updatedCommand: PrismaCommand) =>
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleSaveChanges = (_: PrismaCommand) =>
     updateProjectEffect({
-      ...project!,
-      commands: { ...project?.commands, [commandId]: updatedCommand }
+      ...project!
+      // commands: { ...project?.commands, [commandId]: updatedCommand }
     })
 
   const handleDeleteCommand = () =>
     updateProjectEffect({
-      ...project!,
-      commands: project?.commands
-        ? Object.entries(project.commands).reduce((acc, [id, cmd]) => {
-            if (id === commandId) return acc
-            return { ...acc, [id]: cmd }
-          }, {})
-        : void 0
+      ...project!
+      // commands: project?.commands
+      //   ? Object.entries(project.commands).reduce((acc, [id, cmd]) => {
+      //       if (id === commandId) return acc
+      //       return { ...acc, [id]: cmd }
+      //     }, {})
+      //   : void 0
     })
 
   return (

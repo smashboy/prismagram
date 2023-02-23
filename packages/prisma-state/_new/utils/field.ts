@@ -36,6 +36,8 @@ export const fieldToString = (
   if (block.type === 'datasource' || block.type === 'generator') {
     const Field = settingsFieldMap[field.type as keyof typeof settingsFieldMap]
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return Field._toString(field)
   }
 
@@ -52,6 +54,8 @@ export const fieldToString = (
     field as RelationFieldData | ScalarFieldData | EnumModelFieldData
   )
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   return ModelFieldBase._toString(fieldHelper._data(), fieldHelper.displayType)
 }
 

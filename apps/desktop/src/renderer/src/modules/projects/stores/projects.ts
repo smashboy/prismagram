@@ -18,14 +18,14 @@ export const $selectedProject = combine([$selectedProjectId, $projects]).map(([i
   id ? projects.get(id)! : null
 )
 
-export const $selectedProjectCommands = $selectedProject.map((project) => {
+export const $selectedProjectCommands = $selectedProject.map(() => {
   const commands = new Map<string, PrismaCommand>()
 
-  if (!project?.commands) return commands
+  // if (!project?.commands) return commands
 
-  for (const [id, command] of Object.entries(project.commands)) {
-    commands.set(id, command)
-  }
+  // for (const [id, command] of Object.entries(project.commands)) {
+  //   commands.set(id, command)
+  // }
 
   return commands
 })

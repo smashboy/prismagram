@@ -33,8 +33,4 @@ export class EnvField extends Field {
   _toString() {
     return `${this.name} = ${this.isEnv ? `env("${this.value}")` : `"${this.value}"`}`
   }
-
-  _clone(block: Datasource | Generator) {
-    return new EnvField(this.name, block, { value: this.value, isEnv: this.isEnv })
-  }
 }

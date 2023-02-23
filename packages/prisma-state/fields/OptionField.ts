@@ -22,8 +22,4 @@ export class OptionField extends Field {
   _toString() {
     return `${this.name} = "${this.value}"`
   }
-
-  _clone(block: Datasource | Generator) {
-    return new OptionField(this.name, block, this.value)
-  }
 }

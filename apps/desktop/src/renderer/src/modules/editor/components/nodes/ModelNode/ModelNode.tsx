@@ -40,6 +40,8 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
   const isTarget = connectionNodeId && connectionNodeId !== name
 
   const maxAttribuesCount = Math.max(
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     ...[...new Set(model.fieldsArray.map((field) => field.attributes.size))]
   )
 
@@ -71,6 +73,8 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
                   <ModelNodeField
                     key={field.name}
                     fieldId={field.name}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     field={field}
                     isSelected={isSelected}
                     nodesColors={nodesColors}

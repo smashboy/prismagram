@@ -40,8 +40,4 @@ export class UniqueAttribute extends FieldAttribute<
   setClustered(value: boolean) {
     this.setArgument('clustered', value)
   }
-
-  _clone(field: ScalarField) {
-    return new UniqueAttribute(field, UniqueAttribute.cloneArguments(this.argumentsMap))
-  }
 }

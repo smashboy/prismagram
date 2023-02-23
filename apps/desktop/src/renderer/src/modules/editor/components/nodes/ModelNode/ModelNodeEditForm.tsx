@@ -29,6 +29,8 @@ export const ModelNodeEditForm: React.FC<ModelNodeEditFormProps> = ({
     const oldIndex = block.fieldNames.indexOf(active.id as string)
     const newIndex = block.fieldNames.indexOf(over.id as string)
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     block._setFromArray(arrayMove(block.fieldsArray, oldIndex, newIndex))
 
     setPrismaSchemaEvent(state._clone())
@@ -39,6 +41,8 @@ export const ModelNodeEditForm: React.FC<ModelNodeEditFormProps> = ({
       <NodeDnDContext fieldNames={block.fieldNames} onDragEnd={onDragEnd}>
         {isOpenNewField && <NewModelFieldInput onClose={onCloseNewField} />}
         {block.fieldsArray.map((field) => (
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           <ModelNodeEditField key={field.name} block={block} field={field} />
         ))}
       </NodeDnDContext>

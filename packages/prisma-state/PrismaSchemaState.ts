@@ -2,7 +2,6 @@ import { getSchema } from '@mrleebo/prisma-ast/src/getSchema'
 import { Enum, Datasource, Generator, Model } from './blocks'
 import { RelationField } from './fields'
 import { RelationsManager } from './RelationsManager'
-import { testSchema } from './testSchema'
 import { extractBlockIdsByType, extractBlocksByType } from './utils/block'
 
 export type PrismaSchemaStateItem = Datasource | Generator | Enum | Model
@@ -137,14 +136,6 @@ export class PrismaSchemaState {
 
   toString() {
     return `${[...this.state.values()].map((block) => block._toString()).join('\r\n')}`
-  }
-
-  _clone() {
-    const cloned = new PrismaSchemaState()
-
-    this.state.forEach((block, key) => cloned.state.set(key, block._clone(cloned)))
-
-    return cloned
   }
 }
 

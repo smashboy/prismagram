@@ -20,7 +20,7 @@ export abstract class SettingsBlockBase<B extends DatasourceData | GeneratorData
   static generatorEnvFields = ['provider', 'output']
   static datasourceEnvFields = ['url', 'shadowDatabaseUrl']
 
-  _parse(list: (AstGenerator | AstDatasource)['assignments'] = []) {
+  _parse(blockId: string, list: (AstGenerator | AstDatasource)['assignments'] = []) {
     for (const assignment of list) {
       if (assignment.type !== 'assignment') continue
 
@@ -33,7 +33,7 @@ export abstract class SettingsBlockBase<B extends DatasourceData | GeneratorData
         (this.type === 'datasource' && SettingsBlockBase.datasourceEnvFields.includes(key)) ||
         (this.type === 'generator' && SettingsBlockBase.generatorEnvFields.includes(key))
       ) {
-        const field = new EnvField(key)
+        const field = new EnvField(key, blockId)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         field._parse(value?.params ?? [value])
@@ -42,6 +42,8 @@ export abstract class SettingsBlockBase<B extends DatasourceData | GeneratorData
         // @ts-ignore
         if (!value?.params) field.toggleIsEnv(false)
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         this.data.fields.set(field.name, field._data())
         continue
       }
@@ -49,17 +51,23 @@ export abstract class SettingsBlockBase<B extends DatasourceData | GeneratorData
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (value?.type === 'array') {
-        const optionsField = new OptionsListField(key)
+        const optionsField = new OptionsListField(key, blockId)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         optionsField._parse(value.args)
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         this.data.fields.set(optionsField.name, optionsField._data())
         continue
       }
 
-      const optionField = new OptionField(key)
+      const optionField = new OptionField(key, blockId)
 
       optionField._parse(value as string)
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.data.fields.set(optionField.name, optionField._data())
     }
   }

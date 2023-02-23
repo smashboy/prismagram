@@ -79,7 +79,8 @@ export const PrismaStudioView = () => {
       <LoadingOverlay visible={isLoadingWebview} />
       <webview
         ref={webviewRef}
-        src={`http://localhost:${project.prismaStudioPort ?? DEFAULT_PRISMA_STUDIO_PORT}`}
+        // src={`http://localhost:${project.prismaStudioPort ?? DEFAULT_PRISMA_STUDIO_PORT}`}
+        src={`http://localhost:${DEFAULT_PRISMA_STUDIO_PORT}`}
         style={{ width: '100%', height: '100%' }}
       />
     </Box>

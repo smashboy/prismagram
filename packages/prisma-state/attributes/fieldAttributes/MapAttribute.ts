@@ -19,8 +19,4 @@ export class MapAttribute extends FieldAttribute<ScalarField | RelationField, 'n
   _parseArgs(args: AstAttributeArgument[]) {
     super._parseArgs(args, 'name')
   }
-
-  _clone(field: ScalarField | RelationField) {
-    return new MapAttribute(field, MapAttribute.cloneArguments(this.argumentsMap))
-  }
 }

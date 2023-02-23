@@ -118,13 +118,4 @@ export class Model extends Block<ScalarField | RelationField> {
 
     return blockstr
   }
-
-  _clone(state: PrismaSchemaState) {
-    const cloned = new Model(this.name, state)
-
-    this.fieldsMap.forEach((field) => cloned.addField(field.name, field._clone(cloned)))
-    this.attributes.forEach((attr) => cloned.attributes.set(attr.type, attr._clone(cloned)))
-
-    return cloned
-  }
 }

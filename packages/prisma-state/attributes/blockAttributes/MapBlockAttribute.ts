@@ -18,8 +18,4 @@ export class MapBlockAttribute extends BlockAttribute<Model | Enum, 'name'> {
   _parseArgs(args: AstAttributeArgument[]): void {
     super._parseArgs(args, 'name')
   }
-
-  _clone(block: Model | Enum) {
-    return new MapBlockAttribute(block, MapBlockAttribute.cloneArguments(this.argumentsMap))
-  }
 }

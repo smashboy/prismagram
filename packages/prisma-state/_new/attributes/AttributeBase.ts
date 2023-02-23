@@ -74,6 +74,8 @@ export abstract class AttributeBase<
     const parsedArg = this._parseSingleArg(value)
 
     if (parsedArg) return [key, parsedArg] as const
+
+    return void 0
   }
 
   _parse(args: AstAttributeArgument[] = [], firstArgName?: string) {

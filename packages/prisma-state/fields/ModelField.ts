@@ -94,9 +94,4 @@ export abstract class ModelField<A extends FieldAttribute = FieldAttribute> exte
       .map((attr) => attr._toString())
       .join(' ')}`
   }
-
-  static _cloneModelFieldProps = (prev: ModelField, cloned: ModelField) => {
-    prev.attributes.forEach((attr) => cloned.attributes.set(attr.type, attr._clone(cloned)))
-    cloned.setModifier(prev.modifier)
-  }
 }

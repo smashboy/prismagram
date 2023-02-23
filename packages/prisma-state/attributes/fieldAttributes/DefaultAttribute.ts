@@ -10,8 +10,4 @@ export class DefaultAttribute extends FieldAttribute<ScalarField, 'value' | 'map
   _parseArgs(args: AstAttributeArgument[]) {
     super._parseArgs(args, 'value')
   }
-
-  _clone(field: ScalarField) {
-    return new DefaultAttribute(field, DefaultAttribute.cloneArguments(this.argumentsMap))
-  }
 }

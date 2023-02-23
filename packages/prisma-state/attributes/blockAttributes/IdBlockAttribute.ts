@@ -37,8 +37,4 @@ export class IdBlockAttribute extends BlockAttribute<
   _parseArgs(args: AstAttributeArgument[]) {
     super._parseArgs(args, 'fields')
   }
-
-  _clone(block: Model) {
-    return new IdBlockAttribute(block, IdBlockAttribute.cloneArguments(this.argumentsMap))
-  }
 }

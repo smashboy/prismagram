@@ -42,8 +42,4 @@ export class OptionsListField extends Field {
       .map((option) => `"${option}"`)
       .join(', ')}]`
   }
-
-  _clone(block: Datasource | Generator) {
-    return new OptionsListField(this.name, block, new Set([...this._options]))
-  }
 }

@@ -38,8 +38,4 @@ export class IndexBlockAttribute extends BlockAttribute<
   _parseArgs(args: AstAttributeArgument[]): void {
     super._parseArgs(args, 'fields')
   }
-
-  _clone(block: Model) {
-    return new IndexBlockAttribute(block, IndexBlockAttribute.cloneArguments(this.argumentsMap))
-  }
 }

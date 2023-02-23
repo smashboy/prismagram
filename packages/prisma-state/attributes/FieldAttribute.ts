@@ -20,6 +20,4 @@ export abstract class FieldAttribute<F = unknown, AK = string> extends Attribute
     super(type, '@', inialValues)
     this.field = field
   }
-
-  abstract _clone(field: F): FieldAttribute
 }

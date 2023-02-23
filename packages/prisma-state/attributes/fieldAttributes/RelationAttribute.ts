@@ -62,8 +62,4 @@ export class RelationAttribute extends FieldAttribute<
   _parseArgs(args: AstAttributeArgument[]) {
     super._parseArgs(args, 'name')
   }
-
-  _clone(field: RelationField) {
-    return new RelationAttribute(field, RelationAttribute.cloneArguments(this.argumentsMap))
-  }
 }
