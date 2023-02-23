@@ -1,5 +1,5 @@
-appId: com.electron.${name}
-productName: ${name}
+appId: com.electron.prismagram
+productName: prismagram
 directories:
   buildResources: build
 files:
@@ -12,9 +12,9 @@ asarUnpack:
   - '**/*.{node,dll}'
 afterSign: build/notarize.js
 win:
-  executableName: ${name}
+  executableName: prismagram
 nsis:
-  artifactName: ${name}-${version}-setup.${ext}
+  artifactName: prismagram-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
@@ -26,7 +26,7 @@ mac:
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
 dmg:
-  artifactName: ${name}-${version}.${ext}
+  artifactName: prismagram-${version}.${ext}
 linux:
   target:
     - AppImage
@@ -35,7 +35,7 @@ linux:
   maintainer: electronjs.org
   category: Utility
 appImage:
-  artifactName: ${name}-${version}.${ext}
+  artifactName: prismagram-${version}.${ext}
 npmRebuild: false
 publish:
   provider: github
