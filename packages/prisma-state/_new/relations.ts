@@ -213,8 +213,6 @@ export class RelationsManager implements RelationsManagerInstance {
     const targetRelationField = new RelationField(sourceName, sourceId, targetId)
     targetRelationField.setModifier('list')
 
-    console.log({ sourceId, targetId, sourceRelationField, targetRelationField })
-
     if (relationName) {
       const relationAttr = new RelationAttribute()
       relationAttr.setName(relationName)

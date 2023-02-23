@@ -69,7 +69,7 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
           id={name}
           type="source"
           position={Position.Right}
-          isConnectable={false}
+          isConnectable
           style={{
             borderColor: 'white',
             marginRight: -6,

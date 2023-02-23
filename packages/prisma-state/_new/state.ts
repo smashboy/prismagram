@@ -55,6 +55,14 @@ export class PrismaSchemaState implements PrismaSchemaStateInstance {
     return this.enums.get(id)!
   }
 
+  isModel(id: string) {
+    return this.models.has(id)
+  }
+
+  isEnum(id: string) {
+    return this.enums.has(id)
+  }
+
   createModel(name: string, data?: ModelData) {
     const model = new Model(name, this, data)
     this.state.set(model.name, model._data())

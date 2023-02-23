@@ -21,7 +21,9 @@ import {
   setCreateRelationModalDataEvent,
   toggleCreateRelationModalEvent,
   setPrismaSchemaEvent,
-  viewportChangeEvent
+  viewportChangeEvent,
+  toggleCreateEnumFieldModalEvent,
+  setCreateEnumFieldModalDataEvent
 } from '../stores'
 import { ModelNode } from './nodes/ModelNode'
 import { NodeType } from '@shared/common/configs/diagrams'
@@ -35,6 +37,7 @@ import { ipcRenderer } from '@renderer/core/electron'
 import { EDITOR_REMOTE_SCHEMA_CHANGES } from '@shared/common/configs/api'
 import { createPrismaSchemaState } from 'prisma-state/_new/state'
 import { CreateRelationModal } from './CreateRelationModal'
+import { CreateEnumFieldModal } from './CreateEnumFieldModal'
 
 const $store = combine({
   nodes: $nodesArray,
@@ -118,15 +121,28 @@ export const DiagramEditor = () => {
   const onConnect: OnConnect = ({ source, target }) => {
     if (!source || !target) return
 
-    toggleCreateRelationModalEvent(true)
-    setCreateRelationModalDataEvent({
-      source,
-      target,
-      name: '',
-      onDelete: null,
-      onUpdate: null,
-      isOptional: false
-    })
+    if (schemaState.isModel(source) && schemaState.isModel(target)) {
+      toggleCreateRelationModalEvent(true)
+      setCreateRelationModalDataEvent({
+        source,
+        target,
+        name: '',
+        onDelete: null,
+        onUpdate: null,
+        isOptional: false
+      })
+
+      return
+    }
+
+    if (schemaState.isEnum(source) && schemaState.isModel(target)) {
+      toggleCreateEnumFieldModalEvent(true)
+      setCreateEnumFieldModalDataEvent({
+        model: target,
+        fieldName: '',
+        enum: source
+      })
+    }
   }
 
   return (
@@ -151,6 +167,7 @@ export const DiagramEditor = () => {
         <EditorToolbar />
         <NodesToolbar />
       </ReactFlow>
+      <CreateEnumFieldModal />
       <CreateRelationModal />
     </>
   )

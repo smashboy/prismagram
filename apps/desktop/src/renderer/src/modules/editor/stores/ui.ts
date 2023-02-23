@@ -15,16 +15,27 @@ interface CreateRelationModalData {
   isOptional: boolean
 }
 
+interface CreateEnumFieldModalData {
+  enum: string
+  model: string
+  fieldName: string
+}
+
 export interface SelectedNodeData {
   nodeId: string
   type: NodeType
 }
 
 export const changeEditorViewEvent = createEvent<EditorView>()
+
 export const selectNodeEvent = createEvent<SelectedNodeData>()
 export const resetSelectedNodeEvent = createEvent()
+
 export const setCreateRelationModalDataEvent = createEvent<CreateRelationModalData>()
 export const resetCreateRelationModalDataEvent = createEvent()
+
+export const setCreateEnumFieldModalDataEvent = createEvent<CreateEnumFieldModalData>()
+export const resetCreateEnumFieldModalDataEvent = createEvent()
 
 export const $selectedEditorView = createStore(EditorView.DIAGRAM).on(
   changeEditorViewEvent,
@@ -42,7 +53,16 @@ export const $createRelationModalData = createStore<CreateRelationModalData>({
   .on(setCreateRelationModalDataEvent, (_, data) => data)
   .reset(resetCreateRelationModalDataEvent)
 
+export const $createEnumFieldModalData = createStore<CreateEnumFieldModalData>({
+  model: '',
+  enum: '',
+  fieldName: ''
+})
+  .on(setCreateEnumFieldModalDataEvent, (_, data) => data)
+  .reset(resetCreateEnumFieldModalDataEvent)
+
 export const [$isOpenCreateRelationModal, toggleCreateRelationModalEvent] = createBooleanStore()
+export const [$isOpenCreateEnumFieldModal, toggleCreateEnumFieldModalEvent] = createBooleanStore()
 
 export const $selectedNodeId = createStore<SelectedNodeData | null>(null)
   .on(selectNodeEvent, (_, id) => id)
