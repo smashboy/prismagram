@@ -5,6 +5,7 @@ import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { SettingsRoute } from '../constants'
 import { $selectedSettingsSection } from '../stores'
+import { AboutAppSettings } from './AboutAppSettings'
 import { GeneralSettings } from './GeneralSettings'
 import { ProjectSettings } from './ProjectSettings'
 import { SettingsSidebar } from './SettingsSidebar'
@@ -18,8 +19,8 @@ const $store = combine({
 const settingsRoutesComponents = new Map<SettingsRoute, React.FC>([
   [SettingsRoute.GENERAL, GeneralSettings],
   [SettingsRoute.SHORTCUTS, ShortcutsSettings],
-  [SettingsRoute.PROJECT, ProjectSettings]
-  // [SettingsRoute.ABOUT, null]
+  [SettingsRoute.PROJECT, ProjectSettings],
+  [SettingsRoute.ABOUT, AboutAppSettings]
 ])
 
 export const SettingsModal = () => {

@@ -1,6 +1,11 @@
-import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron'
+import { BrowserWindow, BrowserWindowConstructorOptions, shell } from 'electron'
 import { is } from '@electron-toolkit/utils'
-import { APP_ICON_PNG_PATH, PRELOAD_SCRIPT_PATH, RENDERER_HTML_PATH } from '../../constants'
+import {
+  APP_ICON_PNG_PATH,
+  APP_NAME,
+  PRELOAD_SCRIPT_PATH,
+  RENDERER_HTML_PATH
+} from '../../constants'
 import { WindowManager } from './models'
 import ApiManager from '../apiManager/ApiManager'
 
@@ -13,6 +18,7 @@ export default class WindowsManagerBase extends ApiManager {
             icon: APP_ICON_PNG_PATH
           }
         : {}),
+      title: APP_NAME,
       webPreferences: {
         preload: PRELOAD_SCRIPT_PATH,
         sandbox: false,
@@ -25,6 +31,16 @@ export default class WindowsManagerBase extends ApiManager {
     window.on('ready-to-show', () => {
       window.show()
       if (is.dev) window.webContents.openDevTools({ mode: 'detach' })
+    })
+
+    window.webContents.setWindowOpenHandler(({ url }) => {
+      // config.fileProtocol is my custom file protocol
+      // if (url.startsWith(config.fileProtocol)) {
+      //     return { action: 'allow' };
+      // }
+      // open url in a browser and prevent default
+      shell.openExternal(url)
+      return { action: 'deny' }
     })
 
     const show = () => {

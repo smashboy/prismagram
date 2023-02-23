@@ -1,5 +1,3 @@
-import AppManager from './modules/appManager'
-
-const app = new AppManager()
+import { app } from './app'
 
 app.initApp()

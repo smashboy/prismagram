@@ -10,9 +10,11 @@ import './transports'
 
 import 'prisma-state/_new/state'
 import 'prisma-state/PrismaSchemaState'
+import { useUpdatesManager } from './core/hooks'
 
 function App() {
   useGeneralShortcuts()
+  useUpdatesManager()
 
   useEffect(() => {
     loadGlobalSettingsEffect()

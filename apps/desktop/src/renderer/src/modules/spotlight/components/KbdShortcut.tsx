@@ -7,10 +7,8 @@ interface KbdShortcutProps {
 export const KbdShortcut: React.FC<KbdShortcutProps> = ({ keys }) => {
   return (
     <Group>
-      {keys.map((key, index) => (
-        <>
-          <Kbd key={key}>{key}</Kbd> {index < keys.length - 1 && <>+</>}
-        </>
+      {keys.map((key) => (
+        <Kbd key={key}>{key}</Kbd>
       ))}
     </Group>
   )

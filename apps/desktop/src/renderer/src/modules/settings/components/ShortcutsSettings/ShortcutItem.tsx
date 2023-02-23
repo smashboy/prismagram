@@ -10,7 +10,7 @@ export const ShortcutItem: React.FC<ShortcutItemProps> = ({ shortcut }) => {
   const { name, keys, description } = shortcut
 
   return (
-    <Card sx={{ userSelect: 'none' }} withBorder>
+    <Card sx={{ userSelect: 'none' }} bg="gray.0" withBorder>
       <Group position="apart">
         <Stack spacing={0}>
           <Text>{name}</Text>

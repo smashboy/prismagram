@@ -10,14 +10,7 @@ export const SettingsSectionPaper: React.FC<SettingsSectionPaperProps> = ({ titl
     <Text fz="xl" fw="bold">
       {title}
     </Text>
-    <Paper
-      shadow="none"
-      withBorder
-      p="xs"
-      // sx={(theme) => ({
-      //   backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0]
-      // })}
-    >
+    <Paper shadow="none" withBorder p="xs">
       {children}
     </Paper>
   </Stack>

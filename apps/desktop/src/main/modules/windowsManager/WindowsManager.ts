@@ -10,7 +10,9 @@ import {
   UPDATE_PROJECT_ENDPOINT,
   EDITOR_SAVE_SCHEMA,
   EDITOR_FORMAT_SCHEMA,
-  EDITOR_SAVE_DIAGRAM
+  EDITOR_SAVE_DIAGRAM,
+  APP_UPDATE_CHECK,
+  APP_UPDATE_DOWNLOAD
 } from '@shared/common/configs/api'
 import { GlobalSettings, Project } from '@shared/common/models/Project'
 import { formatPrismaSchema, getPrismaPreviewFeaturesList } from '../../services/prisma'
@@ -22,6 +24,7 @@ import { layoutDiagramElements } from '../../services/diagrams'
 import CommandsManager from '../commandsManager/CommandsManager'
 import { ProjectsManager } from '../projectsManager/ProjectsManager'
 import { PackageManager } from '@shared/common/configs/projects'
+import { UpdatedManager } from '../UpdatesManager'
 
 export default class WindowsManager extends WindowsManagerBase {
   protected appWindow: WindowManager | undefined
@@ -38,6 +41,15 @@ export default class WindowsManager extends WindowsManagerBase {
 
     const browserWindow = this.appWindow!.getWindow()
     const projectsManager = new ProjectsManager(browserWindow)
+    const updatesManager = new UpdatedManager(browserWindow)
+
+    updatesManager.initUpdateListeners()
+
+    this.appWindow.createApiRoute(APP_UPDATE_CHECK, () => updatesManager.checkForUpdates())
+
+    this.appWindow.createApiRoute(APP_UPDATE_DOWNLOAD, () =>
+      updatesManager.startDownloadingUpdate()
+    )
 
     this.appWindow.createApiRoute(GET_PROJECTS_LIST_ENDPOINT, () =>
       projectsManager.getProjectsList()

@@ -5,7 +5,11 @@ declare global {
     electron: ElectronAPI
     api: {
       __dirname: string
+    }
+    constants: {
       ctrlOrCmdKey: string
+      appVersion: string
+      appName: string
     }
   }
 }

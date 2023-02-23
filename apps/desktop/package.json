@@ -1,10 +1,11 @@
 {
-  "name": "desktop-app",
-  "version": "1.0.0",
-  "description": "An Electron application with React and TypeScript",
+  "name": "prismagram",
+  "version": "0.0.1",
+  "description": "Visual prisma schema builder",
   "main": "./out/main/index.js",
   "author": "example.com",
-  "homepage": "https://www.electronjs.org",
+  "homepage": "https://github.com/smashboy/prismagram",
+  "repository": "https://github.com/smashboy/prismagram.git",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "format": "prettier --write .",
@@ -28,6 +29,7 @@
     "@emotion/react": "^11.10.5",
     "@mantine/core": "^5.10.2",
     "@mantine/hooks": "^5.10.2",
+    "@mantine/notifications": "^5.10.4",
     "@mantine/prism": "^5.10.2",
     "@mantine/spotlight": "^5.10.2",
     "@mantine/tiptap": "^5.10.2",

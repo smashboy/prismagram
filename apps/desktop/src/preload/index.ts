@@ -1,12 +1,17 @@
-import { contextBridge } from 'electron'
+import { contextBridge, app } from 'electron'
 import * as path from 'path'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
 const api = {
   path,
-  __dirname,
-  ctrlOrCmdKey: process.platform === 'darwin' ? 'Mod' : 'Ctrl'
+  __dirname
+}
+
+const constants = {
+  ctrlOrCmdKey: process.platform === 'darwin' ? 'Mod' : 'Ctrl',
+  appVersion: app?.getVersion() || '0.0.0',
+  appName: app?.getName() || 'prismagram'
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
@@ -16,6 +21,7 @@ if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
+    contextBridge.exposeInMainWorld('constants', constants)
   } catch (error) {
     console.error(error)
   }
@@ -24,4 +30,6 @@ if (process.contextIsolated) {
   window.electron = electronAPI
   // @ts-ignore (define in dts)
   window.api = api
+  // @ts-ignore (define in dts)
+  window.constants = constants
 }

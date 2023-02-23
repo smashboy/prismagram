@@ -15,3 +15,11 @@ export const EDITOR_REMOTE_SCHEMA_CHANGES = 'editor.remove-schema-changes'
 export const CREATE_COMMAND_ENDPOINT = 'commands.create'
 
 export const GET_GLOBAL_SETTINGS_ENDPOINT = 'settings.get'
+
+export const APP_UPDATE_CHECK = 'app-update.check'
+export const APP_UPDATE_DOWNLOAD = 'app-update.download'
+export const APP_UPDATE_AVAILABLE = 'app-update.available'
+export const APP_UPDATE_ERROR = 'app-update.error'
+export const APP_UPDATE_NOT_AVAILABLE = 'app-update.not-available'
+export const APP_UPDATE_DOWNLOADED = 'app-update.downloaded'
+export const APP_UPDATE_DOWNLOADING = 'app-update.downloading'
