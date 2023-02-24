@@ -4,7 +4,7 @@
 
 ### DISCLAIMER! 
 
-This project is still at a very early stage of development and does not support many features of the prisma schema, so please backup your prisma schema (if you're not using git for some reason). You can view the detailed changelog of the latest version to see a list of supported features.
+This project is still at a very early stage of development and does not support many features of the prisma schema, so please backup your prisma schema (if you're not using git for some reason). You can view the detailed changelog of the [latest version](https://github.com/smashboy/prismagram/releases/latest) to see a list of supported features.
 
 ### Support the project
 
