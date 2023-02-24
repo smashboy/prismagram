@@ -39,6 +39,6 @@ Drag connection lines from model to model to create relations and from enum to m
 
 ## License
 
-Prismagram is licensed under the MIT License - see the LICENSE file for details.
+Prismagram is licensed under the MIT License - see the [LICENSE](https://github.com/smashboy/prismagram/blob/main/LICENSE) file for details.
 
 ![image](https://user-images.githubusercontent.com/30213662/209539792-1cb326ee-8bc3-4659-ba4b-77bef9341fc7.png)
