@@ -26,16 +26,15 @@ Quickly add new models and enums using the drag and drop interface.
 
 ![ezgif-2-e66956149f](https://user-images.githubusercontent.com/30213662/221173929-6cfac296-7a8e-4fc7-9847-728467b08412.gif)
 
-### Spotlight
-Use the various command options to navigate and edit the schema.
-
-![ezgif-2-894793d330](https://user-images.githubusercontent.com/30213662/221174715-0a7f52b4-6b2f-49f7-ad7b-562bb30b1372.gif)
-
-
 ### Connect models and enums
 Drag connection lines from model to model to create relations and from enum to model to create enum fields.
 
 ![ezgif-2-5cb17381b4](https://user-images.githubusercontent.com/30213662/221175333-f4369387-ae09-43f8-9861-7d0ca26361d3.gif)
+
+### Spotlight
+Use the various command options to navigate and edit the schema.
+
+![ezgif-2-894793d330](https://user-images.githubusercontent.com/30213662/221174715-0a7f52b4-6b2f-49f7-ad7b-562bb30b1372.gif)
 
 ## License
 
