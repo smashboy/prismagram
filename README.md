@@ -13,7 +13,7 @@ This project is still at a very early stage of development and does not support 
 </a>
 
 ### Download
-- Windows
+- [Windows](https://github.com/smashboy/prismagram/releases/download/v0.0.1/prismagram-0.0.1-setup.exe)
 
 ### About this project
 
