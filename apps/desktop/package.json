@@ -3,9 +3,10 @@
   "version": "0.0.1",
   "description": "Visual prisma schema builder",
   "main": "./out/main/index.js",
-  "author": "example.com",
+  "author": "https://github.com/smashboy",
   "homepage": "https://github.com/smashboy/prismagram",
   "repository": "https://github.com/smashboy/prismagram.git",
+  "license": "MIT",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "format": "prettier --write .",
