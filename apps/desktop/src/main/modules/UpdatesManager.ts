@@ -12,6 +12,14 @@ import {
 // autoUpdater.logger.transports.file.level = 'info';
 
 autoUpdater.autoDownload = false
+autoUpdater.autoInstallOnAppQuit = true
+
+autoUpdater.setFeedURL({
+  provider: 'github',
+  owner: 'smashboy',
+  repo: 'prismagram',
+  releaseType: 'release'
+})
 
 export class UpdatedManager {
   private readonly appWindow: BrowserWindow
@@ -41,6 +49,10 @@ export class UpdatedManager {
     if (this.newUpdate) {
       autoUpdater.downloadUpdate()
     }
+  }
+
+  installUpdate() {
+    autoUpdater.quitAndInstall()
   }
 
   async checkForUpdates() {

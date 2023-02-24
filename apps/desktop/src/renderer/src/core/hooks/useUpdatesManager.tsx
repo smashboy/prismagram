@@ -7,6 +7,7 @@ import {
   APP_UPDATE_DOWNLOAD,
   APP_UPDATE_DOWNLOADED,
   APP_UPDATE_ERROR,
+  APP_UPDATE_INSTALL,
   APP_UPDATE_NOT_AVAILABLE
 } from '@shared/common/configs/api'
 import { IconAlertTriangle } from '@tabler/icons'
@@ -61,6 +62,7 @@ export const useUpdatesManager = () => {
     })
 
   const handleCloseShowUpdateDownloaded = () => hideNotification(appUpdateDownloadedNotificationId)
+  const handleInstallUpdate = () => invoke(APP_UPDATE_INSTALL)
 
   const handleShowUpdateDownloaded = () => {
     hideNotification(appUpdateProgressNotificationId)
@@ -73,7 +75,9 @@ export const useUpdatesManager = () => {
           <Button variant="subtle" color="gray" onClick={handleCloseShowUpdateDownloaded}>
             Later
           </Button>
-          <Button variant="subtle">Install</Button>
+          <Button onClick={handleInstallUpdate} variant="subtle">
+            Install
+          </Button>
         </Group>
       )
     })
@@ -85,7 +89,6 @@ export const useUpdatesManager = () => {
     ipcRenderer.on(APP_UPDATE_AVAILABLE, handleShowUpdateNotification)
     ipcRenderer.on(APP_UPDATE_ERROR, handleShowUpdateErrorNotification)
     ipcRenderer.on(APP_UPDATE_NOT_AVAILABLE, handleShowUpdateNotAvailable)
-    ipcRenderer.on(APP_UPDATE_DOWNLOADED, handleShowUpdateNotAvailable)
     ipcRenderer.on(APP_UPDATE_DOWNLOADED, handleShowUpdateDownloaded)
 
     return () => {

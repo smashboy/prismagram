@@ -12,7 +12,8 @@ import {
   EDITOR_FORMAT_SCHEMA,
   EDITOR_SAVE_DIAGRAM,
   APP_UPDATE_CHECK,
-  APP_UPDATE_DOWNLOAD
+  APP_UPDATE_DOWNLOAD,
+  APP_UPDATE_INSTALL
 } from '@shared/common/configs/api'
 import { GlobalSettings, Project } from '@shared/common/models/Project'
 import { formatPrismaSchema, getPrismaPreviewFeaturesList } from '../../services/prisma'
@@ -50,6 +51,8 @@ export default class WindowsManager extends WindowsManagerBase {
     this.appWindow.createApiRoute(APP_UPDATE_DOWNLOAD, () =>
       updatesManager.startDownloadingUpdate()
     )
+
+    this.appWindow.createApiRoute(APP_UPDATE_INSTALL, async () => updatesManager.installUpdate())
 
     this.appWindow.createApiRoute(GET_PROJECTS_LIST_ENDPOINT, () =>
       projectsManager.getProjectsList()

@@ -18,6 +18,7 @@ export const GET_GLOBAL_SETTINGS_ENDPOINT = 'settings.get'
 
 export const APP_UPDATE_CHECK = 'app-update.check'
 export const APP_UPDATE_DOWNLOAD = 'app-update.download'
+export const APP_UPDATE_INSTALL = 'app-update.install'
 export const APP_UPDATE_AVAILABLE = 'app-update.available'
 export const APP_UPDATE_ERROR = 'app-update.error'
 export const APP_UPDATE_NOT_AVAILABLE = 'app-update.not-available'
