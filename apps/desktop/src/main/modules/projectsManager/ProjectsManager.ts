@@ -161,9 +161,11 @@ export class ProjectsManager {
   getProjectDiagram(project: Project) {
     const diagramFilePath = this.getProjectDiagramPath(project.id)
 
-    const diagram = JSON.parse(
-      fs.readFileSync(path.join(PROJECTS_FOLDER_PATH, diagramFilePath), { encoding: 'utf-8' })
-    )
+    const diagramPath = path.join(PROJECTS_FOLDER_PATH, diagramFilePath)
+
+    if (!fs.existsSync(diagramPath)) return null
+
+    const diagram = JSON.parse(fs.readFileSync(diagramPath, { encoding: 'utf-8' }))
 
     return diagram
   }

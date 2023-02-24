@@ -29,6 +29,7 @@ sample({
 
 sample({
   source: loadEditorDataEffect.doneData,
+  filter: (data) => !!data.diagram,
   fn: (data) => data.diagram,
   target: setDiagramEvent
 })
