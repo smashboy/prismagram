@@ -39,7 +39,7 @@ export const ModelNodeEditForm: React.FC<ModelNodeEditFormProps> = ({
   return (
     <Stack>
       <NodeDnDContext fieldNames={block.fieldNames} onDragEnd={onDragEnd}>
-        {isOpenNewField && <NewModelFieldInput onClose={onCloseNewField} />}
+        {isOpenNewField && <NewModelFieldInput block={block} onClose={onCloseNewField} />}
         {block.fieldsArray.map((field) => (
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
