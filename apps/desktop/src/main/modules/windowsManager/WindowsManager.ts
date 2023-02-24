@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import {
   CREATE_PROJECT_ENDPOINT,
   EDITOR_CLOSE_PRISMA_STUDIO_ENDPOINT,
@@ -13,7 +13,8 @@ import {
   EDITOR_SAVE_DIAGRAM,
   APP_UPDATE_CHECK,
   APP_UPDATE_DOWNLOAD,
-  APP_UPDATE_INSTALL
+  APP_UPDATE_INSTALL,
+  APP_CLOSE
 } from '@shared/common/configs/api'
 import { GlobalSettings, Project } from '@shared/common/models/Project'
 import { formatPrismaSchema, getPrismaPreviewFeaturesList } from '../../services/prisma'
@@ -45,6 +46,8 @@ export default class WindowsManager extends WindowsManagerBase {
     const updatesManager = new UpdatedManager(browserWindow)
 
     updatesManager.initUpdateListeners()
+
+    this.appWindow.createApiRoute(APP_CLOSE, async () => app.quit())
 
     this.appWindow.createApiRoute(APP_UPDATE_CHECK, () => updatesManager.checkForUpdates())
 

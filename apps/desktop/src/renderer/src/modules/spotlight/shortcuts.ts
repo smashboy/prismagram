@@ -1,6 +1,7 @@
 import { openSpotlight } from '@mantine/spotlight'
 import { ctrlOrCmdKey } from '@renderer/core/electron'
 import {
+  toggleCloseAppModalEvent,
   toggleCreateProjectModalEvent,
   toggleSelectProjectModalEvent,
   toggleSettingsModalEvent
@@ -58,7 +59,7 @@ export const generalShortcuts: Shortcut[] = [
   {
     keys: [ctrlOrCmdKey, 'Shift', 'X'],
     name: 'Close application',
-    onExecute: () => {},
+    onExecute: () => toggleCloseAppModalEvent(true),
     icon: IconPower
   }
 ]

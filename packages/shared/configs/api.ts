@@ -24,3 +24,5 @@ export const APP_UPDATE_ERROR = 'app-update.error'
 export const APP_UPDATE_NOT_AVAILABLE = 'app-update.not-available'
 export const APP_UPDATE_DOWNLOADED = 'app-update.downloaded'
 export const APP_UPDATE_DOWNLOADING = 'app-update.downloading'
+
+export const APP_CLOSE = 'app.close'

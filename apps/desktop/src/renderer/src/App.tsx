@@ -11,6 +11,7 @@ import './transports'
 import 'prisma-state/_new/state'
 import 'prisma-state/PrismaSchemaState'
 import { useUpdatesManager } from './core/hooks'
+import { ConfirmCloseApplicationModal } from './core/components'
 
 function App() {
   useGeneralShortcuts()
@@ -41,6 +42,7 @@ function App() {
           <SettingsModal />
           <CreateProjectModal />
           <ProjectSelectorModal />
+          <ConfirmCloseApplicationModal />
         </Group>
       </Spotlight>
     </ReactFlowProvider>

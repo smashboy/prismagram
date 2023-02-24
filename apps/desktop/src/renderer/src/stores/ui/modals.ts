@@ -4,3 +4,5 @@ export const [$isOpenCreateProjectModal, toggleCreateProjectModalEvent] = create
 export const [$isOpenSelectProjectModal, toggleSelectProjectModalEvent] = createBooleanStore(false)
 
 export const [$isOpenSettingsModal, toggleSettingsModalEvent] = createBooleanStore(false)
+
+export const [$isOpenCloseAppModal, toggleCloseAppModalEvent] = createBooleanStore(false)
