@@ -33,12 +33,13 @@ export const SpotlightItem: React.FC<SpotlightItemProps> = ({ action }) => {
   const hasSubActions = actions && actions.length > 0
 
   const handleActionSelect = () => {
-    if (!hasSubActions) toggleOpenSpotlightEvent()
-    onTrigger?.()
-
     if (hasSubActions) {
       addSpotlightSubActionEvent({ parent: title, actions: [...actions] })
+      return
     }
+
+    toggleOpenSpotlightEvent()
+    onTrigger?.()
   }
 
   return (
