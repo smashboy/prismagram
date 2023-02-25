@@ -1,5 +1,4 @@
-import { SpotlightAction } from '@mantine/spotlight'
-import { Shortcut } from './types'
+import { Shortcut, SpotlightAction } from './types'
 
 export const createShortcutString = (shortcut: Shortcut) => `${shortcut.keys.join('+')}`
 

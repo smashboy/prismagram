@@ -1,7 +1,8 @@
-import { Center, createStyles, Group, Highlight, UnstyledButton } from '@mantine/core'
-import { SpotlightAction } from '@mantine/spotlight'
+import { Box, Center, createStyles, Group, Highlight, UnstyledButton } from '@mantine/core'
+import { IconChevronRight } from '@tabler/icons'
 import { Command } from 'cmdk'
-import { toggleOpenSpotlightEvent } from '../stores'
+import { addSpotlightSubActionEvent, toggleOpenSpotlightEvent } from '../stores'
+import { SpotlightAction } from '../types'
 
 interface SpotlightItemProps {
   action: SpotlightAction
@@ -21,21 +22,23 @@ const useStyles = createStyles((theme) => ({
 
   actionIcon: {
     color: theme.colorScheme === 'dark' ? theme.colors.dark[2] : theme.colors.gray[6]
-  },
-
-  actionBody: {}
+  }
 }))
 
 export const SpotlightItem: React.FC<SpotlightItemProps> = ({ action }) => {
-  const { icon, title, onTrigger } = action
+  const { icon, title, actions, onTrigger } = action
 
   const { classes } = useStyles()
 
+  const hasSubActions = actions && actions.length > 0
+
   const handleActionSelect = () => {
-    toggleOpenSpotlightEvent()
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    onTrigger()
+    if (!hasSubActions) toggleOpenSpotlightEvent()
+    onTrigger?.()
+
+    if (hasSubActions) {
+      addSpotlightSubActionEvent({ parent: title, actions: [...actions] })
+    }
   }
 
   return (
@@ -47,9 +50,16 @@ export const SpotlightItem: React.FC<SpotlightItemProps> = ({ action }) => {
     >
       <Group noWrap>
         {icon && <Center className={classes.actionIcon}>{icon}</Center>}
-        <div className={classes.actionBody}>
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore broken flexGrow types */}
+        <Box sx={{ flexGrow: '1!important' }}>
           <Highlight highlight="">{title}</Highlight>
-        </div>
+        </Box>
+        {hasSubActions && (
+          <Center className={classes.actionIcon}>
+            <IconChevronRight size={18} />
+          </Center>
+        )}
       </Group>
     </UnstyledButton>
   )

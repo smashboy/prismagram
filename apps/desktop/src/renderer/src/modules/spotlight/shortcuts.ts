@@ -1,4 +1,3 @@
-import { openSpotlight } from '@mantine/spotlight'
 import { ctrlOrCmdKey } from '@renderer/core/electron'
 import {
   toggleCloseAppModalEvent,
@@ -37,7 +36,7 @@ export const generalShortcuts: Shortcut[] = [
   {
     keys: [ctrlOrCmdKey, 'K'],
     name: 'Toggle spotlight',
-    onExecute: toggleOpenSpotlightEvent
+    onExecute: () => toggleOpenSpotlightEvent()
   },
   {
     keys: [ctrlOrCmdKey, 'Alt', 'N'],

@@ -8,13 +8,13 @@ interface SpotlightGroup {
 
 const useStyles = createStyles((theme) => ({
   root: {
+    paddingTop: theme.spacing.xs,
     '[cmdk-group-heading]': {
       textTransform: 'uppercase',
       fontSize: theme.spacing.xs,
       fontWeight: 700,
-      padding: '10px 12px',
+      padding: '0px 12px',
       paddingBottom: 0,
-      paddingTop: 15,
       color: theme.colorScheme === 'dark' ? theme.colors.dark[2] : theme.colors.gray[6]
     }
   }
