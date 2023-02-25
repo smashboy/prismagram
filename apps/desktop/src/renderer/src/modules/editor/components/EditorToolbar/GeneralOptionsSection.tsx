@@ -1,5 +1,5 @@
 import { ActionIcon, Divider, Group, Tooltip } from '@mantine/core'
-import { openSpotlight } from '@mantine/spotlight'
+import { toggleOpenSpotlightEvent } from '@renderer/modules/spotlight'
 import {
   toggleCreateProjectModalEvent,
   toggleSelectProjectModalEvent,
@@ -12,7 +12,7 @@ export const GeneralOptionsSection = () => {
   const handleOpenSettingsModal = () => toggleSettingsModalEvent(true)
   const handleOpenCreateProjectModal = () => toggleCreateProjectModalEvent(true)
   const handleOpenSelectProjectModal = () => toggleSelectProjectModalEvent(true)
-  const handleOpenSpotlight = () => openSpotlight()
+  const handleOpenSpotlight = () => toggleOpenSpotlightEvent()
 
   return (
     <Group pr={100}>

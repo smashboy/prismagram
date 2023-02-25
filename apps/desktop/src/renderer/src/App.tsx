@@ -24,27 +24,26 @@ function App() {
 
   return (
     <ReactFlowProvider>
-      <Spotlight>
-        <Group w="100%" h="100%" spacing={0} noWrap>
-          <Stack w="100%" h="100%" spacing={0} sx={{ flex: 1 }}>
-            <Paper
-              w="100%"
-              h="100%"
-              style={{
-                transition: 'width 400ms ease',
-                overflow: 'hidden',
-                borderRadius: 0
-              }}
-            >
-              <Editor />
-            </Paper>
-          </Stack>
-          <SettingsModal />
-          <CreateProjectModal />
-          <ProjectSelectorModal />
-          <ConfirmCloseApplicationModal />
-        </Group>
-      </Spotlight>
+      <Group w="100%" h="100%" spacing={0} noWrap>
+        <Stack w="100%" h="100%" spacing={0} sx={{ flex: 1 }}>
+          <Paper
+            w="100%"
+            h="100%"
+            style={{
+              transition: 'width 400ms ease',
+              overflow: 'hidden',
+              borderRadius: 0
+            }}
+          >
+            <Editor />
+          </Paper>
+        </Stack>
+        <SettingsModal />
+        <CreateProjectModal />
+        <ProjectSelectorModal />
+        <ConfirmCloseApplicationModal />
+        <Spotlight />
+      </Group>
     </ReactFlowProvider>
   )
 }

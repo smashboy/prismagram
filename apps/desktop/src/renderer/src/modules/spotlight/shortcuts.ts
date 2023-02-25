@@ -30,13 +30,14 @@ import {
   resetSelectedNodeEvent,
   setSelectedRelationTypeEvent
 } from '../editor'
+import { toggleOpenSpotlightEvent } from './stores'
 import { Shortcut } from './types'
 
 export const generalShortcuts: Shortcut[] = [
   {
     keys: [ctrlOrCmdKey, 'K'],
     name: 'Toggle spotlight',
-    onExecute: openSpotlight
+    onExecute: toggleOpenSpotlightEvent
   },
   {
     keys: [ctrlOrCmdKey, 'Alt', 'N'],
