@@ -1,0 +1,1 @@
+export { SchemaSidebarEditor } from './SchemaSidebarEditor'

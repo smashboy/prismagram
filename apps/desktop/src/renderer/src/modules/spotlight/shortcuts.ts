@@ -7,7 +7,6 @@ import {
 } from '@renderer/stores/ui/modals'
 import { NodeType } from '@shared/common/configs/diagrams'
 import {
-  IconList,
   IconPlus,
   IconPower,
   IconSettings,
@@ -23,7 +22,8 @@ import {
   IconTrash,
   IconBorderNone,
   IconBorderAll,
-  IconLayoutList
+  IconLayoutList,
+  IconBriefcase
 } from '@tabler/icons'
 import { RelationType } from 'prisma-state/constants'
 import { createPrismaSchemaState } from 'prisma-state/_new/state'
@@ -58,7 +58,7 @@ export const generalShortcuts: Shortcut[] = [
     keys: [ctrlOrCmdKey, 'Alt', 'P'],
     name: 'Select project',
     onExecute: () => toggleSelectProjectModalEvent(true),
-    icon: IconList
+    icon: IconBriefcase
   },
   {
     keys: [ctrlOrCmdKey, ','],

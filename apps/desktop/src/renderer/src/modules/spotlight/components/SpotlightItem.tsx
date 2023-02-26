@@ -7,7 +7,6 @@ import {
   toggleOpenSpotlightEvent
 } from '../stores'
 import { SpotlightAction } from '../types'
-import { KbdShortcut } from './KbdShortcut'
 import { SpotlightKbdShortcut } from './SpotlightKbdShortcut'
 
 interface SpotlightItemProps {

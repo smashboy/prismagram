@@ -5,7 +5,7 @@ import {
   toggleSelectProjectModalEvent,
   toggleSettingsModalEvent
 } from '@renderer/stores/ui/modals'
-import { IconBulb, IconList, IconPlus, IconSettings } from '@tabler/icons'
+import { IconBriefcase, IconBulb, IconPlus, IconSettings } from '@tabler/icons'
 import { ICON_SIZE } from './constants'
 
 export const GeneralOptionsSection = () => {
@@ -28,7 +28,7 @@ export const GeneralOptionsSection = () => {
       </Tooltip>
       <Tooltip label="Select project">
         <ActionIcon onClick={handleOpenSelectProjectModal}>
-          <IconList size={ICON_SIZE} />
+          <IconBriefcase size={ICON_SIZE} />
         </ActionIcon>
       </Tooltip>
       <Tooltip label="Create new project">

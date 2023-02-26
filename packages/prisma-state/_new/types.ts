@@ -21,10 +21,7 @@ export type AttributeFunctionType =
   | 'dbgenerated'
 export type FieldModifier = 'optional' | 'list' | null
 
-export type PrismaSchemaStateData = Map<
-  string,
-  DatasourceData | GeneratorData | EnumData | ModelData
->
+export type PrismaSchemaStateData = Map<string, TopLevelBlockData>
 
 export interface AttributeFunction {
   type: AttributeFunctionType
@@ -116,6 +113,9 @@ export interface PrismaSchemaStateInstance {
   readonly enums: Map<string, EnumData>
   readonly modelIds: string[]
   readonly enumIds: string[]
+  // readonly blocksArray: TopLevelBlockData[]
+  readonly blockIds: string[]
+  block(id: string): TopLevelBlockData
   model(id: string): ModelData
   enum(id: string): EnumData
   isModel(id: string): boolean
