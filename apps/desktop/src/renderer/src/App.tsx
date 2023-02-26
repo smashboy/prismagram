@@ -5,13 +5,10 @@ import { Editor } from './modules/editor'
 import { CreateProjectModal, getProjectsListEffect, ProjectSelectorModal } from './modules/projects'
 import { loadGlobalSettingsEffect, SettingsModal } from './modules/settings'
 import { Spotlight, useGeneralShortcuts } from './modules/spotlight'
-import 'reactflow/dist/style.css'
-import './transports'
-
-import 'prisma-state/_new/state'
-import 'prisma-state/PrismaSchemaState'
 import { useUpdatesManager } from './core/hooks'
 import { ConfirmCloseApplicationModal } from './core/components'
+import 'reactflow/dist/style.css'
+import './transports'
 
 function App() {
   useGeneralShortcuts()
