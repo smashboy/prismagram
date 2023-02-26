@@ -44,6 +44,7 @@ const generateModelActions = (
   {
     title: 'Select',
     icon: <IconPointer size={18} />,
+
     onTrigger: () => {
       const node = flow.getNode(modelId)
 
@@ -71,6 +72,7 @@ const generateModelActions = (
   {
     title: 'Delete',
     icon: <IconTrash size={18} />,
+    shortcut: ['Delete'],
     onTrigger: () => {
       state.removeModel(modelId)
       setPrismaSchemaEvent(state._clone() as ReturnType<typeof createPrismaSchemaState>)
@@ -97,6 +99,7 @@ const generateEnumActions = (
   },
   {
     title: 'Delete',
+    shortcut: ['Delete'],
     icon: <IconTrash size={18} />,
     onTrigger: () => {
       state.removeEnum(enumId)
