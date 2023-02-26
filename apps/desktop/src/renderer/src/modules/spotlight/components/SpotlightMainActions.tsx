@@ -1,33 +1,114 @@
 import { string2Color } from '@renderer/core/utils'
 import {
-  $schemaEnums,
-  $schemaModels,
+  $schemaState,
   schemaStateHistoryApiEvents,
-  selectNodeEvent
+  selectNodeEvent,
+  setCreateRelationModalDataEvent,
+  setPrismaSchemaEvent,
+  toggleCreateRelationModalEvent
 } from '@renderer/modules/editor'
 import { zoomToNode } from '@renderer/modules/editor/utils'
 import { $projects, $selectedProjectId, selectProjectEvent } from '@renderer/modules/projects'
 import { NodeType } from '@shared/common/configs/diagrams'
-import { IconBorderAll, IconBriefcase, IconLayoutList } from '@tabler/icons'
+import {
+  IconBorderAll,
+  IconBriefcase,
+  IconLayoutList,
+  IconPlugConnected,
+  IconPointer,
+  IconTrash
+} from '@tabler/icons'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
-import { useReactFlow } from 'reactflow'
+import { createPrismaSchemaState } from 'prisma-state/_new/state'
+import { PrismaSchemaStateInstance } from 'prisma-state/_new/types'
+import { ReactFlowInstance, useReactFlow } from 'reactflow'
 import { diagramEditorShortcuts, editorShortcuts, generalShortcuts } from '../shortcuts'
+import { SpotlightAction } from '../types'
 import { shortcut2SpotlightAction } from '../utils'
 import { SpotlightGroup } from './SpotlightGroup'
 import { SpotlightItem } from './SpotlightItem'
 
 const $store = combine({
   projects: $projects,
-  schemaModels: $schemaModels,
-  schemaEnums: $schemaEnums,
+  schemaState: $schemaState,
+
   selectedProjectId: $selectedProjectId
 })
+
+const generateModelActions = (
+  modelId: string,
+  flow: ReactFlowInstance,
+  state: PrismaSchemaStateInstance
+): SpotlightAction[] => [
+  {
+    title: 'Select',
+    icon: <IconPointer size={18} />,
+    onTrigger: () => {
+      const node = flow.getNode(modelId)
+
+      if (node) {
+        zoomToNode(flow, node)
+        selectNodeEvent({ nodeId: node.id, type: node.type! as NodeType })
+      }
+    }
+  },
+  {
+    title: 'Create relation',
+    icon: <IconPlugConnected size={18} />,
+    onTrigger: () => {
+      toggleCreateRelationModalEvent(true)
+      setCreateRelationModalDataEvent({
+        source: modelId,
+        target: '',
+        name: '',
+        onDelete: null,
+        onUpdate: null,
+        isOptional: false
+      })
+    }
+  },
+  {
+    title: 'Delete',
+    icon: <IconTrash size={18} />,
+    onTrigger: () => {
+      state.removeModel(modelId)
+      setPrismaSchemaEvent(state._clone() as ReturnType<typeof createPrismaSchemaState>)
+    }
+  }
+]
+
+const generateEnumActions = (
+  enumId: string,
+  flow: ReactFlowInstance,
+  state: PrismaSchemaStateInstance
+): SpotlightAction[] => [
+  {
+    title: 'Select',
+    icon: <IconPointer size={18} />,
+    onTrigger: () => {
+      const node = flow.getNode(enumId)
+
+      if (node) {
+        zoomToNode(flow, node)
+        selectNodeEvent({ nodeId: node.id, type: node.type! as NodeType })
+      }
+    }
+  },
+  {
+    title: 'Delete',
+    icon: <IconTrash size={18} />,
+    onTrigger: () => {
+      state.removeEnum(enumId)
+      setPrismaSchemaEvent(state._clone() as ReturnType<typeof createPrismaSchemaState>)
+    }
+  }
+]
 
 export const SpotlightMainActions = () => {
   const flow = useReactFlow()
 
-  const { schemaModels, schemaEnums, projects, selectedProjectId } = useStore($store)
+  const { schemaState, projects, selectedProjectId } = useStore($store)
 
   const generalSpotlightAction = generalShortcuts
     .filter((shortcut) => shortcut.name !== 'Toggle spotlight')
@@ -55,47 +136,33 @@ export const SpotlightMainActions = () => {
       />
     ))
 
-  const modelActions = [...schemaModels.values()].map(({ name }) => (
+  const modelActions = [...schemaState.models.values()].map(({ name }) => (
     <SpotlightItem
       key={name}
       action={{
         title: name,
-
         icon: <IconBorderAll size={18} color={string2Color(name)} />,
-        onTrigger: () => {
-          const node = flow.getNode(name)
-
-          if (node) {
-            zoomToNode(flow, node)
-            selectNodeEvent({ nodeId: node.id, type: node.type! as NodeType })
-          }
-        }
+        actions: generateModelActions(name, flow, schemaState)
       }}
     />
   ))
 
-  const enumActions = [...schemaEnums.values()].map(({ name }) => (
+  const enumActions = [...schemaState.enums.values()].map(({ name }) => (
     <SpotlightItem
       key={name}
       action={{
         title: name,
-
         icon: <IconLayoutList size={18} color={string2Color(name)} />,
-        onTrigger: () => {
-          const node = flow.getNode(name)
-
-          if (node) {
-            zoomToNode(flow, node)
-            selectNodeEvent({ nodeId: node.id, type: node.type! as NodeType })
-          }
-        }
+        actions: generateEnumActions(name, flow, schemaState)
       }}
     />
   ))
 
   const editorActions = selectedProjectId
     ? [
-        ...diagramEditorShortcuts(flow),
+        ...diagramEditorShortcuts(flow).filter(
+          (shortcut) => shortcut.name !== 'Delete selected node'
+        ),
         ...editorShortcuts({
           undo: schemaStateHistoryApiEvents.undo,
           redo: schemaStateHistoryApiEvents.redo
