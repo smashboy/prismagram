@@ -1,4 +1,3 @@
-import { openSpotlight } from '@mantine/spotlight'
 import { ctrlOrCmdKey } from '@renderer/core/electron'
 import {
   toggleCloseAppModalEvent,
@@ -6,6 +5,7 @@ import {
   toggleSelectProjectModalEvent,
   toggleSettingsModalEvent
 } from '@renderer/stores/ui/modals'
+import { NodeType } from '@shared/common/configs/diagrams'
 import {
   IconList,
   IconPlus,
@@ -20,23 +20,33 @@ import {
   IconZoomInArea,
   IconZoomOut,
   IconZoomIn,
-  IconTrash
+  IconTrash,
+  IconBorderNone,
+  IconBorderAll,
+  IconLayoutList
 } from '@tabler/icons'
 import { RelationType } from 'prisma-state/constants'
-import { ReactFlowInstance } from 'reactflow'
+import { createPrismaSchemaState } from 'prisma-state/_new/state'
+import { PrismaSchemaStateInstance } from 'prisma-state/_new/types'
+import { Node, ReactFlowInstance } from 'reactflow'
 import {
+  addNodeEvent,
   layoutDiagramEffect,
   removeSelectedNodeEffect,
   resetSelectedNodeEvent,
+  selectNodeEvent,
+  setPrismaSchemaEvent,
   setSelectedRelationTypeEvent
 } from '../editor'
+import { zoomToNode } from '../editor/utils'
+import { toggleOpenSpotlightEvent } from './stores'
 import { Shortcut } from './types'
 
 export const generalShortcuts: Shortcut[] = [
   {
     keys: [ctrlOrCmdKey, 'K'],
     name: 'Toggle spotlight',
-    onExecute: openSpotlight
+    onExecute: () => toggleOpenSpotlightEvent()
   },
   {
     keys: [ctrlOrCmdKey, 'Alt', 'N'],
@@ -121,19 +131,54 @@ export const editorShortcuts = ({ undo, redo }: EditorShortcutsProps): Shortcut[
   // }
 ]
 
-export const diagramEditorShortcuts = (flow: ReactFlowInstance): Shortcut[] => [
-  // {
-  //   keys: [ctrlOrCmdKey, 'N'],
-  //   name: 'New Model',
-  //   onExecute: () => {},
-  //   icon: IconBorderAll
-  // },
-  // {
-  //   keys: [ctrlOrCmdKey, 'N'],
-  //   name: 'New Enum',
-  //   onExecute: () => {},
-  //   icon: IconLayoutList
-  // },
+export const diagramEditorShortcuts = (
+  flow: ReactFlowInstance,
+  state: PrismaSchemaStateInstance
+): Shortcut[] => [
+  {
+    keys: [ctrlOrCmdKey, 'N'],
+    name: 'New Model',
+    onExecute: () => {
+      const type = NodeType.MODEL
+      const id = `New${type}`
+
+      const node: Node = {
+        id,
+        type,
+        position: { x: 0, y: 0 },
+        data: {}
+      }
+
+      state.createModel(id)
+      setPrismaSchemaEvent(state._clone() as ReturnType<typeof createPrismaSchemaState>)
+      addNodeEvent(node)
+      selectNodeEvent({ nodeId: id, type: type as NodeType })
+      zoomToNode(flow, node)
+    },
+    icon: IconBorderAll
+  },
+  {
+    keys: [ctrlOrCmdKey, 'Shift', 'N'],
+    name: 'New Enum',
+    onExecute: () => {
+      const type = NodeType.ENUM
+      const id = `New${type}`
+
+      const node: Node = {
+        id,
+        type,
+        position: { x: 0, y: 0 },
+        data: {}
+      }
+
+      state.createEnum(id)
+      setPrismaSchemaEvent(state._clone() as ReturnType<typeof createPrismaSchemaState>)
+      addNodeEvent(node)
+      selectNodeEvent({ nodeId: id, type: type as NodeType })
+      zoomToNode(flow, node)
+    },
+    icon: IconLayoutList
+  },
   {
     keys: [ctrlOrCmdKey, 'L'],
     name: 'Auto layout diagram',
@@ -149,6 +194,7 @@ export const diagramEditorShortcuts = (flow: ReactFlowInstance): Shortcut[] => [
   {
     keys: ['Escape'],
     name: 'Deselect node',
+    icon: IconBorderNone,
     onExecute: () => resetSelectedNodeEvent()
   },
   {
@@ -164,7 +210,7 @@ export const diagramEditorShortcuts = (flow: ReactFlowInstance): Shortcut[] => [
     icon: IconRelationOneToOne
   },
   {
-    keys: [ctrlOrCmdKey, 'N'],
+    keys: [ctrlOrCmdKey, 'U'],
     name: 'One-to-many relation',
     onExecute: () => setSelectedRelationTypeEvent(RelationType.ONE_TO_MANY),
     icon: IconRelationOneToMany
