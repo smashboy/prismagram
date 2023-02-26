@@ -1,11 +1,8 @@
 import { Command } from 'cmdk'
 import { createStyles, Input } from '@mantine/core'
 import { IconSearch } from '@tabler/icons'
-
-interface SpotlightInputProps {
-  value: string
-  onChange: (value: string) => void
-}
+import { useStore } from 'effector-react'
+import { $spotlightSearchInput, setSpotlightSeachEvent } from '../stores'
 
 const useStyles = createStyles((theme) => ({
   input: {
@@ -16,13 +13,17 @@ const useStyles = createStyles((theme) => ({
   }
 }))
 
-export const SpotlightInput: React.FC<SpotlightInputProps> = ({ value, onChange }) => {
+export const SpotlightInput = () => {
   const { classes } = useStyles()
+
+  const value = useStore($spotlightSearchInput)
+
+  const handleInputChange = (value: string) => setSpotlightSeachEvent(value)
 
   return (
     <Input
       value={value}
-      onValueChange={onChange}
+      onValueChange={handleInputChange}
       classNames={{ input: classes.input }}
       placeholder="Search..."
       icon={<IconSearch size={18} />}

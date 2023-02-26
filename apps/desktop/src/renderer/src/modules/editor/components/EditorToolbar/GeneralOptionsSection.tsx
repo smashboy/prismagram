@@ -12,7 +12,7 @@ export const GeneralOptionsSection = () => {
   const handleOpenSettingsModal = () => toggleSettingsModalEvent(true)
   const handleOpenCreateProjectModal = () => toggleCreateProjectModalEvent(true)
   const handleOpenSelectProjectModal = () => toggleSelectProjectModalEvent(true)
-  const handleOpenSpotlight = () => toggleOpenSpotlightEvent()
+  const handleOpenSpotlight = () => toggleOpenSpotlightEvent(true)
 
   return (
     <Group pr={100}>

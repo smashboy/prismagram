@@ -34,7 +34,7 @@ export const Spotlight = () => {
 
   useHotkeys([[`Backspace`, handleRemoveLastSpotlightSubAction]])
 
-  const handleToggleOpenSpotlight = () => toggleOpenSpotlightEvent()
+  const handleToggleOpenSpotlight = () => toggleOpenSpotlightEvent(false)
 
   return (
     <Modal

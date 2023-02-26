@@ -1,7 +1,11 @@
 import { Box, Center, createStyles, Group, Highlight, UnstyledButton } from '@mantine/core'
 import { IconChevronRight } from '@tabler/icons'
 import { Command } from 'cmdk'
-import { addSpotlightSubActionEvent, toggleOpenSpotlightEvent } from '../stores'
+import {
+  addSpotlightSubActionEvent,
+  resetSpotlightSeachEvent,
+  toggleOpenSpotlightEvent
+} from '../stores'
 import { SpotlightAction } from '../types'
 
 interface SpotlightItemProps {
@@ -34,11 +38,12 @@ export const SpotlightItem: React.FC<SpotlightItemProps> = ({ action }) => {
 
   const handleActionSelect = () => {
     if (hasSubActions) {
+      resetSpotlightSeachEvent()
       addSpotlightSubActionEvent({ parent: title, actions: [...actions] })
       return
     }
 
-    toggleOpenSpotlightEvent()
+    toggleOpenSpotlightEvent(false)
     onTrigger?.()
   }
 

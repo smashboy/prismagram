@@ -1,19 +1,19 @@
-import { useState } from 'react'
 import { Command } from 'cmdk'
 import { Box, ScrollArea } from '@mantine/core'
 import { SpotlightInput } from './SpotlightInput'
 import { SpotlightList } from './SpotlightList'
-import { removeLastSpotlightSubActionEvent } from '../stores'
+import { $spotlightSearchInput, removeLastSpotlightSubActionEvent } from '../stores'
+import { useStore } from 'effector-react'
 
 interface SpotlightContainerProps {
   children: React.ReactNode
 }
 
 export const SpotlightContainer: React.FC<SpotlightContainerProps> = ({ children }) => {
-  const [searchValue, setSearchValue] = useState('')
+  const search = useStore($spotlightSearchInput)
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'Escape' || (event.key === 'Backspace' && !searchValue)) {
+    if (event.key === 'Escape' || (event.key === 'Backspace' && !search)) {
       event.preventDefault()
       removeLastSpotlightSubActionEvent()
     }
@@ -21,7 +21,7 @@ export const SpotlightContainer: React.FC<SpotlightContainerProps> = ({ children
 
   return (
     <Command onKeyDown={handleKeyDown} loop>
-      <SpotlightInput value={searchValue} onChange={setSearchValue} />
+      <SpotlightInput />
       <ScrollArea
         type="scroll"
         sx={(theme) => ({
