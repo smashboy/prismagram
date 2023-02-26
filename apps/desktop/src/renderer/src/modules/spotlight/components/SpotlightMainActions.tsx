@@ -3,8 +3,10 @@ import {
   $schemaState,
   schemaStateHistoryApiEvents,
   selectNodeEvent,
+  setCreateEnumFieldModalDataEvent,
   setCreateRelationModalDataEvent,
   setPrismaSchemaEvent,
+  toggleCreateEnumFieldModalEvent,
   toggleCreateRelationModalEvent
 } from '@renderer/modules/editor'
 import { zoomToNode } from '@renderer/modules/editor/utils'
@@ -16,6 +18,7 @@ import {
   IconLayoutList,
   IconPlugConnected,
   IconPointer,
+  IconRowInsertBottom,
   IconTrash
 } from '@tabler/icons'
 import { combine } from 'effector'
@@ -32,7 +35,6 @@ import { SpotlightItem } from './SpotlightItem'
 const $store = combine({
   projects: $projects,
   schemaState: $schemaState,
-
   selectedProjectId: $selectedProjectId
 })
 
@@ -95,6 +97,18 @@ const generateEnumActions = (
         zoomToNode(flow, node)
         selectNodeEvent({ nodeId: node.id, type: node.type! as NodeType })
       }
+    }
+  },
+  {
+    title: 'Create new model field',
+    icon: <IconRowInsertBottom size={18} />,
+    onTrigger: () => {
+      toggleCreateEnumFieldModalEvent(true)
+      setCreateEnumFieldModalDataEvent({
+        model: '',
+        fieldName: '',
+        enum: enumId
+      })
     }
   },
   {
