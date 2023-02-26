@@ -163,7 +163,7 @@ export const SpotlightMainActions = () => {
 
   const editorActions = selectedProjectId
     ? [
-        ...diagramEditorShortcuts(flow).filter(
+        ...diagramEditorShortcuts(flow, schemaState).filter(
           (shortcut) => shortcut.name !== 'Delete selected node'
         ),
         ...editorShortcuts({
