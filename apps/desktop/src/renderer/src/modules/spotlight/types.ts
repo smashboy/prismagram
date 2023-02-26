@@ -12,4 +12,5 @@ export interface Shortcut {
 export interface SpotlightAction extends Omit<MSpotlightAction, 'onTrigger'> {
   onTrigger?: () => void
   actions?: SpotlightAction[]
+  shortcut?: string[]
 }

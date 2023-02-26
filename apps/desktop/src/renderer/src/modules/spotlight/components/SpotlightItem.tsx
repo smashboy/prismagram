@@ -7,6 +7,8 @@ import {
   toggleOpenSpotlightEvent
 } from '../stores'
 import { SpotlightAction } from '../types'
+import { KbdShortcut } from './KbdShortcut'
+import { SpotlightKbdShortcut } from './SpotlightKbdShortcut'
 
 interface SpotlightItemProps {
   action: SpotlightAction
@@ -30,7 +32,7 @@ const useStyles = createStyles((theme) => ({
 }))
 
 export const SpotlightItem: React.FC<SpotlightItemProps> = ({ action }) => {
-  const { icon, title, actions, onTrigger } = action
+  const { icon, title, actions, shortcut, onTrigger } = action
 
   const { classes } = useStyles()
 
@@ -61,6 +63,11 @@ export const SpotlightItem: React.FC<SpotlightItemProps> = ({ action }) => {
         <Box sx={{ flexGrow: '1!important' }}>
           <Highlight highlight="">{title}</Highlight>
         </Box>
+        {shortcut && (
+          <Center>
+            <SpotlightKbdShortcut keys={shortcut} />
+          </Center>
+        )}
         {hasSubActions && (
           <Center className={classes.actionIcon}>
             <IconChevronRight size={18} />
