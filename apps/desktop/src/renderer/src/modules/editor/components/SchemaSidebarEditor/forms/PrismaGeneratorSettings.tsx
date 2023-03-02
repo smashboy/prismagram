@@ -38,7 +38,7 @@ export const PrismaGeneratorSettings: React.FC<PrismaDatasourceSettingsProps> = 
   const generator = new Generator(generatorData.name, state, generatorData)
 
   return (
-    <Stack>
+    <Stack pr="md">
       <EnvInput
         label="Provider"
         description="Describes which generator  to use. This can point to a file that implements a generator or specify a built-in generator directly."

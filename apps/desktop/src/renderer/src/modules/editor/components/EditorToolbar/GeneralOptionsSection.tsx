@@ -15,7 +15,7 @@ export const GeneralOptionsSection = () => {
   const handleOpenSpotlight = () => toggleOpenSpotlightEvent(true)
 
   return (
-    <Group pr={100}>
+    <Group pr={100} sx={{ flex: 1 }}>
       <Tooltip label="Open settings">
         <ActionIcon onClick={handleOpenSettingsModal}>
           <IconSettings size={ICON_SIZE} />

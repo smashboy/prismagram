@@ -9,18 +9,22 @@ import {
   ScrollArea,
   Stack,
   Text,
-  TextInput
+  TextInput,
+  Tooltip
 } from '@mantine/core'
 import {
   $schemaState,
   $selectedNodeId,
+  removeSelectedNodeEffect,
   setPrismaSchemaEvent
 } from '@renderer/modules/editor/stores'
+import { zoomToNode } from '@renderer/modules/editor/utils'
 import { IconEye, IconTrash } from '@tabler/icons'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { Enum, Model } from 'prisma-state/_new/blocks'
 import { useEffect, useRef, useState } from 'react'
+import { useReactFlow } from 'reactflow'
 import { PaperSection } from './PaperSection'
 
 const $store = combine({
@@ -31,9 +35,16 @@ const $store = combine({
 interface BlockBaseFormProps {
   block: Model | Enum
   children: React.ReactNode
+  actions?: React.ReactNode
 }
 
-export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({ block, children }) => {
+export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({
+  block,
+  children,
+  actions = null
+}) => {
+  const flow = useReactFlow()
+
   const { schemaState, selectedNodeId } = useStore($store)
 
   const fieldsCache = useRef<string[]>([])
@@ -45,6 +56,8 @@ export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({ block, children })
       setSelectedFields(block.fieldNames)
     }
   }, [selectedNodeId])
+
+  const handleRemoveNode = () => removeSelectedNodeEffect()
 
   const handleOnDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -68,6 +81,14 @@ export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({ block, children })
     setSelectedFields([])
   }
 
+  const handleFocusNode = () => {
+    const node = flow.getNode(block.name)
+
+    if (node) {
+      zoomToNode(flow, node)
+    }
+  }
+
   return (
     <Stack w="100%" h="100%">
       <Stack pr="md">
@@ -76,12 +97,17 @@ export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({ block, children })
             {block.name}
           </Text>
           <Group>
-            <ActionIcon size="sm">
-              <IconEye />
-            </ActionIcon>
-            <ActionIcon size="sm">
-              <IconTrash />
-            </ActionIcon>
+            <Tooltip label="Remove">
+              <ActionIcon onClick={handleRemoveNode} size="sm">
+                <IconTrash />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label="Focus in diagram">
+              <ActionIcon onClick={handleFocusNode} size="sm">
+                <IconEye />
+              </ActionIcon>
+            </Tooltip>
+            {actions}
           </Group>
         </Group>
         <Divider />

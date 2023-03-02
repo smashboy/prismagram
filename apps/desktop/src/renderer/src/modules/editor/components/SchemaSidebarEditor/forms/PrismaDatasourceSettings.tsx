@@ -24,7 +24,7 @@ export const PrismaDatasourceSettings: React.FC<PrismaDatasourceSettingsProps> =
   const datasource = new Datasource(datasourceData.name, state, datasourceData)
 
   return (
-    <Stack>
+    <Stack pr="md">
       <SelectOptionInput
         label="Provider"
         description="Describes which data source connectors to use."
