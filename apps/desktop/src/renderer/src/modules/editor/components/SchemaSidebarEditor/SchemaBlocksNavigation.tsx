@@ -28,7 +28,7 @@ export const SchemaBlocksNavigation = () => {
   }
 
   return (
-    <ScrollArea miw="30%" h="100%" offsetScrollbars>
+    <ScrollArea miw="35%" h="100%" offsetScrollbars>
       <Stack h="100%">
         <DndContext
           onDragEnd={handleOnDragEnd}

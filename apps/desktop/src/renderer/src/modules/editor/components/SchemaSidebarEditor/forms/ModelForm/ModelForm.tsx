@@ -1,5 +1,10 @@
 import { useStore, useStoreMap } from 'effector-react'
-import { $schemaModels, $schemaState } from '@renderer/modules/editor/stores'
+import {
+  $schemaModels,
+  $schemaState,
+  setCreateRelationModalDataEvent,
+  toggleCreateRelationModalEvent
+} from '@renderer/modules/editor/stores'
 import { Model } from 'prisma-state/_new/blocks'
 import { ModelFieldForm } from './ModelFieldForm'
 import { BlockBaseForm } from '../BlockBaseForm'
@@ -21,13 +26,25 @@ export const ModelForm: React.FC<ModelFormProps> = ({ modelId }) => {
 
   const model = new Model(data.name, schemaState, data)
 
+  const openCreateRelationModal = () => {
+    toggleCreateRelationModalEvent(true)
+    setCreateRelationModalDataEvent({
+      source: model.name,
+      target: '',
+      name: '',
+      onDelete: null,
+      onUpdate: null,
+      isOptional: false
+    })
+  }
+
   return (
     <BlockBaseForm
       block={model}
       actions={
         <>
           <Tooltip label="New relation">
-            <ActionIcon size="sm">
+            <ActionIcon onClick={openCreateRelationModal} size="sm">
               <IconPlugConnected />
             </ActionIcon>
           </Tooltip>

@@ -11,7 +11,7 @@ const useStyles = createStyles(() => ({
     top: '53%!important',
     transform: 'translateY(-53%)',
     height: '90vh',
-    width: '40%',
+    width: '35%',
     pointerEvents: 'none'
   }
 }))

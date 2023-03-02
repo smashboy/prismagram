@@ -1,9 +1,10 @@
+import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Accordion, Badge, Group, Stack, Text } from '@mantine/core'
+import { Accordion, ActionIcon, Badge, Group, Stack, Text, Tooltip } from '@mantine/core'
 import { ScalarFieldColor } from '@renderer/modules/editor/config'
-import { $nodesColors } from '@renderer/modules/editor/stores'
+import { $nodesColors, $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor/stores'
 import { EnumModelFieldData, RelationFieldData, ScalarFieldData } from 'prisma-state/_new/types'
 import { DragHandle } from '../../../DragHandle'
 import { EnumModelField, RelationField, ScalarField } from 'prisma-state/_new/fields'
@@ -12,6 +13,12 @@ import { Model } from 'prisma-state/_new/blocks'
 import { FieldNameInput } from './FieldNameInput'
 import { FieldModifierSelector } from './FieldModifierSelector'
 import { FieldTypeSelect } from './FieldTypeSelect'
+import { IconTrash } from '@tabler/icons'
+
+const $store = combine({
+  nodeColors: $nodesColors,
+  schemaState: $schemaState
+})
 
 interface ModelFieldFormProps {
   field: ScalarFieldData | EnumModelFieldData | RelationFieldData
@@ -36,7 +43,7 @@ const fieldHelperSelector = (data: RelationFieldData | ScalarFieldData | EnumMod
 }
 
 export const ModelFieldForm: React.FC<ModelFieldFormProps> = ({ model, field: fieldData }) => {
-  const nodeColors = useStore($nodesColors)
+  const { nodeColors, schemaState } = useStore($store)
 
   const field = fieldHelperSelector(fieldData)
 
@@ -52,13 +59,34 @@ export const ModelFieldForm: React.FC<ModelFieldFormProps> = ({ model, field: fi
     transition
   }
 
+  const handleDeleteField = () => {
+    if ((fieldData as RelationFieldData)?.isRelationField) {
+      schemaState.relations.remove(
+        model.name,
+        field.type,
+        field.attributes.get('relation')?.arguments.get('name') as string | undefined
+      )
+    }
+
+    model.removeField(field.name)
+
+    setPrismaSchemaEvent(schemaState._clone())
+  }
+
   return (
     <Accordion.Item value={field.name} ref={setNodeRef} style={style} {...attributes}>
       <Accordion.Control>
         <Group>
-          <DragHandle size="sm" ref={setActivatorNodeRef} {...listeners} />
-          <Text>{field.name}</Text>
-          <Badge sx={{ color: typeColor, textTransform: 'none' }}>{field.displayType}</Badge>
+          <Group sx={{ flex: 1 }}>
+            <DragHandle size="sm" ref={setActivatorNodeRef} {...listeners} />
+            <Text>{field.name}</Text>
+            <Badge sx={{ color: typeColor, textTransform: 'none' }}>{field.displayType}</Badge>
+          </Group>
+          <Tooltip label="Remove field">
+            <ActionIcon onClick={handleDeleteField} size="xs">
+              <IconTrash />
+            </ActionIcon>
+          </Tooltip>
         </Group>
       </Accordion.Control>
       <Accordion.Panel>

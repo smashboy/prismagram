@@ -12,7 +12,7 @@ export const EditorToolbar = () => {
   return (
     <Panel
       position={selectedNodeId ? 'top-right' : 'top-center'}
-      style={selectedNodeId ? { width: '40%' } : void 0}
+      style={selectedNodeId ? { width: '35%' } : void 0}
     >
       <PaperGlass py={5} px="xs">
         <Group spacing={0}>
