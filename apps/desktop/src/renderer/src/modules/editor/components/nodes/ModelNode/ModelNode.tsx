@@ -9,9 +9,7 @@ import { ModelNodeToolbar } from './ModelNodeToolbar'
 import { NodeCard } from '../NodeCard'
 import { BlockNameInput } from '../../inputs/BlockNameInput'
 import { NodeType } from '@shared/common/configs/diagrams'
-import { ModelNodeEditForm } from './ModelNodeEditForm'
 import { Model } from 'prisma-state/_new/blocks'
-import { useBoolean } from 'react-use'
 
 const $store = combine({
   nodesColors: $nodesColors,
@@ -23,8 +21,6 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
   const { sourceHandlers, targetHandlers } = data
 
   const { selectedNodeId, nodesColors, state } = useStore($store)
-
-  const [isOpenNewField, toggleIsOpenNewField] = useBoolean(false)
 
   const modelData = useStoreMap({
     store: $schemaModels,
@@ -47,11 +43,7 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
 
   return (
     <Stack sx={{ minWidth: 150, cursor: isSelected ? 'default' : void 0 }}>
-      <ModelNodeToolbar
-        isSelected={isSelected}
-        selectedNodeId={selectedNodeId?.nodeId}
-        onOpenNewFieldInput={toggleIsOpenNewField}
-      />
+      <ModelNodeToolbar isSelected={isSelected} selectedNodeId={selectedNodeId?.nodeId} />
       <NodeCard
         nodeId={name}
         isSelected={isSelected}
@@ -59,33 +51,26 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
         type={NodeType.MODEL}
       >
         <BlockNameInput block={model} />
-        {isSelected ? (
-          <ModelNodeEditForm
-            isOpenNewField={isOpenNewField}
-            onCloseNewField={toggleIsOpenNewField}
-            block={model}
-          />
-        ) : (
-          <Stack sx={{ alignItems: 'center' }}>
-            <Table verticalSpacing="md" fontSize="xl">
-              <tbody>
-                {model.fieldsArray.map((field) => (
-                  <ModelNodeField
-                    key={field.name}
-                    fieldId={field.name}
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    field={field}
-                    isSelected={isSelected}
-                    nodesColors={nodesColors}
-                    sourceHandlers={sourceHandlers}
-                    targetHandlers={targetHandlers}
-                    maxAttribuesCount={maxAttribuesCount}
-                  />
-                ))}
-              </tbody>
-            </Table>
-            {/* {model.attributesArray.length > 0 && (
+        <Stack sx={{ alignItems: 'center' }}>
+          <Table verticalSpacing="md" fontSize="xl">
+            <tbody>
+              {model.fieldsArray.map((field) => (
+                <ModelNodeField
+                  key={field.name}
+                  fieldId={field.name}
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  field={field}
+                  isSelected={isSelected}
+                  nodesColors={nodesColors}
+                  sourceHandlers={sourceHandlers}
+                  targetHandlers={targetHandlers}
+                  maxAttribuesCount={maxAttribuesCount}
+                />
+              ))}
+            </tbody>
+          </Table>
+          {/* {model.attributesArray.length > 0 && (
               <Paper bg="gray.1" p="xs" withBorder>
                 <Stack>
                   {model.attributesArray.map((attr) => (
@@ -94,8 +79,7 @@ export const ModelNode: React.FC<NodeProps<ModelNodeData>> = ({ data, id: name }
                 </Stack>
               </Paper>
             )} */}
-          </Stack>
-        )}
+        </Stack>
 
         <Handle
           id={name}
