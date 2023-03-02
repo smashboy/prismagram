@@ -1,5 +1,6 @@
 import { MultiSelect, MultiSelectProps } from '@mantine/core'
 import { $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor'
+import { PaperSection } from '@renderer/modules/editor/components/SchemaSidebarEditor/forms/PaperSection'
 import { useStore } from 'effector-react'
 import { Datasource, Generator } from 'prisma-state/_new/blocks'
 import { OptionsListField } from 'prisma-state/_new/fields'
@@ -33,5 +34,10 @@ export const MultipleOptionsSelect: React.FC<MultipleOptionsSelectProps> = ({
     setPrismaSchemaEvent(state._clone())
   }
 
-  return <MultiSelect value={field?.values || []} onChange={handleChange} {...props} />
+  return (
+    <PaperSection>
+      {' '}
+      <MultiSelect value={field?.values || []} onChange={handleChange} {...props} />
+    </PaperSection>
+  )
 }

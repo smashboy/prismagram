@@ -44,9 +44,9 @@ export const generalSettingsRoutes = new Map<GeneralSettingsRoute, SettingsRoute
 ])
 
 export const projectSettingsRoutes = new Map<ProjectSettingsRoute, SettingsRouteOptions>([
-  [ProjectSettingsRoute.GENERAL, { label: 'General', icon: IconAdjustments }],
+  [ProjectSettingsRoute.GENERAL, { label: 'General', icon: IconAdjustments }]
   // [ProjectSettingsRoute.COMMANDS, { label: 'Commands', icon: IconPrompt }],
-  [ProjectSettingsRoute.PRISMA, { label: 'Schema', icon: IconBrandPrisma }]
+  // [ProjectSettingsRoute.PRISMA, { label: 'Schema', icon: IconBrandPrisma }]
   // [ProjectSettingsRoute.DANGER, { label: 'Danger', icon: IconAlertTriangle }]
 ])
 

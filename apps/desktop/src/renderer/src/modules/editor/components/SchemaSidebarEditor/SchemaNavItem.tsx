@@ -23,7 +23,10 @@ const iconsMap = {
   generator: IconAdjustments
 }
 export const SchemaNavItem: React.FC<SchemaNavItemProps> = ({ blockId }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: blockId })
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: blockId,
+    disabled: true
+  })
 
   const { selectedNodeId, nodesColors } = useStore($store)
 
@@ -62,7 +65,12 @@ export const SchemaNavItem: React.FC<SchemaNavItemProps> = ({ blockId }) => {
       }
       sx={(theme) => ({
         borderRadius: theme.radius.sm,
-        boxShadow: isSelected ? theme.shadows.xs : void 0
+        boxShadow: isSelected ? theme.shadows.xs : void 0,
+        '& .mantine-NavLink-label': {
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis'
+        }
       })}
       style={style}
       {...attributes}

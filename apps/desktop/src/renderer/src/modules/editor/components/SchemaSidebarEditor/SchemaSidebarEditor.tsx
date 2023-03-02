@@ -4,6 +4,7 @@ import { createStyles, Divider, Group } from '@mantine/core'
 import { PaperGlass } from '@renderer/core/components'
 import { SchemaBlocksNavigation } from './SchemaBlocksNavigation'
 import { $selectedNodeId } from '../../stores'
+import { SchemaSidebarMainCotainer } from './SchemaSidebarMainCotainer'
 
 const useStyles = createStyles(() => ({
   root: {
@@ -28,6 +29,7 @@ export const SchemaSidebarEditor = () => {
         <Group h="100%" spacing={0} noWrap>
           <SchemaBlocksNavigation />
           <Divider orientation="vertical" />
+          <SchemaSidebarMainCotainer />
         </Group>
       </PaperGlass>
     </Panel>
