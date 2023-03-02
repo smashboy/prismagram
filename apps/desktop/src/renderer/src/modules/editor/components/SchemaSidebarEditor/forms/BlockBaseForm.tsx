@@ -1,6 +1,6 @@
-import { closestCenter, DndContext } from '@dnd-kit/core'
+import { closestCenter, DndContext, DragEndEvent } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import {
   Accordion,
   ActionIcon,
@@ -11,7 +11,9 @@ import {
   Text,
   TextInput
 } from '@mantine/core'
+import { $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor/stores'
 import { IconEye, IconTrash } from '@tabler/icons'
+import { useStore } from 'effector-react'
 import { Enum, Model } from 'prisma-state/_new/blocks'
 import { useEffect, useState } from 'react'
 import { PaperSection } from './PaperSection'
@@ -22,11 +24,28 @@ interface BlockBaseFormProps {
 }
 
 export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({ block, children }) => {
+  const schemaState = useStore($schemaState)
+
   const [selectedFields, setSelectedFields] = useState(block.fieldNames)
 
   useEffect(() => {
     setSelectedFields(block.fieldNames)
   }, [block])
+
+  const handleOnDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (!over || active.id === over.id) return
+
+    const oldIndex = block.fieldNames.indexOf(active.id as string)
+    const newIndex = block.fieldNames.indexOf(over.id as string)
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    block._setFromArray(arrayMove(block.fieldsArray, oldIndex, newIndex))
+
+    setPrismaSchemaEvent(schemaState._clone())
+  }
 
   return (
     <Stack w="100%" h="100%">
@@ -53,7 +72,7 @@ export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({ block, children })
           </PaperSection>
           <Divider />
           <DndContext
-            onDragEnd={() => {}}
+            onDragEnd={handleOnDragEnd}
             collisionDetection={closestCenter}
             modifiers={[restrictToVerticalAxis]}
           >
