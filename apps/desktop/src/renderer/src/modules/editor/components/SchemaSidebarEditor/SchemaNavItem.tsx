@@ -1,11 +1,12 @@
 import { combine } from 'effector'
 import { useStore, useStoreMap } from 'effector-react'
-import { NavLink } from '@mantine/core'
+import { Group, NavLink } from '@mantine/core'
 import { CSS } from '@dnd-kit/utilities'
 import { IconAdjustments, IconBorderAll, IconDatabase, IconLayoutList } from '@tabler/icons'
 import { $nodesColors, $schemaState, $selectedNodeId, selectNodeEvent } from '../../stores'
 import { NodeType } from '@shared/common/configs/diagrams'
 import { useSortable } from '@dnd-kit/sortable'
+import { DragHandle } from '../DragHandle'
 
 interface SchemaNavItemProps {
   blockId: string
@@ -23,10 +24,10 @@ const iconsMap = {
   generator: IconAdjustments
 }
 export const SchemaNavItem: React.FC<SchemaNavItemProps> = ({ blockId }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-    id: blockId,
-    disabled: true
-  })
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition } =
+    useSortable({
+      id: blockId
+    })
 
   const { selectedNodeId, nodesColors } = useStore($store)
 
@@ -61,7 +62,26 @@ export const SchemaNavItem: React.FC<SchemaNavItemProps> = ({ blockId }) => {
       onClick={handleSelectMode}
       variant="filled"
       icon={
-        Icon && <Icon size={16} color={isSelected ? void 0 : nodesColors[blockId]} stroke={1.5} />
+        <Group spacing={3}>
+          <DragHandle
+            size="sm"
+            ref={setActivatorNodeRef}
+            color={isSelected ? 'gray.0' : void 0}
+            sx={
+              isSelected
+                ? {
+                    '&:hover': {
+                      backgroundColor: 'transparent'
+                    }
+                  }
+                : void 0
+            }
+            {...listeners}
+          />
+          {Icon && (
+            <Icon size={16} color={isSelected ? void 0 : nodesColors[blockId]} stroke={1.5} />
+          )}
+        </Group>
       }
       sx={(theme) => ({
         borderRadius: theme.radius.sm,
@@ -74,7 +94,6 @@ export const SchemaNavItem: React.FC<SchemaNavItemProps> = ({ blockId }) => {
       })}
       style={style}
       {...attributes}
-      {...listeners}
     />
   )
 }

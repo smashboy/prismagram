@@ -8,9 +8,9 @@ import { SchemaSidebarMainCotainer } from './SchemaSidebarMainCotainer'
 
 const useStyles = createStyles(() => ({
   root: {
-    top: '50%!important',
-    transform: 'translateY(-50%)',
-    height: '85vh',
+    top: '53%!important',
+    transform: 'translateY(-53%)',
+    height: '90vh',
     width: '40%',
     pointerEvents: 'none'
   }
@@ -25,7 +25,7 @@ export const SchemaSidebarEditor = () => {
 
   return (
     <Panel position="top-right" className={classes.root}>
-      <PaperGlass w="100%" h="100%" py="md" pr="md" pl="xs">
+      <PaperGlass w="100%" h="100%" py="md" pl="xs">
         <Group h="100%" spacing={0} noWrap>
           <SchemaBlocksNavigation />
           <Divider orientation="vertical" />

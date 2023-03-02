@@ -76,8 +76,7 @@ export const theme: MantineThemeOverride = {
     Accordion: {
       defaultProps: {
         variant: 'separated',
-        radius: 'md',
-        chevronPosition: 'left'
+        radius: 'md'
       }
     },
     MultiSelect: {

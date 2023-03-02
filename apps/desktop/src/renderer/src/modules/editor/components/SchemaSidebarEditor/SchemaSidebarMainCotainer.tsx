@@ -3,6 +3,7 @@ import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { PrismaSchemaStateInstance } from 'prisma-state/_new/types'
 import { $schemaState, $selectedNodeId, SelectedNodeData } from '../../stores'
+import { ModelForm } from './forms/ModelForm'
 import { PrismaDatasourceSettings } from './forms/PrismaDatasourceSettings'
 import { PrismaGeneratorSettings } from './forms/PrismaGeneratorSettings'
 
@@ -27,6 +28,10 @@ const formSelector = (
     return <PrismaGeneratorSettings settingsId={nodeId} />
   }
 
+  if (state.isModel(nodeId)) {
+    return <ModelForm modelId={nodeId} />
+  }
+
   return null
 }
 
@@ -36,7 +41,7 @@ export const SchemaSidebarMainCotainer = () => {
   const form = formSelector(selectedNodeId, schemaState)
 
   return (
-    <Stack pl="xs" h="100%">
+    <Stack pl="xs" w="100%" h="100%">
       {form}
     </Stack>
   )

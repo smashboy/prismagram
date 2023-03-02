@@ -126,6 +126,7 @@ export interface PrismaSchemaStateInstance {
   removeEnum(id: string): void
   toString(): string
   fromString(schema: string): void
+  _data(): PrismaSchemaStateData
   _clone(): PrismaSchemaStateInstance
 }
 
