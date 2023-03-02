@@ -20,7 +20,7 @@ import { IconEye, IconTrash } from '@tabler/icons'
 import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { Enum, Model } from 'prisma-state/_new/blocks'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { PaperSection } from './PaperSection'
 
 const $store = combine({
@@ -36,6 +36,8 @@ interface BlockBaseFormProps {
 export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({ block, children }) => {
   const { schemaState, selectedNodeId } = useStore($store)
 
+  const fieldsCache = useRef<string[]>([])
+
   const [selectedFields, setSelectedFields] = useState(block.fieldNames)
 
   useEffect(() => {
@@ -47,6 +49,8 @@ export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({ block, children })
   const handleOnDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
 
+    setSelectedFields(fieldsCache.current)
+
     if (!over || active.id === over.id) return
 
     const oldIndex = block.fieldNames.indexOf(active.id as string)
@@ -57,6 +61,11 @@ export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({ block, children })
     block._setFromArray(arrayMove(block.fieldsArray, oldIndex, newIndex))
 
     setPrismaSchemaEvent(schemaState._clone())
+  }
+
+  const handleOnDragStart = () => {
+    fieldsCache.current = selectedFields
+    setSelectedFields([])
   }
 
   return (
@@ -84,6 +93,7 @@ export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({ block, children })
           </PaperSection>
           <Divider />
           <DndContext
+            onDragStart={handleOnDragStart}
             onDragEnd={handleOnDragEnd}
             collisionDetection={closestCenter}
             modifiers={[restrictToVerticalAxis]}
