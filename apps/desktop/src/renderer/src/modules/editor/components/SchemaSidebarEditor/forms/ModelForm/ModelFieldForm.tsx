@@ -1,7 +1,7 @@
 import { useStore } from 'effector-react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Accordion, Badge, Group, Stack, Text, TextInput } from '@mantine/core'
+import { Accordion, Badge, Group, Stack, Text } from '@mantine/core'
 import { ScalarFieldColor } from '@renderer/modules/editor/config'
 import { $nodesColors } from '@renderer/modules/editor/stores'
 import { EnumModelFieldData, RelationFieldData, ScalarFieldData } from 'prisma-state/_new/types'

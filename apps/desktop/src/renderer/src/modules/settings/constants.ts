@@ -1,6 +1,5 @@
 import {
   IconAdjustments,
-  IconBrandPrisma,
   IconBriefcase,
   IconCommand,
   IconDashboard,
