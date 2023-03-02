@@ -1,9 +1,34 @@
 import Image from 'next/image'
 import Head from 'next/head'
-import { Button, Container, Group, Paper, rem, Stack, Text, Title } from '@mantine/core'
+import {
+  Button,
+  Container,
+  Grid,
+  Group,
+  Paper,
+  rem,
+  SimpleGrid,
+  Stack,
+  Text,
+  Title,
+  useMantineTheme
+} from '@mantine/core'
+import {
+  IconSchema,
+  IconPlugConnected,
+  IconBulb,
+  IconDragDrop,
+  IconBrain
+} from '@tabler/icons-react'
 import appuiImage from '../../public/app-ui.png'
+import { FeaturePreviewCard } from '@/components/FeaturePreviewCard'
+
+const PRIMARY_COL_HEIGHT = rem(500)
 
 export default function Home() {
+  const theme = useMantineTheme()
+  const SECONDARY_COL_HEIGHT = `calc(${PRIMARY_COL_HEIGHT} / 2 - ${theme.spacing.md} / 2)`
+
   return (
     <>
       <Head>
@@ -47,6 +72,67 @@ export default function Home() {
           >
             <Image src={appuiImage} alt="App user interface" width={1080} />
           </Paper>
+        </Container>
+        <Container size="lg" w="100%">
+          <Title order={2} align="center" my={rem(70)}>
+            Features
+          </Title>
+          <SimpleGrid cols={2} spacing="md" w="100%">
+            <Grid gutter="md">
+              <Grid.Col>
+                <FeaturePreviewCard
+                  title="Schema diagram"
+                  color="blue"
+                  icon={IconSchema}
+                  height={SECONDARY_COL_HEIGHT}
+                  largeIcon
+                />
+              </Grid.Col>
+              <Grid.Col span={6}>
+                <FeaturePreviewCard
+                  title="Spotlight"
+                  color="cyan"
+                  icon={IconBulb}
+                  height={SECONDARY_COL_HEIGHT}
+                />
+              </Grid.Col>
+              <Grid.Col span={6}>
+                <FeaturePreviewCard
+                  title="Dran and drop"
+                  color="grape"
+                  icon={IconDragDrop}
+                  height={SECONDARY_COL_HEIGHT}
+                />
+              </Grid.Col>
+            </Grid>
+            <Grid gutter="md">
+              <Grid.Col span={6}>
+                <FeaturePreviewCard
+                  title="Smart editor"
+                  color="green"
+                  icon={IconBrain}
+                  height={SECONDARY_COL_HEIGHT}
+                />
+              </Grid.Col>
+              <Grid.Col span={6}>
+                <FeaturePreviewCard
+                  title="Spotlight"
+                  color="orange"
+                  icon={IconBulb}
+                  height={SECONDARY_COL_HEIGHT}
+                />
+              </Grid.Col>
+              <Grid.Col>
+                <FeaturePreviewCard
+                  title="Relations manager"
+                  color="pink"
+                  icon={IconPlugConnected}
+                  height={SECONDARY_COL_HEIGHT}
+                  largeIcon
+                />
+              </Grid.Col>
+            </Grid>
+          </SimpleGrid>
         </Container>
       </Stack>
     </>

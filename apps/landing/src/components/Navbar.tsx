@@ -12,8 +12,15 @@ export const Navbar = () => (
     style={{ transform: 'translateX(-50%)', zIndex: 1 }}
   >
     <Group>
-      <Group sx={{ flex: 1 }}>
-        <Image src="/logo.svg" alt="Prismagram logo" width={32} height={32} priority />
+      <Group sx={{ flex: 1, userSelect: 'none' }}>
+        <Image
+          src="/logo.svg"
+          alt="Prismagram logo"
+          width={32}
+          height={32}
+          priority
+          style={{ pointerEvents: 'none' }}
+        />
         <Text fw="bold" size="lg">
           Prismagram
         </Text>

@@ -5,7 +5,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   return (
     <>
       <Navbar />
-      <ScrollArea w="100%" h="100%">
+      <ScrollArea type="auto" h="100vh">
         {children}
       </ScrollArea>
     </>

@@ -8,12 +8,6 @@ export const theme: MantineThemeOverride = {
     to: 'pink',
     deg: 20
   },
-  globalStyles: () => ({
-    'html, body': {
-      width: '100%',
-      height: '100%'
-    }
-  }),
   components: {
     Button: {
       defaultProps: {
