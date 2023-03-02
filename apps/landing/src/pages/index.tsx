@@ -1,4 +1,7 @@
+import Image from 'next/image'
 import Head from 'next/head'
+import { Button, Container, Group, Paper, rem, Stack, Text, Title } from '@mantine/core'
+import appuiImage from '../../public/app-ui.png'
 
 export default function Home() {
   return (
@@ -9,6 +12,43 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Stack>
+        <Container size={1400} pt={250}>
+          <Title align="center" sx={{ fontSize: rem(65) }}>
+            Prismagram,{' '}
+            <Text
+              component="span"
+              variant="gradient"
+              gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}
+              inherit
+            >
+              visual
+            </Text>{' '}
+            prisma schema builder
+          </Title>
+        </Container>
+        <Container p={0} size={600}>
+          <Text size="lg" color="dimmed" align="center" sx={{ fontSize: rem(25) }}>
+            Build your prisma database schemas more efficiently with user interface capabilities.
+          </Text>
+        </Container>
+        <Container>
+          <Group>
+            <Button size="md" color="pink">
+              Support project
+            </Button>
+            <Button size="md">Download</Button>
+          </Group>
+        </Container>
+        <Container p={0} mt={rem(70)} size={1400}>
+          <Paper
+            radius="lg"
+            sx={{ boxShadow: 'rgba(149, 157, 165, 0.4) 0px 8px 54px', overflow: 'hidden' }}
+          >
+            <Image src={appuiImage} alt="App user interface" width={1080} />
+          </Paper>
+        </Container>
+      </Stack>
     </>
   )
 }
