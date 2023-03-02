@@ -11,12 +11,22 @@ import {
   Text,
   TextInput
 } from '@mantine/core'
-import { $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor/stores'
+import {
+  $schemaState,
+  $selectedNodeId,
+  setPrismaSchemaEvent
+} from '@renderer/modules/editor/stores'
 import { IconEye, IconTrash } from '@tabler/icons'
+import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { Enum, Model } from 'prisma-state/_new/blocks'
 import { useEffect, useState } from 'react'
 import { PaperSection } from './PaperSection'
+
+const $store = combine({
+  selectedNodeId: $selectedNodeId,
+  schemaState: $schemaState
+})
 
 interface BlockBaseFormProps {
   block: Model | Enum
@@ -24,13 +34,15 @@ interface BlockBaseFormProps {
 }
 
 export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({ block, children }) => {
-  const schemaState = useStore($schemaState)
+  const { schemaState, selectedNodeId } = useStore($store)
 
   const [selectedFields, setSelectedFields] = useState(block.fieldNames)
 
   useEffect(() => {
-    setSelectedFields(block.fieldNames)
-  }, [block])
+    if (selectedNodeId) {
+      setSelectedFields(block.fieldNames)
+    }
+  }, [selectedNodeId])
 
   const handleOnDragEnd = (event: DragEndEvent) => {
     const { active, over } = event

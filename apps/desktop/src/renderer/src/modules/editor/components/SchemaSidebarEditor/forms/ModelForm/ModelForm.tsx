@@ -22,7 +22,7 @@ export const ModelForm: React.FC<ModelFormProps> = ({ modelId }) => {
   return (
     <BlockBaseForm block={model}>
       {model.fieldsArray.map((field) => (
-        <ModelFieldForm key={field.name} field={field} />
+        <ModelFieldForm key={field.name} field={field} model={model} />
       ))}
     </BlockBaseForm>
   )
