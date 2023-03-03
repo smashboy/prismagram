@@ -16,7 +16,7 @@ export const FeaturePreviewCard: React.FC<FeaturePreviewCardProps> = ({
   height,
   largeIcon = false
 }) => (
-  <Card p="lg" radius="md" shadow="sm" h={height} withBorder>
+  <Card p="lg" radius="md" h={height} sx={(theme) => ({ backgroundColor: theme.colors[color][0] })}>
     <Stack w="100%" h="100%" justify="center" align="center">
       <ThemeIcon color={color} size={rem(largeIcon ? 80 : 60)}>
         <Icon size={rem(largeIcon ? 40 : 30)} />

@@ -10,18 +10,23 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  Timeline,
   Title,
   useMantineTheme
 } from '@mantine/core'
 import {
-  IconSchema,
+  IconSitemap,
   IconPlugConnected,
   IconBulb,
   IconDragDrop,
-  IconBrain
+  IconBrain,
+  IconMap
 } from '@tabler/icons-react'
 import appuiImage from '../../public/app-ui.png'
 import { FeaturePreviewCard } from '@/components/FeaturePreviewCard'
+import { FeatureCard } from '@/components/FeatureCard'
+import { LandingSection } from '@/components/LandingSection'
+import { RoadmapItem } from '@/components/RoadmapItem'
 
 const PRIMARY_COL_HEIGHT = rem(500)
 
@@ -73,17 +78,14 @@ export default function Home() {
             <Image src={appuiImage} alt="App user interface" width={1080} />
           </Paper>
         </Container>
-        <Container size="lg" w="100%">
-          <Title order={2} align="center" my={rem(70)}>
-            Features
-          </Title>
+        <LandingSection title="Features">
           <SimpleGrid cols={2} spacing="md" w="100%">
             <Grid gutter="md">
               <Grid.Col>
                 <FeaturePreviewCard
                   title="Schema diagram"
                   color="blue"
-                  icon={IconSchema}
+                  icon={IconSitemap}
                   height={SECONDARY_COL_HEIGHT}
                   largeIcon
                 />
@@ -116,24 +118,70 @@ export default function Home() {
               </Grid.Col>
               <Grid.Col span={6}>
                 <FeaturePreviewCard
-                  title="Spotlight"
+                  title="Relations manager"
                   color="orange"
-                  icon={IconBulb}
+                  icon={IconPlugConnected}
                   height={SECONDARY_COL_HEIGHT}
                 />
               </Grid.Col>
               <Grid.Col>
                 <FeaturePreviewCard
-                  title="Relations manager"
+                  title="And much more coming soon..."
                   color="pink"
-                  icon={IconPlugConnected}
+                  icon={IconMap}
                   height={SECONDARY_COL_HEIGHT}
                   largeIcon
                 />
               </Grid.Col>
             </Grid>
           </SimpleGrid>
-        </Container>
+          <Stack w="100%" spacing="xl">
+            <FeatureCard
+              title="Schema diagram"
+              imageUrl="/app-ui.png"
+              icon={IconSitemap}
+              color="blue"
+              description=""
+            />
+            <FeatureCard
+              title="Dran and drop"
+              color="grape"
+              icon={IconDragDrop}
+              imageUrl="/app-ui.png"
+              description=""
+            />
+            <FeatureCard
+              title="Relations manager"
+              color="orange"
+              icon={IconPlugConnected}
+              imageUrl="/app-ui.png"
+              description=""
+            />
+            <FeatureCard
+              title="Smart editor"
+              color="green"
+              icon={IconBrain}
+              imageUrl="/app-ui.png"
+              description=""
+            />
+            <FeatureCard
+              title="Spotlight"
+              color="cyan"
+              icon={IconBulb}
+              imageUrl="/app-ui.png"
+              description=""
+            />
+          </Stack>
+        </LandingSection>
+        <LandingSection title="Roadmap">
+          <Timeline w="100%" active={1} lineWidth={5} bulletSize={24}>
+            <RoadmapItem />
+            <RoadmapItem />
+            <RoadmapItem />
+            <RoadmapItem />
+            <RoadmapItem />
+          </Timeline>
+        </LandingSection>
       </Stack>
     </>
   )

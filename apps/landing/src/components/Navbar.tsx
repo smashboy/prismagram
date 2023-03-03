@@ -23,6 +23,9 @@ export const Navbar = () => (
         />
         <Text fw="bold" size="lg">
           Prismagram
+          <Text color="dimmed" size="xs" component="span" ml={3}>
+            v0.1.0
+          </Text>
         </Text>
       </Group>
       <Button size="md" variant="filled">
