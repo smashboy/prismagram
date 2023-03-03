@@ -1,4 +1,5 @@
 import { useStore, useStoreMap } from 'effector-react'
+import { useBoolean } from 'react-use'
 import {
   $schemaModels,
   $schemaState,
@@ -10,6 +11,7 @@ import { ModelFieldForm } from './ModelFieldForm'
 import { BlockBaseForm } from '../BlockBaseForm'
 import { ActionIcon, Tooltip } from '@mantine/core'
 import { IconPlugConnected, IconPlus } from '@tabler/icons'
+import { NewModelFieldForm } from './NewModelFieldForm'
 
 interface ModelFormProps {
   modelId: string
@@ -17,6 +19,8 @@ interface ModelFormProps {
 
 export const ModelForm: React.FC<ModelFormProps> = ({ modelId }) => {
   const schemaState = useStore($schemaState)
+
+  const [isNewFieldFormOpen, toggleOpenNewFieldForm] = useBoolean(false)
 
   const data = useStoreMap({
     store: $schemaModels,
@@ -38,6 +42,9 @@ export const ModelForm: React.FC<ModelFormProps> = ({ modelId }) => {
     })
   }
 
+  const handleOpenNewFieldForm = () => toggleOpenNewFieldForm(true)
+  const handleCloseNewFieldForm = () => toggleOpenNewFieldForm(false)
+
   return (
     <BlockBaseForm
       block={model}
@@ -49,11 +56,18 @@ export const ModelForm: React.FC<ModelFormProps> = ({ modelId }) => {
             </ActionIcon>
           </Tooltip>
           <Tooltip label="New field">
-            <ActionIcon size="sm">
+            <ActionIcon onClick={handleOpenNewFieldForm} size="sm">
               <IconPlus />
             </ActionIcon>
           </Tooltip>
         </>
+      }
+      form={
+        <NewModelFieldForm
+          isOpen={isNewFieldFormOpen}
+          model={model}
+          onClose={handleCloseNewFieldForm}
+        />
       }
     >
       {model.fieldsArray.map((field) => (

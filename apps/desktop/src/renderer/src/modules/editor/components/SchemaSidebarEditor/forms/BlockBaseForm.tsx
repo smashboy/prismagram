@@ -36,12 +36,14 @@ interface BlockBaseFormProps {
   block: Model | Enum
   children: React.ReactNode
   actions?: React.ReactNode
+  form?: React.ReactNode
 }
 
 export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({
   block,
   children,
-  actions = null
+  actions = null,
+  form = null
 }) => {
   const flow = useReactFlow()
 
@@ -118,6 +120,7 @@ export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({
             <TextInput label="Name" value={block.name} />
           </PaperSection>
           <Divider />
+          {form}
           <DndContext
             onDragStart={handleOnDragStart}
             onDragEnd={handleOnDragEnd}
