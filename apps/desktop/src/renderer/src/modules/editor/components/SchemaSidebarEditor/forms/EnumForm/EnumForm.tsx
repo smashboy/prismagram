@@ -14,7 +14,7 @@ interface EnumFormProps {
 export const EnumForm: React.FC<EnumFormProps> = ({ enumId }) => {
   const schemaState = useStore($schemaState)
 
-  const [isNewFieldFormOpen, toggleOpenNewFieldForm] = useBoolean(false)
+  const [, toggleOpenNewFieldForm] = useBoolean(false)
 
   const data = useStoreMap({
     store: $schemaEnums,
@@ -25,7 +25,7 @@ export const EnumForm: React.FC<EnumFormProps> = ({ enumId }) => {
   const enumItem = new Enum(data.name, schemaState, data)
 
   const handleOpenNewFieldForm = () => toggleOpenNewFieldForm(true)
-  const handleCloseNewFieldForm = () => toggleOpenNewFieldForm(false)
+  // const handleCloseNewFieldForm = () => toggleOpenNewFieldForm(false)
 
   return (
     <BlockBaseForm

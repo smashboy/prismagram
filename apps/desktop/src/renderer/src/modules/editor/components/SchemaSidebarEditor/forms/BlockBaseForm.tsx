@@ -114,13 +114,15 @@ export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({
         </Group>
         <Divider />
       </Stack>
+
+      {form}
       <ScrollArea h="100%" offsetScrollbars>
         <Stack w="100%" h="100%">
           <PaperSection>
             <TextInput label="Name" value={block.name} />
           </PaperSection>
           <Divider />
-          {form}
+
           <DndContext
             onDragStart={handleOnDragStart}
             onDragEnd={handleOnDragEnd}

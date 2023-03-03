@@ -1,7 +1,7 @@
 import { useStore } from 'effector-react'
 import { IconFileOff } from '@tabler/icons'
 import { Message } from '@renderer/core/components'
-import { Button, Group, Stack } from '@mantine/core'
+import { Box, Button, Group, Stack, Text } from '@mantine/core'
 import { DiagramEditor } from './DiagramEditor'
 import { $selectedProjectId } from '@renderer/modules/projects'
 import {
@@ -16,6 +16,12 @@ import { ctrlOrCmdKey } from '@renderer/core/electron'
 const $store = combine({
   projectId: $selectedProjectId
 })
+
+const options = [
+  { title: 'Spotlight', shortcut: [ctrlOrCmdKey, 'K'] },
+  { title: 'Open project', shortcut: [ctrlOrCmdKey, 'Alt', 'P'] },
+  { title: 'Create new project', shortcut: [ctrlOrCmdKey, 'Alt', 'N'] }
+]
 
 export const Editor = () => {
   const { projectId } = useStore($store)
@@ -39,7 +45,16 @@ export const Editor = () => {
               Open project
             </Button>
           </Group>
-          <KbdShortcut keys={[ctrlOrCmdKey, 'K']} />
+          <Stack mt="xl">
+            {options.map(({ title, shortcut }) => (
+              <Group key={title} noWrap>
+                <Text color="dimmed" sx={{ flex: 1 }}>
+                  {title}
+                </Text>
+                <KbdShortcut keys={shortcut} />
+              </Group>
+            ))}
+          </Stack>
         </Stack>
       </Message>
     )
