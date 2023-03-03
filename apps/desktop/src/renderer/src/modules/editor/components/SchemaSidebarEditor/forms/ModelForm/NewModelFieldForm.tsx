@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useStore } from 'effector-react'
-import { Button, Collapse, Group, Select, Stack, TextInput } from '@mantine/core'
+import { Button, Collapse, Divider, Group, Select, Stack, TextInput } from '@mantine/core'
 import { scalarOptionsArray, ScalarTypeOption } from 'prisma-state/constants'
 import { $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor/stores'
 import { PaperSection } from '../PaperSection'
@@ -46,26 +46,29 @@ export const NewModelFieldForm: React.FC<NewModelFieldFormProps> = ({ isOpen, mo
   }
 
   return (
-    <Collapse in={isOpen}>
-      <PaperSection>
-        <Stack>
-          <TextInput label="Name" value={name} onChange={handleNameInput} />
-          <Select
-            value={type}
-            label="Type"
-            onChange={handleTypeSelect}
-            data={[...scalarOptionsArray, ...schemaState.enumIds]}
-          />
-          <Group position="right">
-            <Button onClick={handleCloseForm} variant="subtle" color="gray">
-              Cancel
-            </Button>
-            <Button variant="subtle" onClick={handleCreateNewField} disabled={!name || !type}>
-              Create
-            </Button>
-          </Group>
-        </Stack>
-      </PaperSection>
+    <Collapse in={isOpen} mr="md">
+      <Stack>
+        <PaperSection>
+          <Stack>
+            <TextInput label="Name" value={name} onChange={handleNameInput} />
+            <Select
+              value={type}
+              label="Type"
+              onChange={handleTypeSelect}
+              data={[...scalarOptionsArray, ...schemaState.enumIds]}
+            />
+            <Group position="right">
+              <Button onClick={handleCloseForm} variant="subtle" color="gray">
+                Cancel
+              </Button>
+              <Button variant="subtle" onClick={handleCreateNewField} disabled={!name || !type}>
+                Create
+              </Button>
+            </Group>
+          </Stack>
+        </PaperSection>
+        <Divider />
+      </Stack>
     </Collapse>
   )
 }
