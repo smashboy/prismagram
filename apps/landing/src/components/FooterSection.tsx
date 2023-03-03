@@ -12,7 +12,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ title, options }) 
     </Text>
     <Stack>
       {options.map(({ label, newWindow }) => (
-        <Anchor key="label" color="dark.5" fw={500} size="sm">
+        <Anchor key={label} color="dark.5" fw={500} size="sm">
           {label}
         </Anchor>
       ))}
