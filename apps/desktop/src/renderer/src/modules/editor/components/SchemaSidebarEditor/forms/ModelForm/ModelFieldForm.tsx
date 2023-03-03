@@ -3,6 +3,7 @@ import { useStore } from 'effector-react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Accordion, ActionIcon, Badge, Group, Stack, Text, Tooltip } from '@mantine/core'
+import { IconTrash } from '@tabler/icons'
 import { ScalarFieldColor } from '@renderer/modules/editor/config'
 import { $nodesColors, $schemaState, setPrismaSchemaEvent } from '@renderer/modules/editor/stores'
 import { EnumModelFieldData, RelationFieldData, ScalarFieldData } from 'prisma-state/_new/types'
@@ -13,7 +14,6 @@ import { Model } from 'prisma-state/_new/blocks'
 import { FieldNameInput } from './FieldNameInput'
 import { FieldModifierSelector } from './FieldModifierSelector'
 import { FieldTypeSelect } from './FieldTypeSelect'
-import { IconTrash } from '@tabler/icons'
 
 const $store = combine({
   nodeColors: $nodesColors,

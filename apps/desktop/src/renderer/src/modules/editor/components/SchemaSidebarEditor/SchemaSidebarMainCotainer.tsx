@@ -3,6 +3,7 @@ import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { PrismaSchemaStateInstance } from 'prisma-state/_new/types'
 import { $schemaState, $selectedNodeId, SelectedNodeData } from '../../stores'
+import { EnumForm } from './forms/EnumForm'
 import { ModelForm } from './forms/ModelForm'
 import { PrismaDatasourceSettings } from './forms/PrismaDatasourceSettings'
 import { PrismaGeneratorSettings } from './forms/PrismaGeneratorSettings'
@@ -30,6 +31,10 @@ const formSelector = (
 
   if (state.isModel(nodeId)) {
     return <ModelForm modelId={nodeId} />
+  }
+
+  if (state.isEnum(nodeId)) {
+    return <EnumForm enumId={nodeId} />
   }
 
   return null
