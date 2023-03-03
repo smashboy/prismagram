@@ -56,6 +56,7 @@ export const NewModelFieldForm: React.FC<NewModelFieldFormProps> = ({ isOpen, mo
               label="Type"
               onChange={handleTypeSelect}
               data={[...scalarOptionsArray, ...schemaState.enumIds]}
+              searchable
             />
             <Group position="right">
               <Button onClick={handleCloseForm} variant="subtle" color="gray">
