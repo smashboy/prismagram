@@ -35,7 +35,6 @@ import { SpotlightItem } from './SpotlightItem'
 const $store = combine({
   projects: $projects,
   schemaState: $schemaState,
-
   selectedProjectId: $selectedProjectId
 })
 
@@ -72,7 +71,6 @@ const generateModelActions = (
       })
     }
   },
-
   {
     title: 'Delete',
     icon: <IconTrash size={18} />,

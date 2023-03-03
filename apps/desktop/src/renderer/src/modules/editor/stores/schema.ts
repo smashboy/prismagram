@@ -23,6 +23,8 @@ export const $schemaModels = $schemaState.map(({ models }) => models)
 //   id ? models.get(id.nodeId)! : null
 // )
 
+export const $schemaBlockIds = $schemaState.map(({ blockIds }) => blockIds)
+
 export const $schemaEnums = $schemaState.map(({ enums }) => enums)
 
 export const $schemaDatasources = $schemaState.map(({ datasource }) =>
