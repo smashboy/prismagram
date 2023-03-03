@@ -1,5 +1,6 @@
 import { ScrollArea } from '@mantine/core'
 import { Navbar } from './Navbar'
+import { Footer } from './Footer'
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
@@ -7,6 +8,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       <Navbar />
       <ScrollArea type="auto" h="100vh">
         {children}
+        <Footer />
       </ScrollArea>
     </>
   )

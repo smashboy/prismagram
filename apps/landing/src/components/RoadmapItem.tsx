@@ -1,7 +1,7 @@
-import { Text, Timeline } from '@mantine/core'
+import { Card, Text } from '@mantine/core'
 
 export const RoadmapItem = () => (
-  <Timeline.Item title="New branch">
+  <Card withBorder>
     <Text color="dimmed" size="sm">
       You&apos;ve created new branch{' '}
       <Text variant="link" component="span" inherit>
@@ -12,5 +12,5 @@ export const RoadmapItem = () => (
     <Text size="xs" mt={4}>
       2 hours ago
     </Text>
-  </Timeline.Item>
+  </Card>
 )

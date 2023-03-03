@@ -2,7 +2,9 @@ import Image from 'next/image'
 import Head from 'next/head'
 import {
   Button,
+  Card,
   Container,
+  Flex,
   Grid,
   Group,
   Paper,
@@ -174,13 +176,50 @@ export default function Home() {
           </Stack>
         </LandingSection>
         <LandingSection title="Roadmap">
-          <Timeline w="100%" active={1} lineWidth={5} bulletSize={24}>
-            <RoadmapItem />
-            <RoadmapItem />
-            <RoadmapItem />
-            <RoadmapItem />
-            <RoadmapItem />
-          </Timeline>
+          <Flex w="100%" justify="center" direction="row">
+            <Timeline w="50%" active={1} lineWidth={5} bulletSize={24}>
+              <Timeline.Item title="Demo release">
+                <RoadmapItem />
+              </Timeline.Item>
+              <Timeline.Item title="v0.1.0">
+                <RoadmapItem />
+              </Timeline.Item>
+              <Timeline.Item title="v0.2.0">
+                <RoadmapItem />
+              </Timeline.Item>
+              <Timeline.Item title="v0.3.0">
+                <RoadmapItem />
+              </Timeline.Item>
+              <Timeline.Item title="v1.0.0">
+                <RoadmapItem />
+              </Timeline.Item>
+            </Timeline>
+          </Flex>
+          <Card
+            w="100%"
+            h="60vh"
+            p="xl"
+            radius="xl"
+            mt={rem(100)}
+            sx={(theme) => ({
+              backgroundImage: theme.fn.gradient({ from: 'blue', to: 'pink', deg: 45 })
+            })}
+          >
+            <Stack w="100%" h="100%" justify="center" align="center">
+              <Title color="white" order={4} size={rem(30)}>
+                Prismagram is open sourced and completely free
+              </Title>
+              <Text color="gray.1">Try it out today.</Text>
+              <Group pt="xl">
+                <Button size="lg" variant="filled">
+                  Download
+                </Button>
+                <Button size="lg" variant="filled" color="pink">
+                  Support project
+                </Button>
+              </Group>
+            </Stack>
+          </Card>
         </LandingSection>
       </Stack>
     </>
