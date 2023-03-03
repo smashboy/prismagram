@@ -10,10 +10,10 @@ interface MessageProps {
 export const Message: React.FC<MessageProps> = ({ title, description, icon, children }) => (
   <Stack w="100%" h="100%" justify="center" spacing={0} align="center">
     {icon}
-    <Text fz="xl" color="gray">
+    <Text fz="xl" color="dimmed">
       {title}
     </Text>
-    <Text color="gray">{description}</Text>
+    <Text color="dimmed">{description}</Text>
     <Box mt="sm">{children}</Box>
   </Stack>
 )
