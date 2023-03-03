@@ -1,7 +1,7 @@
-import { MantineThemeOverride } from '@mantine/core'
+import { MantineThemeOverride, ColorScheme } from '@mantine/core'
 
-export const theme: MantineThemeOverride = {
-  colorScheme: 'light',
+export const theme = (colorScheme: ColorScheme): MantineThemeOverride => ({
+  colorScheme: colorScheme,
   defaultRadius: 'md',
   defaultGradient: {
     from: 'blue',
@@ -103,4 +103,4 @@ export const theme: MantineThemeOverride = {
       }
     }
   }
-}
+})
