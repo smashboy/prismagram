@@ -4,6 +4,7 @@ import { SpotlightInput } from './SpotlightInput'
 import { SpotlightList } from './SpotlightList'
 import { $spotlightSearchInput, removeLastSpotlightSubActionEvent } from '../stores'
 import { useStore } from 'effector-react'
+import { SpotlightNotFound } from './SpotlightNotFound'
 
 interface SpotlightContainerProps {
   children: React.ReactNode
@@ -34,7 +35,7 @@ export const SpotlightContainer: React.FC<SpotlightContainerProps> = ({ children
       >
         <Box sx={{ maxHeight: 450 }}>
           <SpotlightList>
-            <Command.Empty>No results found.</Command.Empty>
+            <SpotlightNotFound />
             {children}
           </SpotlightList>
         </Box>
