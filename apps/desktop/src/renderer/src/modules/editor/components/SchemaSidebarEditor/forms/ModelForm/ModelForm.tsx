@@ -33,7 +33,7 @@ export const ModelForm: React.FC<ModelFormProps> = ({ modelId }) => {
   const [fieldStableIds, setStableFieldName] = useStableFieldIds(model.fieldsArray)
   const [isNewFieldFormOpen, toggleOpenNewFieldForm] = useBoolean(false)
 
-  const openCreateRelationModal = () => {
+  const handleOpenCreateRelationModal = () => {
     toggleCreateRelationModalEvent(true)
     setCreateRelationModalDataEvent({
       source: model.name,
@@ -55,7 +55,7 @@ export const ModelForm: React.FC<ModelFormProps> = ({ modelId }) => {
       actions={
         <>
           <Tooltip label="New relation">
-            <ActionIcon onClick={openCreateRelationModal} size="sm">
+            <ActionIcon onClick={handleOpenCreateRelationModal} size="sm">
               <IconPlugConnected />
             </ActionIcon>
           </Tooltip>
