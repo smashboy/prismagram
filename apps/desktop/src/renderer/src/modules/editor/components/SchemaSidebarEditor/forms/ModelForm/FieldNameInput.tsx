@@ -6,13 +6,21 @@ import { EnumModelField, RelationField, ScalarField } from 'prisma-state/_new/fi
 import { Model } from 'prisma-state/_new/blocks'
 import { RelationFieldData } from 'prisma-state/_new/types'
 import { RelationAttribute } from 'prisma-state/_new/attributes'
+import { arrayMove } from '@dnd-kit/sortable'
 
 interface FieldNameInputProps {
+  stableId: string
   model: Model
   field: ScalarField | RelationField | EnumModelField
+  setStableFieldName: (id: string, name: string) => void
 }
 
-export const FieldNameInput: React.FC<FieldNameInputProps> = ({ model, field }) => {
+export const FieldNameInput: React.FC<FieldNameInputProps> = ({
+  model,
+  stableId,
+  setStableFieldName,
+  field
+}) => {
   const state = useStore($schemaState)
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -26,6 +34,9 @@ export const FieldNameInput: React.FC<FieldNameInputProps> = ({ model, field }) 
     if (!newValue) return
 
     const prevName = field.name
+    const newIndex = model.fieldNames.indexOf(prevName)
+
+    setStableFieldName(stableId, newValue)
 
     field.setName(newValue)
 
@@ -47,6 +58,12 @@ export const FieldNameInput: React.FC<FieldNameInputProps> = ({ model, field }) 
 
     model.removeField(prevName)
     model.addField(newValue, updatedField)
+
+    const oldIndex = model.fieldNames.indexOf(newValue)
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    model._setFromArray(arrayMove(model.fieldsArray, oldIndex, newIndex))
 
     setPrismaSchemaEvent(state._clone())
   }
