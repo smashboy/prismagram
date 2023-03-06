@@ -38,6 +38,7 @@ import { EDITOR_REMOTE_SCHEMA_CHANGES } from '@shared/common/configs/api'
 import { createPrismaSchemaState } from 'prisma-state/_new/state'
 import { CreateRelationModal } from './CreateRelationModal'
 import { CreateEnumFieldModal } from './CreateEnumFieldModal'
+import { SchemaSidebarEditor } from './SchemaSidebarEditor'
 
 const $store = combine({
   nodes: $nodesArray,
@@ -129,7 +130,8 @@ export const DiagramEditor = () => {
         name: '',
         onDelete: null,
         onUpdate: null,
-        isOptional: false
+        isOptional: false,
+        isExplicit: false
       })
 
       return
@@ -166,6 +168,7 @@ export const DiagramEditor = () => {
         <Background />
         <EditorToolbar />
         <NodesToolbar />
+        <SchemaSidebarEditor />
       </ReactFlow>
       <CreateEnumFieldModal />
       <CreateRelationModal />

@@ -1,6 +1,5 @@
 export enum NodeType {
   MODEL = 'model',
-  NEW_MODEL = 'new-model',
   ENUM = 'enum'
 }
 

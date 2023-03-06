@@ -8,8 +8,11 @@ export const PaperGlass: React.FC<Omit<PaperProps, 'sx' | 'shadow' | 'radius'>> 
     {...props}
     shadow="sm"
     sx={(theme) => ({
-      backgroundColor: theme.fn.rgba(theme.colors.gray[3], 0.35),
-      backdropFilter: 'blur(5px)'
+      backgroundColor:
+        theme.colorScheme === 'light'
+          ? theme.fn.rgba(theme.colors.gray[3], 0.75)
+          : theme.fn.rgba(theme.colors.dark[6], 0.75),
+      backdropFilter: 'blur(2px)'
     })}
   >
     {children}

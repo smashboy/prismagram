@@ -21,10 +21,7 @@ export type AttributeFunctionType =
   | 'dbgenerated'
 export type FieldModifier = 'optional' | 'list' | null
 
-export type PrismaSchemaStateData = Map<
-  string,
-  DatasourceData | GeneratorData | EnumData | ModelData
->
+export type PrismaSchemaStateData = Map<string, TopLevelBlockData>
 
 export interface AttributeFunction {
   type: AttributeFunctionType
@@ -116,6 +113,9 @@ export interface PrismaSchemaStateInstance {
   readonly enums: Map<string, EnumData>
   readonly modelIds: string[]
   readonly enumIds: string[]
+  // readonly blocksArray: TopLevelBlockData[]
+  readonly blockIds: string[]
+  block(id: string): TopLevelBlockData
   model(id: string): ModelData
   enum(id: string): EnumData
   isModel(id: string): boolean
@@ -126,6 +126,7 @@ export interface PrismaSchemaStateInstance {
   removeEnum(id: string): void
   toString(): string
   fromString(schema: string): void
+  _data(): PrismaSchemaStateData
   _clone(): PrismaSchemaStateInstance
 }
 
@@ -150,17 +151,17 @@ export interface RelationsManagerInstance {
     sourceId: string,
     targetId: string,
     options?: CreateCommonRelationOptions
-  ) => readonly [RelationFieldData, RelationFieldData] | undefined
+  ) => void
   createOneToManyRelation: (
     sourceId: string,
     targetId: string,
     options?: CreateCommonRelationOptions
-  ) => readonly [RelationFieldData, RelationFieldData] | undefined
+  ) => void
   createManyToManyRelation: (
     sourceId: string,
     targetId: string,
     options?: CreateManyToManyRelationOptions
-  ) => readonly [RelationFieldData, RelationFieldData]
+  ) => void
 }
 
 export type TopLevelBlockData = ModelData | EnumData | DatasourceData | GeneratorData

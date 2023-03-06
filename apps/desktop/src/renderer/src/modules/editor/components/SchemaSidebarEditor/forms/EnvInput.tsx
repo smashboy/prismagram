@@ -4,6 +4,7 @@ import { EnvFieldData } from 'prisma-state/_new/types'
 import { Datasource, Generator } from 'prisma-state/_new/blocks'
 import { EnvField } from 'prisma-state/_new/fields'
 import { useStore } from 'effector-react'
+import { PaperSection } from '@renderer/modules/editor/components/SchemaSidebarEditor/forms/PaperSection'
 
 interface EnvInputProps extends TextInputProps {
   name: string
@@ -39,15 +40,17 @@ export const EnvInput: React.FC<EnvInputProps> = ({ block, name, ...props }) => 
   }
 
   return (
-    <Stack spacing={0}>
-      <TextInput onChange={handleInput} value={field?.value || ''} {...props} />
-      <Switch
-        label="Is environment variable"
-        description="If the field is marked as an environment variable, you must specify its name instead of the actual value."
-        onChange={handleEnvSwitch}
-        disabled={!fieldData}
-        checked={field?.isEnv || false}
-      />
-    </Stack>
+    <PaperSection>
+      <Stack spacing={0}>
+        <TextInput onChange={handleInput} value={field?.value || ''} {...props} />
+        <Switch
+          label="Is environment variable"
+          description="If the field is marked as an environment variable, you must specify its name instead of the actual value."
+          onChange={handleEnvSwitch}
+          disabled={!fieldData}
+          checked={field?.isEnv || false}
+        />
+      </Stack>
+    </PaperSection>
   )
 }
