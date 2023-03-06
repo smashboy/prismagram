@@ -4,7 +4,7 @@ import { FieldData } from 'prisma-state/_new/types'
 
 export type StableFieldIds = Array<[string, string]> // [uuid, fieldName]
 
-const handleFieldStableIds = (fieldsArray: Array<FieldData>, prevIds: StableFieldIds = []) => {
+const handleFieldStableIds = (fieldsArray: FieldData[], prevIds: StableFieldIds = []) => {
   const ids: StableFieldIds = []
 
   for (const field of fieldsArray) {

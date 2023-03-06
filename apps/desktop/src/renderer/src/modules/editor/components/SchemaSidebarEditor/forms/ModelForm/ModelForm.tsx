@@ -41,7 +41,8 @@ export const ModelForm: React.FC<ModelFormProps> = ({ modelId }) => {
       name: '',
       onDelete: null,
       onUpdate: null,
-      isOptional: false
+      isOptional: false,
+      isExplicit: false
     })
   }
 
