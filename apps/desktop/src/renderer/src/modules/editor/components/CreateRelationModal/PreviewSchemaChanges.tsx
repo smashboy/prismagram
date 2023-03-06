@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
+import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { Stack, Text } from '@mantine/core'
 import { Prism } from '@mantine/prism'
 import { PrismaSchemaStateInstance } from 'prisma-state/_new/types'
-import { $createRelationModalData } from '../../stores'
+import { $createRelationModalData, $selectedRelationType } from '../../stores'
 import { formatSchema } from '@renderer/core/utils'
 import { BlockBase } from 'prisma-state/_new/blocks'
 
@@ -13,21 +14,30 @@ interface PreviewSchemaChangesProps {
   state: PrismaSchemaStateInstance
 }
 
-export const PreviewSchemaChanges: React.FC<PreviewSchemaChangesProps> = ({ state }) => {
-  const data = useStore($createRelationModalData)
+const $store = combine({
+  data: $createRelationModalData,
+  selectedRelationType: $selectedRelationType
+})
 
-  const { source: sourceModelId, target: targetModelId } = data
+export const PreviewSchemaChanges: React.FC<PreviewSchemaChangesProps> = ({ state }) => {
+  const { data, selectedRelationType } = useStore($store)
+
+  const { source, target, isExplicit } = data
 
   const [preview, setPreview] = useState('')
 
   useEffect(() => {
     const handleCreatePreview = async () => {
-      const sourceModel = state.model(sourceModelId)
-      const targetModel = state.model(targetModelId)
+      console.log(state)
 
       const preview = await formatSchema(`
-        ${BlockBase._toString(targetModel, state)}
-        ${BlockBase._toString(sourceModel, state)}
+        ${BlockBase._toString(state.model(target), state)}
+        ${BlockBase._toString(state.model(source), state)}
+        ${
+          selectedRelationType === 'n-m' && isExplicit
+            ? BlockBase._toString(state.model(`${source}On${target}`), state)
+            : ''
+        }
       `)
 
       setPreview(preview)

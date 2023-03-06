@@ -31,6 +31,10 @@ export class IdBlockAttribute extends BlockAttributeBase {
     return (this.arguments.get('clustered') as boolean) || null
   }
 
+  setFields(value: string[]) {
+    this.data.arguments.set('fields', value)
+  }
+
   _parse(args?: AstAttributeArgument[]) {
     super._parse(args, 'fields')
   }

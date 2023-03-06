@@ -151,17 +151,17 @@ export interface RelationsManagerInstance {
     sourceId: string,
     targetId: string,
     options?: CreateCommonRelationOptions
-  ) => readonly [RelationFieldData, RelationFieldData] | undefined
+  ) => void
   createOneToManyRelation: (
     sourceId: string,
     targetId: string,
     options?: CreateCommonRelationOptions
-  ) => readonly [RelationFieldData, RelationFieldData] | undefined
+  ) => void
   createManyToManyRelation: (
     sourceId: string,
     targetId: string,
     options?: CreateManyToManyRelationOptions
-  ) => readonly [RelationFieldData, RelationFieldData]
+  ) => void
 }
 
 export type TopLevelBlockData = ModelData | EnumData | DatasourceData | GeneratorData

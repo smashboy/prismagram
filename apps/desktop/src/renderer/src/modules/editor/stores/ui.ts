@@ -13,6 +13,7 @@ interface CreateRelationModalData {
   onUpdate: ReferentialActionOption | null
   onDelete: ReferentialActionOption | null
   isOptional: boolean
+  isExplicit: boolean
 }
 
 interface CreateEnumFieldModalData {
@@ -48,7 +49,8 @@ export const $createRelationModalData = createStore<CreateRelationModalData>({
   name: '',
   onDelete: null,
   onUpdate: null,
-  isOptional: false
+  isOptional: false,
+  isExplicit: false
 })
   .on(setCreateRelationModalDataEvent, (_, data) => data)
   .reset(resetCreateRelationModalDataEvent)

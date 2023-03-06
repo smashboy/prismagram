@@ -67,7 +67,8 @@ const generateModelActions = (
         name: '',
         onDelete: null,
         onUpdate: null,
-        isOptional: false
+        isOptional: false,
+        isExplicit: false
       })
     }
   },
