@@ -12,6 +12,7 @@ import { BlockBaseForm } from '../BlockBaseForm'
 import { ActionIcon, Tooltip } from '@mantine/core'
 import { EnumFieldForm } from './EnumFieldForm'
 import { useStableFieldIds } from '../hooks/useStableFieldIds'
+import { NewEnumFieldForm } from './NewEnumFieldForm'
 
 interface EnumFormProps {
   enumId: string
@@ -20,7 +21,7 @@ interface EnumFormProps {
 export const EnumForm: React.FC<EnumFormProps> = ({ enumId }) => {
   const schemaState = useStore($schemaState)
 
-  const [, toggleOpenNewFieldForm] = useBoolean(false)
+  const [isNewFieldFormOpen, toggleOpenNewFieldForm] = useBoolean(false)
 
   const enumItem = useStoreMap({
     store: $schemaEnums,
@@ -34,7 +35,7 @@ export const EnumForm: React.FC<EnumFormProps> = ({ enumId }) => {
   const [fieldStableIds, setStableFieldName] = useStableFieldIds(enumItem.fieldsArray)
 
   const handleOpenNewFieldForm = () => toggleOpenNewFieldForm(true)
-  // const handleCloseNewFieldForm = () => toggleOpenNewFieldForm(false)
+  const handleCloseNewFieldForm = () => toggleOpenNewFieldForm(false)
 
   const handleOpenNewModelEnumFieldModal = () => {
     toggleCreateEnumFieldModalEvent(true)
@@ -62,6 +63,13 @@ export const EnumForm: React.FC<EnumFormProps> = ({ enumId }) => {
             </ActionIcon>
           </Tooltip>
         </>
+      }
+      form={
+        <NewEnumFieldForm
+          isOpen={isNewFieldFormOpen}
+          enum={enumItem}
+          onClose={handleCloseNewFieldForm}
+        />
       }
     >
       {fieldStableIds.map(([id, fieldName]) => (
