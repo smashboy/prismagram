@@ -37,13 +37,15 @@ interface BlockBaseFormProps {
   children: React.ReactNode
   actions?: React.ReactNode
   form?: React.ReactNode
+  fieldIds: string[]
 }
 
 export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({
   block,
   children,
   actions = null,
-  form = null
+  form = null,
+  fieldIds
 }) => {
   const flow = useReactFlow()
 
@@ -51,11 +53,11 @@ export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({
 
   const fieldsCache = useRef<string[]>([])
 
-  const [selectedFields, setSelectedFields] = useState(block.fieldNames)
+  const [selectedFields, setSelectedFields] = useState(fieldIds)
 
   useEffect(() => {
     if (selectedNodeId) {
-      setSelectedFields(block.fieldNames)
+      setSelectedFields(fieldIds)
     }
   }, [selectedNodeId])
 
@@ -68,8 +70,8 @@ export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({
 
     if (!over || active.id === over.id) return
 
-    const oldIndex = block.fieldNames.indexOf(active.id as string)
-    const newIndex = block.fieldNames.indexOf(over.id as string)
+    const oldIndex = fieldIds.indexOf(active.id as string)
+    const newIndex = fieldIds.indexOf(over.id as string)
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -129,7 +131,7 @@ export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({
             collisionDetection={closestCenter}
             modifiers={[restrictToVerticalAxis]}
           >
-            <SortableContext items={block.fieldNames} strategy={verticalListSortingStrategy}>
+            <SortableContext items={fieldIds} strategy={verticalListSortingStrategy}>
               <Accordion
                 variant="separated"
                 value={selectedFields}

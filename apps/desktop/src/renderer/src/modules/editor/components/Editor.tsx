@@ -1,14 +1,14 @@
+import { combine } from 'effector'
 import { useStore } from 'effector-react'
 import { IconFileOff } from '@tabler/icons'
 import { Message } from '@renderer/core/components'
-import { Box, Button, Group, Stack, Text } from '@mantine/core'
+import { Button, Group, Stack, Text } from '@mantine/core'
 import { DiagramEditor } from './DiagramEditor'
 import { $selectedProjectId } from '@renderer/modules/projects'
 import {
   toggleCreateProjectModalEvent,
   toggleSelectProjectModalEvent
 } from '@renderer/stores/ui/modals'
-import { combine } from 'effector'
 
 import { KbdShortcut, useEditorShortcuts } from '@renderer/modules/spotlight'
 import { ctrlOrCmdKey } from '@renderer/core/electron'

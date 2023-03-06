@@ -12,6 +12,7 @@ import { BlockBaseForm } from '../BlockBaseForm'
 import { ActionIcon, Tooltip } from '@mantine/core'
 import { IconPlugConnected, IconPlus } from '@tabler/icons'
 import { NewModelFieldForm } from './NewModelFieldForm'
+import { useStableFieldIds } from '../hooks/useStableFieldIds'
 
 interface ModelFormProps {
   modelId: string
@@ -20,17 +21,19 @@ interface ModelFormProps {
 export const ModelForm: React.FC<ModelFormProps> = ({ modelId }) => {
   const schemaState = useStore($schemaState)
 
-  const [isNewFieldFormOpen, toggleOpenNewFieldForm] = useBoolean(false)
-
-  const data = useStoreMap({
+  const model = useStoreMap({
     store: $schemaModels,
     keys: [modelId],
-    fn: (models, [id]) => models.get(id)!
+    fn: (models, [id]) => {
+      const data = models.get(id)!
+      return new Model(data.name, schemaState, data)
+    }
   })
 
-  const model = new Model(data.name, schemaState, data)
+  const [fieldStableIds, setStableFieldName] = useStableFieldIds(model.fieldsArray)
+  const [isNewFieldFormOpen, toggleOpenNewFieldForm] = useBoolean(false)
 
-  const openCreateRelationModal = () => {
+  const handleOpenCreateRelationModal = () => {
     toggleCreateRelationModalEvent(true)
     setCreateRelationModalDataEvent({
       source: model.name,
@@ -48,10 +51,11 @@ export const ModelForm: React.FC<ModelFormProps> = ({ modelId }) => {
   return (
     <BlockBaseForm
       block={model}
+      fieldIds={fieldStableIds.map((id) => id[0])}
       actions={
         <>
           <Tooltip label="New relation">
-            <ActionIcon onClick={openCreateRelationModal} size="sm">
+            <ActionIcon onClick={handleOpenCreateRelationModal} size="sm">
               <IconPlugConnected />
             </ActionIcon>
           </Tooltip>
@@ -70,10 +74,16 @@ export const ModelForm: React.FC<ModelFormProps> = ({ modelId }) => {
         />
       }
     >
-      {model.fieldsArray.map((field) => (
+      {fieldStableIds.map(([id, fieldName]) => (
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        <ModelFieldForm key={field.name} field={field} model={model} />
+        <ModelFieldForm
+          key={id}
+          stableId={id}
+          field={model.field(fieldName)}
+          model={model}
+          setStableFieldName={setStableFieldName}
+        />
       ))}
     </BlockBaseForm>
   )

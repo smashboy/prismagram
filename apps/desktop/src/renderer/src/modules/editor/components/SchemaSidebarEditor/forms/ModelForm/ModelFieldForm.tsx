@@ -21,8 +21,10 @@ const $store = combine({
 })
 
 interface ModelFieldFormProps {
+  stableId: string
   field: ScalarFieldData | EnumModelFieldData | RelationFieldData
   model: Model
+  setStableFieldName: (id: string, name: string) => void
 }
 
 const fieldHelperSelector = (data: RelationFieldData | ScalarFieldData | EnumModelFieldData) => {
@@ -42,14 +44,19 @@ const fieldHelperSelector = (data: RelationFieldData | ScalarFieldData | EnumMod
   )
 }
 
-export const ModelFieldForm: React.FC<ModelFieldFormProps> = ({ model, field: fieldData }) => {
+export const ModelFieldForm: React.FC<ModelFieldFormProps> = ({
+  stableId,
+  model,
+  field: fieldData,
+  setStableFieldName
+}) => {
   const { nodeColors, schemaState } = useStore($store)
 
   const field = fieldHelperSelector(fieldData)
 
   const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition } =
     useSortable({
-      id: field.name
+      id: stableId
     })
 
   const typeColor = ScalarFieldColor[field.type] || nodeColors[field.type]
@@ -74,7 +81,7 @@ export const ModelFieldForm: React.FC<ModelFieldFormProps> = ({ model, field: fi
   }
 
   return (
-    <Accordion.Item value={field.name} ref={setNodeRef} style={style} {...attributes}>
+    <Accordion.Item value={stableId} ref={setNodeRef} style={style} {...attributes}>
       <Accordion.Control>
         <Group>
           <Group sx={{ flex: 1 }}>
@@ -91,7 +98,12 @@ export const ModelFieldForm: React.FC<ModelFieldFormProps> = ({ model, field: fi
       </Accordion.Control>
       <Accordion.Panel>
         <Stack>
-          <FieldNameInput model={model} field={field} />
+          <FieldNameInput
+            stableId={stableId}
+            model={model}
+            field={field}
+            setStableFieldName={setStableFieldName}
+          />
           <FieldTypeSelect field={field} />
           <FieldModifierSelector field={field} />
         </Stack>
