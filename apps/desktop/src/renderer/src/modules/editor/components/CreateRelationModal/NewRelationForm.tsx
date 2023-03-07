@@ -27,7 +27,7 @@ const relationTypeOptions = [
 export const NewRelationForm = () => {
   const { data, modelIds, selectedRelationType } = useStore($store)
 
-  const { source, target, name: relationName, onDelete, onUpdate, isOptional } = data
+  const { source, target, name: relationName, onDelete, onUpdate, isOptional, isExplicit } = data
 
   const disableNonNMActions = !target || selectedRelationType === 'n-m'
 
@@ -48,8 +48,9 @@ export const NewRelationForm = () => {
   const handleRelationNameInput = (event: React.ChangeEvent<HTMLInputElement>) =>
     setCreateRelationModalDataEvent({ ...data, name: event.target.value })
 
-  const handleOptionalRelationSwitch = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setCreateRelationModalDataEvent({ ...data, isOptional: event.currentTarget.checked })
+  const handleSwitch =
+    (field: 'isExplicit' | 'isOptional') => (event: React.ChangeEvent<HTMLInputElement>) =>
+      setCreateRelationModalDataEvent({ ...data, [field]: event.currentTarget.checked })
 
   return (
     <Stack w="40%">
@@ -82,7 +83,7 @@ export const NewRelationForm = () => {
         description="Defines the name of the relationship. In an m-n-relation, it also determines the name of the underlying relation table."
         name={relationName}
         onChange={handleRelationNameInput}
-        disabled={!target}
+        disabled={!target || (selectedRelationType === 'n-m' && isExplicit)}
       />
 
       <Stack>
@@ -103,8 +104,14 @@ export const NewRelationForm = () => {
         <Switch
           label="Optional"
           checked={isOptional}
-          onChange={handleOptionalRelationSwitch}
+          onChange={handleSwitch('isOptional')}
           disabled={disableNonNMActions}
+        />
+        <Switch
+          label="Explicit many-to-many relation"
+          checked={isExplicit}
+          onChange={handleSwitch('isExplicit')}
+          disabled={!disableNonNMActions}
         />
       </Stack>
     </Stack>

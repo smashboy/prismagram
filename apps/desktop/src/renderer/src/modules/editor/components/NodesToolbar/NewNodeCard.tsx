@@ -21,8 +21,10 @@ export const NewNodeCard: React.FC<NewNodeCardProps> = ({ icon: Icon, title, nod
       onDragStart={onDragStart}
       sx={(theme) => ({
         cursor: 'grab',
-        backgroundColor: theme.colors[color][0],
-        borderColor: theme.colors[color][5],
+        backgroundColor:
+          theme.colorScheme === 'light' ? theme.colors[color][0] : theme.colors[color][9],
+        borderColor:
+          theme.colorScheme === 'light' ? theme.colors[color][5] : theme.colors[color][7],
         borderWidth: 3
       })}
       withBorder
@@ -31,9 +33,7 @@ export const NewNodeCard: React.FC<NewNodeCardProps> = ({ icon: Icon, title, nod
       <Stack align="center">
         <Icon size={24} />
         <Group>
-          <Text color="dimmed" fz="lg">
-            {title} +
-          </Text>
+          <Text fz="lg">{title} +</Text>
         </Group>
       </Stack>
     </Paper>

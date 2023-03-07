@@ -135,8 +135,6 @@ export class RelationsManager implements RelationsManagerInstance {
       sourceModel.addField(sourceRelationField.name, sourceRelationField._data())
       sourceModel.addField(sourceTypeField.name, sourceTypeField._data())
       targetModel.addField(targetRelationField.name, targetRelationField._data())
-
-      return [sourceRelationField._data(), targetRelationField._data()] as const
     }
 
     const sourceTypeFields: ScalarField[] = []
@@ -169,8 +167,6 @@ export class RelationsManager implements RelationsManagerInstance {
 
     sourceModel.addField(sourceRelationField.name, sourceRelationField._data())
     targetModel.addField(targetRelationField.name, targetRelationField._data())
-
-    return [sourceRelationField._data(), targetRelationField._data()] as const
   }
 
   createOneToOneRelation(
@@ -178,7 +174,7 @@ export class RelationsManager implements RelationsManagerInstance {
     targetId: string,
     options?: CreateCommonRelationOptions
   ) {
-    return this.createCommonRelation(sourceId, targetId, options)
+    this.createCommonRelation(sourceId, targetId, options)
   }
 
   createOneToManyRelation(
@@ -186,7 +182,7 @@ export class RelationsManager implements RelationsManagerInstance {
     targetId: string,
     options?: CreateCommonRelationOptions
   ) {
-    return this.createCommonRelation(sourceId, targetId, options, true)
+    this.createCommonRelation(sourceId, targetId, options, true)
   }
 
   createManyToManyRelation(
@@ -202,9 +198,35 @@ export class RelationsManager implements RelationsManagerInstance {
     let sourceName = uncapitalize(sourceId)
     let targetName = uncapitalize(targetId)
 
-    if (relationName) {
+    if (relationName && !options?.explicit) {
       sourceName = `${sourceName}_${cleanupStr(relationName)}`
       targetName = `${targetName}_${cleanupStr(relationName)}`
+    }
+
+    if (options?.explicit) {
+      const relationModelName = `${sourceId}On${targetId}`
+      let relationModel = new Model(relationModelName, this.state)
+
+      this.state.createModel(relationModel.name, relationModel._data())
+
+      this.createOneToManyRelation(relationModel.name, targetModel.name)
+      this.createOneToManyRelation(relationModel.name, sourceModel.name)
+
+      relationModel = new Model(relationModelName, this.state, this.state.model(relationModelName))
+
+      const sourceRelationAttrFields = new RelationAttribute(
+        relationModel.field(sourceName)?.attributes.get('relation')
+      ).fields
+      const targetRelationAttrFields = new RelationAttribute(
+        relationModel.field(targetName)?.attributes.get('relation')
+      ).fields
+
+      const relationModelIdAttr = new IdBlockAttribute()
+      relationModelIdAttr.setFields([...sourceRelationAttrFields, ...targetRelationAttrFields])
+
+      relationModel.addAttribute('id', relationModelIdAttr._data())
+
+      return
     }
 
     const sourceRelationField = new RelationField(targetName, targetId, sourceId)
@@ -223,7 +245,5 @@ export class RelationsManager implements RelationsManagerInstance {
 
     sourceModel.addField(sourceRelationField.name, sourceRelationField._data())
     targetModel.addField(targetRelationField.name, targetRelationField._data())
-
-    return [sourceRelationField._data(), targetRelationField._data()] as const
   }
 }

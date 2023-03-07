@@ -47,6 +47,18 @@ export class PrismaSchemaState implements PrismaSchemaStateInstance {
     return extractBlockIdsByType('enum', this.state)
   }
 
+  get blockIds() {
+    return [...this.state.keys()]
+  }
+
+  block(id: string) {
+    return this.state.get(id)!
+  }
+
+  // get blocksArray() {
+  //   return [...this.state.values()]
+  // }
+
   model(id: string) {
     return this.models.get(id)!
   }

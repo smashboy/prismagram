@@ -1,5 +1,4 @@
 import { combine } from 'effector'
-import { useBoolean } from 'react-use'
 import { Handle, NodeProps, Position } from 'reactflow'
 import { useStore, useStoreMap } from 'effector-react'
 import { Stack, Table } from '@mantine/core'
@@ -9,7 +8,6 @@ import { NodeCard } from '../NodeCard'
 import { BlockNameInput } from '../../inputs/BlockNameInput'
 import { EnumNodeToolbar } from './EnumNodeToolbar'
 import { NodeType } from '@shared/common/configs/diagrams'
-import { EnumEditForm } from './EnumEditForm'
 import { Enum } from 'prisma-state/_new/blocks'
 
 const $store = combine({
@@ -19,8 +17,6 @@ const $store = combine({
 
 export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
   const { selectedNodeId, state } = useStore($store)
-
-  const [isOpenNewOptionField, toggleIsOpenNewOptionField] = useBoolean(false)
 
   const enumData = useStoreMap({
     store: $schemaEnums,
@@ -34,11 +30,7 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
 
   return (
     <Stack sx={{ minWidth: 300, cursor: isSelected ? 'default' : void 0 }}>
-      <EnumNodeToolbar
-        isSelected={isSelected}
-        selectedNodeId={selectedNodeId?.nodeId}
-        onOpenNewOptionInput={toggleIsOpenNewOptionField}
-      />
+      <EnumNodeToolbar isSelected={isSelected} selectedNodeId={selectedNodeId?.nodeId} />
       <NodeCard
         nodeId={name}
         isSelected={isSelected}
@@ -47,23 +39,15 @@ export const EnumNode: React.FC<NodeProps<EnumNodeData>> = ({ id: name }) => {
       >
         <Stack>
           <BlockNameInput block={enumItem} />
-          {isSelected ? (
-            <EnumEditForm
-              block={enumItem}
-              isOpenNewOptionField={isOpenNewOptionField}
-              onCloseNewOptionField={toggleIsOpenNewOptionField}
-            />
-          ) : (
-            <Table verticalSpacing="md" fontSize="xl">
-              <tbody>
-                {enumItem.fieldNames.map((fieldName) => (
-                  <tr key={fieldName}>
-                    <td>{fieldName}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          )}
+          <Table verticalSpacing="md" fontSize="xl">
+            <tbody>
+              {enumItem.fieldNames.map((fieldName) => (
+                <tr key={fieldName}>
+                  <td>{fieldName}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
         </Stack>
         <Handle
           id={name}
