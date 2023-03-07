@@ -1,15 +1,18 @@
+import { useEffect, useRef, useState } from 'react'
+import { combine } from 'effector'
+import { useStore } from 'effector-react'
+import { useReactFlow } from 'reactflow'
 import { closestCenter, DndContext, DragEndEvent } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import {
   Accordion,
   ActionIcon,
+  Box,
   Divider,
   Group,
   ScrollArea,
   Stack,
-  Text,
-  TextInput,
   Tooltip
 } from '@mantine/core'
 import {
@@ -20,12 +23,8 @@ import {
 } from '@renderer/modules/editor/stores'
 import { zoomToNode } from '@renderer/modules/editor/utils'
 import { IconEye, IconTrash } from '@tabler/icons'
-import { combine } from 'effector'
-import { useStore } from 'effector-react'
 import { Enum, Model } from 'prisma-state/_new/blocks'
-import { useEffect, useRef, useState } from 'react'
-import { useReactFlow } from 'reactflow'
-import { PaperSection } from './PaperSection'
+import { BlockNameInput } from './BlockNameInput'
 
 const $store = combine({
   selectedNodeId: $selectedNodeId,
@@ -97,9 +96,9 @@ export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({
     <Stack w="100%" h="100%">
       <Stack pr="md">
         <Group w="100%" noWrap>
-          <Text sx={{ flex: 1 }} fw={500}>
-            {block.name}
-          </Text>
+          <Box sx={{ flex: 1 }}>
+            <BlockNameInput block={block} />
+          </Box>
           <Group>
             <Tooltip label="Remove">
               <ActionIcon onClick={handleRemoveNode} size="sm">
@@ -120,11 +119,6 @@ export const BlockBaseForm: React.FC<BlockBaseFormProps> = ({
       {form}
       <ScrollArea h="100%" offsetScrollbars>
         <Stack w="100%" h="100%">
-          <PaperSection>
-            <TextInput label="Name" value={block.name} />
-          </PaperSection>
-          <Divider />
-
           <DndContext
             onDragStart={handleOnDragStart}
             onDragEnd={handleOnDragEnd}
