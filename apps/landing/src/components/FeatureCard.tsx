@@ -1,8 +1,6 @@
 import {
   Card,
-  createStyles,
   Flex,
-  Group,
   Image,
   MantineColor,
   rem,
@@ -37,7 +35,7 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
       radius="xl"
       sx={(theme) => ({ backgroundColor: theme.colors[color][0] })}
     >
-      <SimpleGrid cols={2} h="100%">
+      <SimpleGrid cols={2} spacing="xl" h="100%">
         <Stack h="100%">
           <Stack>
             <ThemeIcon color={color} size={rem(60)}>
@@ -47,11 +45,7 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
               {title}
             </Title>
           </Stack>
-          <Text>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
-            has been the industrys standard dummy text ever since the 1500s, when an unknown printer
-            took a galley of type and scrambled it to make a type specimen book.
-          </Text>
+          <Text>{description}</Text>
         </Stack>
         <Flex h="100%" align="center">
           <Image src={imageUrl} alt={title} radius="xl" />

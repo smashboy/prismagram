@@ -8,6 +8,7 @@ import {
   Grid,
   Group,
   Paper,
+  Anchor,
   rem,
   SimpleGrid,
   Stack,
@@ -29,6 +30,7 @@ import { FeaturePreviewCard } from '@/components/FeaturePreviewCard'
 import { FeatureCard } from '@/components/FeatureCard'
 import { LandingSection } from '@/components/LandingSection'
 import { RoadmapItem } from '@/components/RoadmapItem'
+import { SupportButton } from '@/components/SupportButton'
 
 const PRIMARY_COL_HEIGHT = rem(500)
 
@@ -66,9 +68,7 @@ export default function Home() {
         </Container>
         <Container>
           <Group>
-            <Button size="md" color="pink">
-              Support project
-            </Button>
+            <SupportButton size="md" color="pink" />
             <Button size="md">Download</Button>
           </Group>
         </Container>
@@ -137,64 +137,92 @@ export default function Home() {
               </Grid.Col>
             </Grid>
           </SimpleGrid>
-          <Stack w="100%" spacing="xl">
+          <Stack w="100%" mt="xs" spacing="xl">
             <FeatureCard
               title="Schema diagram"
               imageUrl="/app-ui.png"
               icon={IconSitemap}
               color="blue"
-              description=""
+              description="Prisma schema visualization is a powerful tool that enables users to easily visualize their database schema using diagrams. With its intuitive interface, users can quickly create and edit their schema, add relationships between tables, and visualize data types and constraints. The diagrams are fully customizable, allowing users to tailor them to their specific needs. Prismagram simplifies the process of database schema design, making it accessible to users of all skill levels."
             />
             <FeatureCard
               title="Dran and drop"
               color="grape"
               icon={IconDragDrop}
               imageUrl="/app-ui.png"
-              description=""
+              description="Drag-and-drop interface simplifies the process of creating schema models and enums. With an intuitive user interface, users can easily create and modify database schema models and enums by dragging and dropping components onto the diagram canvas."
             />
             <FeatureCard
               title="Relations manager"
               color="orange"
               icon={IconPlugConnected}
               imageUrl="/app-ui.png"
-              description=""
+              description="Diagram interface allows for easy creation of schema relations by simply dragging and connecting components on the diagram canvas. This feature simplifies the process of defining relationships between tables."
             />
             <FeatureCard
               title="Smart editor"
               color="green"
               icon={IconBrain}
               imageUrl="/app-ui.png"
-              description=""
+              description="Schema editor automates routine tasks, such as removing relations of deleted models and auto renaming model, and enum references. With this feature, developers can quickly and easily modify the schema, reducing the likelihood of errors and increasing productivity. The editor's intelligent functionality simplifies the development process, enabling developers to focus on more complex tasks."
             />
             <FeatureCard
               title="Spotlight"
               color="cyan"
               icon={IconBulb}
               imageUrl="/app-ui.png"
-              description=""
+              description="Quickly search and navigate around app, your prisma schema and use most common actions."
             />
           </Stack>
         </LandingSection>
         <LandingSection title="Roadmap">
-          <Flex w="100%" justify="center" direction="row">
+          <Stack spacing="xl" w="100%" align="center">
             <Timeline w="50%" active={1} lineWidth={5} bulletSize={24}>
               <Timeline.Item title="Demo release">
-                <RoadmapItem />
+                <RoadmapItem
+                  description="Create projects for prisma schema, diagram visualization, create model and enums, create relations between models."
+                  releaseDate="24.02.2023"
+                />
               </Timeline.Item>
               <Timeline.Item title="v0.1.0">
-                <RoadmapItem />
+                <RoadmapItem
+                  description="Enhanced spotlight, reworked models and enums editor, dark mode, explicit n-m relations."
+                  releaseDate="24.02.2023"
+                />
               </Timeline.Item>
               <Timeline.Item title="v0.2.0">
-                <RoadmapItem />
+                <RoadmapItem
+                  description="Diagrams customization, improved prisma schema support."
+                  releaseDate="Coming soon..."
+                />
               </Timeline.Item>
               <Timeline.Item title="v0.3.0">
-                <RoadmapItem />
+                <RoadmapItem
+                  description="Model field and block attributes editor."
+                  releaseDate="Coming soon..."
+                />
+              </Timeline.Item>
+              <Timeline.Item title="v0.4.0">
+                <RoadmapItem
+                  description="Custom prisma schema generators support."
+                  releaseDate="Coming soon..."
+                />
               </Timeline.Item>
               <Timeline.Item title="v1.0.0">
-                <RoadmapItem />
+                <RoadmapItem releaseDate="Coming soon..." />
               </Timeline.Item>
             </Timeline>
-          </Flex>
+            <Text color="dimmed">
+              For a more detailed overview, please check out our{' '}
+              <Anchor
+                href="https://github.com/smashboy/prismagram/projects?query=is%3Aopen"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                github projects.
+              </Anchor>
+            </Text>
+          </Stack>
           <Card
             w="100%"
             h="60vh"
@@ -214,9 +242,7 @@ export default function Home() {
                 <Button size="lg" variant="filled">
                   Download
                 </Button>
-                <Button size="lg" variant="filled" color="pink">
-                  Support project
-                </Button>
+                <SupportButton size="lg" variant="filled" color="pink" />
               </Group>
             </Stack>
           </Card>

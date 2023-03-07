@@ -1,16 +1,19 @@
 import { Card, Text } from '@mantine/core'
 
-export const RoadmapItem = () => (
+interface RoadmapItemProps {
+  description?: string
+  releaseDate: string
+}
+
+export const RoadmapItem: React.FC<RoadmapItemProps> = ({ description, releaseDate }) => (
   <Card withBorder>
-    <Text color="dimmed" size="sm">
-      You&apos;ve created new branch{' '}
-      <Text variant="link" component="span" inherit>
-        fix-notifications
-      </Text>{' '}
-      from master
-    </Text>
+    {description && (
+      <Text color="dimmed" size="sm">
+        {description}
+      </Text>
+    )}
     <Text size="xs" mt={4}>
-      2 hours ago
+      {releaseDate}
     </Text>
   </Card>
 )
