@@ -1,6 +1,6 @@
 {
   "name": "prismagram",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Visual prisma schema builder",
   "main": "./out/main/index.js",
   "author": "https://github.com/smashboy",
