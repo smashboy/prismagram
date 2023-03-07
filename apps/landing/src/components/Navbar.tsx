@@ -1,5 +1,6 @@
 import { Button, Group, Text } from '@mantine/core'
 import Image from 'next/image'
+import Link from 'next/link'
 import { PaperGlass } from './PaperGlass'
 
 export const Navbar = () => (
@@ -12,7 +13,7 @@ export const Navbar = () => (
     style={{ transform: 'translateX(-50%)', zIndex: 1 }}
   >
     <Group>
-      <Group sx={{ flex: 1, userSelect: 'none' }}>
+      <Group href="/" sx={{ flex: 1, userSelect: 'none', textDecoration: 'none' }} component={Link}>
         <Image
           src="/logo.svg"
           alt="Prismagram logo"
@@ -21,14 +22,14 @@ export const Navbar = () => (
           priority
           style={{ pointerEvents: 'none' }}
         />
-        <Text fw="bold" size="lg">
+        <Text fw="bold" color="dark" size="lg">
           Prismagram
           <Text color="dimmed" size="xs" component="span" ml={3}>
             v0.1.0
           </Text>
         </Text>
       </Group>
-      <Button size="md" variant="filled">
+      <Button href="/download" component={Link} size="md" variant="filled">
         Download
       </Button>
     </Group>
