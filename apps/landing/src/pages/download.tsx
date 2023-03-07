@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Alert, Button, Container, Group, Stack, Title } from '@mantine/core'
+import { Alert, Button, Container, Group, Stack, Text, Title } from '@mantine/core'
 import {
   IconAlertCircle,
   IconBrandApple,
@@ -20,7 +20,17 @@ export default function DownloadPage() {
             priority
             style={{ pointerEvents: 'none' }}
           />
-          <Title>Download prismagram</Title>
+          <Title>
+            <Text
+              component="span"
+              variant="gradient"
+              gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}
+              inherit
+            >
+              Download{' '}
+            </Text>
+            Prismagram
+          </Title>
 
           <Group>
             <Button leftIcon={<IconBrandWindows />} variant="filled" size="lg">
