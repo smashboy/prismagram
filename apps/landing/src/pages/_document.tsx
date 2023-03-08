@@ -3,14 +3,24 @@ import { createGetInitialProps } from '@mantine/next'
 
 const getInitialProps = createGetInitialProps()
 
+const socialPreviewImageUrl = `${process.env.NEXT_PUBLIC_ORIGIN}/socialpreview.png`
+
 export default class Document extends NextDocument {
   static getInitialProps = getInitialProps
 
   render() {
     return (
       <Html lang="en">
-        <Head />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Head>
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://sizzy.co/" />
+          <link rel="icon" href="/favicon.ico" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="image" content={socialPreviewImageUrl} />
+          <meta itemProp="image" content={socialPreviewImageUrl} />
+          <meta name="twitter:image" content={socialPreviewImageUrl} />
+          <meta name="og:image" content={socialPreviewImageUrl} />
+        </Head>
         <body>
           <Main />
           <NextScript />
