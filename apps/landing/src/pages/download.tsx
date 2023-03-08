@@ -33,7 +33,13 @@ export default function DownloadPage() {
           </Title>
 
           <Group>
-            <Button leftIcon={<IconBrandWindows />} variant="filled" size="lg">
+            <Button
+              href="https://github.com/smashboy/prismagram/releases/download/v0.1.1/prismagram-0.1.1-setup.exe"
+              leftIcon={<IconBrandWindows />}
+              variant="filled"
+              size="lg"
+              component="a"
+            >
               Windows
             </Button>
             <Button leftIcon={<IconBrandApple />} variant="filled" size="lg" disabled>

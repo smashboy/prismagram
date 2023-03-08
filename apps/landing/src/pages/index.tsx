@@ -1,10 +1,8 @@
-import Image from 'next/image'
 import Head from 'next/head'
 import {
   Button,
   Card,
   Container,
-  Flex,
   Grid,
   Group,
   Paper,
@@ -25,7 +23,6 @@ import {
   IconBrain,
   IconMap
 } from '@tabler/icons-react'
-import appuiImage from '../../public/app-ui.png'
 import { FeaturePreviewCard } from '@/components/FeaturePreviewCard'
 import { FeatureCard } from '@/components/FeatureCard'
 import { LandingSection } from '@/components/LandingSection'
@@ -75,12 +72,12 @@ export default function Home() {
             </Button>
           </Group>
         </Container>
-        <Container p={0} mt={rem(70)} size={1400}>
+        <Container p={0} mt={rem(70)} size="lg">
           <Paper
             radius="lg"
             sx={{ boxShadow: 'rgba(149, 157, 165, 0.4) 0px 8px 54px', overflow: 'hidden' }}
           >
-            <Image src={appuiImage} alt="App user interface" width={1080} />
+            <video src="/videos/hero.mp4" width="100%" height="auto" muted loop autoPlay />
           </Paper>
         </Container>
         <LandingSection title="Features">
@@ -143,38 +140,38 @@ export default function Home() {
           <Stack w="100%" mt="xs" spacing="xl">
             <FeatureCard
               title="Schema diagram"
-              imageUrl="/app-ui.png"
               icon={IconSitemap}
               color="blue"
+              videoUrl="/videos/diagram.mp4"
               description="Prisma schema visualization is a powerful tool that enables users to easily visualize their database schema using diagrams. With its intuitive interface, users can quickly create and edit their schema, add relationships between tables, and visualize data types and constraints. The diagrams are fully customizable, allowing users to tailor them to their specific needs. Prismagram simplifies the process of database schema design, making it accessible to users of all skill levels."
             />
             <FeatureCard
               title="Dran and drop"
               color="grape"
               icon={IconDragDrop}
-              imageUrl="/app-ui.png"
+              videoUrl="/videos/dnd.mp4"
               description="Drag-and-drop interface simplifies the process of creating schema models and enums. With an intuitive user interface, users can easily create and modify database schema models and enums by dragging and dropping components onto the diagram canvas."
             />
             <FeatureCard
               title="Relations manager"
               color="orange"
               icon={IconPlugConnected}
-              imageUrl="/app-ui.png"
+              videoUrl="/videos/relations.mp4"
               description="Diagram interface allows for easy creation of schema relations by simply dragging and connecting components on the diagram canvas. This feature simplifies the process of defining relationships between tables."
             />
             <FeatureCard
               title="Smart editor"
               color="green"
               icon={IconBrain}
-              imageUrl="/app-ui.png"
+              videoUrl="/videos/smarteditor.mp4"
               description="Schema editor automates routine tasks, such as removing relations of deleted models and auto renaming model, and enum references. With this feature, developers can quickly and easily modify the schema, reducing the likelihood of errors and increasing productivity. The editor's intelligent functionality simplifies the development process, enabling developers to focus on more complex tasks."
             />
             <FeatureCard
               title="Spotlight"
               color="cyan"
               icon={IconBulb}
-              imageUrl="/app-ui.png"
-              description="Quickly search and navigate around app, your prisma schema and use most common actions."
+              videoUrl="/videos/spotlight.mp4"
+              description="Quickly search and navigate around app, your prisma schema and use most common actions like creating new models and enums."
             />
           </Stack>
         </LandingSection>
@@ -190,7 +187,7 @@ export default function Home() {
               <Timeline.Item title="v0.1.0">
                 <RoadmapItem
                   description="Enhanced spotlight, reworked models and enums editor, dark mode, explicit n-m relations."
-                  releaseDate="24.02.2023"
+                  releaseDate="07.03.2023"
                 />
               </Timeline.Item>
               <Timeline.Item title="v0.2.0">
@@ -222,7 +219,15 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                github projects.
+                github projects
+              </Anchor>
+              {' and '}
+              <Anchor
+                href="https://github.com/smashboy/prismagram/releases"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                releases.
               </Anchor>
             </Text>
           </Stack>

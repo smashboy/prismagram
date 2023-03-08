@@ -1,8 +1,10 @@
 import {
+  AspectRatio,
   Card,
   Flex,
   Image,
   MantineColor,
+  Paper,
   rem,
   SimpleGrid,
   Stack,
@@ -15,7 +17,7 @@ import type { Icon } from '@tabler/icons-react'
 interface FeatureCardProps {
   title: string
   description: string
-  imageUrl: string
+  videoUrl: string
   icon: Icon
   color: MantineColor
 }
@@ -24,7 +26,7 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
   title,
   description,
   icon: Icon,
-  imageUrl,
+  videoUrl,
   color
 }) => {
   return (
@@ -45,10 +47,14 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
               {title}
             </Title>
           </Stack>
-          <Text>{description}</Text>
+          <Text pt="xl" mt="xl" pr="xl">
+            {description}
+          </Text>
         </Stack>
         <Flex h="100%" align="center">
-          <Image src={imageUrl} alt={title} radius="xl" />
+          <Paper radius="lg" sx={{ overflow: 'hidden' }}>
+            <video src={videoUrl} width="100%" height="auto" muted controls />
+          </Paper>
         </Flex>
       </SimpleGrid>
     </Card>

@@ -25,7 +25,7 @@ export const Navbar = () => (
         <Text fw="bold" color="dark" size="lg">
           Prismagram
           <Text color="dimmed" size="xs" component="span" ml={3}>
-            v0.1.0
+            v0.1.1
           </Text>
         </Text>
       </Group>
