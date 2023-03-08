@@ -5,7 +5,10 @@ import { FooterSection, FooterSectionProps } from './FooterSection'
 const downloadSection: FooterSectionProps = {
   title: 'Download',
   options: [
-    { label: 'Windows', url: '' },
+    {
+      label: 'Windows',
+      url: 'https://github.com/smashboy/prismagram/releases/download/v0.1.1/prismagram-0.1.1-setup.exe'
+    },
     { label: 'macOS', url: '', disabled: true },
     { label: 'Linux', url: '', disabled: true }
   ]
@@ -14,9 +17,17 @@ const downloadSection: FooterSectionProps = {
 const resourcesSection: FooterSectionProps = {
   title: 'Resources',
   options: [
-    { label: 'Changelog', url: '', newWindow: true },
-    { label: 'Report a bug', url: '', newWindow: true },
-    { label: 'Suggest a feautre', url: '', newWindow: true },
+    { label: 'Changelog', url: 'https://github.com/smashboy/prismagram/releases', newWindow: true },
+    {
+      label: 'Report a bug',
+      url: 'https://github.com/smashboy/prismagram/issues/new?assignees=&labels=bug&template=bug_report.md&title=',
+      newWindow: true
+    },
+    {
+      label: 'Suggest a feautre',
+      url: 'https://github.com/smashboy/prismagram/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=',
+      newWindow: true
+    },
     { label: 'Documentation', url: '', disabled: true },
     { label: 'Blog', url: '', disabled: true }
   ]
@@ -25,7 +36,7 @@ const resourcesSection: FooterSectionProps = {
 const contactSection: FooterSectionProps = {
   title: 'Contact',
   options: [
-    { label: 'GitHub', url: '', newWindow: true },
+    { label: 'GitHub', url: 'https://github.com/smashboy/prismagram', newWindow: true },
     { label: 'Discord', url: '', newWindow: true, disabled: true },
     { label: 'Twitter', url: '', newWindow: true, disabled: true }
   ]

@@ -11,8 +11,16 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ title, options }) 
       {title}
     </Text>
     <Stack>
-      {options.map(({ label, newWindow }) => (
-        <Anchor key={label} color="dark.5" fw={500} size="sm">
+      {options.map(({ label, url, disabled, newWindow }) => (
+        <Anchor
+          key={label}
+          href={url}
+          color="dark.5"
+          fw={500}
+          size="sm"
+          sx={{ opacity: disabled ? 0.6 : 1, pointerEvents: disabled ? 'none' : void 0 }}
+          {...(newWindow ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+        >
           {label}
         </Anchor>
       ))}
