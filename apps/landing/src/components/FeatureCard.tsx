@@ -1,8 +1,6 @@
 import {
-  AspectRatio,
   Card,
   Flex,
-  Image,
   MantineColor,
   Paper,
   rem,

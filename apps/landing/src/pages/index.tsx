@@ -109,7 +109,7 @@ export default function Home() {
               </Grid.Col>
               <Grid.Col span={6}>
                 <FeaturePreviewCard
-                  title="Dran and drop"
+                  title="Drag and drop"
                   color="grape"
                   icon={IconDragDrop}
                   height={SECONDARY_COL_HEIGHT}
@@ -153,7 +153,7 @@ export default function Home() {
               description="Prisma schema visualization is a powerful tool that simplifies the process of database schema design and enables users to easily visualize their database schema using diagrams. With its intuitive interface, users can quickly create and edit their schema, add relationships between tables, and visualize data types and constraints. The diagrams are fully customizable, allowing users to tailor them to their specific needs."
             />
             <FeatureCard
-              title="Dran and drop"
+              title="Drag and drop"
               color="grape"
               icon={IconDragDrop}
               videoUrl="/videos/dnd.mp4"
