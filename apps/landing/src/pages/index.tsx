@@ -109,7 +109,7 @@ export default function Home() {
               </Grid.Col>
               <Grid.Col span={6}>
                 <FeaturePreviewCard
-                  title="Dran and drop"
+                  title="Drag and drop"
                   color="grape"
                   icon={IconDragDrop}
                   height={SECONDARY_COL_HEIGHT}
