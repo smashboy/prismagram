@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import Image from 'next/image'
 import { Alert, Button, Container, Group, Stack, Text, Title } from '@mantine/core'
 import {
@@ -7,9 +8,21 @@ import {
   IconBrandWindows
 } from '@tabler/icons-react'
 
+const title = 'Prismagram - download for free'
+const description = 'Download Prismagram for Windows, MacOs, Ubuntu.'
+
 export default function DownloadPage() {
   return (
     <>
+      <Head>
+        <title>Prismagram - visual prisma schema builder</title>
+        <meta name="title" content={title} />
+        <meta name="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+      </Head>
       <Container size="xl" pt={250}>
         <Stack spacing="xl" align="center">
           <Image
@@ -50,7 +63,12 @@ export default function DownloadPage() {
             </Button>
           </Group>
           <Container size="sm">
-            <Alert icon={<IconAlertCircle size="5rem" />} title="Warning!" radius="md">
+            <Alert
+              icon={<IconAlertCircle size="5rem" />}
+              title="Warning!"
+              color="orange"
+              radius="md"
+            >
               {
                 'This project is still at a very early stage of development and does not support many features of the prisma schema. You can view the detailed changelog of the latest version to see a list of supported features.'
               }

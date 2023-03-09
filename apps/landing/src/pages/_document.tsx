@@ -13,7 +13,8 @@ export default class Document extends NextDocument {
       <Html lang="en">
         <Head>
           <meta property="og:type" content="website" />
-          <meta property="og:url" content="https://sizzy.co/" />
+          <meta property="og:url" content={process.env.NEXT_PUBLIC_ORIGIN} />
+          <meta property="twitter:url" content={process.env.NEXT_PUBLIC_ORIGIN} />
           <link rel="icon" href="/favicon.ico" />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="image" content={socialPreviewImageUrl} />

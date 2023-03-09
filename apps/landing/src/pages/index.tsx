@@ -32,6 +32,10 @@ import Link from 'next/link'
 
 const PRIMARY_COL_HEIGHT = rem(500)
 
+const title = 'Prismagram - visual prisma schema builder'
+const description =
+  'Build your prisma database schemas more efficiently with user interface capabilities.'
+
 export default function Home() {
   const theme = useMantineTheme()
   const SECONDARY_COL_HEIGHT = `calc(${PRIMARY_COL_HEIGHT} / 2 - ${theme.spacing.md} / 2)`
@@ -40,22 +44,12 @@ export default function Home() {
     <>
       <Head>
         <title>Prismagram - visual prisma schema builder</title>
-        <meta name="title" content="Prismagram - visual prisma schema builder" />
-        <meta
-          name="description"
-          content="Build your prisma database schemas more efficiently with user interface capabilities."
-        />
-        <meta property="og:title" content="Prismagram - visual prisma schema builder" />
-        <meta
-          property="og:description"
-          content="Build your prisma database schemas more efficiently with user interface capabilities."
-        />
-        <meta property="twitter:url" content="https://sizzy.co/" />
-        <meta property="twitter:title" content="Prismagram - visual prisma schema builder" />
-        <meta
-          property="twitter:description"
-          content="Build your prisma database schemas more efficiently with user interface capabilities."
-        />
+        <meta name="title" content={title} />
+        <meta name="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
       </Head>
       <Stack>
         <Container size="xl" pt={250}>
@@ -156,7 +150,7 @@ export default function Home() {
               icon={IconSitemap}
               color="blue"
               videoUrl="/videos/diagram.mp4"
-              description="Prisma schema visualization is a powerful tool that enables users to easily visualize their database schema using diagrams. With its intuitive interface, users can quickly create and edit their schema, add relationships between tables, and visualize data types and constraints. The diagrams are fully customizable, allowing users to tailor them to their specific needs. Prismagram simplifies the process of database schema design, making it accessible to users of all skill levels."
+              description="Prisma schema visualization is a powerful tool that simplifies the process of database schema design and enables users to easily visualize their database schema using diagrams. With its intuitive interface, users can quickly create and edit their schema, add relationships between tables, and visualize data types and constraints. The diagrams are fully customizable, allowing users to tailor them to their specific needs."
             />
             <FeatureCard
               title="Dran and drop"
