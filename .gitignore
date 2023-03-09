@@ -1,7 +1,18 @@
 node_modules
+
 dist
 .next
 out
+.next
+
 *.log*
 .turbo
-.env.local
+
+# local env files
+.env*.local
+
+*.tsbuildinfo
+next-env.d.ts
+
+.DS_Store
+*.pem
