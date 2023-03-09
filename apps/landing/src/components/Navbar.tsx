@@ -13,6 +13,8 @@ export const Navbar = () => (
     style={{ transform: 'translateX(-50%)', zIndex: 1 }}
   >
     <Group>
+      {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+      {/* @ts-ignore */}
       <Group href="/" sx={{ flex: 1, userSelect: 'none', textDecoration: 'none' }} component={Link}>
         <Image
           src="/logo.svg"
