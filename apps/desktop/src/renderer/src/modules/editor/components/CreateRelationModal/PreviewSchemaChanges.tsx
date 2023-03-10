@@ -28,8 +28,6 @@ export const PreviewSchemaChanges: React.FC<PreviewSchemaChangesProps> = ({ stat
 
   useEffect(() => {
     const handleCreatePreview = async () => {
-      console.log(state)
-
       const preview = await formatSchema(`
         ${BlockBase._toString(state.model(target), state)}
         ${BlockBase._toString(state.model(source), state)}

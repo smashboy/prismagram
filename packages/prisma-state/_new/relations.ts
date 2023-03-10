@@ -135,6 +135,8 @@ export class RelationsManager implements RelationsManagerInstance {
       sourceModel.addField(sourceRelationField.name, sourceRelationField._data())
       sourceModel.addField(sourceTypeField.name, sourceTypeField._data())
       targetModel.addField(targetRelationField.name, targetRelationField._data())
+
+      return
     }
 
     const sourceTypeFields: ScalarField[] = []
