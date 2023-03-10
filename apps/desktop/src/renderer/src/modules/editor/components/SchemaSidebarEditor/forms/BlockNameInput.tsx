@@ -6,10 +6,12 @@ import { Enum, Model } from 'prisma-state/_new/blocks'
 import {
   $schemaState,
   $selectedNodeId,
+  selectNodeEvent,
   setPrismaSchemaEvent
 } from '@renderer/modules/editor/stores'
 import { ConfirmInput } from '@renderer/core/components'
 import { Text } from '@mantine/core'
+import { NodeType } from '@shared/common/configs/diagrams'
 
 interface BlockNameInputProps {
   block: Model | Enum
@@ -28,6 +30,7 @@ export const BlockNameInput: React.FC<BlockNameInputProps> = ({ block }) => {
 
   useEffect(() => {
     setIsOpen(false)
+    setName(block?.name || '')
   }, [selectedNodeId])
 
   const handleCloseEdit = () => {
@@ -43,6 +46,7 @@ export const BlockNameInput: React.FC<BlockNameInputProps> = ({ block }) => {
 
   const handleSaveChanges = () => {
     block.setName(name)
+    selectNodeEvent({ type: block.type as NodeType, nodeId: name })
     setPrismaSchemaEvent(schemaState._clone())
   }
 
