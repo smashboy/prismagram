@@ -45,7 +45,7 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
               {title}
             </Title>
           </Stack>
-          <Text pt="xl" mt="xl" pr="xl" fz="lg" sx={{ textAlign: 'justify' }}>
+          <Text pt="xl" mt="xl" pr="xl" fz="xl" sx={{ textAlign: 'justify' }}>
             {description}
           </Text>
         </Stack>
