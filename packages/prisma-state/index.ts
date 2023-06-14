@@ -1,1 +1,0 @@
-export { PrismaSchemaState } from './PrismaSchemaState'

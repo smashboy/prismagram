@@ -1,1 +1,0 @@
-export { AboutAppSettings } from './AboutAppSettings'

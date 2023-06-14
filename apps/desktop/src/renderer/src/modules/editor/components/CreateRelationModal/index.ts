@@ -1,1 +1,0 @@
-export { CreateRelationModal } from './CreateRelationModal'

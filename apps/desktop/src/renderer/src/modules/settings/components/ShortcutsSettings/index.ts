@@ -1,1 +1,0 @@
-export { ShortcutsSettings } from './ShortcutsSettings'
