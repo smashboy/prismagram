@@ -6,12 +6,6 @@
 
 This project is still at a very early stage of development and does not support many features of the prisma schema, so please backup your prisma schema (if you're not using git for some reason). You can view the detailed changelog of the [latest version](https://github.com/smashboy/prismagram/releases/latest) to see a list of supported features.
 
-### Support the project
-
-<a href="https://www.buymeacoffee.com/smashboy">
-<img width="545" alt="yellow-button" src="https://user-images.githubusercontent.com/30213662/221171938-b6fd3eea-5e95-4629-b641-d8c25d9a1dff.png">
-</a>
-
 ### Download
 - [Windows](https://github.com/smashboy/prismagram/releases/download/v0.0.1/prismagram-0.0.1-setup.exe)
 
